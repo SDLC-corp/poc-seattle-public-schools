@@ -1,3 +1,5 @@
 node_modules
 .env
 uploads/
+# Encryption key for integration secrets
+data/.integrations.key

@@ -9,6 +9,7 @@
     "start": "node src/index.js",
     "scrape:schools": "node scripts/scrape-schools.js",
     "generate:buildings": "node scripts/generate-buildings.js",
+    "generate:floors": "node scripts/generate-floors.js",
     "generate:users": "node scripts/generate-users.js",
     "generate:audit": "node scripts/generate-audit.js",
     "generate:documents": "node scripts/generate-documents.js",

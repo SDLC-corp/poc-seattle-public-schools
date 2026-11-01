@@ -1,0 +1,330 @@
+/* Reuses u-* (users.css), c-* / cd-* (compliance.css) and kpi-* styles */
+.schools-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  max-width: 1700px;
+  margin: 0 auto;
+  align-items: start;
+}
+.schools-page.details-open { grid-template-columns: minmax(0, 1fr) 340px; }
+.sch-main { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+.sch-kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.sch-kpis .kpi-card { gap: 8px; padding: 0 10px; }
+.sch-kpis .kpi-icon { width: 30px; height: 30px; }
+.sch-kpis .kpi-icon svg { width: 16px; height: 16px; }
+
+.sch-filters {
+  display: grid;
+  grid-template-columns: minmax(200px, 1.6fr) repeat(4, minmax(130px, 1fr)) auto;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.sch-table tbody tr { cursor: pointer; }
+.sch-name { font-weight: 600; color: var(--ink-1); }
+
+/* Details panel (hidden on desktop until a school is picked/kept open; drawer on small screens) */
+.sch-details { display: none; position: sticky; top: 0; flex-direction: column; gap: 10px; max-height: calc(100vh - var(--topbar-h) - 48px); overflow-y: auto; }
+.details-open > .sch-details { display: flex; }
+.sch-hero { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; background: #f5f8fb; }
+.sch-hero > div { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sch-hero strong { font-size: 15px; color: var(--ink-1); }
+.sch-hero span { font-size: 12px; color: var(--ink-2); }
+.sch-details .cd-row dt { display: inline-flex; align-items: center; gap: 5px; }
+.sch-details .cd-row a { color: var(--primary); }
+.sch-details .cd-h { display: flex; align-items: center; gap: 6px; }
+.sch-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.sch-buildings { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.sch-buildings li { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; }
+.sch-buildings li > div { flex: 1; min-width: 0; }
+.sch-buildings strong { display: block; font-size: 13px; color: var(--ink-1); }
+.sch-buildings small { display: block; font-size: 11px; color: var(--ink-2); }
+.sch-actions { display: flex; flex-direction: column; gap: 8px; }
+.sch-actions .u-btn { justify-content: flex-start; }
+a.sch-name { text-decoration: none; }
+a.sch-name:hover { color: var(--primary); text-decoration: underline; }
+
+/* ---------- Buildings (school page + district list) ---------- */
+.b-kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.b-kpis .kpi-card { gap: 8px; padding: 0 10px; }
+.b-kpis .kpi-icon { width: 30px; height: 30px; }
+.b-kpis .kpi-icon svg { width: 16px; height: 16px; }
+
+.b-acm { display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.b-acm.present { background: #fbe1e1; color: #b02a2a; }
+.b-acm.assumed { background: #fdf0d5; color: #8f5a00; }
+.b-acm.none { background: #e3f4e5; color: #0c7f0c; }
+
+.b-head { flex-wrap: wrap; }
+.b-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.b-tools .u-search { width: 230px; }
+.b-tools .ss-field { width: 170px; }
+.b-filters { display: grid; grid-template-columns: minmax(200px, 1.6fr) minmax(170px, 1.2fr) repeat(2, minmax(130px, 1fr)) auto; gap: 10px; margin-bottom: 12px; }
+
+.b-table tbody tr { cursor: pointer; }
+.b-table a { color: var(--primary); text-decoration: none; }
+.b-table a:hover { text-decoration: underline; }
+.b-name { display: flex; align-items: center; gap: 10px; }
+.b-name strong { color: var(--ink-1); font-weight: 600; }
+/* Thumbnail: a little building whose height follows the floor count */
+.b-thumb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #eaf3f9 0%, #d3e6f2 100%);
+  color: var(--primary);
+  overflow: hidden;
+}
+.b-thumb::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--primary); opacity: 0.35; }
+.b-thumb.f2::after { height: 5px; }
+.b-thumb.f3::after { height: 7px; }
+.b-code { font-family: Consolas, 'Cascadia Mono', monospace; font-size: 12px; color: var(--ink-2); }
+.b-actions { display: inline-flex; gap: 4px; }
+.b-col-actions { width: 1%; white-space: nowrap; }
+
+/* Details: floor stack + ACM split */
+.b-stack { display: flex; flex-direction: column; gap: 3px; padding: 10px 18px 0; }
+.b-floor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 10px;
+  border: 1px solid #c9dcea;
+  border-radius: 4px;
+  background: repeating-linear-gradient(90deg, #f2f8fc 0 18px, #e6f0f7 18px 20px);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-1);
+}
+.b-floor small { font-weight: 400; color: var(--ink-2); }
+.b-ground { height: 4px; margin: 2px -12px 0; border-radius: 2px; background: var(--axis); }
+.b-split { display: flex; flex-direction: column; gap: 6px; }
+.b-split-head { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--ink-2); }
+.b-split-head strong { color: var(--ink-1); }
+.b-bar { display: flex; gap: 2px; height: 10px; }
+.b-bar > span { border-radius: 4px; }
+.b-bar-acm { background: #e07b24; }
+.b-bar-none { flex: 1; background: #d9e1ea; }
+.b-legend { display: flex; gap: 14px; font-size: 11px; color: var(--ink-2); }
+.b-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.b-sw { width: 10px; height: 10px; border-radius: 3px; }
+.b-sw.acm { background: #e07b24; }
+.b-sw.none { background: #d9e1ea; }
+.b-note { display: flex; align-items: flex-start; gap: 6px; margin: 12px 0 0; padding: 8px 10px; border-radius: 6px; background: #f1f6fa; font-size: 12px; color: var(--ink-2); line-height: 1.45; }
+.b-note svg { flex-shrink: 0; margin-top: 1px; color: var(--primary); }
+.b-note.warn { background: #fdf3e0; color: #7a4d00; }
+.b-note.warn svg { color: #b87400; }
+.b-details .b-note { margin: 0; }
+
+/* Add / edit building form */
+.bf-max { margin-left: 4px; padding: 1px 6px; border-radius: 8px; background: var(--primary-light); color: var(--primary); font-size: 10px; font-weight: 600; }
+.bf-seg { display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.bf-seg button {
+  flex: 1;
+  height: 34px;
+  border: 0;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink-1);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.bf-seg button:last-child { border-right: 0; }
+.bf-seg button:hover { background: #f3f7fa; }
+.bf-seg button.active { background: var(--primary); color: #fff; font-weight: 600; }
+.bf-seg button:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
+.bf-acm { margin-top: 12px; }
+
+/* ---------- School page ---------- */
+.sd-crumbs { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); }
+.sd-crumbs a { color: var(--primary); text-decoration: none; }
+.sd-crumbs a:hover { text-decoration: underline; }
+.sd-crumbs svg { color: var(--ink-3); }
+.sd-crumbs [aria-current] { color: var(--ink-1); font-weight: 500; }
+.sd-title { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.sd-icon { display: grid; place-items: center; width: 46px; height: 46px; flex-shrink: 0; border-radius: 10px; background: var(--primary-light); color: var(--primary); }
+.school-detail .c-head h1 { flex-wrap: wrap; }
+.school-detail .c-head h1 .c-status { font-size: 11px; }
+.sd-title p { display: flex; flex-wrap: wrap; gap: 4px 8px; }
+.sd-sep { color: var(--border); }
+.school-detail .u-card-head h2 { display: flex; align-items: center; gap: 6px; }
+.sd-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.sd-grid .u-card { display: flex; flex-direction: column; gap: 12px; }
+.sd-grid .u-card-head { margin-bottom: 0; }
+.sd-facts .cd-row { grid-template-columns: 150px minmax(0, 1fr); }
+.sd-facts .cd-row dt { display: inline-flex; align-items: center; gap: 5px; }
+.sd-facts a { color: var(--primary); }
+.sd-share { display: flex; align-items: center; gap: 8px; }
+.sd-share .b-bar { width: 140px; }
+.sd-share b { font-size: 12px; font-weight: 600; color: var(--ink-1); min-width: 32px; }
+.c-table tfoot td { padding: 8px 10px; border-top: 1px solid var(--border); background: #f7f9fb; font-weight: 600; color: var(--ink-1); }
+
+@media (max-width: 1600px) {
+  .details-open .sch-col-address, .details-open .sch-col-board { display: none; }
+  .details-open .b-col-acmrooms { display: none; }
+}
+@media (max-width: 1250px) {
+  .b-col-floor, .b-col-inspector, .b-col-acmrooms { display: none; }
+  .b-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sd-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 1400px) {
+  .sch-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sch-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sch-filters .u-search { grid-column: span 2; }
+  .details-open .sch-col-phone { display: none; }
+}
+@media (max-width: 1100px) {
+  .schools-page.details-open { grid-template-columns: minmax(0, 1fr); }
+  .sch-details {
+    display: flex;
+    position: fixed;
+    top: var(--topbar-h);
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    width: min(380px, 100vw);
+    max-height: none;
+    border-radius: 0;
+    box-shadow: -8px 0 28px rgba(4, 43, 68, 0.2);
+    transform: translateX(105%);
+    transition: transform 0.22s ease;
+  }
+  .details-open > .sch-details { transform: none; }
+  .details-open > .u-drawer-backdrop {
+    display: block;
+    position: fixed;
+    inset: var(--topbar-h) 0 0 0;
+    z-index: 35;
+    background: rgba(4, 43, 68, 0.35);
+  }
+  .sch-col-address, .sch-col-principal { display: none; }
+}
+@media (max-width: 700px) {
+  .sch-filters { grid-template-columns: minmax(0, 1fr); }
+  .sch-filters .u-search { grid-column: auto; }
+  .sch-kpis, .b-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .b-filters { grid-template-columns: minmax(0, 1fr); }
+  .b-tools, .b-tools .u-search, .b-tools .ss-field { width: 100%; }
+  .b-col-school, .sd-share-col { display: none; }
+}
+
+/* ---------- Building page ---------- */
+.b-link { color: var(--ink-1); font-weight: 600; text-decoration: none; }
+.b-link:hover { color: var(--primary); text-decoration: underline; }
+.bd-card { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 12px 16px; }
+.bd-id { display: flex; align-items: center; gap: 12px; flex: 1 1 320px; min-width: 0; }
+.bd-id h2 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0; font-size: 17px; font-weight: 600; color: var(--ink-1); }
+.bd-id p { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 3px 0 0; font-size: 12px; color: var(--ink-2); }
+/* Thumbnail: one band per floor */
+.bd-thumb {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  gap: 2px;
+  width: 64px;
+  height: 52px;
+  padding: 8px 10px 0;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #e7f1f8, #cfe2ef);
+  border-bottom: 4px solid var(--axis);
+}
+.bd-thumb i { display: block; height: 11px; border-radius: 2px 2px 0 0; background: repeating-linear-gradient(90deg, var(--primary) 0 6px, #7fb1cf 6px 9px); opacity: 0.85; }
+.bd-stats { display: flex; gap: 0; }
+.bd-stat { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0 18px; border-left: 1px solid var(--grid); }
+.bd-stat span { font-size: 11px; color: var(--ink-2); white-space: nowrap; }
+.bd-stat strong { font-size: 18px; font-weight: 700; color: var(--ink-1); }
+.tone-text-critical { color: var(--status-critical) !important; }
+.bd-floors-title { display: flex; align-items: center; gap: 10px; }
+.bd-floors-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 8px; background: var(--primary-light); color: var(--primary); }
+.bd-fnum { display: inline-grid; place-items: center; min-width: 30px; height: 28px; padding: 0 6px; border: 1px solid #c9dcea; border-radius: 6px; background: #f2f8fc; color: var(--primary); font-weight: 700; }
+.bd-max { margin: 0 0 12px; }
+.bd-floorlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.bd-floorlist button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); font: inherit; text-align: left; cursor: pointer; }
+.bd-floorlist button:hover { border-color: var(--primary); }
+.bd-floorlist button > span:nth-child(2) { flex: 1; min-width: 0; }
+.bd-floorlist strong { display: block; font-size: 13px; color: var(--ink-1); }
+.bd-floorlist small { display: block; font-size: 11px; color: var(--ink-2); }
+.u-row-btn.danger:hover:not(:disabled) { border-color: var(--status-critical); color: var(--status-critical); }
+.u-row-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Condition badges (AHERA physical assessment) */
+.fp-cond { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.fp-cond.good { background: #e3f4e5; color: #0c7f0c; }
+.fp-cond.damaged { background: #fdf0d5; color: #8f5a00; }
+.fp-cond.severe { background: #fbe1e1; color: #b02a2a; }
+.fp-cond.na { background: #eef1f5; color: var(--ink-2); }
+
+/* ---------- Rooms & Floor Plans ---------- */
+.rf-kpis { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.rf-filters-rooms { grid-template-columns: minmax(200px, 1.6fr) minmax(170px, 1.2fr) repeat(2, minmax(130px, 1fr)) auto; }
+.rf-plan { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #eef1f5; color: var(--ink-2); font-size: 11px; font-weight: 600; }
+.rf-plan.up { background: var(--primary-light); color: var(--primary); }
+@media (max-width: 1400px) { .rf-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1900px) { .fp-open .rf-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* ---------- Floor panel ---------- */
+.schools-page.details-open.fp-open { grid-template-columns: minmax(0, 1fr) 500px; }
+.fp-panel { gap: 0; }
+.fp-form { display: flex; flex-direction: column; gap: 10px; }
+.fp-h { margin: 6px 0 0; font-size: 14px; font-weight: 600; color: var(--primary-800); }
+.fp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
+.fp-wide { grid-column: 1 / -1; }
+.fp-panel .bf-seg button { font-size: 12px; }
+.fp-panel .bf-seg button:disabled { background: #f3f5f8; color: var(--ink-3); text-decoration: line-through; cursor: not-allowed; }
+.fp-panel .b-note { margin: 0; }
+.fp-plan-tools { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.fp-plan-tools > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fp-plan-btns { display: flex; gap: 6px; }
+.fp-detect { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border: 1px solid #cfe2ef; border-radius: 8px; background: #f5f9fc; }
+.fp-detect-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.fp-detect-row .ss-field { width: 190px; }
+.fp-detect-title { display: inline-flex; align-items: center; gap: 6px; margin-right: auto; font-size: 13px; font-weight: 600; color: var(--ink-1); }
+.fp-detect-title svg { color: var(--primary); }
+.fp-detect-title small { padding: 1px 6px; border-radius: 8px; background: var(--primary-light); color: var(--primary); font-size: 10px; font-weight: 600; }
+.fp-detect-row > .u-muted { margin-right: auto; }
+.fp-detect-msg { margin: 0; font-size: 12px; }
+.fp-detect-msg.ok { color: #0c7f0c; }
+.fp-detect-msg.warn { color: #8f5a00; }
+.fp-spin { animation: fp-spin 0.9s linear infinite; }
+@keyframes fp-spin { to { transform: rotate(360deg); } }
+.fp-canvas { width: 100%; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #fff; }
+.fp-canvas.editable { cursor: crosshair; }
+.fp-labels { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; }
+.fp-labels-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 30px; }
+.fp-labels-head > span { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--ink-1); }
+.fp-labels-head svg { color: var(--primary); }
+.fp-remove:hover { border-color: var(--status-critical); color: var(--status-critical); }
+.fp-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fp-chip { padding: 3px 10px; border: 1px solid var(--border); border-left-width: 3px; border-radius: 4px; background: #f6f8fa; color: var(--ink-1); font: inherit; font-size: 12px; cursor: pointer; }
+.fp-chip.present { border-left-color: #d03b3b; }
+.fp-chip.assumed { border-left-color: #c98a00; }
+.fp-chip.none { border-left-color: #0c8f3e; }
+.fp-chip.active { background: var(--primary-light); border-color: var(--primary); border-left-width: 3px; font-weight: 600; }
+.fp-empty { margin: 0; }
+.fp-label-edit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 10px; padding-top: 8px; border-top: 1px dashed var(--border); }
+.fp-label-facts { padding-top: 8px; border-top: 1px dashed var(--border); border-bottom: 0; }
+.fp-foot { display: flex; justify-content: flex-end; gap: 8px; padding-top: 10px; border-top: 1px solid var(--grid); }
+.fp-foot .u-btn { min-width: 120px; justify-content: center; }
+
+@media (max-width: 1500px) {
+  .schools-page.details-open.fp-open { grid-template-columns: minmax(0, 1fr) 440px; }
+  .fp-open .bd-stats .bd-stat:last-child { display: none; }
+}
+@media (max-width: 1100px) {
+  .schools-page.details-open.fp-open { grid-template-columns: minmax(0, 1fr); }
+  .fp-panel { width: min(520px, 100vw) !important; }
+  .bd-stats { width: 100%; justify-content: space-between; }
+  .bd-stat:first-child { border-left: 0; }
+}
+@media (max-width: 700px) {
+  .fp-grid, .fp-label-edit { grid-template-columns: minmax(0, 1fr); }
+  .bd-stat { padding: 0 8px; }
+}

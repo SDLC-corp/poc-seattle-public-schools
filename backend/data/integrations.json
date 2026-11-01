@@ -1,0 +1,143 @@
+{
+  "note": "Integration settings. Secrets are AES-256-GCM encrypted.",
+  "integrations": {
+    "entra": {
+      "status": "connected",
+      "sample": true,
+      "config": {
+        "tenantId": "9a42495c-0f19-40b7-a84f-844284e11cbd",
+        "clientId": "ca0c03b1-5297-403f-93b8-c9891e67888f",
+        "secretExpiresOn": "2027-03-23",
+        "redirectUri": "https://asbestos.example/auth/callback",
+        "allowedDomain": "district.example",
+        "syncGroups": true
+      },
+      "secrets": {
+        "clientSecret": {
+          "iv": "uCo92xlahKeyQ0wZ",
+          "tag": "8kh9uiQx5GVlskxH9sbYTg==",
+          "data": "KB+OYxI6Ju3Ne/RARwtsYGNAqDamyNd8ElPZ2HsJqQo=",
+          "last4": "t1Ra"
+        }
+      },
+      "connectedAt": "2026-09-14T18:34:49.939Z",
+      "connectedBy": {
+        "id": "u001",
+        "name": "John Doe"
+      },
+      "history": [
+        {
+          "at": "2026-11-01T16:34:49.939Z",
+          "status": "success",
+          "items": 129,
+          "durationMs": 1123,
+          "message": "Synced 129 users and 7 groups",
+          "by": "Scheduled sync"
+        },
+        {
+          "at": "2026-11-01T10:34:49.939Z",
+          "status": "success",
+          "items": 129,
+          "durationMs": 3664,
+          "message": "Synced 129 users and 7 groups",
+          "by": "Scheduled sync"
+        }
+      ]
+    },
+    "sharepoint": {
+      "status": "connected",
+      "sample": true,
+      "config": {
+        "tenantId": "70edf759-bc08-4de8-8a8a-72babfe36240",
+        "clientId": "a528f060-264b-4879-ae50-e459412b817b",
+        "secretExpiresOn": "2026-11-19",
+        "siteUrl": "https://contoso.sharepoint.com/sites/Facilities",
+        "libraryName": "Asbestos Records",
+        "folderPath": "/AHERA"
+      },
+      "secrets": {
+        "clientSecret": {
+          "iv": "CKDNGzsm4eALIg3+",
+          "tag": "/Z9CrFNXso0TJhAJDZ8rNg==",
+          "data": "yPkuc6msJQQwWR4INLm5h57oEBObUIHHtuGCROZMQIw=",
+          "last4": "sVKN"
+        }
+      },
+      "connectedAt": "2026-10-02T18:34:49.940Z",
+      "connectedBy": {
+        "id": "u001",
+        "name": "John Doe"
+      },
+      "history": [
+        {
+          "at": "2026-11-01T17:58:49.940Z",
+          "status": "success",
+          "items": 96,
+          "durationMs": 1192,
+          "message": "Synced 96 documents (0 conflicts)",
+          "by": "Scheduled sync"
+        },
+        {
+          "at": "2026-11-01T16:58:49.940Z",
+          "status": "success",
+          "items": 96,
+          "durationMs": 2972,
+          "message": "Synced 96 documents (0 conflicts)",
+          "by": "Scheduled sync"
+        }
+      ]
+    },
+    "outlook": {
+      "status": "disconnected",
+      "sample": true,
+      "config": {},
+      "secrets": {},
+      "connectedAt": null,
+      "connectedBy": null,
+      "history": []
+    },
+    "sql": {
+      "status": "error",
+      "sample": true,
+      "config": {
+        "server": "facilities-db.database.windows.net",
+        "port": 1433,
+        "database": "Facilities",
+        "authentication": "SQL Server Authentication",
+        "username": "asbestos_reader",
+        "encrypt": true
+      },
+      "secrets": {
+        "password": {
+          "iv": "NmpvGqZ5voFKpT8S",
+          "tag": "1l8mSZRqVa/FzQY98JuJTQ==",
+          "data": "tmljLumwDmVurRWEH/Ytay0qLAN/v2LHrxmkPcMM1QE=",
+          "last4": "Cnq0"
+        }
+      },
+      "connectedAt": "2026-08-03T18:34:49.940Z",
+      "connectedBy": {
+        "id": "u001",
+        "name": "John Doe"
+      },
+      "history": [
+        {
+          "at": "2026-10-31T22:34:49.940Z",
+          "status": "failed",
+          "items": 0,
+          "durationMs": 2988,
+          "message": "Login failed for user 'asbestos_reader' (password expired)",
+          "by": "Scheduled sync"
+        },
+        {
+          "at": "2026-10-30T22:34:49.940Z",
+          "status": "success",
+          "items": 866,
+          "durationMs": 1088,
+          "message": "Read 866 building and floor records",
+          "by": "Scheduled sync"
+        }
+      ]
+    }
+  }
+}

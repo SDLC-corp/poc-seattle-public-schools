@@ -9,7 +9,9 @@ import SearchSelect from '../../components/ui/SearchSelect'
 import Toggle from '../../components/ui/Toggle'
 import { mainNav } from '../../components/layout/navItems'
 import { applyBrandColors } from '../../theme'
+import Integrations from './Integrations'
 import './settings.css'
+import './integrations.css'
 
 const TABS = [
   { id: 'general', label: 'General', icon: SettingsIcon },
@@ -269,7 +271,9 @@ export default function Settings() {
         ))}
       </nav>
 
-      {tab !== 'general' ? (
+      {tab === 'integrations' ? (
+        <Integrations onToast={setToast} />
+      ) : tab !== 'general' ? (
         <div className="s-card s-placeholder">
           <SettingsIcon size={28} />
           <strong>{TABS.find((t) => t.id === tab).label}</strong>

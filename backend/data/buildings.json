@@ -1,6 +1,6 @@
 {
   "note": "MOCK DATA — generated from schools.json by scripts/generate-buildings.js",
-  "generatedAt": "2026-11-01T14:22:13.243Z",
+  "generatedAt": "2026-11-01T17:53:15.019Z",
   "count": 315,
   "buildings": [
     {
@@ -14,6 +14,9 @@
       "areaSqFt": 170034,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 200,
+      "roomsWithAcm": 59,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 159,
       "depthM": 99.4,
@@ -60,6 +63,9 @@
       "areaSqFt": 10123,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 12,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 38.8,
       "depthM": 24.2,
@@ -106,6 +112,9 @@
       "areaSqFt": 24581,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 29,
+      "roomsWithAcm": 8,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 42.7,
       "depthM": 26.7,
@@ -152,6 +161,9 @@
       "areaSqFt": 121710,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 143,
+      "roomsWithAcm": 17,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 95.1,
       "depthM": 59.4,
@@ -198,6 +210,9 @@
       "areaSqFt": 17676,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 21,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 36.2,
       "depthM": 22.7,
@@ -244,6 +259,9 @@
       "areaSqFt": 24944,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 29,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 60.9,
       "depthM": 38.1,
@@ -290,6 +308,9 @@
       "areaSqFt": 121839,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 143,
+      "roomsWithAcm": 41,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 95.2,
       "depthM": 59.5,
@@ -336,6 +357,9 @@
       "areaSqFt": 23545,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 28,
+      "roomsWithAcm": 8,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 41.8,
       "depthM": 26.1,
@@ -382,6 +406,9 @@
       "areaSqFt": 10835,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 13,
+      "roomsWithAcm": 3,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 28.4,
       "depthM": 17.7,
@@ -428,6 +455,9 @@
       "areaSqFt": 65945,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 78,
+      "roomsWithAcm": 17,
+      "acmStatus": "Assumed ACM",
       "heightM": 13,
       "widthM": 57.2,
       "depthM": 35.7,
@@ -474,6 +504,9 @@
       "areaSqFt": 7151,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 8,
+      "roomsWithAcm": 3,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 32.6,
       "depthM": 20.4,
@@ -520,6 +553,9 @@
       "areaSqFt": 23458,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 28,
+      "roomsWithAcm": 4,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 41.8,
       "depthM": 26.1,
@@ -566,6 +602,9 @@
       "areaSqFt": 122017,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 144,
+      "roomsWithAcm": 31,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 77.8,
       "depthM": 48.6,
@@ -612,6 +651,9 @@
       "areaSqFt": 18337,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 22,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 52.2,
       "depthM": 32.6,
@@ -658,6 +700,9 @@
       "areaSqFt": 28988,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 34,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 46.4,
       "depthM": 29,
@@ -700,13 +745,16 @@
       "code": "GATZERTES-A",
       "name": "Main Building",
       "yearBuilt": 1915,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 144321,
       "construction": "Steel Frame",
       "presumedAcm": true,
-      "heightM": 17,
-      "widthM": 73.2,
-      "depthM": 45.8,
+      "rooms": 170,
+      "roomsWithAcm": 65,
+      "acmStatus": "ACM Present",
+      "heightM": 13,
+      "widthM": 84.6,
+      "depthM": 52.9,
       "location": {
         "lat": 47.601633,
         "lng": -122.315848
@@ -716,24 +764,24 @@
         "coordinates": [
           [
             [
-              -122.3163359,
-              47.601427
+              -122.3164118,
+              47.6013951
             ],
             [
-              -122.3153607,
-              47.601427
+              -122.3152847,
+              47.6013951
             ],
             [
-              -122.3153607,
-              47.6018384
+              -122.3152847,
+              47.6018703
             ],
             [
-              -122.3163359,
-              47.6018384
+              -122.3164118,
+              47.6018703
             ],
             [
-              -122.3163359,
-              47.601427
+              -122.3164118,
+              47.6013951
             ]
           ]
         ]
@@ -750,35 +798,38 @@
       "areaSqFt": 19705,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 23,
+      "roomsWithAcm": 3,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 54.1,
       "depthM": 33.8,
       "location": {
         "lat": 47.601633,
-        "lng": -122.31484
+        "lng": -122.314764
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3152008,
+              -122.3151249,
               47.6014809
             ],
             [
-              -122.31448,
+              -122.3144041,
               47.6014809
             ],
             [
-              -122.31448,
+              -122.3144041,
               47.6017845
             ],
             [
-              -122.3152008,
+              -122.3151249,
               47.6017845
             ],
             [
-              -122.3152008,
+              -122.3151249,
               47.6014809
             ]
           ]
@@ -796,11 +847,14 @@
       "areaSqFt": 7257,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 9,
+      "roomsWithAcm": 3,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 32.8,
       "depthM": 20.5,
       "location": {
-        "lat": 47.601227,
+        "lat": 47.601195,
         "lng": -122.315848
       },
       "footprint": {
@@ -809,23 +863,23 @@
           [
             [
               -122.3160668,
-              47.601135
+              47.6011031
             ],
             [
               -122.3156298,
-              47.601135
+              47.6011031
             ],
             [
               -122.3156298,
-              47.6013192
+              47.6012873
             ],
             [
               -122.3160668,
-              47.6013192
+              47.6012873
             ],
             [
               -122.3160668,
-              47.601135
+              47.6011031
             ]
           ]
         ]
@@ -842,6 +896,9 @@
       "areaSqFt": 144953,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 171,
+      "roomsWithAcm": 46,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 84.7,
       "depthM": 53,
@@ -888,6 +945,9 @@
       "areaSqFt": 14996,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 18,
+      "roomsWithAcm": 5,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 33.4,
       "depthM": 20.9,
@@ -934,6 +994,9 @@
       "areaSqFt": 27122,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 32,
+      "roomsWithAcm": 8,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 63.5,
       "depthM": 39.7,
@@ -980,6 +1043,9 @@
       "areaSqFt": 140627,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 165,
+      "roomsWithAcm": 45,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 83.5,
       "depthM": 52.2,
@@ -1026,6 +1092,9 @@
       "areaSqFt": 21258,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 25,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 39.7,
       "depthM": 24.8,
@@ -1072,6 +1141,9 @@
       "areaSqFt": 12924,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 15,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 43.8,
       "depthM": 27.4,
@@ -1118,6 +1190,9 @@
       "areaSqFt": 40066,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 47,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 54.6,
       "depthM": 34.1,
@@ -1164,6 +1239,9 @@
       "areaSqFt": 12365,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 15,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 30.3,
       "depthM": 18.9,
@@ -1210,6 +1288,9 @@
       "areaSqFt": 7404,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 9,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 33.2,
       "depthM": 20.7,
@@ -1256,6 +1337,9 @@
       "areaSqFt": 103059,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 121,
+      "roomsWithAcm": 43,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 87.5,
       "depthM": 54.7,
@@ -1302,6 +1386,9 @@
       "areaSqFt": 24569,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 29,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 42.7,
       "depthM": 26.7,
@@ -1348,6 +1435,9 @@
       "areaSqFt": 12961,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 15,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 31,
       "depthM": 19.4,
@@ -1394,6 +1484,9 @@
       "areaSqFt": 59340,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 70,
+      "roomsWithAcm": 23,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 54.2,
       "depthM": 33.9,
@@ -1440,6 +1533,9 @@
       "areaSqFt": 12263,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 14,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 42.7,
       "depthM": 26.7,
@@ -1486,6 +1582,9 @@
       "areaSqFt": 24336,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 29,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 42.5,
       "depthM": 26.6,
@@ -1532,6 +1631,9 @@
       "areaSqFt": 87282,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 103,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 80.5,
       "depthM": 50.3,
@@ -1578,6 +1680,9 @@
       "areaSqFt": 23213,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 27,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 41.5,
       "depthM": 26,
@@ -1624,6 +1729,9 @@
       "areaSqFt": 28794,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 34,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 46.3,
       "depthM": 28.9,
@@ -1666,13 +1774,16 @@
       "code": "VIRTUALOPTIONK12-A",
       "name": "Main Building",
       "yearBuilt": 1930,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 42903,
       "construction": "Masonry",
       "presumedAcm": true,
-      "heightM": 17,
-      "widthM": 39.9,
-      "depthM": 25,
+      "rooms": 50,
+      "roomsWithAcm": 6,
+      "acmStatus": "Assumed ACM",
+      "heightM": 13,
+      "widthM": 46.1,
+      "depthM": 28.8,
       "location": {
         "lat": 47.646048,
         "lng": -122.358252
@@ -1682,24 +1793,24 @@
         "coordinates": [
           [
             [
-              -122.3585179,
-              47.645936
+              -122.3585592,
+              47.6459189
             ],
             [
-              -122.3579859,
-              47.645936
+              -122.3579445,
+              47.6459189
             ],
             [
-              -122.3579859,
-              47.6461606
+              -122.3579445,
+              47.6461777
             ],
             [
-              -122.3585179,
-              47.6461606
+              -122.3585592,
+              47.6461777
             ],
             [
-              -122.3585179,
-              47.645936
+              -122.3585592,
+              47.6459189
             ]
           ]
         ]
@@ -1716,35 +1827,38 @@
       "areaSqFt": 16026,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 19,
+      "roomsWithAcm": 7,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 48.8,
       "depthM": 30.5,
       "location": {
         "lat": 47.646048,
-        "lng": -122.357501
+        "lng": -122.357459
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3578259,
+              -122.3577845,
               47.6459113
             ],
             [
-              -122.3571752,
+              -122.3571338,
               47.6459113
             ],
             [
-              -122.3571752,
+              -122.3571338,
               47.6461853
             ],
             [
-              -122.3578259,
+              -122.3577845,
               47.6461853
             ],
             [
-              -122.3578259,
+              -122.3577845,
               47.6459113
             ]
           ]
@@ -1762,11 +1876,14 @@
       "areaSqFt": 25555,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 30,
+      "roomsWithAcm": 10,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 61.6,
       "depthM": 38.5,
       "location": {
-        "lat": 47.645655,
+        "lat": 47.645638,
         "lng": -122.358252
       },
       "footprint": {
@@ -1775,23 +1892,23 @@
           [
             [
               -122.3586626,
-              47.6454824
+              47.6454653
             ],
             [
               -122.3578412,
-              47.6454824
+              47.6454653
             ],
             [
               -122.3578412,
-              47.6458282
+              47.6458111
             ],
             [
               -122.3586626,
-              47.6458282
+              47.6458111
             ],
             [
               -122.3586626,
-              47.6454824
+              47.6454653
             ]
           ]
         ]
@@ -1808,6 +1925,9 @@
       "areaSqFt": 154180,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 181,
+      "roomsWithAcm": 52,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 107,
       "depthM": 66.9,
@@ -1854,6 +1974,9 @@
       "areaSqFt": 18002,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 21,
+      "roomsWithAcm": 2,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 51.7,
       "depthM": 32.3,
@@ -1900,6 +2023,9 @@
       "areaSqFt": 24512,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 29,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 60.4,
       "depthM": 37.7,
@@ -1946,6 +2072,9 @@
       "areaSqFt": 158665,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 187,
+      "roomsWithAcm": 45,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 108.6,
       "depthM": 67.9,
@@ -1992,6 +2121,9 @@
       "areaSqFt": 11594,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 14,
+      "roomsWithAcm": 4,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 29.4,
       "depthM": 18.3,
@@ -2038,6 +2170,9 @@
       "areaSqFt": 19154,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 23,
+      "roomsWithAcm": 6,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 53.4,
       "depthM": 33.3,
@@ -2084,6 +2219,9 @@
       "areaSqFt": 48987,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 58,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 13,
       "widthM": 49.3,
       "depthM": 30.8,
@@ -2130,6 +2268,9 @@
       "areaSqFt": 7382,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 9,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 33.1,
       "depthM": 20.7,
@@ -2176,6 +2317,9 @@
       "areaSqFt": 4571,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 5,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 26.1,
       "depthM": 16.3,
@@ -2222,6 +2366,9 @@
       "areaSqFt": 92594,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 109,
+      "roomsWithAcm": 33,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 83,
       "depthM": 51.8,
@@ -2268,6 +2415,9 @@
       "areaSqFt": 13830,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 16,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 45.3,
       "depthM": 28.3,
@@ -2314,6 +2464,9 @@
       "areaSqFt": 17205,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 20,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 35.8,
       "depthM": 22.3,
@@ -2360,6 +2513,9 @@
       "areaSqFt": 109264,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 129,
+      "roomsWithAcm": 35,
+      "acmStatus": "Assumed ACM",
       "heightM": 13,
       "widthM": 73.6,
       "depthM": 46,
@@ -2406,6 +2562,9 @@
       "areaSqFt": 25914,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 30,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 62.1,
       "depthM": 38.8,
@@ -2452,6 +2611,9 @@
       "areaSqFt": 23210,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 27,
+      "roomsWithAcm": 9,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 41.5,
       "depthM": 26,
@@ -2498,6 +2660,9 @@
       "areaSqFt": 128782,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 152,
+      "roomsWithAcm": 35,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 79.9,
       "depthM": 49.9,
@@ -2544,6 +2709,9 @@
       "areaSqFt": 19028,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 22,
+      "roomsWithAcm": 7,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 53.2,
       "depthM": 33.2,
@@ -2590,6 +2758,9 @@
       "areaSqFt": 12133,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 14,
+      "roomsWithAcm": 5,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 42.5,
       "depthM": 26.5,
@@ -2632,13 +2803,16 @@
       "code": "CONCORDES-A",
       "name": "Main Building",
       "yearBuilt": 1939,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 145787,
       "construction": "Masonry",
       "presumedAcm": true,
-      "heightM": 17,
-      "widthM": 73.6,
-      "depthM": 46,
+      "rooms": 172,
+      "roomsWithAcm": 29,
+      "acmStatus": "ACM Present",
+      "heightM": 13,
+      "widthM": 85,
+      "depthM": 53.1,
       "location": {
         "lat": 47.523863,
         "lng": -122.324986
@@ -2648,24 +2822,24 @@
         "coordinates": [
           [
             [
-              -122.3254753,
-              47.5236562
+              -122.3255512,
+              47.5236243
             ],
             [
-              -122.3244963,
-              47.5236562
+              -122.3244204,
+              47.5236243
             ],
             [
-              -122.3244963,
-              47.5240694
+              -122.3244204,
+              47.5241013
             ],
             [
-              -122.3254753,
-              47.5240694
+              -122.3255512,
+              47.5241013
             ],
             [
-              -122.3254753,
-              47.5236562
+              -122.3255512,
+              47.5236243
             ]
           ]
         ]
@@ -2682,35 +2856,38 @@
       "areaSqFt": 24964,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 29,
+      "roomsWithAcm": 5,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 60.9,
       "depthM": 38.1,
       "location": {
         "lat": 47.523863,
-        "lng": -122.323932
+        "lng": -122.323856
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3243366,
+              -122.3242608,
               47.5236916
             ],
             [
-              -122.3235265,
+              -122.3234507,
               47.5236916
             ],
             [
-              -122.3235265,
+              -122.3234507,
               47.5240339
             ],
             [
-              -122.3243366,
+              -122.3242608,
               47.5240339
             ],
             [
-              -122.3243366,
+              -122.3242608,
               47.5236916
             ]
           ]
@@ -2728,11 +2905,14 @@
       "areaSqFt": 7765,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 9,
+      "roomsWithAcm": 2,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 24,
       "depthM": 15,
       "location": {
-        "lat": 47.523481,
+        "lat": 47.523449,
         "lng": -122.324986
       },
       "footprint": {
@@ -2741,23 +2921,23 @@
           [
             [
               -122.3251454,
-              47.5234136
+              47.5233817
             ],
             [
               -122.3248262,
-              47.5234136
+              47.5233817
             ],
             [
               -122.3248262,
-              47.5235484
+              47.5235165
             ],
             [
               -122.3251454,
-              47.5235484
+              47.5235165
             ],
             [
               -122.3251454,
-              47.5234136
+              47.5233817
             ]
           ]
         ]
@@ -2770,13 +2950,16 @@
       "code": "BAGLEYES-A",
       "name": "Main Building",
       "yearBuilt": 1997,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 54189,
       "construction": "Masonry",
       "presumedAcm": false,
-      "heightM": 17,
-      "widthM": 44.9,
-      "depthM": 28,
+      "rooms": 64,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
+      "heightM": 13,
+      "widthM": 51.8,
+      "depthM": 32.4,
       "location": {
         "lat": 47.686328,
         "lng": -122.34189
@@ -2786,24 +2969,24 @@
         "coordinates": [
           [
             [
-              -122.3421892,
-              47.6862027
+              -122.3422352,
+              47.686183
             ],
             [
-              -122.3415901,
-              47.6862027
+              -122.341544,
+              47.686183
             ],
             [
-              -122.3415901,
-              47.6864543
+              -122.341544,
+              47.686474
             ],
             [
-              -122.3421892,
-              47.6864543
+              -122.3422352,
+              47.686474
             ],
             [
-              -122.3421892,
-              47.6862027
+              -122.3422352,
+              47.686183
             ]
           ]
         ]
@@ -2820,35 +3003,38 @@
       "areaSqFt": 20298,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 24,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 54.9,
       "depthM": 34.3,
       "location": {
         "lat": 47.686328,
-        "lng": -122.341064
+        "lng": -122.341018
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3414299,
+              -122.3413839,
               47.6861744
             ],
             [
-              -122.3406973,
+              -122.3406513,
               47.6861744
             ],
             [
-              -122.3406973,
+              -122.3406513,
               47.6864826
             ],
             [
-              -122.3414299,
+              -122.3413839,
               47.6864826
             ],
             [
-              -122.3414299,
+              -122.3413839,
               47.6861744
             ]
           ]
@@ -2866,11 +3052,14 @@
       "areaSqFt": 17944,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 21,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 51.6,
       "depthM": 32.3,
       "location": {
-        "lat": 47.68595,
+        "lat": 47.68593,
         "lng": -122.34189
       },
       "footprint": {
@@ -2879,23 +3068,23 @@
           [
             [
               -122.3422339,
-              47.6858048
+              47.685785
             ],
             [
               -122.3415454,
-              47.6858048
+              47.685785
             ],
             [
               -122.3415454,
-              47.6860949
+              47.6860752
             ],
             [
               -122.3422339,
-              47.6860949
+              47.6860752
             ],
             [
               -122.3422339,
-              47.6858048
+              47.685785
             ]
           ]
         ]
@@ -2912,6 +3101,9 @@
       "areaSqFt": 44942,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 53,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 13,
       "widthM": 47.2,
       "depthM": 29.5,
@@ -2958,6 +3150,9 @@
       "areaSqFt": 19373,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 23,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 37.9,
       "depthM": 23.7,
@@ -3004,6 +3199,9 @@
       "areaSqFt": 11501,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 14,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 29.2,
       "depthM": 18.3,
@@ -3050,6 +3248,9 @@
       "areaSqFt": 174972,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 206,
+      "roomsWithAcm": 52,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 114,
       "depthM": 71.3,
@@ -3096,6 +3297,9 @@
       "areaSqFt": 11958,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 14,
+      "roomsWithAcm": 1,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 29.8,
       "depthM": 18.6,
@@ -3142,6 +3346,9 @@
       "areaSqFt": 20022,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 24,
+      "roomsWithAcm": 6,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 38.6,
       "depthM": 24.1,
@@ -3188,6 +3395,9 @@
       "areaSqFt": 52492,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 62,
+      "roomsWithAcm": 18,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 88.3,
       "depthM": 55.2,
@@ -3234,6 +3444,9 @@
       "areaSqFt": 18741,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 22,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 52.8,
       "depthM": 33,
@@ -3280,6 +3493,9 @@
       "areaSqFt": 24263,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 29,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 42.5,
       "depthM": 26.5,
@@ -3322,13 +3538,16 @@
       "code": "DUNLAPES-A",
       "name": "Main Building",
       "yearBuilt": 2004,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 174054,
       "construction": "Concrete",
       "presumedAcm": false,
-      "heightM": 17,
-      "widthM": 80.4,
-      "depthM": 50.3,
+      "rooms": 205,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
+      "heightM": 13,
+      "widthM": 92.9,
+      "depthM": 58,
       "location": {
         "lat": 47.526061,
         "lng": -122.274729
@@ -3338,24 +3557,24 @@
         "coordinates": [
           [
             [
-              -122.2752638,
-              47.5258348
+              -122.2753469,
+              47.5258002
             ],
             [
-              -122.2741942,
-              47.5258348
+              -122.2741111,
+              47.5258002
             ],
             [
-              -122.2741942,
-              47.5262866
+              -122.2741111,
+              47.5263212
             ],
             [
-              -122.2752638,
-              47.5262866
+              -122.2753469,
+              47.5263212
             ],
             [
-              -122.2752638,
-              47.5258348
+              -122.2753469,
+              47.5258002
             ]
           ]
         ]
@@ -3372,35 +3591,38 @@
       "areaSqFt": 8752,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 10,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 25.5,
       "depthM": 15.9,
       "location": {
         "lat": 47.526061,
-        "lng": -122.273865
+        "lng": -122.273782
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.2740346,
+              -122.2739514,
               47.5259893
             ],
             [
-              -122.2736953,
+              -122.2736122,
               47.5259893
             ],
             [
-              -122.2736953,
+              -122.2736122,
               47.5261321
             ],
             [
-              -122.2740346,
+              -122.2739514,
               47.5261321
             ],
             [
-              -122.2740346,
+              -122.2739514,
               47.5259893
             ]
           ]
@@ -3418,11 +3640,14 @@
       "areaSqFt": 18052,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 21,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 36.6,
       "depthM": 22.9,
       "location": {
-        "lat": 47.525624,
+        "lat": 47.52559,
         "lng": -122.274729
       },
       "footprint": {
@@ -3431,23 +3656,23 @@
           [
             [
               -122.2749724,
-              47.5255213
+              47.5254867
             ],
             [
               -122.2744855,
-              47.5255213
+              47.5254867
             ],
             [
               -122.2744855,
-              47.525727
+              47.5256924
             ],
             [
               -122.2749724,
-              47.525727
+              47.5256924
             ],
             [
               -122.2749724,
-              47.5255213
+              47.5254867
             ]
           ]
         ]
@@ -3464,6 +3689,9 @@
       "areaSqFt": 128883,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 152,
+      "roomsWithAcm": 38,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 97.9,
       "depthM": 61.2,
@@ -3510,6 +3738,9 @@
       "areaSqFt": 23494,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 28,
+      "roomsWithAcm": 4,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 41.8,
       "depthM": 26.1,
@@ -3556,6 +3787,9 @@
       "areaSqFt": 3338,
       "construction": "Modular",
       "presumedAcm": true,
+      "rooms": 4,
+      "roomsWithAcm": 1,
+      "acmStatus": "Assumed ACM",
       "heightM": 3.5,
       "widthM": 22.3,
       "depthM": 13.9,
@@ -3602,6 +3836,9 @@
       "areaSqFt": 152297,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 179,
+      "roomsWithAcm": 48,
+      "acmStatus": "Assumed ACM",
       "heightM": 13,
       "widthM": 86.9,
       "depthM": 54.3,
@@ -3648,6 +3885,9 @@
       "areaSqFt": 8071,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 9,
+      "roomsWithAcm": 3,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 34.6,
       "depthM": 21.6,
@@ -3694,6 +3934,9 @@
       "areaSqFt": 2959,
       "construction": "Modular",
       "presumedAcm": true,
+      "rooms": 3,
+      "roomsWithAcm": 1,
+      "acmStatus": "ACM Present",
       "heightM": 3.5,
       "widthM": 21,
       "depthM": 13.1,
@@ -3740,6 +3983,9 @@
       "areaSqFt": 179939,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 212,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 115.6,
       "depthM": 72.3,
@@ -3786,6 +4032,9 @@
       "areaSqFt": 24749,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 29,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 42.9,
       "depthM": 26.8,
@@ -3832,6 +4081,9 @@
       "areaSqFt": 14064,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 17,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 45.7,
       "depthM": 28.6,
@@ -3878,6 +4130,9 @@
       "areaSqFt": 48666,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 57,
+      "roomsWithAcm": 14,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 49.1,
       "depthM": 30.7,
@@ -3924,6 +4179,9 @@
       "areaSqFt": 8830,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 10,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 25.6,
       "depthM": 16,
@@ -3970,6 +4228,9 @@
       "areaSqFt": 25103,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 30,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 61.1,
       "depthM": 38.2,
@@ -4016,6 +4277,9 @@
       "areaSqFt": 69613,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 82,
+      "roomsWithAcm": 30,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 58.7,
       "depthM": 36.7,
@@ -4062,6 +4326,9 @@
       "areaSqFt": 19407,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 23,
+      "roomsWithAcm": 3,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 38,
       "depthM": 23.7,
@@ -4108,6 +4375,9 @@
       "areaSqFt": 6864,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 8,
+      "roomsWithAcm": 3,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 31.9,
       "depthM": 20,
@@ -4150,13 +4420,16 @@
       "code": "GATEWOODES-A",
       "name": "Main Building",
       "yearBuilt": 2001,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 88854,
       "construction": "Masonry",
       "presumedAcm": false,
-      "heightM": 17,
-      "widthM": 57.5,
-      "depthM": 35.9,
+      "rooms": 105,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
+      "heightM": 13,
+      "widthM": 66.4,
+      "depthM": 41.5,
       "location": {
         "lat": 47.539929,
         "lng": -122.387569
@@ -4166,24 +4439,24 @@
         "coordinates": [
           [
             [
-              -122.3879513,
-              47.5397673
+              -122.3880105,
+              47.5397422
             ],
             [
-              -122.3871861,
-              47.5397673
+              -122.3871269,
+              47.5397422
             ],
             [
-              -122.3871861,
-              47.5400898
+              -122.3871269,
+              47.540115
             ],
             [
-              -122.3879513,
-              47.5400898
+              -122.3880105,
+              47.540115
             ],
             [
-              -122.3879513,
-              47.5397673
+              -122.3880105,
+              47.5397422
             ]
           ]
         ]
@@ -4200,35 +4473,38 @@
       "areaSqFt": 27571,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 32,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 64,
       "depthM": 40,
       "location": {
         "lat": 47.539929,
-        "lng": -122.386601
+        "lng": -122.386541
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3870265,
+              -122.3869672,
               47.5397489
             ],
             [
-              -122.3861748,
+              -122.3861156,
               47.5397489
             ],
             [
-              -122.3861748,
+              -122.3861156,
               47.5401083
             ],
             [
-              -122.3870265,
+              -122.3869672,
               47.5401083
             ],
             [
-              -122.3870265,
+              -122.3869672,
               47.5397489
             ]
           ]
@@ -4246,11 +4522,14 @@
       "areaSqFt": 4346,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 5,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 25.4,
       "depthM": 15.9,
       "location": {
-        "lat": 47.539588,
+        "lat": 47.539563,
         "lng": -122.387569
       },
       "footprint": {
@@ -4259,23 +4538,23 @@
           [
             [
               -122.3877377,
-              47.5395167
+              47.5394916
             ],
             [
               -122.3873997,
-              47.5395167
+              47.5394916
             ],
             [
               -122.3873997,
-              47.5396596
+              47.5396344
             ],
             [
               -122.3877377,
-              47.5396596
+              47.5396344
             ],
             [
               -122.3877377,
-              47.5395167
+              47.5394916
             ]
           ]
         ]
@@ -4292,6 +4571,9 @@
       "areaSqFt": 40549,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 48,
+      "roomsWithAcm": 17,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 77.6,
       "depthM": 48.5,
@@ -4338,6 +4620,9 @@
       "areaSqFt": 28932,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 34,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 46.4,
       "depthM": 29,
@@ -4384,6 +4669,9 @@
       "areaSqFt": 4028,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 5,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 24.5,
       "depthM": 15.3,
@@ -4430,6 +4718,9 @@
       "areaSqFt": 109610,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 129,
+      "roomsWithAcm": 30,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 90.3,
       "depthM": 56.4,
@@ -4476,6 +4767,9 @@
       "areaSqFt": 9787,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 12,
+      "roomsWithAcm": 3,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 38.1,
       "depthM": 23.8,
@@ -4522,6 +4816,9 @@
       "areaSqFt": 13989,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 16,
+      "roomsWithAcm": 4,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 32.2,
       "depthM": 20.2,
@@ -4568,6 +4865,9 @@
       "areaSqFt": 154235,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 181,
+      "roomsWithAcm": 19,
+      "acmStatus": "Assumed ACM",
       "heightM": 13,
       "widthM": 87.4,
       "depthM": 54.6,
@@ -4614,6 +4914,9 @@
       "areaSqFt": 18009,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 21,
+      "roomsWithAcm": 4,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 51.7,
       "depthM": 32.3,
@@ -4660,6 +4963,9 @@
       "areaSqFt": 4225,
       "construction": "Modular",
       "presumedAcm": true,
+      "rooms": 5,
+      "roomsWithAcm": 1,
+      "acmStatus": "Assumed ACM",
       "heightM": 3.5,
       "widthM": 25.1,
       "depthM": 15.7,
@@ -4706,6 +5012,9 @@
       "areaSqFt": 151127,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 178,
+      "roomsWithAcm": 38,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 106,
       "depthM": 66.2,
@@ -4752,6 +5061,9 @@
       "areaSqFt": 16593,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 20,
+      "roomsWithAcm": 3,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 35.1,
       "depthM": 21.9,
@@ -4798,6 +5110,9 @@
       "areaSqFt": 10894,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 13,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 28.5,
       "depthM": 17.8,
@@ -4844,6 +5159,9 @@
       "areaSqFt": 46575,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 55,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 58.8,
       "depthM": 36.8,
@@ -4890,6 +5208,9 @@
       "areaSqFt": 10779,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 13,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 40,
       "depthM": 25,
@@ -4936,6 +5257,9 @@
       "areaSqFt": 25631,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 30,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 61.7,
       "depthM": 38.6,
@@ -4982,6 +5306,9 @@
       "areaSqFt": 130149,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 153,
+      "roomsWithAcm": 42,
+      "acmStatus": "Assumed ACM",
       "heightM": 13,
       "widthM": 80.3,
       "depthM": 50.2,
@@ -5028,6 +5355,9 @@
       "areaSqFt": 11000,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 13,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 28.6,
       "depthM": 17.9,
@@ -5074,6 +5404,9 @@
       "areaSqFt": 22868,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 27,
+      "roomsWithAcm": 5,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 58.3,
       "depthM": 36.4,
@@ -5120,6 +5453,9 @@
       "areaSqFt": 56826,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 67,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 91.9,
       "depthM": 57.4,
@@ -5166,6 +5502,9 @@
       "areaSqFt": 13587,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 16,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 31.8,
       "depthM": 19.9,
@@ -5212,6 +5551,9 @@
       "areaSqFt": 4075,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 5,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 24.6,
       "depthM": 15.4,
@@ -5258,6 +5600,9 @@
       "areaSqFt": 40187,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 47,
+      "roomsWithAcm": 8,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 54.7,
       "depthM": 34.2,
@@ -5304,6 +5649,9 @@
       "areaSqFt": 28798,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 34,
+      "roomsWithAcm": 4,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 65.4,
       "depthM": 40.9,
@@ -5350,6 +5698,9 @@
       "areaSqFt": 4476,
       "construction": "Modular",
       "presumedAcm": true,
+      "rooms": 5,
+      "roomsWithAcm": 1,
+      "acmStatus": "Assumed ACM",
       "heightM": 3.5,
       "widthM": 25.8,
       "depthM": 16.1,
@@ -5396,6 +5747,9 @@
       "areaSqFt": 87303,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 103,
+      "roomsWithAcm": 21,
+      "acmStatus": "Assumed ACM",
       "heightM": 13,
       "widthM": 65.8,
       "depthM": 41.1,
@@ -5442,6 +5796,9 @@
       "areaSqFt": 23343,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 27,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 41.7,
       "depthM": 26,
@@ -5488,6 +5845,9 @@
       "areaSqFt": 21898,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 26,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 57.1,
       "depthM": 35.7,
@@ -5534,6 +5894,9 @@
       "areaSqFt": 130837,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 154,
+      "roomsWithAcm": 35,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 139.5,
       "depthM": 87.2,
@@ -5580,6 +5943,9 @@
       "areaSqFt": 15829,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 19,
+      "roomsWithAcm": 3,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 48.5,
       "depthM": 30.3,
@@ -5626,6 +5992,9 @@
       "areaSqFt": 27690,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 33,
+      "roomsWithAcm": 7,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 45.4,
       "depthM": 28.4,
@@ -5672,6 +6041,9 @@
       "areaSqFt": 57974,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 68,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 92.8,
       "depthM": 58,
@@ -5718,6 +6090,9 @@
       "areaSqFt": 17826,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 21,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 51.5,
       "depthM": 32.2,
@@ -5764,6 +6139,9 @@
       "areaSqFt": 19579,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 23,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 53.9,
       "depthM": 33.7,
@@ -5806,13 +6184,16 @@
       "code": "ADDAMSMS-A",
       "name": "Main Building",
       "yearBuilt": 2014,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 112610,
       "construction": "Concrete",
       "presumedAcm": false,
-      "heightM": 17,
-      "widthM": 64.7,
-      "depthM": 40.4,
+      "rooms": 132,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
+      "heightM": 13,
+      "widthM": 74.7,
+      "depthM": 46.7,
       "location": {
         "lat": 47.7093,
         "lng": -122.292168
@@ -5822,24 +6203,24 @@
         "coordinates": [
           [
             [
-              -122.2926,
-              47.7091185
+              -122.2926667,
+              47.7090902
             ],
             [
-              -122.2917362,
-              47.7091185
+              -122.2916695,
+              47.7090902
             ],
             [
-              -122.2917362,
-              47.7094814
+              -122.2916695,
+              47.7095097
             ],
             [
-              -122.2926,
-              47.7094814
+              -122.2926667,
+              47.7095097
             ],
             [
-              -122.2926,
-              47.7091185
+              -122.2926667,
+              47.7090902
             ]
           ]
         ]
@@ -5856,35 +6237,38 @@
       "areaSqFt": 15270,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 18,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 33.7,
       "depthM": 21.1,
       "location": {
         "lat": 47.7093,
-        "lng": -122.291351
+        "lng": -122.291284
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.291576,
+              -122.2915093,
               47.7092052
             ],
             [
-              -122.2911261,
+              -122.2910594,
               47.7092052
             ],
             [
-              -122.2911261,
+              -122.2910594,
               47.7093947
             ],
             [
-              -122.291576,
+              -122.2915093,
               47.7093947
             ],
             [
-              -122.291576,
+              -122.2915093,
               47.7092052
             ]
           ]
@@ -5902,11 +6286,14 @@
       "areaSqFt": 7576,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 9,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 23.7,
       "depthM": 14.8,
       "location": {
-        "lat": 47.708944,
+        "lat": 47.708916,
         "lng": -122.292168
       },
       "footprint": {
@@ -5915,23 +6302,23 @@
           [
             [
               -122.2923263,
-              47.7088778
+              47.7088495
             ],
             [
               -122.2920099,
-              47.7088778
+              47.7088495
             ],
             [
               -122.2920099,
-              47.7090107
+              47.7089824
             ],
             [
               -122.2923263,
-              47.7090107
+              47.7089824
             ],
             [
               -122.2923263,
-              47.7088778
+              47.7088495
             ]
           ]
         ]
@@ -5948,6 +6335,9 @@
       "areaSqFt": 167548,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 197,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 13,
       "widthM": 91.1,
       "depthM": 56.9,
@@ -5994,6 +6384,9 @@
       "areaSqFt": 21751,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 26,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 56.9,
       "depthM": 35.5,
@@ -6040,6 +6433,9 @@
       "areaSqFt": 7738,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 9,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 24,
       "depthM": 15,
@@ -6086,6 +6482,9 @@
       "areaSqFt": 50610,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 60,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 13,
       "widthM": 50.1,
       "depthM": 31.3,
@@ -6132,6 +6531,9 @@
       "areaSqFt": 22854,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 27,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 41.2,
       "depthM": 25.8,
@@ -6178,6 +6580,9 @@
       "areaSqFt": 7122,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 8,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 23,
       "depthM": 14.4,
@@ -6224,6 +6629,9 @@
       "areaSqFt": 78716,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 93,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 108.2,
       "depthM": 67.6,
@@ -6270,6 +6678,9 @@
       "areaSqFt": 24346,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 29,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 60.2,
       "depthM": 37.6,
@@ -6316,6 +6727,9 @@
       "areaSqFt": 19380,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 23,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 38,
       "depthM": 23.7,
@@ -6362,6 +6776,9 @@
       "areaSqFt": 62525,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 74,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 13,
       "widthM": 55.7,
       "depthM": 34.8,
@@ -6408,6 +6825,9 @@
       "areaSqFt": 6030,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 7,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 29.9,
       "depthM": 18.7,
@@ -6454,6 +6874,9 @@
       "areaSqFt": 4189,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 5,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 25,
       "depthM": 15.6,
@@ -6500,6 +6923,9 @@
       "areaSqFt": 83813,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 99,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 78.9,
       "depthM": 49.3,
@@ -6546,6 +6972,9 @@
       "areaSqFt": 9766,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 11,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 26.9,
       "depthM": 16.8,
@@ -6592,6 +7021,9 @@
       "areaSqFt": 9497,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 11,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 26.6,
       "depthM": 16.6,
@@ -6634,13 +7066,16 @@
       "code": "LAFAYETTEES-A",
       "name": "Main Building",
       "yearBuilt": 2017,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 71075,
       "construction": "Masonry",
       "presumedAcm": false,
-      "heightM": 17,
-      "widthM": 51.4,
-      "depthM": 32.1,
+      "rooms": 84,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
+      "heightM": 13,
+      "widthM": 59.3,
+      "depthM": 37.1,
       "location": {
         "lat": 47.580343,
         "lng": -122.386667
@@ -6650,24 +7085,24 @@
         "coordinates": [
           [
             [
-              -122.3870091,
-              47.5801987
+              -122.3870617,
+              47.5801763
             ],
             [
-              -122.3863246,
-              47.5801987
+              -122.386272,
+              47.5801763
             ],
             [
-              -122.3863246,
-              47.5804871
+              -122.386272,
+              47.5805095
             ],
             [
-              -122.3870091,
-              47.5804871
+              -122.3870617,
+              47.5805095
             ],
             [
-              -122.3870091,
-              47.5801987
+              -122.3870617,
+              47.5801763
             ]
           ]
         ]
@@ -6684,35 +7119,38 @@
       "areaSqFt": 10884,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 13,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 28.4,
       "depthM": 17.8,
       "location": {
         "lat": 47.580343,
-        "lng": -122.385976
+        "lng": -122.385923
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3861648,
+              -122.3861122,
               47.580263
             ],
             [
-              -122.3857866,
+              -122.385734,
               47.580263
             ],
             [
-              -122.3857866,
+              -122.385734,
               47.5804229
             ],
             [
-              -122.3861648,
+              -122.3861122,
               47.5804229
             ],
             [
-              -122.3861648,
+              -122.3861122,
               47.580263
             ]
           ]
@@ -6730,11 +7168,14 @@
       "areaSqFt": 25646,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 30,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 43.7,
       "depthM": 27.3,
       "location": {
-        "lat": 47.579968,
+        "lat": 47.579946,
         "lng": -122.386667
       },
       "footprint": {
@@ -6743,23 +7184,23 @@
           [
             [
               -122.3869578,
-              47.5798457
+              47.5798232
             ],
             [
               -122.3863758,
-              47.5798457
+              47.5798232
             ],
             [
               -122.3863758,
-              47.5800909
+              47.5800685
             ],
             [
               -122.3869578,
-              47.5800909
+              47.5800685
             ],
             [
               -122.3869578,
-              47.5798457
+              47.5798232
             ]
           ]
         ]
@@ -6776,6 +7217,9 @@
       "areaSqFt": 157744,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 186,
+      "roomsWithAcm": 62,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 88.4,
       "depthM": 55.3,
@@ -6822,6 +7266,9 @@
       "areaSqFt": 18751,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 22,
+      "roomsWithAcm": 8,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 52.8,
       "depthM": 33,
@@ -6868,6 +7315,9 @@
       "areaSqFt": 13550,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 16,
+      "roomsWithAcm": 2,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 44.9,
       "depthM": 28,
@@ -6910,13 +7360,16 @@
       "code": "LAWTONES-A",
       "name": "Main Building",
       "yearBuilt": 2012,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 42850,
       "construction": "Steel Frame",
       "presumedAcm": false,
-      "heightM": 17,
-      "widthM": 39.9,
-      "depthM": 24.9,
+      "rooms": 50,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
+      "heightM": 13,
+      "widthM": 46.1,
+      "depthM": 28.8,
       "location": {
         "lat": 47.65671,
         "lng": -122.390993
@@ -6926,24 +7379,24 @@
         "coordinates": [
           [
             [
-              -122.391259,
-              47.6565985
+              -122.3913004,
+              47.656581
             ],
             [
-              -122.3907269,
-              47.6565985
+              -122.3906855,
+              47.656581
             ],
             [
-              -122.3907269,
-              47.6568222
+              -122.3906855,
+              47.6568397
             ],
             [
-              -122.391259,
-              47.6568222
+              -122.3913004,
+              47.6568397
             ],
             [
-              -122.391259,
-              47.6565985
+              -122.3913004,
+              47.656581
             ]
           ]
         ]
@@ -6960,35 +7413,38 @@
       "areaSqFt": 29814,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 35,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 66.6,
       "depthM": 41.6,
       "location": {
         "lat": 47.65671,
-        "lng": -122.390123
+        "lng": -122.390081
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3905668,
+              -122.3905255,
               47.6565235
             ],
             [
-              -122.3896786,
+              -122.3896373,
               47.6565235
             ],
             [
-              -122.3896786,
+              -122.3896373,
               47.6568972
             ],
             [
-              -122.3905668,
+              -122.3905255,
               47.6568972
             ],
             [
-              -122.3905668,
+              -122.3905255,
               47.6565235
             ]
           ]
@@ -7006,11 +7462,14 @@
       "areaSqFt": 10033,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 12,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 38.6,
       "depthM": 24.1,
       "location": {
-        "lat": 47.656382,
+        "lat": 47.656365,
         "lng": -122.390993
       },
       "footprint": {
@@ -7019,23 +7478,23 @@
           [
             [
               -122.3912503,
-              47.6562742
+              47.6562567
             ],
             [
               -122.3907356,
-              47.6562742
+              47.6562567
             ],
             [
               -122.3907356,
-              47.6564907
+              47.6564732
             ],
             [
               -122.3912503,
-              47.6564907
+              47.6564732
             ],
             [
               -122.3912503,
-              47.6562742
+              47.6562567
             ]
           ]
         ]
@@ -7052,6 +7511,9 @@
       "areaSqFt": 117319,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 138,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 93.4,
       "depthM": 58.4,
@@ -7098,6 +7560,9 @@
       "areaSqFt": 23858,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 28,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 59.6,
       "depthM": 37.2,
@@ -7144,6 +7609,9 @@
       "areaSqFt": 4320,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 5,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 25.3,
       "depthM": 15.8,
@@ -7186,13 +7654,16 @@
       "code": "LICTONSPRINGSK8-A",
       "name": "Main Building",
       "yearBuilt": 2005,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 69344,
       "construction": "Wood Frame",
       "presumedAcm": false,
-      "heightM": 17,
-      "widthM": 50.8,
-      "depthM": 31.7,
+      "rooms": 82,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
+      "heightM": 13,
+      "widthM": 58.6,
+      "depthM": 36.6,
       "location": {
         "lat": 47.677964,
         "lng": -122.395951
@@ -7202,24 +7673,24 @@
         "coordinates": [
           [
             [
-              -122.3962901,
-              47.6778213
+              -122.3963421,
+              47.6777993
             ],
             [
-              -122.3956123,
-              47.6778213
+              -122.3955603,
+              47.6777993
             ],
             [
-              -122.3956123,
-              47.678106
+              -122.3955603,
+              47.678128
             ],
             [
-              -122.3962901,
-              47.678106
+              -122.3963421,
+              47.678128
             ],
             [
-              -122.3962901,
-              47.6778213
+              -122.3963421,
+              47.6777993
             ]
           ]
         ]
@@ -7236,35 +7707,38 @@
       "areaSqFt": 13462,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 16,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 31.6,
       "depthM": 19.8,
       "location": {
         "lat": 47.677964,
-        "lng": -122.395241
+        "lng": -122.395189
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3954522,
+              -122.3954002,
               47.6778747
             ],
             [
-              -122.3950306,
+              -122.3949786,
               47.6778747
             ],
             [
-              -122.3950306,
+              -122.3949786,
               47.6780526
             ],
             [
-              -122.3954522,
+              -122.3954002,
               47.6780526
             ],
             [
-              -122.3954522,
+              -122.3954002,
               47.6778747
             ]
           ]
@@ -7282,11 +7756,14 @@
       "areaSqFt": 28479,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 34,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 65.1,
       "depthM": 40.7,
       "location": {
-        "lat": 47.677531,
+        "lat": 47.677509,
         "lng": -122.395951
       },
       "footprint": {
@@ -7295,23 +7772,23 @@
           [
             [
               -122.3963855,
-              47.6773479
+              47.6773258
             ],
             [
               -122.3955169,
-              47.6773479
+              47.6773258
             ],
             [
               -122.3955169,
-              47.6777135
+              47.6776915
             ],
             [
               -122.3963855,
-              47.6777135
+              47.6776915
             ],
             [
               -122.3963855,
-              47.6773479
+              47.6773258
             ]
           ]
         ]
@@ -7328,6 +7805,9 @@
       "areaSqFt": 50648,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 60,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 13,
       "widthM": 50.1,
       "depthM": 31.3,
@@ -7374,6 +7854,9 @@
       "areaSqFt": 26505,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 31,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 62.8,
       "depthM": 39.2,
@@ -7420,6 +7903,9 @@
       "areaSqFt": 10214,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 12,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 39,
       "depthM": 24.4,
@@ -7462,13 +7948,16 @@
       "code": "BORENSTEMK8-A",
       "name": "Main Building",
       "yearBuilt": 2007,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 61845,
       "construction": "Concrete",
       "presumedAcm": false,
-      "heightM": 17,
-      "widthM": 47.9,
-      "depthM": 30,
+      "rooms": 73,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
+      "heightM": 13,
+      "widthM": 55.4,
+      "depthM": 34.6,
       "location": {
         "lat": 47.54957,
         "lng": -122.362934
@@ -7478,24 +7967,24 @@
         "coordinates": [
           [
             [
-              -122.3632527,
-              47.5494353
+              -122.3633026,
+              47.5494147
             ],
             [
-              -122.3626152,
-              47.5494353
+              -122.3625653,
+              47.5494147
             ],
             [
-              -122.3626152,
-              47.5497048
+              -122.3625653,
+              47.5497255
             ],
             [
-              -122.3632527,
-              47.5497048
+              -122.3633026,
+              47.5497255
             ],
             [
-              -122.3632527,
-              47.5494353
+              -122.3633026,
+              47.5494147
             ]
           ]
         ]
@@ -7512,35 +8001,38 @@
       "areaSqFt": 15084,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 18,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 33.5,
       "depthM": 20.9,
       "location": {
         "lat": 47.54957,
-        "lng": -122.362233
+        "lng": -122.362183
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3624555,
+              -122.3624056,
               47.5494762
             ],
             [
-              -122.3620096,
+              -122.3619597,
               47.5494762
             ],
             [
-              -122.3620096,
+              -122.3619597,
               47.5496639
             ],
             [
-              -122.3624555,
+              -122.3624056,
               47.5496639
             ],
             [
-              -122.3624555,
+              -122.3624056,
               47.5494762
             ]
           ]
@@ -7558,11 +8050,14 @@
       "areaSqFt": 23272,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 27,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 58.8,
       "depthM": 36.8,
       "location": {
-        "lat": 47.549162,
+        "lat": 47.549142,
         "lng": -122.362934
       },
       "footprint": {
@@ -7571,23 +8066,23 @@
           [
             [
               -122.3633252,
-              47.5489969
+              47.5489763
             ],
             [
               -122.3625427,
-              47.5489969
+              47.5489763
             ],
             [
               -122.3625427,
-              47.5493275
+              47.5493069
             ],
             [
               -122.3633252,
-              47.5493275
+              47.5493069
             ],
             [
               -122.3633252,
-              47.5489969
+              47.5489763
             ]
           ]
         ]
@@ -7600,13 +8095,16 @@
       "code": "LOWELLES-A",
       "name": "Main Building",
       "yearBuilt": 1942,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 137830,
       "construction": "Masonry",
       "presumedAcm": true,
-      "heightM": 17,
-      "widthM": 71.6,
-      "depthM": 44.7,
+      "rooms": 162,
+      "roomsWithAcm": 30,
+      "acmStatus": "ACM Present",
+      "heightM": 13,
+      "widthM": 82.6,
+      "depthM": 51.6,
       "location": {
         "lat": 47.624321,
         "lng": -122.318754
@@ -7616,24 +8114,24 @@
         "coordinates": [
           [
             [
-              -122.3192309,
-              47.6241204
+              -122.3193042,
+              47.6240894
             ],
             [
-              -122.3182766,
-              47.6241204
+              -122.3182033,
+              47.6240894
             ],
             [
-              -122.3182766,
-              47.6245219
+              -122.3182033,
+              47.6245529
             ],
             [
-              -122.3192309,
-              47.6245219
+              -122.3193042,
+              47.6245529
             ],
             [
-              -122.3192309,
-              47.6241204
+              -122.3193042,
+              47.6240894
             ]
           ]
         ]
@@ -7650,35 +8148,38 @@
       "areaSqFt": 25751,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 30,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 61.9,
       "depthM": 38.7,
       "location": {
         "lat": 47.624321,
-        "lng": -122.317704
+        "lng": -122.317631
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3181166,
+              -122.3180433,
               47.6241473
             ],
             [
-              -122.3172916,
+              -122.3172183,
               47.6241473
             ],
             [
-              -122.3172916,
+              -122.3172183,
               47.624495
             ],
             [
-              -122.3181166,
+              -122.3180433,
               47.624495
             ],
             [
-              -122.3181166,
+              -122.3180433,
               47.6241473
             ]
           ]
@@ -7696,11 +8197,14 @@
       "areaSqFt": 10187,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 12,
+      "roomsWithAcm": 1,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 38.9,
       "depthM": 24.3,
       "location": {
-        "lat": 47.623903,
+        "lat": 47.623872,
         "lng": -122.318754
       },
       "footprint": {
@@ -7709,23 +8213,23 @@
           [
             [
               -122.319013,
-              47.6237943
+              47.6237633
             ],
             [
               -122.3184945,
-              47.6237943
+              47.6237633
             ],
             [
               -122.3184945,
-              47.6240126
+              47.6239816
             ],
             [
               -122.319013,
-              47.6240126
+              47.6239816
             ],
             [
               -122.319013,
-              47.6237943
+              47.6237633
             ]
           ]
         ]
@@ -7742,6 +8246,9 @@
       "areaSqFt": 134947,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 159,
+      "roomsWithAcm": 28,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 100.1,
       "depthM": 62.6,
@@ -7788,6 +8295,9 @@
       "areaSqFt": 15447,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 18,
+      "roomsWithAcm": 3,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 47.9,
       "depthM": 29.9,
@@ -7834,6 +8344,9 @@
       "areaSqFt": 22669,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 27,
+      "roomsWithAcm": 5,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 41,
       "depthM": 25.7,
@@ -7880,6 +8393,9 @@
       "areaSqFt": 83212,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 98,
+      "roomsWithAcm": 15,
+      "acmStatus": "Assumed ACM",
       "heightM": 13,
       "widthM": 64.2,
       "depthM": 40.1,
@@ -7926,6 +8442,9 @@
       "areaSqFt": 21098,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 25,
+      "roomsWithAcm": 8,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 39.6,
       "depthM": 24.7,
@@ -7972,6 +8491,9 @@
       "areaSqFt": 20176,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 24,
+      "roomsWithAcm": 7,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 54.8,
       "depthM": 34.2,
@@ -8018,6 +8540,9 @@
       "areaSqFt": 116123,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 137,
+      "roomsWithAcm": 38,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 75.9,
       "depthM": 47.4,
@@ -8064,6 +8589,9 @@
       "areaSqFt": 27179,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 32,
+      "roomsWithAcm": 8,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 63.6,
       "depthM": 39.7,
@@ -8110,6 +8638,9 @@
       "areaSqFt": 10975,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 13,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 40.4,
       "depthM": 25.2,
@@ -8152,13 +8683,16 @@
       "code": "MAGNOLIAES-A",
       "name": "Main Building",
       "yearBuilt": 1978,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 171316,
       "construction": "Steel Frame",
       "presumedAcm": true,
-      "heightM": 17,
-      "widthM": 79.8,
-      "depthM": 49.9,
+      "rooms": 202,
+      "roomsWithAcm": 21,
+      "acmStatus": "Assumed ACM",
+      "heightM": 13,
+      "widthM": 92.1,
+      "depthM": 57.6,
       "location": {
         "lat": 47.640253,
         "lng": -122.392906
@@ -8168,24 +8702,24 @@
         "coordinates": [
           [
             [
-              -122.3934381,
-              47.6400291
+              -122.3935201,
+              47.6399945
             ],
             [
-              -122.3923742,
-              47.6400291
+              -122.3922922,
+              47.6399945
             ],
             [
-              -122.3923742,
-              47.6404773
+              -122.3922922,
+              47.6405119
             ],
             [
-              -122.3934381,
-              47.6404773
+              -122.3935201,
+              47.6405119
             ],
             [
-              -122.3934381,
-              47.6400291
+              -122.3935201,
+              47.6399945
             ]
           ]
         ]
@@ -8202,35 +8736,38 @@
       "areaSqFt": 7528,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 9,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 23.7,
       "depthM": 14.8,
       "location": {
         "lat": 47.640253,
-        "lng": -122.392056
+        "lng": -122.391974
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3922142,
+              -122.3921322,
               47.6401867
             ],
             [
-              -122.3918982,
+              -122.3918163,
               47.6401867
             ],
             [
-              -122.3918982,
+              -122.3918163,
               47.6403197
             ],
             [
-              -122.3922142,
+              -122.3921322,
               47.6403197
             ],
             [
-              -122.3922142,
+              -122.3921322,
               47.6401867
             ]
           ]
@@ -8248,11 +8785,14 @@
       "areaSqFt": 13877,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 16,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 45.4,
       "depthM": 28.4,
       "location": {
-        "lat": 47.639794,
+        "lat": 47.639759,
         "lng": -122.392906
       },
       "footprint": {
@@ -8261,23 +8801,23 @@
           [
             [
               -122.3932088,
-              47.6396662
+              47.6396316
             ],
             [
               -122.3926035,
-              47.6396662
+              47.6396316
             ],
             [
               -122.3926035,
-              47.6399213
+              47.6398867
             ],
             [
               -122.3932088,
-              47.6399213
+              47.6398867
             ],
             [
               -122.3932088,
-              47.6396662
+              47.6396316
             ]
           ]
         ]
@@ -8294,6 +8834,9 @@
       "areaSqFt": 97781,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 115,
+      "roomsWithAcm": 28,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 85.2,
       "depthM": 53.3,
@@ -8340,6 +8883,9 @@
       "areaSqFt": 26939,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 32,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 63.3,
       "depthM": 39.5,
@@ -8386,6 +8932,9 @@
       "areaSqFt": 7200,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 8,
+      "roomsWithAcm": 1,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 32.7,
       "depthM": 20.4,
@@ -8432,6 +8981,9 @@
       "areaSqFt": 101232,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 119,
+      "roomsWithAcm": 44,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 86.7,
       "depthM": 54.2,
@@ -8478,6 +9030,9 @@
       "areaSqFt": 8522,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 10,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 25.2,
       "depthM": 15.7,
@@ -8524,6 +9079,9 @@
       "areaSqFt": 10550,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 12,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 28,
       "depthM": 17.5,
@@ -8570,6 +9128,9 @@
       "areaSqFt": 76743,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 90,
+      "roomsWithAcm": 23,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 75.5,
       "depthM": 47.2,
@@ -8616,6 +9177,9 @@
       "areaSqFt": 21217,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 25,
+      "roomsWithAcm": 5,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 39.7,
       "depthM": 24.8,
@@ -8662,6 +9226,9 @@
       "areaSqFt": 13095,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 15,
+      "roomsWithAcm": 2,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 31.2,
       "depthM": 19.5,
@@ -8708,6 +9275,9 @@
       "areaSqFt": 69766,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 82,
+      "roomsWithAcm": 13,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 72,
       "depthM": 45,
@@ -8754,6 +9324,9 @@
       "areaSqFt": 29601,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 35,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 46.9,
       "depthM": 29.3,
@@ -8800,6 +9373,9 @@
       "areaSqFt": 28065,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 33,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 45.7,
       "depthM": 28.5,
@@ -8846,6 +9422,9 @@
       "areaSqFt": 156297,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 184,
+      "roomsWithAcm": 58,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 152.4,
       "depthM": 95.3,
@@ -8892,6 +9471,9 @@
       "areaSqFt": 8883,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 10,
+      "roomsWithAcm": 4,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 25.7,
       "depthM": 16.1,
@@ -8938,6 +9520,9 @@
       "areaSqFt": 19562,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 23,
+      "roomsWithAcm": 7,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 53.9,
       "depthM": 33.7,
@@ -8984,6 +9569,9 @@
       "areaSqFt": 73605,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 87,
+      "roomsWithAcm": 27,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 104.6,
       "depthM": 65.4,
@@ -9030,6 +9618,9 @@
       "areaSqFt": 15899,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 19,
+      "roomsWithAcm": 6,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 48.6,
       "depthM": 30.4,
@@ -9076,6 +9667,9 @@
       "areaSqFt": 3529,
       "construction": "Modular",
       "presumedAcm": true,
+      "rooms": 4,
+      "roomsWithAcm": 1,
+      "acmStatus": "ACM Present",
       "heightM": 3.5,
       "widthM": 22.9,
       "depthM": 14.3,
@@ -9122,6 +9716,9 @@
       "areaSqFt": 107998,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 127,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 126.7,
       "depthM": 79.2,
@@ -9168,6 +9765,9 @@
       "areaSqFt": 26267,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 31,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 44.2,
       "depthM": 27.6,
@@ -9214,6 +9814,9 @@
       "areaSqFt": 23773,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 28,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 59.4,
       "depthM": 37.2,
@@ -9256,13 +9859,16 @@
       "code": "MIDDLECOLLEGEHS-A",
       "name": "Main Building",
       "yearBuilt": 1974,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 118491,
       "construction": "Steel Frame",
       "presumedAcm": true,
-      "heightM": 17,
-      "widthM": 66.4,
-      "depthM": 41.5,
+      "rooms": 139,
+      "roomsWithAcm": 34,
+      "acmStatus": "ACM Present",
+      "heightM": 13,
+      "widthM": 76.6,
+      "depthM": 47.9,
       "location": null,
       "footprint": null
     },
@@ -9277,6 +9883,9 @@
       "areaSqFt": 27083,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 32,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 63.4,
       "depthM": 39.7,
@@ -9294,6 +9903,9 @@
       "areaSqFt": 4055,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 5,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 24.6,
       "depthM": 15.3,
@@ -9311,6 +9923,9 @@
       "areaSqFt": 97904,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 115,
+      "roomsWithAcm": 29,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 69.6,
       "depthM": 43.5,
@@ -9357,6 +9972,9 @@
       "areaSqFt": 22049,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 26,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 40.5,
       "depthM": 25.3,
@@ -9403,6 +10021,9 @@
       "areaSqFt": 15220,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 18,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 33.6,
       "depthM": 21,
@@ -9449,6 +10070,9 @@
       "areaSqFt": 110507,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 130,
+      "roomsWithAcm": 37,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 128.2,
       "depthM": 80.1,
@@ -9495,6 +10119,9 @@
       "areaSqFt": 24706,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 29,
+      "roomsWithAcm": 8,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 60.6,
       "depthM": 37.9,
@@ -9541,6 +10168,9 @@
       "areaSqFt": 3702,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 4,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 23.5,
       "depthM": 14.7,
@@ -9587,6 +10217,9 @@
       "areaSqFt": 45258,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 53,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 58,
       "depthM": 36.2,
@@ -9633,6 +10266,9 @@
       "areaSqFt": 20467,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 24,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 55.2,
       "depthM": 34.5,
@@ -9679,6 +10315,9 @@
       "areaSqFt": 29251,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 34,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 46.6,
       "depthM": 29.1,
@@ -9725,6 +10364,9 @@
       "areaSqFt": 151798,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 179,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 13,
       "widthM": 86.7,
       "depthM": 54.2,
@@ -9771,6 +10413,9 @@
       "areaSqFt": 12247,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 14,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 30.2,
       "depthM": 18.9,
@@ -9817,6 +10462,9 @@
       "areaSqFt": 4133,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 5,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 24.8,
       "depthM": 15.5,
@@ -9863,6 +10511,9 @@
       "areaSqFt": 48465,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 57,
+      "roomsWithAcm": 16,
+      "acmStatus": "Assumed ACM",
       "heightM": 13,
       "widthM": 49,
       "depthM": 30.6,
@@ -9909,6 +10560,9 @@
       "areaSqFt": 25335,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 30,
+      "roomsWithAcm": 4,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 61.4,
       "depthM": 38.4,
@@ -9955,6 +10609,9 @@
       "areaSqFt": 6149,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 7,
+      "roomsWithAcm": 1,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 30.2,
       "depthM": 18.9,
@@ -10001,6 +10658,9 @@
       "areaSqFt": 101598,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 120,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 86.9,
       "depthM": 54.3,
@@ -10047,6 +10707,9 @@
       "areaSqFt": 9208,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 11,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 37,
       "depthM": 23.1,
@@ -10093,6 +10756,9 @@
       "areaSqFt": 3196,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 4,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 21.8,
       "depthM": 13.6,
@@ -10135,13 +10801,16 @@
       "code": "ORCAK8-A",
       "name": "Main Building",
       "yearBuilt": 1997,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 109803,
       "construction": "Masonry",
       "presumedAcm": false,
-      "heightM": 17,
-      "widthM": 63.9,
-      "depthM": 39.9,
+      "rooms": 129,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
+      "heightM": 13,
+      "widthM": 73.8,
+      "depthM": 46.1,
       "location": {
         "lat": 47.555062,
         "lng": -122.275457
@@ -10151,24 +10820,24 @@
         "coordinates": [
           [
             [
-              -122.2758825,
-              47.5548824
+              -122.2759484,
+              47.5548545
             ],
             [
-              -122.275032,
-              47.5548824
+              -122.2749661,
+              47.5548545
             ],
             [
-              -122.275032,
-              47.5552408
+              -122.2749661,
+              47.5552687
             ],
             [
-              -122.2758825,
-              47.5552408
+              -122.2759484,
+              47.5552687
             ],
             [
-              -122.2758825,
-              47.5548824
+              -122.2759484,
+              47.5548545
             ]
           ]
         ]
@@ -10185,35 +10854,38 @@
       "areaSqFt": 10366,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 12,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 39.3,
       "depthM": 24.5,
       "location": {
         "lat": 47.555062,
-        "lng": -122.274611
+        "lng": -122.274545
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.2748723,
+              -122.2748064,
               47.5549516
             ],
             [
-              -122.2743491,
+              -122.2742833,
               47.5549516
             ],
             [
-              -122.2743491,
+              -122.2742833,
               47.5551716
             ],
             [
-              -122.2748723,
+              -122.2748064,
               47.5551716
             ],
             [
-              -122.2748723,
+              -122.2748064,
               47.5549516
             ]
           ]
@@ -10231,11 +10903,14 @@
       "areaSqFt": 16134,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 19,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 34.6,
       "depthM": 21.6,
       "location": {
-        "lat": 47.554678,
+        "lat": 47.55465,
         "lng": -122.275457
       },
       "footprint": {
@@ -10244,23 +10919,23 @@
           [
             [
               -122.2756875,
-              47.5545806
+              47.5545527
             ],
             [
               -122.275227,
-              47.5545806
+              47.5545527
             ],
             [
               -122.275227,
-              47.5547746
+              47.5547467
             ],
             [
               -122.2756875,
-              47.5547746
+              47.5547467
             ],
             [
               -122.2756875,
-              47.5545806
+              47.5545527
             ]
           ]
         ]
@@ -10277,6 +10952,9 @@
       "areaSqFt": 81836,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 96,
+      "roomsWithAcm": 31,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 78,
       "depthM": 48.7,
@@ -10323,6 +11001,9 @@
       "areaSqFt": 11955,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 14,
+      "roomsWithAcm": 4,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 42.2,
       "depthM": 26.3,
@@ -10369,6 +11050,9 @@
       "areaSqFt": 4649,
       "construction": "Modular",
       "presumedAcm": true,
+      "rooms": 5,
+      "roomsWithAcm": 1,
+      "acmStatus": "ACM Present",
       "heightM": 3.5,
       "widthM": 26.3,
       "depthM": 16.4,
@@ -10415,6 +11099,9 @@
       "areaSqFt": 63465,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 75,
+      "roomsWithAcm": 21,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 56.1,
       "depthM": 35,
@@ -10461,6 +11148,9 @@
       "areaSqFt": 10149,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 12,
+      "roomsWithAcm": 2,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 27.5,
       "depthM": 17.2,
@@ -10507,6 +11197,9 @@
       "areaSqFt": 4074,
       "construction": "Modular",
       "presumedAcm": true,
+      "rooms": 5,
+      "roomsWithAcm": 1,
+      "acmStatus": "ACM Present",
       "heightM": 3.5,
       "widthM": 24.6,
       "depthM": 15.4,
@@ -10553,6 +11246,9 @@
       "areaSqFt": 128915,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 152,
+      "roomsWithAcm": 41,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 97.9,
       "depthM": 61.2,
@@ -10599,6 +11295,9 @@
       "areaSqFt": 23982,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 28,
+      "roomsWithAcm": 8,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 59.7,
       "depthM": 37.3,
@@ -10645,6 +11344,9 @@
       "areaSqFt": 24748,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 29,
+      "roomsWithAcm": 6,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 60.7,
       "depthM": 37.9,
@@ -10687,13 +11389,16 @@
       "code": "RAINIERVIEWES-A",
       "name": "Main Building",
       "yearBuilt": 1991,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 106737,
       "construction": "Steel Frame",
       "presumedAcm": false,
-      "heightM": 17,
-      "widthM": 63,
-      "depthM": 39.4,
+      "rooms": 126,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
+      "heightM": 13,
+      "widthM": 72.7,
+      "depthM": 45.5,
       "location": {
         "lat": 47.498469,
         "lng": -122.26385
@@ -10703,24 +11408,24 @@
         "coordinates": [
           [
             [
-              -122.2642685,
-              47.4982919
+              -122.2643329,
+              47.4982645
             ],
             [
-              -122.2634308,
-              47.4982919
+              -122.2633663,
+              47.4982645
             ],
             [
-              -122.2634308,
-              47.4986458
+              -122.2633663,
+              47.4986732
             ],
             [
-              -122.2642685,
-              47.4986458
+              -122.2643329,
+              47.4986732
             ],
             [
-              -122.2642685,
-              47.4982919
+              -122.2643329,
+              47.4982645
             ]
           ]
         ]
@@ -10737,35 +11442,38 @@
       "areaSqFt": 13053,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 15,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 31.1,
       "depthM": 19.5,
       "location": {
         "lat": 47.498469,
-        "lng": -122.263064
+        "lng": -122.263
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.2632712,
+              -122.2632067,
               47.4983813
             ],
             [
-              -122.2628577,
+              -122.2627932,
               47.4983813
             ],
             [
-              -122.2628577,
+              -122.2627932,
               47.4985564
             ],
             [
-              -122.2632712,
+              -122.2632067,
               47.4985564
             ],
             [
-              -122.2632712,
+              -122.2632067,
               47.4983813
             ]
           ]
@@ -10783,11 +11491,14 @@
       "areaSqFt": 2950,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 3,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 20.9,
       "depthM": 13.1,
       "location": {
-        "lat": 47.498125,
+        "lat": 47.498098,
         "lng": -122.26385
       },
       "footprint": {
@@ -10796,23 +11507,23 @@
           [
             [
               -122.2639886,
-              47.4980664
+              47.498039
             ],
             [
               -122.2637107,
-              47.4980664
+              47.498039
             ],
             [
               -122.2637107,
-              47.4981841
+              47.4981567
             ],
             [
               -122.2639886,
-              47.4981841
+              47.4981567
             ],
             [
               -122.2639886,
-              47.4980664
+              47.498039
             ]
           ]
         ]
@@ -10829,6 +11540,9 @@
       "areaSqFt": 58989,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 69,
+      "roomsWithAcm": 9,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 66.2,
       "depthM": 41.4,
@@ -10875,6 +11589,9 @@
       "areaSqFt": 28154,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 33,
+      "roomsWithAcm": 9,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 64.7,
       "depthM": 40.4,
@@ -10921,6 +11638,9 @@
       "areaSqFt": 15319,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 18,
+      "roomsWithAcm": 7,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 47.7,
       "depthM": 29.8,
@@ -10967,6 +11687,9 @@
       "areaSqFt": 60304,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 71,
+      "roomsWithAcm": 11,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 94.7,
       "depthM": 59.2,
@@ -11013,6 +11736,9 @@
       "areaSqFt": 24369,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 29,
+      "roomsWithAcm": 8,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 42.6,
       "depthM": 26.6,
@@ -11059,6 +11785,9 @@
       "areaSqFt": 24636,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 29,
+      "roomsWithAcm": 6,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 60.5,
       "depthM": 37.8,
@@ -11101,13 +11830,16 @@
       "code": "ROOSEVELTHS-A",
       "name": "Main Building",
       "yearBuilt": 1934,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 142184,
       "construction": "Wood Frame",
       "presumedAcm": true,
-      "heightM": 17,
-      "widthM": 72.7,
-      "depthM": 45.4,
+      "rooms": 167,
+      "roomsWithAcm": 52,
+      "acmStatus": "ACM Present",
+      "heightM": 13,
+      "widthM": 83.9,
+      "depthM": 52.5,
       "location": {
         "lat": 47.676571,
         "lng": -122.312948
@@ -11117,24 +11849,24 @@
         "coordinates": [
           [
             [
-              -122.3134326,
-              47.6763668
+              -122.3135073,
+              47.6763349
             ],
             [
-              -122.3124626,
-              47.6763668
+              -122.3123879,
+              47.6763349
             ],
             [
-              -122.3124626,
-              47.6767746
+              -122.3123879,
+              47.6768065
             ],
             [
-              -122.3134326,
-              47.6767746
+              -122.3135073,
+              47.6768065
             ],
             [
-              -122.3134326,
-              47.6763668
+              -122.3135073,
+              47.6763349
             ]
           ]
         ]
@@ -11151,36 +11883,39 @@
       "areaSqFt": 14076,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 17,
+      "roomsWithAcm": 3,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 45.7,
       "depthM": 28.6,
       "location": {
         "lat": 47.676571,
-        "lng": -122.311998
+        "lng": -122.311923
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3123025,
-              47.6764422
+              -122.3122279,
+              47.6764425
             ],
             [
-              -122.3116928,
-              47.6764422
+              -122.3116181,
+              47.6764425
             ],
             [
-              -122.3116928,
-              47.6766992
+              -122.3116181,
+              47.6766995
             ],
             [
-              -122.3123025,
-              47.6766992
+              -122.3122279,
+              47.6766995
             ],
             [
-              -122.3123025,
-              47.6764422
+              -122.3122279,
+              47.6764425
             ]
           ]
         ]
@@ -11197,11 +11932,14 @@
       "areaSqFt": 18934,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 22,
+      "roomsWithAcm": 7,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 37.5,
       "depthM": 23.4,
       "location": {
-        "lat": 47.676154,
+        "lat": 47.676122,
         "lng": -122.312948
       },
       "footprint": {
@@ -11210,23 +11948,23 @@
           [
             [
               -122.3131978,
-              47.6760488
+              47.6760169
             ],
             [
               -122.3126975,
-              47.6760488
+              47.6760169
             ],
             [
               -122.3126975,
-              47.676259
+              47.6762271
             ],
             [
               -122.3131978,
-              47.676259
+              47.6762271
             ],
             [
               -122.3131978,
-              47.6760488
+              47.6760169
             ]
           ]
         ]
@@ -11243,6 +11981,9 @@
       "areaSqFt": 41216,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 48,
+      "roomsWithAcm": 7,
+      "acmStatus": "Assumed ACM",
       "heightM": 13,
       "widthM": 45.2,
       "depthM": 28.2,
@@ -11289,6 +12030,9 @@
       "areaSqFt": 12357,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 15,
+      "roomsWithAcm": 3,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 30.3,
       "depthM": 18.9,
@@ -11335,6 +12079,9 @@
       "areaSqFt": 4769,
       "construction": "Modular",
       "presumedAcm": true,
+      "rooms": 6,
+      "roomsWithAcm": 1,
+      "acmStatus": "Assumed ACM",
       "heightM": 3.5,
       "widthM": 26.6,
       "depthM": 16.6,
@@ -11381,6 +12128,9 @@
       "areaSqFt": 159247,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 187,
+      "roomsWithAcm": 28,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 108.8,
       "depthM": 68,
@@ -11427,6 +12177,9 @@
       "areaSqFt": 14585,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 17,
+      "roomsWithAcm": 3,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 32.9,
       "depthM": 20.6,
@@ -11473,6 +12226,9 @@
       "areaSqFt": 22215,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 26,
+      "roomsWithAcm": 8,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 57.5,
       "depthM": 35.9,
@@ -11515,13 +12271,16 @@
       "code": "SALMONBAYK8-A",
       "name": "Main Building",
       "yearBuilt": 1971,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 142091,
       "construction": "Wood Frame",
       "presumedAcm": true,
-      "heightM": 17,
-      "widthM": 72.7,
-      "depthM": 45.4,
+      "rooms": 167,
+      "roomsWithAcm": 31,
+      "acmStatus": "ACM Present",
+      "heightM": 13,
+      "widthM": 83.9,
+      "depthM": 52.4,
       "location": {
         "lat": 47.676047,
         "lng": -122.380151
@@ -11531,24 +12290,24 @@
         "coordinates": [
           [
             [
-              -122.3806355,
-              47.6758429
+              -122.3807102,
+              47.6758114
             ],
             [
-              -122.3796655,
-              47.6758429
+              -122.3795908,
+              47.6758114
             ],
             [
-              -122.3796655,
-              47.6762507
+              -122.3795908,
+              47.6762822
             ],
             [
-              -122.3806355,
-              47.6762507
+              -122.3807102,
+              47.6762822
             ],
             [
-              -122.3806355,
-              47.6758429
+              -122.3807102,
+              47.6758114
             ]
           ]
         ]
@@ -11565,35 +12324,38 @@
       "areaSqFt": 9867,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 12,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 27.1,
       "depthM": 16.9,
       "location": {
         "lat": 47.676047,
-        "lng": -122.379325
+        "lng": -122.37925
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3795054,
+              -122.3794307,
               47.6759709
             ],
             [
-              -122.3791439,
+              -122.3790692,
               47.6759709
             ],
             [
-              -122.3791439,
+              -122.3790692,
               47.6761227
             ],
             [
-              -122.3795054,
+              -122.3794307,
               47.6761227
             ],
             [
-              -122.3795054,
+              -122.3794307,
               47.6759709
             ]
           ]
@@ -11611,11 +12373,14 @@
       "areaSqFt": 3382,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 4,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 22.4,
       "depthM": 14,
       "location": {
-        "lat": 47.675672,
+        "lat": 47.675641,
         "lng": -122.380151
       },
       "footprint": {
@@ -11624,23 +12389,23 @@
           [
             [
               -122.3802999,
-              47.6756093
+              47.6755779
             ],
             [
               -122.3800011,
-              47.6756093
+              47.6755779
             ],
             [
               -122.3800011,
-              47.6757351
+              47.6757036
             ],
             [
               -122.3802999,
-              47.6757351
+              47.6757036
             ],
             [
               -122.3802999,
-              47.6756093
+              47.6755779
             ]
           ]
         ]
@@ -11657,6 +12422,9 @@
       "areaSqFt": 121589,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 143,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 95.1,
       "depthM": 59.4,
@@ -11703,6 +12471,9 @@
       "areaSqFt": 21200,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 25,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 39.7,
       "depthM": 24.8,
@@ -11749,6 +12520,9 @@
       "areaSqFt": 25067,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 29,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 43.2,
       "depthM": 27,
@@ -11795,6 +12569,9 @@
       "areaSqFt": 125802,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 148,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 96.7,
       "depthM": 60.4,
@@ -11841,6 +12618,9 @@
       "areaSqFt": 28631,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 34,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 65.2,
       "depthM": 40.8,
@@ -11887,6 +12667,9 @@
       "areaSqFt": 17702,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 21,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 51.3,
       "depthM": 32.1,
@@ -11933,6 +12716,9 @@
       "areaSqFt": 43623,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 51,
+      "roomsWithAcm": 7,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 80.5,
       "depthM": 50.3,
@@ -11979,6 +12765,9 @@
       "areaSqFt": 12121,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 14,
+      "roomsWithAcm": 5,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 42.4,
       "depthM": 26.5,
@@ -12025,6 +12814,9 @@
       "areaSqFt": 8696,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 10,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 36,
       "depthM": 22.5,
@@ -12071,6 +12863,9 @@
       "areaSqFt": 85098,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 100,
+      "roomsWithAcm": 25,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 79.5,
       "depthM": 49.7,
@@ -12117,6 +12912,9 @@
       "areaSqFt": 12846,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 15,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 30.9,
       "depthM": 19.3,
@@ -12163,6 +12961,9 @@
       "areaSqFt": 10539,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 12,
+      "roomsWithAcm": 2,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 28,
       "depthM": 17.5,
@@ -12209,6 +13010,9 @@
       "areaSqFt": 136756,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 161,
+      "roomsWithAcm": 25,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 82.3,
       "depthM": 51.4,
@@ -12255,6 +13059,9 @@
       "areaSqFt": 25163,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 30,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 43.2,
       "depthM": 27,
@@ -12301,6 +13108,9 @@
       "areaSqFt": 24643,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 29,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 42.8,
       "depthM": 26.7,
@@ -12347,6 +13157,9 @@
       "areaSqFt": 69223,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 81,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 13,
       "widthM": 58.6,
       "depthM": 36.6,
@@ -12393,6 +13206,9 @@
       "areaSqFt": 6897,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 8,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 32,
       "depthM": 20,
@@ -12439,6 +13255,9 @@
       "areaSqFt": 17559,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 21,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 51.1,
       "depthM": 31.9,
@@ -12485,6 +13304,9 @@
       "areaSqFt": 165941,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 195,
+      "roomsWithAcm": 58,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 111.1,
       "depthM": 69.4,
@@ -12531,6 +13353,9 @@
       "areaSqFt": 19886,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 23,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 38.4,
       "depthM": 24,
@@ -12577,6 +13402,9 @@
       "areaSqFt": 12613,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 15,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 43.3,
       "depthM": 27.1,
@@ -12623,6 +13451,9 @@
       "areaSqFt": 163349,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 192,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 155.8,
       "depthM": 97.4,
@@ -12669,6 +13500,9 @@
       "areaSqFt": 24649,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 29,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 42.8,
       "depthM": 26.8,
@@ -12715,6 +13549,9 @@
       "areaSqFt": 9884,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 12,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 38.3,
       "depthM": 24,
@@ -12757,13 +13594,16 @@
       "code": "MARSHALLES-A",
       "name": "Main Building",
       "yearBuilt": 1967,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 94152,
       "construction": "Steel Frame",
       "presumedAcm": true,
-      "heightM": 17,
-      "widthM": 59.2,
-      "depthM": 37,
+      "rooms": 111,
+      "roomsWithAcm": 32,
+      "acmStatus": "ACM Present",
+      "heightM": 13,
+      "widthM": 68.3,
+      "depthM": 42.7,
       "location": {
         "lat": 47.591167,
         "lng": -122.301171
@@ -12773,24 +13613,24 @@
         "coordinates": [
           [
             [
-              -122.3015653,
-              47.5910012
+              -122.3016259,
+              47.5909756
             ],
             [
-              -122.3007768,
-              47.5910012
+              -122.3007162,
+              47.5909756
             ],
             [
-              -122.3007768,
-              47.5913336
+              -122.3007162,
+              47.5913592
             ],
             [
-              -122.3015653,
-              47.5913336
+              -122.3016259,
+              47.5913592
             ],
             [
-              -122.3015653,
-              47.5910012
+              -122.3016259,
+              47.5909756
             ]
           ]
         ]
@@ -12807,35 +13647,38 @@
       "areaSqFt": 29578,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 35,
+      "roomsWithAcm": 9,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 46.9,
       "depthM": 29.3,
       "location": {
         "lat": 47.591167,
-        "lng": -122.300305
+        "lng": -122.300244
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3006169,
+              -122.3005563,
               47.5910358
             ],
             [
-              -122.2999922,
+              -122.2999316,
               47.5910358
             ],
             [
-              -122.2999922,
+              -122.2999316,
               47.591299
             ],
             [
-              -122.3006169,
+              -122.3005563,
               47.591299
             ],
             [
-              -122.3006169,
+              -122.3005563,
               47.5910358
             ]
           ]
@@ -12853,11 +13696,14 @@
       "areaSqFt": 14578,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 17,
+      "roomsWithAcm": 5,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 32.9,
       "depthM": 20.6,
       "location": {
-        "lat": 47.590801,
+        "lat": 47.590775,
         "lng": -122.301171
       },
       "footprint": {
@@ -12866,23 +13712,23 @@
           [
             [
               -122.3013902,
-              47.5907084
+              47.5906828
             ],
             [
               -122.3009519,
-              47.5907084
+              47.5906828
             ],
             [
               -122.3009519,
-              47.5908934
+              47.5908678
             ],
             [
               -122.3013902,
-              47.5908934
+              47.5908678
             ],
             [
               -122.3013902,
-              47.5907084
+              47.5906828
             ]
           ]
         ]
@@ -12895,13 +13741,16 @@
       "code": "TOPSK8-A",
       "name": "Main Building",
       "yearBuilt": 1912,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 46250,
       "construction": "Steel Frame",
       "presumedAcm": true,
-      "heightM": 17,
-      "widthM": 41.5,
-      "depthM": 25.9,
+      "rooms": 54,
+      "roomsWithAcm": 6,
+      "acmStatus": "Assumed ACM",
+      "heightM": 13,
+      "widthM": 47.9,
+      "depthM": 29.9,
       "location": {
         "lat": 47.642084,
         "lng": -122.32459
@@ -12911,24 +13760,24 @@
         "coordinates": [
           [
             [
-              -122.3248663,
-              47.6419673
+              -122.3249089,
+              47.6419494
             ],
             [
-              -122.3243129,
-              47.6419673
+              -122.3242703,
+              47.6419494
             ],
             [
-              -122.3243129,
-              47.6422
+              -122.3242703,
+              47.642218
             ],
             [
-              -122.3248663,
-              47.6422
+              -122.3249089,
+              47.642218
             ],
             [
-              -122.3248663,
-              47.6419673
+              -122.3249089,
+              47.6419494
             ]
           ]
         ]
@@ -12945,35 +13794,38 @@
       "areaSqFt": 16479,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 19,
+      "roomsWithAcm": 7,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 35,
       "depthM": 21.9,
       "location": {
         "lat": 47.642084,
-        "lng": -122.32392
+        "lng": -122.323877
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3241529,
+              -122.3241103,
               47.6419853
             ],
             [
-              -122.3236863,
+              -122.3236436,
               47.6419853
             ],
             [
-              -122.3236863,
+              -122.3236436,
               47.642182
             ],
             [
-              -122.3241529,
+              -122.3241103,
               47.642182
             ],
             [
-              -122.3241529,
+              -122.3241103,
               47.6419853
             ]
           ]
@@ -12991,11 +13843,14 @@
       "areaSqFt": 3218,
       "construction": "Modular",
       "presumedAcm": true,
+      "rooms": 4,
+      "roomsWithAcm": 1,
+      "acmStatus": "ACM Present",
       "heightM": 3.5,
       "widthM": 21.9,
       "depthM": 13.7,
       "location": {
-        "lat": 47.641798,
+        "lat": 47.64178,
         "lng": -122.32459
       },
       "footprint": {
@@ -13004,23 +13859,23 @@
           [
             [
               -122.3247356,
-              47.6417365
+              47.6417185
             ],
             [
               -122.3244436,
-              47.6417365
+              47.6417185
             ],
             [
               -122.3244436,
-              47.6418595
+              47.6418416
             ],
             [
               -122.3247356,
-              47.6418595
+              47.6418416
             ],
             [
               -122.3247356,
-              47.6417365
+              47.6417185
             ]
           ]
         ]
@@ -13037,6 +13892,9 @@
       "areaSqFt": 116778,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 137,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 13,
       "widthM": 76.1,
       "depthM": 47.5,
@@ -13083,6 +13941,9 @@
       "areaSqFt": 25759,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 30,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 61.9,
       "depthM": 38.7,
@@ -13129,6 +13990,9 @@
       "areaSqFt": 27141,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 32,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 63.5,
       "depthM": 39.7,
@@ -13175,6 +14039,9 @@
       "areaSqFt": 174140,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 205,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 113.8,
       "depthM": 71.1,
@@ -13221,6 +14088,9 @@
       "areaSqFt": 13884,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 16,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 32.1,
       "depthM": 20.1,
@@ -13267,6 +14137,9 @@
       "areaSqFt": 15072,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 18,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 33.5,
       "depthM": 20.9,
@@ -13309,13 +14182,16 @@
       "code": "WASHINGTONMS-A",
       "name": "Main Building",
       "yearBuilt": 1908,
-      "floors": 4,
+      "floors": 3,
       "areaSqFt": 109585,
       "construction": "Concrete",
       "presumedAcm": true,
-      "heightM": 17,
-      "widthM": 63.8,
-      "depthM": 39.9,
+      "rooms": 129,
+      "roomsWithAcm": 23,
+      "acmStatus": "Assumed ACM",
+      "heightM": 13,
+      "widthM": 73.7,
+      "depthM": 46.1,
       "location": {
         "lat": 47.59921,
         "lng": -122.30414
@@ -13325,24 +14201,24 @@
         "coordinates": [
           [
             [
-              -122.3045652,
-              47.599031
+              -122.3046311,
+              47.5990032
             ],
             [
-              -122.3037152,
-              47.599031
+              -122.3036493,
+              47.5990032
             ],
             [
-              -122.3037152,
-              47.5993895
+              -122.3036493,
+              47.5994173
             ],
             [
-              -122.3045652,
-              47.5993895
+              -122.3046311,
+              47.5994173
             ],
             [
-              -122.3045652,
-              47.599031
+              -122.3046311,
+              47.5990032
             ]
           ]
         ]
@@ -13359,35 +14235,38 @@
       "areaSqFt": 27355,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 32,
+      "roomsWithAcm": 8,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 45.1,
       "depthM": 28.2,
       "location": {
         "lat": 47.59921,
-        "lng": -122.303255
+        "lng": -122.303189
       },
       "footprint": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -122.3035554,
+              -122.3034894,
               47.5990836
             ],
             [
-              -122.3029546,
+              -122.3028886,
               47.5990836
             ],
             [
-              -122.3029546,
+              -122.3028886,
               47.5993369
             ],
             [
-              -122.3035554,
+              -122.3034894,
               47.5993369
             ],
             [
-              -122.3035554,
+              -122.3034894,
               47.5990836
             ]
           ]
@@ -13405,11 +14284,14 @@
       "areaSqFt": 25071,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 29,
+      "roomsWithAcm": 5,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 43.2,
       "depthM": 27,
       "location": {
-        "lat": 47.598802,
+        "lat": 47.598774,
         "lng": -122.30414
       },
       "footprint": {
@@ -13418,23 +14300,23 @@
           [
             [
               -122.304428,
-              47.5986807
+              47.5986528
             ],
             [
               -122.3038525,
-              47.5986807
+              47.5986528
             ],
             [
               -122.3038525,
-              47.5989232
+              47.5988954
             ],
             [
               -122.304428,
-              47.5989232
+              47.5988954
             ],
             [
               -122.304428,
-              47.5986807
+              47.5986528
             ]
           ]
         ]
@@ -13451,6 +14333,9 @@
       "areaSqFt": 114134,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 134,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 92.1,
       "depthM": 57.6,
@@ -13497,6 +14382,9 @@
       "areaSqFt": 29023,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 34,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 65.7,
       "depthM": 41.1,
@@ -13543,6 +14431,9 @@
       "areaSqFt": 23982,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 28,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 59.7,
       "depthM": 37.3,
@@ -13589,6 +14480,9 @@
       "areaSqFt": 58670,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 69,
+      "roomsWithAcm": 11,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 66,
       "depthM": 41.3,
@@ -13635,6 +14529,9 @@
       "areaSqFt": 23994,
       "construction": "Masonry",
       "presumedAcm": true,
+      "rooms": 28,
+      "roomsWithAcm": 8,
+      "acmStatus": "Assumed ACM",
       "heightM": 9,
       "widthM": 42.2,
       "depthM": 26.4,
@@ -13681,6 +14578,9 @@
       "areaSqFt": 14635,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 17,
+      "roomsWithAcm": 6,
+      "acmStatus": "ACM Present",
       "heightM": 5,
       "widthM": 46.6,
       "depthM": 29.2,
@@ -13727,6 +14627,9 @@
       "areaSqFt": 105552,
       "construction": "Concrete",
       "presumedAcm": true,
+      "rooms": 124,
+      "roomsWithAcm": 36,
+      "acmStatus": "ACM Present",
       "heightM": 13,
       "widthM": 72.3,
       "depthM": 45.2,
@@ -13773,6 +14676,9 @@
       "areaSqFt": 14460,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 17,
+      "roomsWithAcm": 5,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 32.8,
       "depthM": 20.5,
@@ -13819,6 +14725,9 @@
       "areaSqFt": 27781,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 33,
+      "roomsWithAcm": 8,
+      "acmStatus": "Assumed ACM",
       "heightM": 5,
       "widthM": 64.3,
       "depthM": 40.2,
@@ -13865,6 +14774,9 @@
       "areaSqFt": 88756,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 104,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 81.2,
       "depthM": 50.8,
@@ -13911,6 +14823,9 @@
       "areaSqFt": 18277,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 22,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 52.1,
       "depthM": 32.6,
@@ -13957,6 +14872,9 @@
       "areaSqFt": 12759,
       "construction": "Steel Frame",
       "presumedAcm": false,
+      "rooms": 15,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 43.5,
       "depthM": 27.2,
@@ -14003,6 +14921,9 @@
       "areaSqFt": 101182,
       "construction": "Wood Frame",
       "presumedAcm": true,
+      "rooms": 119,
+      "roomsWithAcm": 43,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 86.7,
       "depthM": 54.2,
@@ -14049,6 +14970,9 @@
       "areaSqFt": 10849,
       "construction": "Steel Frame",
       "presumedAcm": true,
+      "rooms": 13,
+      "roomsWithAcm": 2,
+      "acmStatus": "ACM Present",
       "heightM": 9,
       "widthM": 28.4,
       "depthM": 17.7,
@@ -14095,6 +15019,9 @@
       "areaSqFt": 22969,
       "construction": "Wood Frame",
       "presumedAcm": false,
+      "rooms": 27,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 58.4,
       "depthM": 36.5,
@@ -14141,6 +15068,9 @@
       "areaSqFt": 107523,
       "construction": "Masonry",
       "presumedAcm": false,
+      "rooms": 126,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 13,
       "widthM": 73,
       "depthM": 45.6,
@@ -14187,6 +15117,9 @@
       "areaSqFt": 9732,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 11,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 9,
       "widthM": 26.9,
       "depthM": 16.8,
@@ -14233,6 +15166,9 @@
       "areaSqFt": 3397,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 4,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 22.5,
       "depthM": 14,
@@ -14279,6 +15215,9 @@
       "areaSqFt": 155901,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 183,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 13,
       "widthM": 87.9,
       "depthM": 54.9,
@@ -14325,6 +15264,9 @@
       "areaSqFt": 12841,
       "construction": "Concrete",
       "presumedAcm": false,
+      "rooms": 15,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 5,
       "widthM": 43.7,
       "depthM": 27.3,
@@ -14371,6 +15313,9 @@
       "areaSqFt": 3790,
       "construction": "Modular",
       "presumedAcm": false,
+      "rooms": 4,
+      "roomsWithAcm": 0,
+      "acmStatus": "No ACM",
       "heightM": 3.5,
       "widthM": 23.7,
       "depthM": 14.8,

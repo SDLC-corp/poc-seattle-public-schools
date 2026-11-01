@@ -72,7 +72,7 @@ function InspectionView({ inspection: i, onChanged, notify, onOpenSchool }) {
       <h3 className="cd-h">Actions</h3>
       <div className="cd-actions">
         <Link className="u-btn u-btn-primary" to={open ? '/inspections/upcoming' : '/inspections/history'}><CalendarDays size={15} />View Inspection</Link>
-        <Link className="u-btn u-btn-outline" to="/schools/rooms"><MapIcon size={15} />View Floor Plan</Link>
+        <Link className="u-btn u-btn-outline" to={i.buildingId ? `/schools/${i.schoolId}/buildings/${i.buildingId}/floors` : `/schools/rooms?school=${i.schoolId}`}><MapIcon size={15} />View Floor Plan</Link>
         <Link className="u-btn u-btn-outline" to="/acm/locations"><Layers size={15} />View ACM Records</Link>
         {open && (reschedule ? (
           <div className="cd-reschedule">
@@ -132,7 +132,7 @@ function SchoolView({ school: s, onSelectInspection }) {
       </ul>
       <div className="cd-actions">
         <Link className="u-btn u-btn-outline" to="/acm/locations"><Layers size={15} />View ACM Records</Link>
-        <Link className="u-btn u-btn-outline" to="/schools/rooms"><MapIcon size={15} />View Floor Plans</Link>
+        <Link className="u-btn u-btn-outline" to={`/schools/rooms?school=${s.id}`}><MapIcon size={15} />View Floor Plans</Link>
       </div>
     </>
   )

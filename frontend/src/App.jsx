@@ -13,6 +13,11 @@ import Compliance from './pages/Compliance/Compliance'
 import AirMonitoring from './pages/AirMonitoring/AirMonitoring'
 import Personnel from './pages/Personnel/Personnel'
 import HelpPage from './pages/Help/HelpPage'
+import Schools from './pages/Schools/Schools'
+import SchoolDetail from './pages/Schools/SchoolDetail'
+import Buildings from './pages/Schools/Buildings'
+import BuildingDetail from './pages/Schools/BuildingDetail'
+import RoomsFloorPlans from './pages/Schools/RoomsFloorPlans'
 import { applyBrandColors } from './theme'
 
 const APP_NAME = 'Seattle Public Schools – Asbestos Compliance'
@@ -87,6 +92,12 @@ function App() {
           <Route path="personnel/:tab?" element={<Personnel />} />
           <Route path="contractors" element={<Navigate to="/personnel" replace />} />
           <Route path="help" element={<HelpPage />} />
+          <Route path="schools" element={<Navigate to="/schools/list" replace />} />
+          <Route path="schools/list" element={<Schools />} />
+          <Route path="schools/buildings" element={<Buildings />} />
+          <Route path="schools/rooms" element={<RoomsFloorPlans />} />
+          <Route path="schools/:schoolId/:tab?" element={<SchoolDetail />} />
+          <Route path="schools/:schoolId/buildings/:buildingId/:tab?" element={<BuildingDetail />} />
           <Route path="*" element={<PlaceholderPage />} />
         </Route>
       </Routes>

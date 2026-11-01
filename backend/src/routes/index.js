@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import schoolsRoutes from './schools.js';
 import buildingsRoutes from './buildings.js';
+import floorsRoutes from './floors.js';
+import integrationsRoutes from './integrations.js';
 import settingsRoutes from './settings.js';
 import usersRoutes from './users.js';
 import rolesRoutes from './roles.js';
@@ -15,6 +17,8 @@ const router = Router();
 
 router.use('/schools', schoolsRoutes);
 router.use('/buildings', buildingsRoutes);
+router.use('/floors', floorsRoutes);
+router.use('/integrations', integrationsRoutes);
 router.use('/settings', settingsRoutes);
 router.use('/users', usersRoutes);
 router.use('/roles', rolesRoutes);

@@ -1,15 +1,62 @@
 import { Router } from 'express';
-import { buildings } from '../data/store.js';
+import { schools, buildings, getSchoolBuildings, addBuilding, updateBuilding } from '../data/store.js';
+import { MAX_FLOORS, ACM_STATUSES, PRESUMED_ACM_BEFORE } from '../data/buildingGeometry.js';
+import { logAudit, diff } from '../data/auditStore.js';
+import { seedFloors } from '../data/floorsStore.js';
+
+const schoolById = new Map(schools.map((s) => [s.id, s]));
+const CONSTRUCTION = ['Concrete', 'Masonry', 'Steel Frame', 'Wood Frame', 'Modular'];
+const THIS_YEAR = new Date().getFullYear();
+
+const int = (v) => (v === '' || v === null || v === undefined ? NaN : Number(v));
+
+function validateBuilding(body, existing, schoolId) {
+  const errors = {};
+  const pickInt = (key) => int(body[key] ?? existing?.[key]);
+  const b = {
+    name: String(body.name ?? existing?.name ?? '').trim().slice(0, 80),
+    code: String(body.code ?? existing?.code ?? '').trim().toUpperCase().slice(0, 30),
+    yearBuilt: pickInt('yearBuilt'),
+    floors: pickInt('floors'),
+    areaSqFt: pickInt('areaSqFt'),
+    construction: body.construction ?? existing?.construction ?? 'Masonry',
+    rooms: pickInt('rooms'),
+    roomsWithAcm: pickInt('roomsWithAcm'),
+    acmStatus: body.acmStatus ?? existing?.acmStatus,
+  };
+  if (!b.name) errors.name = 'Building name is required';
+  if (!b.code) errors.code = 'Building code is required';
+  else if (buildings.some((x) => x.code === b.code && x.id !== existing?.id)) errors.code = 'That code is already used';
+  else if (getSchoolBuildings(schoolId).some((x) => x.name.toLowerCase() === b.name.toLowerCase() && x.id !== existing?.id)) {
+    errors.name = 'This school already has a building with that name';
+  }
+  if (!Number.isInteger(b.yearBuilt) || b.yearBuilt < 1850 || b.yearBuilt > THIS_YEAR) errors.yearBuilt = `Enter a year between 1850 and ${THIS_YEAR}`;
+  if (!Number.isInteger(b.floors) || b.floors < 1 || b.floors > MAX_FLOORS) errors.floors = `Floors must be 1 to ${MAX_FLOORS}`;
+  if (!Number.isInteger(b.areaSqFt) || b.areaSqFt < 200 || b.areaSqFt > 500000) errors.areaSqFt = 'Enter an area between 200 and 500,000 sq ft';
+  if (!CONSTRUCTION.includes(b.construction)) errors.construction = 'Choose a construction type';
+  if (!Number.isInteger(b.rooms) || b.rooms < 1 || b.rooms > 1000) errors.rooms = 'Rooms must be 1 to 1,000';
+  if (!ACM_STATUSES.includes(b.acmStatus)) errors.acmStatus = 'Choose an ACM status';
+  if (b.acmStatus === 'No ACM') b.roomsWithAcm = 0;
+  else if (!Number.isInteger(b.roomsWithAcm) || b.roomsWithAcm < 1) errors.roomsWithAcm = 'Enter at least 1 room with ACM';
+  else if (b.roomsWithAcm > b.rooms) errors.roomsWithAcm = 'Can’t exceed the number of rooms';
+  return { b, errors };
+}
+
+const view = (x) => ({
+  Name: x.name, Code: x.code, 'Year Built': x.yearBuilt, Floors: x.floors, 'Area (sq ft)': x.areaSqFt,
+  Construction: x.construction, Rooms: x.rooms, 'Rooms with ACM': x.roomsWithAcm, 'ACM Status': x.acmStatus,
+});
 
 const router = Router();
 
-// GET /api/buildings?schoolId=ballardhs&presumedAcm=true&q=gym
+// GET /api/buildings?schoolId=ballardhs&presumedAcm=true&acmStatus=No%20ACM&q=gym
 router.get('/', (req, res) => {
-  const { schoolId, presumedAcm, q } = req.query;
+  const { schoolId, presumedAcm, acmStatus, q } = req.query;
   let result = buildings;
 
   if (schoolId) result = result.filter((b) => b.schoolId === schoolId);
   if (presumedAcm) result = result.filter((b) => b.presumedAcm === (presumedAcm === 'true'));
+  if (acmStatus) result = result.filter((b) => b.acmStatus === acmStatus);
   if (q) {
     const term = q.toLowerCase();
     result = result.filter((b) =>
@@ -19,10 +66,59 @@ router.get('/', (req, res) => {
   res.json({ count: result.length, buildings: result });
 });
 
+router.get('/meta', (req, res) => res.json({ maxFloors: MAX_FLOORS, acmStatuses: ACM_STATUSES, construction: CONSTRUCTION, presumedAcmBefore: PRESUMED_ACM_BEFORE }));
+
 router.get('/:id', (req, res) => {
   const building = buildings.find((b) => b.id === req.params.id);
   if (!building) return res.status(404).json({ error: 'Building not found' });
   res.json(building);
+});
+
+// POST /api/buildings  { schoolId, name, code, yearBuilt, floors (1–3), areaSqFt, construction, rooms, roomsWithAcm, acmStatus }
+router.post('/', async (req, res, next) => {
+  try {
+    const school = schoolById.get(req.body?.schoolId);
+    if (!school) return res.status(400).json({ error: 'Invalid building', fields: { schoolId: 'Choose a school' } });
+    const { b, errors } = validateBuilding(req.body ?? {}, null, school.id);
+    if (Object.keys(errors).length) return res.status(400).json({ error: 'Invalid building', fields: errors });
+    const added = await addBuilding(school, b);
+    await seedFloors(added);
+    const created = buildings.find((x) => x.id === added.id); // totals re-synced from its floors
+    logAudit(req, {
+      action: 'create', module: 'Schools & Facilities', recordId: created.id, link: `/schools/${school.id}/buildings`,
+      summary: `Added building ${created.name} – ${school.name}`,
+      changes: diff({}, view(created)).map(({ field, to }) => ({ field, to })),
+      related: { school: school.name, building: created.name },
+    });
+    res.status(201).json(created);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put('/:id', async (req, res, next) => {
+  try {
+    const existing = buildings.find((b) => b.id === req.params.id);
+    if (!existing) return res.status(404).json({ error: 'Building not found' });
+    // Floors, rooms and ACM are managed per floor (Floors tab), so they're not editable here
+    const { floors, rooms, roomsWithAcm, acmStatus, ...editable } = req.body ?? {}; // eslint-disable-line no-unused-vars
+    const { b, errors } = validateBuilding(editable, existing, existing.schoolId);
+    if (Object.keys(errors).length) return res.status(400).json({ error: 'Invalid building', fields: errors });
+    const before = view(existing);
+    const updated = await updateBuilding(existing.id, b);
+    const changes = diff(before, view(updated));
+    if (changes.length) {
+      logAudit(req, {
+        action: 'update', module: 'Schools & Facilities', recordId: updated.id, link: `/schools/${updated.schoolId}/buildings`,
+        summary: `Updated building ${updated.name} – ${updated.schoolName}`,
+        changes,
+        related: { school: updated.schoolName, building: updated.name },
+      });
+    }
+    res.json(updated);
+  } catch (err) {
+    next(err);
+  }
 });
 
 export default router;

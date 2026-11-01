@@ -16,6 +16,7 @@
   padding: 0 12px 0 14px;
 }
 .d-sp-status { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: #8f5a00; }
+.d-sp-status.on { color: #0c7f0c; }
 .d-sp small { grid-column: 1; font-size: 11px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .d-sp .u-btn { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
 

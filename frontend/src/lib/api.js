@@ -9,6 +9,7 @@ export async function request(path, options = {}) {
   if (!res.ok) {
     const err = new Error(body.error || `HTTP ${res.status}`)
     err.fields = body.fields
+    err.status = res.status
     throw err
   }
   return body

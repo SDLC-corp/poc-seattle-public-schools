@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import {
   FileText, Cloud, CloudUpload, Lock, Plus, FolderPlus, Search, ChevronLeft, ChevronRight, RotateCcw,
   Ellipsis, Eye, Download, Trash2, CircleCheck, CircleAlert, CloudOff, RefreshCw, X,
@@ -100,6 +100,22 @@ export default function Documents() {
       .catch((err) => setError(err.message))
   }, [])
 
+  // SharePoint status comes from Settings › Integrations (via /documents/facets)
+  const [spSyncing, setSpSyncing] = useState(false)
+  const sp = facets?.sharepoint
+  const syncSharePoint = async () => {
+    setSpSyncing(true)
+    try {
+      const r = await request('/integrations/sharepoint/sync', { method: 'POST' })
+      setFacets((f) => ({ ...f, sharepoint: { ...f.sharepoint, lastSync: r.lastSync } }))
+      setToast({ kind: 'success', text: `SharePoint: ${r.lastSync.message} (simulated).` })
+    } catch (err) {
+      setToast({ kind: 'error', text: err.message })
+    } finally {
+      setSpSyncing(false)
+    }
+  }
+
   useEffect(() => {
     const t = setTimeout(() => { setDebouncedQ(query); setPage(1) }, 250)
     return () => clearTimeout(t)
@@ -194,9 +210,9 @@ export default function Documents() {
           <button type="button" className="u-btn u-btn-outline" disabled title="Folders aren't available yet">
             <FolderPlus size={15} />New Folder
           </button>
-          <button type="button" className="u-btn u-btn-outline" disabled title="SharePoint integration isn't configured">
+          <Link className="u-btn u-btn-outline" to="/settings/integrations" title="SharePoint integration settings">
             <Cloud size={15} />SharePoint
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -217,13 +233,23 @@ export default function Documents() {
           <Kpi icon={CloudUpload} value={data?.stats.thisMonth} label="Uploaded This Month" tone="violet" />
           <Kpi icon={Lock} value={data?.stats.restricted} label="Restricted Documents" tone="warning" />
         </div>
-        <div className="u-card d-sp">
-          <span className="d-sp-status"><CloudOff size={16} />SharePoint not connected</span>
-          <small title="Sample records are labelled SharePoint; live sync needs Microsoft 365 credentials.">Live sync needs Microsoft 365 credentials</small>
-          <button type="button" className="u-btn u-btn-outline u-btn-sm" disabled title="SharePoint integration isn't configured">
-            <RefreshCw size={13} />Sync Now
-          </button>
-        </div>
+        {sp?.connected ? (
+          <div className="u-card d-sp">
+            <span className="d-sp-status on"><Cloud size={16} />SharePoint connected</span>
+            <small title={sp.siteUrl ?? undefined}>
+              {sp.lastSync ? `Last sync ${fmtDateTime(sp.lastSync.at)}${sp.lastSync.status === 'failed' ? ' (failed)' : ''}` : 'Not synced yet'}
+            </small>
+            <button type="button" className="u-btn u-btn-outline u-btn-sm" disabled={spSyncing} onClick={syncSharePoint} title="Simulated in this demo environment">
+              <RefreshCw size={13} />{spSyncing ? 'Syncing…' : 'Sync Now'}
+            </button>
+          </div>
+        ) : (
+          <div className="u-card d-sp">
+            <span className="d-sp-status"><CloudOff size={16} />SharePoint {sp?.status === 'error' ? 'connection error' : 'not connected'}</span>
+            <small>Connect it under Settings › Integrations</small>
+            <Link className="u-btn u-btn-outline u-btn-sm" to="/settings/integrations">Connect</Link>
+          </div>
+        )}
       </div>
 
       <div className={`d-layout${previewOpen ? ' details-open' : ''}`}>

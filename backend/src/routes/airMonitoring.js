@@ -8,7 +8,8 @@ import { notify } from '../data/notificationsStore.js';
 
 const DAY = 86400000;
 const schoolById = new Map(schools.map((s) => [s.id, s]));
-const buildingById = new Map(buildings.map((b) => [b.id, b]));
+// Looked up live so buildings added in the app are found
+const buildingById = { get: (id) => buildings.find((b) => b.id === id) };
 
 function filterEvents({ q, school, building, type, method, status, from, to }) {
   const term = q?.trim().toLowerCase();

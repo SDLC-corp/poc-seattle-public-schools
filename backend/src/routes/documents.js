@@ -8,9 +8,11 @@ import {
 import { schools, buildings } from '../data/store.js';
 import { logAudit, getEntries, CURRENT_USER } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
+import { publicView } from '../data/integrationsStore.js';
 
 const schoolById = new Map(schools.map((s) => [s.id, s]));
-const buildingById = new Map(buildings.map((b) => [b.id, b]));
+// Looked up live so buildings added in the app are found
+const buildingById = { get: (id) => buildings.find((b) => b.id === id) };
 
 function filterDocs({ q, category, school, building, type, year, source }) {
   const term = q?.trim().toLowerCase();
@@ -61,7 +63,7 @@ router.get('/facets', (req, res) => {
     years,
     allowedExtensions: Object.keys(FILE_TYPES),
     maxUploadBytes: MAX_UPLOAD_BYTES,
-    sharepoint: { connected: false }, // integration not configured in this environment
+    sharepoint: (({ status, lastSync, config }) => ({ connected: status === 'connected', status, lastSync, siteUrl: config.siteUrl ?? null }))(publicView('sharepoint')),
   });
 });
 

@@ -1,5 +1,5 @@
 {
   "watch": ["src", "data"],
   "ext": "js,json",
-  "ignore": ["data/settings.json", "data/users.json", "data/roles.json", "data/audit.json", "data/documents.json", "data/notifications.json", "data/inspections.json", "data/airMonitoring.json", "data/personnel.json", "uploads/*"]
+  "ignore": ["data/settings.json", "data/users.json", "data/roles.json", "data/audit.json", "data/documents.json", "data/notifications.json", "data/inspections.json", "data/airMonitoring.json", "data/personnel.json", "data/buildings.json", "data/floors.json", "data/integrations.json", "uploads/*"]
 }
