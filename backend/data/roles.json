@@ -1,0 +1,101 @@
+{
+  "roles": [
+    {
+      "id": "ehs-manager",
+      "name": "EHS Manager",
+      "tone": "primary",
+      "description": "District environmental health & safety lead with full access.",
+      "defaultAccess": "all",
+      "permissions": [
+        "schools.view_all",
+        "acm.manage",
+        "inspections.manage",
+        "response.manage",
+        "lab.upload",
+        "reports.generate",
+        "documents.all",
+        "notifications.receive",
+        "users.manage",
+        "settings.manage"
+      ]
+    },
+    {
+      "id": "principal",
+      "name": "Principal",
+      "tone": "violet",
+      "description": "School leader; views their school’s asbestos status and is notified of issues.",
+      "defaultAccess": "schools",
+      "permissions": [
+        "schools.view_assigned",
+        "acm.view",
+        "documents.assigned",
+        "notifications.receive"
+      ]
+    },
+    {
+      "id": "facilities-manager",
+      "name": "Facilities Manager",
+      "tone": "good",
+      "description": "Maintains buildings; manages ACM records and response actions for assigned schools.",
+      "defaultAccess": "schools",
+      "permissions": [
+        "schools.view_assigned",
+        "acm.manage",
+        "inspections.manage",
+        "response.manage",
+        "documents.assigned",
+        "notifications.receive",
+        "reports.generate"
+      ]
+    },
+    {
+      "id": "inspector",
+      "name": "Inspector",
+      "tone": "warning",
+      "description": "Accredited inspector performing AHERA inspections and surveillance.",
+      "defaultAccess": "schools",
+      "permissions": [
+        "schools.view_assigned",
+        "acm.view",
+        "inspections.perform",
+        "documents.assigned"
+      ]
+    },
+    {
+      "id": "capital-projects",
+      "name": "Capital Projects",
+      "tone": "teal",
+      "description": "Plans renovations and needs district-wide ACM visibility.",
+      "defaultAccess": "all",
+      "permissions": [
+        "schools.view_all",
+        "acm.view",
+        "reports.generate",
+        "documents.all"
+      ]
+    },
+    {
+      "id": "contractor",
+      "name": "Contractor",
+      "tone": "critical",
+      "description": "External abatement contractor limited to assigned projects.",
+      "defaultAccess": "assigned",
+      "permissions": [
+        "schools.view_assigned",
+        "acm.view",
+        "response.update",
+        "documents.assigned"
+      ]
+    },
+    {
+      "id": "lab-user",
+      "name": "Lab User",
+      "tone": "violet",
+      "description": "External laboratory uploading sample analysis results.",
+      "defaultAccess": "lab",
+      "permissions": [
+        "lab.upload"
+      ]
+    }
+  ]
+}

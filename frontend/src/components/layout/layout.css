@@ -1,7 +1,7 @@
 :root {
   --topbar-h: 58px;
-  --sidebar-w: 258px;
-  --sidebar-w-collapsed: 72px;
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 64px;
   /* Primary: SPS blue and darker shades of the same hue for the chrome */
   --primary: #006aa3;
   --primary-hover: #00578a;
@@ -186,6 +186,13 @@
   overflow: hidden;
 }
 .sidebar.collapsed { width: var(--sidebar-w-collapsed); }
+/* Light-on-dark scrollbar for the navy sidebar, extra slim so menu labels keep their width */
+.sidebar {
+  --scrollbar-thumb: rgba(255, 255, 255, 0.16);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.32);
+}
+.sidebar-scroll::-webkit-scrollbar { width: 5px; }
+.sidebar-scroll::-webkit-scrollbar-thumb { border-width: 1px; }
 
 .sidebar-scroll {
   height: 100%;
@@ -203,21 +210,23 @@
 .nav-link {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   width: 100%;
-  height: 40px;
-  margin: 2px 0;
-  padding: 0 12px;
+  min-height: 36px;
+  margin: 1px 0;
+  padding: 6px 8px 6px 10px;
   border: 0;
   border-radius: 6px;
   background: transparent;
   color: var(--text-on-dark);
   font: inherit;
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1.25;
   text-align: left;
   cursor: pointer;
-  white-space: nowrap;
 }
+.nav-link,
+.nav-sublink { text-decoration: none; } /* nav items are router links */
 .nav-link:hover { background: var(--primary-700); }
 .nav-link.active {
   background: var(--primary);
@@ -234,10 +243,11 @@
   width: 24px;
   flex-shrink: 0;
 }
+/* Long labels (e.g. "Personnel, Training & Certifications") wrap to a second line */
 .nav-label {
   flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .nav-chevron {
   flex-shrink: 0;
@@ -271,18 +281,18 @@
 .nav-sub {
   list-style: none;
   margin: 0 0 4px;
-  padding: 0 0 0 38px;
+  padding: 0 0 0 33px;
 }
 .nav-sublink {
   display: block;
   width: 100%;
-  padding: 8px 12px;
+  padding: 7px 12px;
   border: 0;
   border-radius: 6px;
   background: transparent;
   color: var(--muted-on-dark);
   font: inherit;
-  font-size: 13px;
+  font-size: 12px;
   text-align: left;
   cursor: pointer;
 }

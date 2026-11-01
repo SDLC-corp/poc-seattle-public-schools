@@ -1,7 +1,10 @@
+import { Link } from 'react-router'
 import { Menu, Search, Bell, ChevronDown, School } from 'lucide-react'
+import { useUnreadCount } from '../../lib/unreadNotifications'
 
-export default function Topbar({ onToggleSidebar, notificationCount = 0, user }) {
+export default function Topbar({ onToggleSidebar, user }) {
   const initials = user.name.split(' ').map((p) => p[0]).join('').slice(0, 2)
+  const unread = useUnreadCount() ?? 0
 
   return (
     <header className="topbar">
@@ -23,10 +26,10 @@ export default function Topbar({ onToggleSidebar, notificationCount = 0, user })
       </label>
 
       <div className="topbar-actions">
-        <button type="button" className="icon-btn bell-btn" aria-label={`Notifications (${notificationCount})`}>
+        <Link to="/notifications/unread" className="icon-btn bell-btn" aria-label={`Notifications (${unread} unread)`} title={`${unread} unread notifications`}>
           <Bell size={22} />
-          {notificationCount > 0 && <span className="bell-badge">{notificationCount}</span>}
-        </button>
+          {unread > 0 && <span className="bell-badge">{unread > 99 ? '99+' : unread}</span>}
+        </Link>
 
         <button type="button" className="user-menu">
           <span className="avatar">{initials}</span>

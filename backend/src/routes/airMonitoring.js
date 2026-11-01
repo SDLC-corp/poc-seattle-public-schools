@@ -1,0 +1,186 @@
+import { Router } from 'express';
+import {
+  getEvents, getEvent, addEvent, updateEvent, nextId, statusOf, limitFor, SAMPLE_TYPES, METHODS,
+} from '../data/airStore.js';
+import { schools, buildings } from '../data/store.js';
+import { logAudit, diff, CURRENT_USER } from '../data/auditStore.js';
+import { notify } from '../data/notificationsStore.js';
+
+const DAY = 86400000;
+const schoolById = new Map(schools.map((s) => [s.id, s]));
+const buildingById = new Map(buildings.map((b) => [b.id, b]));
+
+function filterEvents({ q, school, building, type, method, status, from, to }) {
+  const term = q?.trim().toLowerCase();
+  const fromMs = from ? Date.parse(from) : -Infinity;
+  const toMs = to ? Date.parse(to) + DAY - 1 : Infinity;
+  return getEvents().filter((e) => {
+    const t = Date.parse(e.sampledAt);
+    return t >= fromMs && t <= toMs
+      && (!school || e.schoolId === school)
+      && (!building || e.buildingId === building)
+      && (!type || e.type === type)
+      && (!method || e.method === method)
+      && (!status || e.status === status)
+      && (!term || [e.id, e.schoolName, e.buildingName, e.location, e.project, e.contractorName, e.inspectorName]
+        .some((v) => v?.toLowerCase().includes(term)));
+  }).sort((a, b) => b.sampledAt.localeCompare(a.sampledAt));
+}
+
+// Normalise + validate a create/update payload
+function validate(body, existing) {
+  const errors = {};
+  const pickStr = (k, max = 200) => String(body[k] ?? existing?.[k] ?? '').trim().slice(0, max);
+  const e = {
+    sampledAt: body.sampledAt ?? existing?.sampledAt,
+    schoolId: body.schoolId ?? existing?.schoolId,
+    buildingId: body.buildingId ?? existing?.buildingId ?? null,
+    location: pickStr('location', 80),
+    type: body.type ?? existing?.type,
+    method: body.method ?? existing?.method ?? 'PCM',
+    durationMin: Number(body.durationMin ?? existing?.durationMin ?? 0),
+    result: body.result === '' || body.result === null ? null : body.result !== undefined ? Number(body.result) : existing?.result ?? null,
+    contractorName: pickStr('contractorName', 80),
+    inspectorName: pickStr('inspectorName', 80),
+    project: pickStr('project', 120),
+    notes: pickStr('notes', 1000),
+  };
+  if (!e.sampledAt || Number.isNaN(Date.parse(e.sampledAt))) errors.sampledAt = 'Enter the sampling date and time';
+  else if (Date.parse(e.sampledAt) > Date.now() + 60000) errors.sampledAt = 'Sampling time can’t be in the future';
+  const school = schoolById.get(e.schoolId);
+  if (!school) errors.schoolId = 'Choose a school';
+  const building = e.buildingId ? buildingById.get(e.buildingId) : null;
+  if (e.buildingId && (!building || building.schoolId !== e.schoolId)) errors.buildingId = 'Building does not belong to that school';
+  if (!e.location) errors.location = 'Enter the location or room';
+  if (!SAMPLE_TYPES.includes(e.type)) errors.type = 'Choose a sample type';
+  if (!METHODS[e.method]) errors.method = 'Choose PCM or TEM';
+  if (!Number.isFinite(e.durationMin) || e.durationMin < 1 || e.durationMin > 1440) errors.durationMin = 'Duration must be 1–1440 minutes';
+  if (e.result !== null && (!Number.isFinite(e.result) || e.result < 0)) errors.result = 'Result must be a positive number (or empty if pending)';
+  return {
+    errors,
+    event: { ...e, schoolName: school?.name ?? null, buildingName: building?.name ?? existing?.buildingName ?? 'Main Building' },
+  };
+}
+
+const fmtResult = (e) => (e.result === null ? 'pending' : `${e.result} ${limitFor(e.type, e.method).unit}`);
+
+function raiseExceedance(e) {
+  notify({
+    type: 'compliance', priority: 'high', title: 'Air Monitoring Exceedance',
+    message: `${e.type} sample at ${e.location} measured ${fmtResult(e)} (limit ${e.limit.value} ${e.limit.unit}).`,
+    description: `${e.id} (${e.method}) at ${e.schoolName}, ${e.buildingName} – ${e.location} exceeded the ${e.limit.basis}. Stop work in the area if abatement is ongoing, review containment, and re-sample before re-occupancy.`,
+    schoolId: e.schoolId, schoolName: e.schoolName, buildingName: e.buildingName, rooms: e.location,
+    link: '/air-monitoring', linkLabel: 'View Air Monitoring',
+  });
+}
+
+const csvCell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+const router = Router();
+
+router.get('/meta', (req, res) => res.json({
+  types: SAMPLE_TYPES,
+  methods: Object.entries(METHODS).map(([id, m]) => ({ id, ...m })),
+  limits: Object.fromEntries(SAMPLE_TYPES.flatMap((t) => Object.keys(METHODS).map((m) => [`${t}|${m}`, limitFor(t, m)]))),
+}));
+
+// GET /api/air-monitoring?q=&school=&building=&type=&method=&status=&from=&to=&page=&pageSize=
+router.get('/', (req, res) => {
+  const filtered = filterEvents(req.query);
+  // KPI/donut stats ignore the status filter so the cards keep showing the full split
+  const statsBase = filterEvents({ ...req.query, status: '' });
+  const count = (s) => statsBase.filter((e) => e.status === s).length;
+  const pageSize = Math.min(100, Math.max(1, Number(req.query.pageSize) || 10));
+  const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const page = Math.min(pages, Math.max(1, Number(req.query.page) || 1));
+  res.json({
+    total: filtered.length,
+    page,
+    pageSize,
+    pages,
+    stats: { total: statsBase.length, compliant: count('compliant'), exceedance: count('exceedance'), pending: count('pending') },
+    events: filtered.slice((page - 1) * pageSize, page * pageSize),
+  });
+});
+
+// Monthly PCM area/clearance/background results (f/cc), same filters. Personal/TEM have other units/limits.
+router.get('/trend', (req, res) => {
+  const pcm = filterEvents({ ...req.query, status: '' })
+    .filter((e) => e.method === 'PCM' && ['Clearance', 'Area', 'Background'].includes(e.type) && e.result !== null);
+  const byMonth = new Map();
+  for (const e of pcm) {
+    const key = e.sampledAt.slice(0, 7);
+    if (!byMonth.has(key)) byMonth.set(key, []);
+    byMonth.get(key).push(e.result);
+  }
+  const months = [...byMonth.keys()].sort().map((m) => {
+    const v = byMonth.get(m);
+    return {
+      month: m,
+      count: v.length,
+      avg: Math.round((v.reduce((a, b) => a + b, 0) / v.length) * 10000) / 10000,
+      min: Math.min(...v),
+      max: Math.max(...v),
+    };
+  });
+  res.json({ unit: 'f/cc', actionLevel: 0.01, months });
+});
+
+router.get('/export.csv', (req, res) => {
+  const rows = filterEvents(req.query);
+  logAudit(req, { action: 'export', module: 'Air Monitoring', recordId: 'air-monitoring.csv', summary: `Exported ${rows.length} air monitoring events to CSV` });
+  const header = ['Event ID', 'Date & Time', 'School', 'Building', 'Location', 'Type', 'Method', 'Result', 'Unit', 'Limit', 'Status', 'Duration (min)', 'Contractor', 'Inspector', 'Project', 'Notes'];
+  const lines = rows.map((e) => [e.id, e.sampledAt, e.schoolName, e.buildingName, e.location, e.type, e.method, e.result ?? '', e.limit.unit, e.limit.value, e.status, e.durationMin, e.contractorName, e.inspectorName, e.project, e.notes]);
+  res.type('text/csv').attachment('air-monitoring.csv').send([header, ...lines].map((r) => r.map(csvCell).join(',')).join('\r\n'));
+});
+
+router.get('/:id', (req, res) => {
+  const e = getEvent(req.params.id);
+  if (!e) return res.status(404).json({ error: 'Monitoring event not found' });
+  res.json(e);
+});
+
+router.post('/', async (req, res, next) => {
+  try {
+    const { errors, event } = validate(req.body ?? {});
+    if (Object.keys(errors).length) return res.status(400).json({ error: 'Invalid monitoring event', fields: errors });
+    const created = await addEvent({ id: nextId(), ...event, loggedBy: CURRENT_USER.name, sample: false });
+    logAudit(req, {
+      action: 'create', module: 'Air Monitoring', recordId: created.id, link: '/air-monitoring',
+      summary: `Logged ${created.type.toLowerCase()} air sample – ${created.schoolName}`,
+      changes: [
+        { field: 'Type', to: created.type }, { field: 'Method', to: created.method },
+        { field: 'Location', to: `${created.buildingName}, ${created.location}` }, { field: 'Result', to: fmtResult(created) },
+      ],
+      related: { school: created.schoolName, building: created.buildingName, room: created.location },
+    });
+    if (created.status === 'exceedance') raiseExceedance(created);
+    res.status(201).json(created);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put('/:id', async (req, res, next) => {
+  try {
+    const existing = getEvent(req.params.id);
+    if (!existing) return res.status(404).json({ error: 'Monitoring event not found' });
+    const { errors, event } = validate(req.body ?? {}, existing);
+    if (Object.keys(errors).length) return res.status(400).json({ error: 'Invalid monitoring event', fields: errors });
+    const updated = await updateEvent(existing.id, event);
+    const view = (e) => ({ type: e.type, method: e.method, location: e.location, result: fmtResult(e), status: statusOf(e), notes: e.notes });
+    const changes = diff(view(existing), view(updated));
+    if (changes.length) {
+      logAudit(req, {
+        action: 'update', module: 'Air Monitoring', recordId: updated.id, link: '/air-monitoring',
+        summary: `Updated air monitoring event – ${updated.schoolName}`, changes,
+        related: { school: updated.schoolName, building: updated.buildingName, room: updated.location },
+      });
+    }
+    if (updated.status === 'exceedance' && existing.status !== 'exceedance') raiseExceedance(updated);
+    res.json(updated);
+  } catch (err) {
+    next(err);
+  }
+});
+
+export default router;

@@ -50,3 +50,53 @@ body {
 button {
   font: inherit;
 }
+
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 60vh;
+  color: var(--ink-3);
+  text-align: center;
+}
+.coming-soon strong { color: var(--ink-1); font-size: 16px; }
+.coming-soon span { font-size: 13px; }
+
+/* ---------- Scrollbars (whole platform) ----------
+   Thin, rounded thumb on a transparent track. Chromium/Safari use the ::-webkit-scrollbar
+   rules; Chromium ignores those if the standard properties are also set, so the standard
+   ones are only applied where ::-webkit-scrollbar isn't supported (Firefox). */
+:root {
+  --scrollbar-thumb: rgba(28, 43, 64, 0.22);
+  --scrollbar-thumb-hover: rgba(28, 43, 64, 0.4);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  border: 2px solid transparent; /* inset the thumb so it reads as a slim pill */
+  border-radius: 8px;
+  background: var(--scrollbar-thumb);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+}

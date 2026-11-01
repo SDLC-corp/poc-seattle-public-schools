@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   School, Building2, Layers, ClipboardCheck, TriangleAlert, FileText, ChevronRight,
-  ChevronDown, CalendarDays, CalendarPlus, MapPin, FileUp, Map as MapIcon, ChartColumn, UsersRound,
+  CalendarDays, CalendarPlus, MapPin, FileUp, Map as MapIcon, ChartColumn, UsersRound,
   CircleCheck, FlaskConical, Wrench,
 } from 'lucide-react'
 import DonutChart from '../../components/charts/DonutChart'
 import BarChart from '../../components/charts/BarChart'
 import SchoolMap from './SchoolMap'
+import SearchSelect from '../../components/ui/SearchSelect'
 import {
   STATUS, kpis, acmByMaterial, inspectionStatus, upcomingInspections, recentActivities,
   mockComplianceStatus,
@@ -94,9 +95,11 @@ export default function Dashboard() {
     const getJson = (url) => fetch(url).then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
     Promise.all([getJson('/api/schools'), getJson('/api/buildings')])
       .then(([schoolData, buildingData]) => {
-        setSchools(schoolData.schools.map((s) => ({ ...s, status: mockComplianceStatus(s.id) })))
+        // Real status from the inspection schedule (API); placeholder only if the API doesn't provide it
+        const statusById = Object.fromEntries(schoolData.schools.map((s) => [s.id, s.complianceStatus ?? mockComplianceStatus(s.id)]))
+        setSchools(schoolData.schools.map((s) => ({ ...s, status: statusById[s.id] })))
         // Buildings take their school's compliance status so the 3D map colours match the pins
-        setBuildings(buildingData.buildings.map((b) => ({ ...b, status: mockComplianceStatus(b.schoolId) })))
+        setBuildings(buildingData.buildings.map((b) => ({ ...b, status: statusById[b.schoolId] ?? mockComplianceStatus(b.schoolId) })))
         setBuildingsLoaded(true)
       })
       .catch((err) => setError(err.message))
@@ -134,32 +137,46 @@ export default function Dashboard() {
   const acmData = acmByMaterial.map((d, i) => ({ ...d, color: SERIES[i] ?? 'var(--series-other)' }))
   const barData = inspectionStatus.map((d) => ({ ...d, color: STATUS_COLOR[d.status] }))
 
+  // Shared by the page header and the fullscreen map, so both stay in sync
+  const schoolFilters = (
+    <>
+      <SearchSelect
+        label="Type"
+        value={schoolType}
+        onChange={changeSchoolType}
+        searchPlaceholder="Search types…"
+        options={[
+          { value: '', label: 'All Types', meta: String(schools.length) },
+          ...schoolTypes.map((t) => ({
+            value: t,
+            label: SCHOOL_TYPE_LABEL[t],
+            meta: String(schools.filter((s) => s.type === t).length),
+          })),
+        ]}
+      />
+      <SearchSelect
+        label="School"
+        value={selectedSchool}
+        onChange={setSelectedSchool}
+        searchPlaceholder="Search schools…"
+        wide
+        options={[
+          { value: '', label: schoolType ? `All ${SCHOOL_TYPE_LABEL[schoolType]}` : 'All Schools' },
+          ...visibleSchools.map((s) => ({ value: s.id, label: s.name, meta: s.type })),
+        ]}
+      />
+    </>
+  )
+
   return (
     <div className="dashboard">
       <div className="page-head">
-        <div>
+        <div className="page-title">
           <h1>Dashboard</h1>
           <p>Overview of asbestos compliance and activities across Seattle Public Schools</p>
         </div>
         <div className="page-filters">
-          <label className="filter-chip">
-            <span className="filter-label">Type</span>
-            <select value={schoolType} onChange={(e) => changeSchoolType(e.target.value)} aria-label="School type">
-              <option value="">All Types</option>
-              {schoolTypes.map((t) => (
-                <option key={t} value={t}>{SCHOOL_TYPE_LABEL[t]} ({schools.filter((s) => s.type === t).length})</option>
-              ))}
-            </select>
-            <ChevronDown size={14} />
-          </label>
-          <label className="filter-chip filter-chip-wide">
-            <span className="filter-label">School</span>
-            <select value={selectedSchool} onChange={(e) => setSelectedSchool(e.target.value)} aria-label="School">
-              <option value="">{schoolType ? `All ${SCHOOL_TYPE_LABEL[schoolType]}` : 'All Schools'}</option>
-              {visibleSchools.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-            </select>
-            <ChevronDown size={14} />
-          </label>
+          {schoolFilters}
           <button type="button" className="filter-chip date-chip" aria-label="Date range">
             <CalendarDays size={14} />
             Jan 1 – Dec 31, 2026
@@ -179,12 +196,17 @@ export default function Dashboard() {
         <KpiCard icon={Layers} value={kpis.acmLocations.toLocaleString('en-US')} label="ACM Locations" tone="violet" link />
         <KpiCard icon={ClipboardCheck} value={kpis.inspectionsDue} label="Inspections Due" tone="warning" />
         <KpiCard icon={TriangleAlert} value={kpis.overdueItems} label="Overdue Items" tone="critical" />
-        <KpiCard icon={FileText} value={kpis.responseActions} label="Response Actions" sublabel="In Progress" tone="teal" />
+        <KpiCard icon={FileText} value={kpis.responseActions} label="Open Responses" tone="teal" />
       </div>
 
       <div className="grid-map">
         <Card title="School Locations" className="card-map">
-          <SchoolMap schools={visibleSchools} buildings={visibleBuildings} selectedId={selectedSchool} />
+          <SchoolMap
+            schools={visibleSchools}
+            buildings={visibleBuildings}
+            selectedId={selectedSchool}
+            fullscreenControls={schoolFilters}
+          />
         </Card>
         <Card title="Upcoming Inspections" action={<a href="#" className="card-link">View All</a>}>
           <div className="table-wrap">

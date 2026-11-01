@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Outlet, useLocation } from 'react-router'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
 import './layout.css'
@@ -14,9 +15,12 @@ function readCollapsed() {
   }
 }
 
-export default function AppLayout({ children, activeId, onSelect }) {
+// Layout route: topbar + sidebar around the current page (<Outlet />)
+export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(readCollapsed)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const mainRef = useRef(null)
+  const { pathname } = useLocation()
 
   useEffect(() => {
     try {
@@ -26,34 +30,34 @@ export default function AppLayout({ children, activeId, onSelect }) {
     }
   }, [collapsed])
 
+  // New page starts at the top (the content area scrolls, not the window)
+  useEffect(() => {
+    mainRef.current?.scrollTo(0, 0)
+  }, [pathname])
+
   const toggleSidebar = () => {
     // On small screens the sidebar is an overlay drawer instead of a collapsing rail
     if (window.matchMedia(MOBILE_QUERY).matches) setMobileOpen((o) => !o)
     else setCollapsed((c) => !c)
   }
 
-  const handleSelect = (id) => {
-    onSelect(id)
-    setMobileOpen(false)
-  }
-
   return (
     <div className="app-shell">
       <Topbar
         onToggleSidebar={toggleSidebar}
-        notificationCount={5}
         user={{ name: 'John Doe', role: 'EHS Manager' }}
       />
       <div className="app-body">
         <Sidebar
           collapsed={collapsed}
           mobileOpen={mobileOpen}
-          activeId={activeId}
-          onSelect={handleSelect}
+          onNavigate={() => setMobileOpen(false)}
           onExpand={() => setCollapsed(false)}
         />
         {mobileOpen && <div className="sidebar-backdrop" onClick={() => setMobileOpen(false)} />}
-        <main className="app-main">{children}</main>
+        <main ref={mainRef} className="app-main">
+          <Outlet />
+        </main>
       </div>
     </div>
   )

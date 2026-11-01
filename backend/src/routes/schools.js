@@ -1,9 +1,15 @@
 import { Router } from 'express';
 import { schools, getSchoolBuildings } from '../data/store.js';
+import { schoolCompliance } from '../data/complianceStore.js';
 
 const router = Router();
 
-const withBuildingCount = (s) => ({ ...s, buildingCount: getSchoolBuildings(s.id).length });
+// complianceStatus is derived from the inspection schedule: compliant | dueSoon | overdue
+const withBuildingCount = (s) => ({
+  ...s,
+  buildingCount: getSchoolBuildings(s.id).length,
+  complianceStatus: schoolCompliance(s.id).status,
+});
 
 // GET /api/schools?type=High&category=Option%20School&boardDistrict=2&q=ballard
 router.get('/', (req, res) => {

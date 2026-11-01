@@ -1,61 +1,87 @@
 import {
   House, School, Layers, ClipboardCheck, FileText, FlaskConical, ScanEye,
-  TriangleAlert, Wrench, Wind, HardHat, ListChecks, Bell, FolderOpen,
-  ChartLine, UsersRound, History, Settings,
+  TriangleAlert, Wrench, Wind, GraduationCap, ListChecks, Bell, FolderOpen,
+  ChartLine, UsersRound, History, Settings, LifeBuoy,
 } from 'lucide-react'
 
-// Child items are placeholders until the real pages are defined.
+// Every item has a route `path`. Child items are placeholders until the real pages are defined.
 export const mainNav = [
-  { id: 'dashboard', label: 'Dashboard', icon: House },
+  { id: 'dashboard', label: 'Dashboard', icon: House, path: '/dashboard' },
   {
-    id: 'schools', label: 'Schools & Facilities', icon: School,
+    id: 'schools', label: 'Schools & Facilities', icon: School, path: '/schools',
     children: [
-      { id: 'schools-list', label: 'Schools' },
-      { id: 'buildings', label: 'Buildings' },
-      { id: 'rooms', label: 'Rooms & Floor Plans' },
+      { id: 'schools-list', label: 'Schools', path: '/schools/list' },
+      { id: 'buildings', label: 'Buildings', path: '/schools/buildings' },
+      { id: 'rooms', label: 'Rooms & Floor Plans', path: '/schools/rooms' },
     ],
   },
   {
-    id: 'acm', label: 'ACM Inventory', icon: Layers,
+    id: 'acm', label: 'ACM Inventory', icon: Layers, path: '/acm',
     children: [
-      { id: 'acm-locations', label: 'ACM Locations' },
-      { id: 'acm-materials', label: 'Material Types' },
+      { id: 'acm-locations', label: 'ACM Locations', path: '/acm/locations' },
+      { id: 'acm-materials', label: 'Material Types', path: '/acm/materials' },
     ],
   },
   {
-    id: 'inspections', label: 'Inspections', icon: ClipboardCheck,
+    id: 'inspections', label: 'Inspections', icon: ClipboardCheck, path: '/inspections',
     children: [
-      { id: 'inspections-upcoming', label: 'Upcoming' },
-      { id: 'inspections-history', label: 'History' },
+      { id: 'inspections-upcoming', label: 'Upcoming', path: '/inspections/upcoming' },
+      { id: 'inspections-history', label: 'History', path: '/inspections/history' },
     ],
   },
-  { id: 'management-plans', label: 'Management Plans', icon: FileText },
+  { id: 'management-plans', label: 'Management Plans', icon: FileText, path: '/management-plans' },
   {
-    id: 'sampling', label: 'Sampling & Lab Results', icon: FlaskConical,
+    id: 'sampling', label: 'Sampling & Lab Results', icon: FlaskConical, path: '/sampling',
     children: [
-      { id: 'samples', label: 'Samples' },
-      { id: 'lab-results', label: 'Lab Results' },
+      { id: 'samples', label: 'Samples', path: '/sampling/samples' },
+      { id: 'lab-results', label: 'Lab Results', path: '/sampling/lab-results' },
     ],
   },
-  { id: 'surveillance', label: 'Surveillance', icon: ScanEye },
-  { id: 'response-actions', label: 'Response Actions', icon: TriangleAlert },
-  { id: 'operations', label: 'Operations & Maintenance', icon: Wrench },
-  { id: 'air-monitoring', label: 'Air Monitoring', icon: Wind },
-  { id: 'contractors', label: 'Contractors & Training', icon: HardHat },
-  { id: 'compliance', label: 'Compliance Tracking', icon: ListChecks },
-  { id: 'notifications', label: 'Notifications', icon: Bell, badge: 5 },
-  { id: 'documents', label: 'Document Management', icon: FolderOpen },
+  { id: 'surveillance', label: 'Surveillance', icon: ScanEye, path: '/surveillance' },
+  { id: 'response-actions', label: 'Response Actions', icon: TriangleAlert, path: '/response-actions' },
+  { id: 'operations', label: 'Operations & Maintenance', icon: Wrench, path: '/operations' },
+  { id: 'air-monitoring', label: 'Air Monitoring', icon: Wind, path: '/air-monitoring' },
+  { id: 'personnel', label: 'Personnel, Training & Certifications', icon: GraduationCap, path: '/personnel' },
+  { id: 'compliance', label: 'Compliance & Tracking', icon: ListChecks, path: '/compliance' },
+  // badgeKey: the sidebar shows a live count for this item (see Sidebar.jsx)
+  { id: 'notifications', label: 'Notifications', icon: Bell, badgeKey: 'unreadNotifications', path: '/notifications' },
+  { id: 'documents', label: 'Document Management', icon: FolderOpen, path: '/documents' },
   {
-    id: 'reports', label: 'Reports & Analytics', icon: ChartLine,
+    id: 'reports', label: 'Reports & Analytics', icon: ChartLine, path: '/reports',
     children: [
-      { id: 'reports-compliance', label: 'Compliance Reports' },
-      { id: 'reports-analytics', label: 'Analytics' },
+      { id: 'reports-compliance', label: 'Compliance Reports', path: '/reports/compliance' },
+      { id: 'reports-analytics', label: 'Analytics', path: '/reports/analytics' },
     ],
   },
 ]
 
 export const adminNav = [
-  { id: 'users', label: 'User & Role Management', icon: UsersRound },
-  { id: 'audit', label: 'Audit Trail', icon: History },
-  { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'users', label: 'User & Role Management', icon: UsersRound, path: '/users' },
+  { id: 'audit', label: 'Audit Logs', icon: History, path: '/audit' },
+  { id: 'help', label: 'Help & Learning', icon: LifeBuoy, path: '/help' },
+  { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
 ]
+
+const allTop = [...mainNav, ...adminNav]
+
+// Does `pathname` belong to this nav path (exact match or a sub-path)?
+export const isPathActive = (path, pathname) => pathname === path || pathname.startsWith(`${path}/`)
+
+// The nav entry (and child, if any) for the current URL — used for titles and placeholders
+export function findNav(pathname) {
+  for (const item of allTop) {
+    const child = item.children?.find((c) => isPathActive(c.path, pathname))
+    if (child) return { item, child }
+    if (isPathActive(item.path, pathname)) return { item, child: null }
+  }
+  return null
+}
+
+export const pathForId = (id) => {
+  for (const item of allTop) {
+    if (item.id === id) return item.path
+    const child = item.children?.find((c) => c.id === id)
+    if (child) return child.path
+  }
+  return null
+}

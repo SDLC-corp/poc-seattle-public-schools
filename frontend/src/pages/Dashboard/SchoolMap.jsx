@@ -97,21 +97,29 @@ function buildingsGeoJson(buildings) {
   }
 }
 
-// Basemap buildings within this distance of a school building's centre are flattened, so
-// they can't occupy the same space as the (mock) school footprints. Overlapping extrusions
-// z-fight: they flicker and bleed into each other as the camera moves. 70 m covers the
-// largest generated footprint (main buildings are up to ~85 x 55 m).
-const CAMPUS_CLEARANCE_M = 70
+// Basemap buildings that could overlap a (mock) school footprint are flattened: overlapping
+// extrusions z-fight, flickering and bleeding into each other as the camera moves.
+// Each school building clears only the circle that encloses its own footprint (half its
+// diagonal), so neighbouring city buildings keep their 3D shape. Buildings are grouped into
+// 5 m radius buckets to keep the expression small.
+// Evaluated per feature when tiles are parsed, so it needs no bookkeeping. Point inputs are
+// used deliberately: `distance` to large polygon inputs returned wrong results in testing.
+const CLEARANCE_BUCKET_M = 5
 
-// Evaluated per feature when tiles are parsed, so unlike feature-state or id filters it needs
-// no bookkeeping. Point inputs are used deliberately: `distance` to large polygon inputs
-// returned wrong results in testing (every building matched).
 function cityHeight(buildings) {
   const height = ['coalesce', ['get', 'render_height'], 0]
-  const centres = buildings.filter((b) => b.location).map((b) => [b.location.lng, b.location.lat])
-  const value = centres.length
-    ? ['case', ['<', ['distance', { type: 'MultiPoint', coordinates: centres }], CAMPUS_CLEARANCE_M], 0, height]
-    : height
+  const buckets = new Map() // radius → [lng, lat][]
+  for (const b of buildings) {
+    if (!b.location || !b.widthM || !b.depthM) continue
+    const halfDiagonal = Math.hypot(b.widthM, b.depthM) / 2
+    const radius = Math.ceil(halfDiagonal / CLEARANCE_BUCKET_M) * CLEARANCE_BUCKET_M
+    if (!buckets.has(radius)) buckets.set(radius, [])
+    buckets.get(radius).push([b.location.lng, b.location.lat])
+  }
+  const clauses = [...buckets].flatMap(([radius, coordinates]) => [
+    ['<', ['distance', { type: 'MultiPoint', coordinates }], radius], 0,
+  ])
+  const value = clauses.length ? ['case', ...clauses, height] : height
   return ['interpolate', ['linear'], ['zoom'], BUILDINGS_MIN_ZOOM, 0, BUILDINGS_MIN_ZOOM + 0.6, value]
 }
 
@@ -269,7 +277,9 @@ function applyMode(map, is3d) {
   }
 }
 
-export default function SchoolMap({ schools, buildings, selectedId }) {
+// `fullscreenControls` (e.g. the dashboard's filters) are shown inside the map while it is
+// fullscreen, since the rest of the page is hidden then.
+export default function SchoolMap({ schools, buildings, selectedId, fullscreenControls }) {
   const wrapperRef = useRef(null)
   const containerRef = useRef(null)
   const mapRef = useRef(null)
@@ -277,6 +287,13 @@ export default function SchoolMap({ schools, buildings, selectedId }) {
   const [basemapId, setBasemapId] = useState(readBasemap)
   const [is3d, setIs3d] = useState(true)
   const [zoom, setZoom] = useState(10.3)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(document.fullscreenElement === wrapperRef.current)
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
   const basemap = BASEMAPS.find((b) => b.id === basemapId) ?? BASEMAPS[0]
   const basemapRef = useRef(basemap)
   basemapRef.current = basemap
@@ -452,6 +469,10 @@ export default function SchoolMap({ schools, buildings, selectedId }) {
           <button type="button" className={is3d ? 'active' : ''} aria-pressed={is3d} onClick={() => setIs3d(true)}>3D</button>
         </div>
       </div>
+
+      {isFullscreen && fullscreenControls && (
+        <div className="map-fs-filters">{fullscreenControls}</div>
+      )}
 
       {is3d && zoom < BUILDINGS_MIN_ZOOM && (
         <div className="map-hint">Zoom in or pick a school to see 3D buildings</div>
