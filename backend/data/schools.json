@@ -1,0 +1,2734 @@
+{
+  "source": "https://www.seattleschools.org/schools/",
+  "scrapedAt": "2026-11-01T06:59:03.898Z",
+  "count": 105,
+  "schools": [
+    {
+      "id": "adamses",
+      "name": "Adams Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "6110 28th Ave. NW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98107",
+        "full": "6110 28th Ave. NW, Seattle, WA 98107"
+      },
+      "website": "https://adamses.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/adamses/",
+      "category": "Attendance Area School",
+      "phone": "206-252-1300",
+      "fax": "206-252-1301",
+      "principal": "Principal: Anitra Jones",
+      "principalTitle": "Principal",
+      "principalEmail": "alpinchback@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-two/",
+      "location": {
+        "lat": 47.673096807659,
+        "lng": -122.392893221483
+      }
+    },
+    {
+      "id": "kurosems",
+      "name": "Aki Kurose Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "7201 Beacon Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98108",
+        "full": "7201 Beacon Ave. S., Seattle, WA 98108"
+      },
+      "website": "https://kurosems.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/kurosems/",
+      "category": "Attendance Area School",
+      "phone": "206-252-7700",
+      "fax": "206-252-7701",
+      "principal": "Principal: Daniel Reeve",
+      "principalTitle": "Principal",
+      "principalEmail": "dereeve@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.537670437713,
+        "lng": -122.294705989676
+      }
+    },
+    {
+      "id": "sugiyamahs",
+      "name": "Alan T. Sugiyama High School",
+      "type": "High",
+      "address": {
+        "street": "8601 Rainier Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "8601 Rainier Ave. S., Seattle, WA 98118"
+      },
+      "website": "https://sugiyamahs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/sugiyamahs/",
+      "category": "Service School",
+      "phone": "206-252-6600",
+      "fax": "206-252-6601",
+      "principal": "Principal: George Breland",
+      "principalTitle": "Principal",
+      "principalEmail": "glbreland@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.526111754455,
+        "lng": -122.270069916238
+      }
+    },
+    {
+      "id": "alkies",
+      "name": "Alki Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "3010 59th Ave. SW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98116",
+        "full": "3010 59th Ave. SW, Seattle, WA 98116"
+      },
+      "website": "https://alkies.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/alkies/",
+      "category": "Attendance Area School",
+      "phone": "206-252-9050",
+      "fax": "206-252-9051",
+      "principal": "Principal: Mason Skeffington",
+      "principalTitle": "Principal",
+      "principalEmail": "meskeffington@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.577260337979,
+        "lng": -122.408006095132
+      }
+    },
+    {
+      "id": "arborheightses",
+      "name": "Arbor Heights Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "3701 SW 104th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98146",
+        "full": "3701 SW 104th St., Seattle, WA 98146"
+      },
+      "website": "https://arborheightses.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/arborheightses/",
+      "category": "Attendance Area School",
+      "phone": "206-252-9250",
+      "fax": "206-252-9251",
+      "principal": "Principal: Lauren Porto",
+      "principalTitle": "Principal",
+      "principalEmail": "lsporto@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.509943384178,
+        "lng": -122.378199799171
+      }
+    },
+    {
+      "id": "gatzertes",
+      "name": "Bailey Gatzert Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "1301 E. Yesler Way",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98122",
+        "full": "1301 E. Yesler Way, Seattle, WA 98122"
+      },
+      "website": "https://gatzertes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/gatzertes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-2810",
+      "fax": "206-252-2811",
+      "principal": "Principal: Ronnie Belle",
+      "principalTitle": "Principal",
+      "principalEmail": "rlbelle@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-five",
+      "location": {
+        "lat": 47.601632686421,
+        "lng": -122.315848269531
+      }
+    },
+    {
+      "id": "ballardhs",
+      "name": "Ballard High School",
+      "type": "High",
+      "address": {
+        "street": "1418 NW 65th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98117",
+        "full": "1418 NW 65th St., Seattle, WA 98117"
+      },
+      "website": "https://ballardhs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/ballardhs/",
+      "category": "Attendance Area School",
+      "phone": "206-252-1000",
+      "fax": "206-252-1001",
+      "principal": "Principal: Abigail (Abby) Hunt",
+      "principalTitle": "Principal",
+      "principalEmail": "abhunt@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-two/",
+      "location": {
+        "lat": 47.676045872317,
+        "lng": -122.374688325317
+      }
+    },
+    {
+      "id": "beaconhilles",
+      "name": "Beacon Hill International Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "2025 14th Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98144",
+        "full": "2025 14th Ave. S., Seattle, WA 98144"
+      },
+      "website": "https://beaconhilles.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/beaconhilles/",
+      "category": "Attendance Area School",
+      "phone": "206-252-2700",
+      "fax": "206-252-2701",
+      "principal": "Principal: Sahnica Washington",
+      "principalTitle": "Principal",
+      "principalEmail": "smwashington@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.585263127743,
+        "lng": -122.314765116972
+      }
+    },
+    {
+      "id": "dayes",
+      "name": "Benjamin Franklin Day Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "3921 Linden Ave. N.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98103",
+        "full": "3921 Linden Ave. N., Seattle, WA 98103"
+      },
+      "website": "https://dayes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/dayes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-6010",
+      "fax": "206-252-6011",
+      "principal": "Principal: Kristen Eckert",
+      "principalTitle": "Principal",
+      "principalEmail": null,
+      "boardDistrict": 4,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-four/",
+      "location": {
+        "lat": 47.654425687657,
+        "lng": -122.348664429906
+      }
+    },
+    {
+      "id": "broadviewk8",
+      "name": "Broadview-Thomson K-8",
+      "type": "K-8",
+      "address": {
+        "street": "13052 Greenwood Ave. N.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98133",
+        "full": "13052 Greenwood Ave. N., Seattle, WA 98133"
+      },
+      "website": "https://broadviewk8.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/broadviewk8/",
+      "category": "Attendance Area School",
+      "phone": "206-252-4080",
+      "fax": "206-252-4081",
+      "principal": "Principal: Tip Blish",
+      "principalTitle": "Principal",
+      "principalEmail": "tiblish@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-one",
+      "location": {
+        "lat": 47.724507539141,
+        "lng": -122.355465437053
+      }
+    },
+    {
+      "id": "bryantes",
+      "name": "Bryant Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "3311 NE 60th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98115",
+        "full": "3311 NE 60th St., Seattle, WA 98115"
+      },
+      "website": "https://bryantes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/bryantes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-5200",
+      "fax": "206-252-5201",
+      "principal": "Principal: Charmaine Marshall",
+      "principalTitle": "Principal",
+      "principalEmail": "ccmarshall@seattleschools.org",
+      "boardDistrict": 3,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-three",
+      "location": {
+        "lat": 47.672088713248,
+        "lng": -122.292077128363
+      }
+    },
+    {
+      "id": "cppp",
+      "name": "Cascade Parent Partnership K-8",
+      "type": "K-8",
+      "address": {
+        "street": "2919 First Ave. W.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98119",
+        "full": "2919 First Ave. W., Seattle, WA 98119"
+      },
+      "website": "https://cppp.seattleschools.org/about/",
+      "profileUrl": "https://www.seattleschools.org/schools/cppp/",
+      "category": "Alternative Learning Experience School",
+      "phone": "206-743-3900",
+      "fax": "206-743-3901",
+      "principal": "Principal: Owen Gonder",
+      "principalTitle": "Principal",
+      "principalEmail": "oigonder@seattleschools.org",
+      "boardDistrict": 4,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-four/",
+      "location": {
+        "lat": 47.646048303096,
+        "lng": -122.358251890001
+      }
+    },
+    {
+      "id": "virtualoptionk12",
+      "name": "Cascade Virtual Option K-12",
+      "type": "Other",
+      "address": {
+        "street": "2919 First Ave. W.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98119",
+        "full": "2919 First Ave. W., Seattle, WA 98119"
+      },
+      "website": "https://virtualoptionk12.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/virtualoptionk12/",
+      "category": "Option School",
+      "phone": "206-743-3900",
+      "fax": "206-743-3901",
+      "principal": "Principal: Owen Gonder",
+      "principalTitle": "Principal",
+      "principalEmail": "oigonder@seattleschools.org",
+      "boardDistrict": 4,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-four/",
+      "location": {
+        "lat": 47.646048303096,
+        "lng": -122.358251890001
+      }
+    },
+    {
+      "id": "cascadiaes",
+      "name": "Cascadia Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "1700 N. 90th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98103",
+        "full": "1700 N. 90th St., Seattle, WA 98103"
+      },
+      "website": "https://cascadiaes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/cascadiaes/",
+      "category": null,
+      "phone": "206-413-2000",
+      "fax": "206-413-2001",
+      "principal": "Principal: Sandra Mackey",
+      "principalTitle": "Principal",
+      "principalEmail": "samackey@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-one/",
+      "location": {
+        "lat": 47.694202782067,
+        "lng": -122.337743129588
+      }
+    },
+    {
+      "id": "blainek8",
+      "name": "Catharine Blaine K-8",
+      "type": "K-8",
+      "address": {
+        "street": "2550 34th Ave. W.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98199",
+        "full": "2550 34th Ave. W., Seattle, WA 98199"
+      },
+      "website": "https://blainek8.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/blainek8/",
+      "category": "Attendance Area School",
+      "phone": "206-252-1920",
+      "fax": "206-252-1921",
+      "principal": "Principal: Patrick Gray",
+      "principalTitle": "Principal",
+      "principalEmail": "pcgray@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-two/",
+      "location": {
+        "lat": 47.642189419396,
+        "lng": -122.40089177723
+      }
+    },
+    {
+      "id": "cedarparkes",
+      "name": "Cedar Park Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "3737 NE 135th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98125",
+        "full": "3737 NE 135th St., Seattle, WA 98125"
+      },
+      "website": "https://cedarparkes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/cedarparkes/",
+      "category": "Option School",
+      "phone": "206-252-4300",
+      "fax": "206-252-4301",
+      "principal": "Principal: Andrew Zillig",
+      "principalTitle": "Principal",
+      "principalEmail": "awzillig@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-one",
+      "location": {
+        "lat": 47.726370949062,
+        "lng": -122.287695629028
+      }
+    },
+    {
+      "id": "chiefsealthhs",
+      "name": "Chief Sealth International High School",
+      "type": "High",
+      "address": {
+        "street": "2600 SW Thistle St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98126",
+        "full": "2600 SW Thistle St., Seattle, WA 98126"
+      },
+      "website": "https://chiefsealthhs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/chiefsealthhs/",
+      "category": "Attendance Area School",
+      "phone": "206-252-8550",
+      "fax": "206-252-8551",
+      "principal": "Principal: Hope Perry",
+      "principalTitle": "Principal",
+      "principalEmail": "ihperry@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.528336292302,
+        "lng": -122.366102817323
+      }
+    },
+    {
+      "id": "clevelandhs",
+      "name": "Cleveland High School",
+      "type": "High",
+      "address": {
+        "street": "5511 15th Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98108",
+        "full": "5511 15th Ave. S., Seattle, WA 98108"
+      },
+      "website": "https://clevelandhs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/clevelandhs/",
+      "category": "Option School",
+      "phone": "206-252-7800",
+      "fax": "206-252-7801",
+      "principal": "Principal: Jeff Lam",
+      "principalTitle": "Principal",
+      "principalEmail": "jklam@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.55331417952,
+        "lng": -122.313561052623
+      }
+    },
+    {
+      "id": "coees",
+      "name": "Coe Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "2424 Seventh Ave. W.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98119",
+        "full": "2424 Seventh Ave. W., Seattle, WA 98119"
+      },
+      "website": "https://coees.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/coees/",
+      "category": "Attendance Area School",
+      "phone": "206-252-2000",
+      "fax": "206-252-2001",
+      "principal": "Principal: Lindsey Backstrom",
+      "principalTitle": "Principal",
+      "principalEmail": "lmbackstrom@seattleschools.org",
+      "boardDistrict": 4,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-four",
+      "location": {
+        "lat": 47.639894769106,
+        "lng": -122.366201646299
+      }
+    },
+    {
+      "id": "concordes",
+      "name": "Concord International Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "723 S. Concord St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98108",
+        "full": "723 S. Concord St., Seattle, WA 98108"
+      },
+      "website": "https://concordes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/concordes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-8100",
+      "fax": "206-252-8101",
+      "principal": "Principal: Surojit (Suro) Pierce",
+      "principalTitle": "Principal",
+      "principalEmail": null,
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.523862763088,
+        "lng": -122.324985806209
+      }
+    },
+    {
+      "id": "bagleyes",
+      "name": "Daniel Bagley Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "7821 Stone Ave. N.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98103",
+        "full": "7821 Stone Ave. N., Seattle, WA 98103"
+      },
+      "website": "https://bagleyes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/bagleyes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-5110",
+      "fax": "206-252-5111",
+      "principal": "Principal: Angela Clement",
+      "principalTitle": "Principal",
+      "principalEmail": "amclement@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-two",
+      "location": {
+        "lat": 47.686328499716,
+        "lng": -122.341889628351
+      }
+    },
+    {
+      "id": "dearbornes",
+      "name": "Dearborn Park International Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "2820 S. Orcas St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98108",
+        "full": "2820 S. Orcas St., Seattle, WA 98108"
+      },
+      "website": "https://dearbornes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/dearbornes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-6930",
+      "fax": "206-252-6931",
+      "principal": "Principal: Don Noble",
+      "principalTitle": "Principal",
+      "principalEmail": "dfnoble@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.550936319806,
+        "lng": -122.296536310403
+      }
+    },
+    {
+      "id": "decatures",
+      "name": "Decatur Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "7711 43rd Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98115",
+        "full": "7711 43rd Ave. NE, Seattle, WA 98115"
+      },
+      "website": "https://decatures.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/decatures/",
+      "category": null,
+      "phone": "206-252-3230",
+      "fax": "206-252-3231",
+      "principal": "Principal Thomas Baisden",
+      "principalTitle": "Principal",
+      "principalEmail": "tpbaisden@seattleschools.org",
+      "boardDistrict": 3,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-three",
+      "location": {
+        "lat": 47.684960148911,
+        "lng": -122.282181470172
+      }
+    },
+    {
+      "id": "dennyms",
+      "name": "Denny International Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "2601 SW Kenyon St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98126",
+        "full": "2601 SW Kenyon St., Seattle, WA 98126"
+      },
+      "website": "https://dennyms.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/dennyms/",
+      "category": "Attendance Area School",
+      "phone": "206-252-9000",
+      "fax": "206-252-9001",
+      "principal": "Principal: Mary Ingraham",
+      "principalTitle": "Principal",
+      "principalEmail": "mkingraham@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-six/",
+      "location": {
+        "lat": 47.531821939853,
+        "lng": -122.365925248565
+      }
+    },
+    {
+      "id": "dunlapes",
+      "name": "Dunlap Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "4525 S. Cloverdale St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "4525 S. Cloverdale St., Seattle, WA 98118"
+      },
+      "website": "https://dunlapes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/dunlapes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-7000",
+      "fax": "206-252-7001",
+      "principal": "Interim Principal: Chelsea Adams-Fields",
+      "principalTitle": "Interim Principal",
+      "principalEmail": "ccadams@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.526060710662,
+        "lng": -122.274728994566
+      }
+    },
+    {
+      "id": "ecksteinms",
+      "name": "Eckstein Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "3003 NE 75th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98115",
+        "full": "3003 NE 75th St., Seattle, WA 98115"
+      },
+      "website": "https://ecksteinms.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/ecksteinms/",
+      "category": "Attendance Area School",
+      "phone": "206-252-5010",
+      "fax": "206-252-5011",
+      "principal": "Principal: Kristen Rose",
+      "principalTitle": "Principal",
+      "principalEmail": "kprose@seattleschools.org",
+      "boardDistrict": 3,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-three",
+      "location": {
+        "lat": 47.682988707612,
+        "lng": -122.295782524951
+      }
+    },
+    {
+      "id": "emersones",
+      "name": "Emerson Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "9709 60th Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "9709 60th Ave. S., Seattle, WA 98118"
+      },
+      "website": "https://emersones.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/emersones/",
+      "category": "Attendance Area School",
+      "phone": "206-252-7100",
+      "fax": "206-252-7101",
+      "principal": "Principal: Keyunda Wilson",
+      "principalTitle": "Principal",
+      "principalEmail": "krwilson@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.514991403697,
+        "lng": -122.258281899823
+      }
+    },
+    {
+      "id": "fairmountparkes",
+      "name": "Fairmount Park Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "3800 SW Findlay St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98126",
+        "full": "3800 SW Findlay St., Seattle, WA 98126"
+      },
+      "website": "https://fairmountparkes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/fairmountparkes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-9300",
+      "fax": "206-252-9301",
+      "principal": "Principal: Sara J Davis",
+      "principalTitle": "Principal",
+      "principalEmail": "sjdavis1@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.552068314142,
+        "lng": -122.379990787766
+      }
+    },
+    {
+      "id": "franklinhs",
+      "name": "Franklin High School",
+      "type": "High",
+      "address": {
+        "street": "3013 S. Mt. Baker Blvd.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98144",
+        "full": "3013 S. Mt. Baker Blvd., Seattle, WA 98144"
+      },
+      "website": "https://franklinhs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/franklinhs/",
+      "category": "Attendance Area School",
+      "phone": "206-252-6150",
+      "fax": "206-252-6341",
+      "principal": "Principal: Erik Weiss",
+      "principalTitle": "Principal",
+      "principalEmail": "erweiss@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.575912542344,
+        "lng": -122.293875630702
+      }
+    },
+    {
+      "id": "garfieldhs",
+      "name": "Garfield High School",
+      "type": "High",
+      "address": {
+        "street": "400 23rd Ave.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98122",
+        "full": "400 23rd Ave., Seattle, WA 98122"
+      },
+      "website": "https://garfieldhs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/garfieldhs/",
+      "category": "Attendance Area School",
+      "phone": "206-252-2270",
+      "fax": "206-252-2271",
+      "principal": "Principal: Tarance Hart",
+      "principalTitle": "Principal",
+      "principalEmail": "tdhart@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-five",
+      "location": {
+        "lat": 47.604989303222,
+        "lng": -122.302502786938
+      }
+    },
+    {
+      "id": "gatewoodes",
+      "name": "Gatewood Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "4320 SW Myrtle St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98136",
+        "full": "4320 SW Myrtle St., Seattle, WA 98136"
+      },
+      "website": "https://gatewoodes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/gatewoodes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-9400",
+      "fax": "206-252-9401",
+      "principal": "Principal: Kyna Hogg",
+      "principalTitle": "Principal",
+      "principalEmail": "kkhogg@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.539928594355,
+        "lng": -122.387568706239
+      }
+    },
+    {
+      "id": "geneseehilles",
+      "name": "Genesee Hill Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "5013 SW Dakota St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98116",
+        "full": "5013 SW Dakota St., Seattle, WA 98116"
+      },
+      "website": "https://geneseehilles.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/geneseehilles/",
+      "category": "Attendance Area School",
+      "phone": "206-252-9700",
+      "fax": "206-252-9701",
+      "principal": "Principal: Liz Dunn",
+      "principalTitle": "Principal",
+      "principalEmail": "eadunn@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-six/",
+      "location": {
+        "lat": 47.566610942119,
+        "lng": -122.396383287545
+      }
+    },
+    {
+      "id": "grahamhilles",
+      "name": "Graham Hill Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "5149 S. Graham St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "5149 S. Graham St., Seattle, WA 98118"
+      },
+      "website": "https://grahamhilles.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/grahamhilles/",
+      "category": "Attendance Area School",
+      "phone": "206-252-7140",
+      "fax": "206-252-7141",
+      "principal": "Principal: Gardner, Treneicia M",
+      "principalTitle": "Principal",
+      "principalEmail": "tmgardner@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.546007747288,
+        "lng": -122.267868325197
+      }
+    },
+    {
+      "id": "greenlakees",
+      "name": "Green Lake Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "2400 N. 65th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98103",
+        "full": "2400 N. 65th St., Seattle, WA 98103"
+      },
+      "website": "https://greenlakees.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/greenlakees/",
+      "category": "Attendance Area School",
+      "phone": "206-252-5320",
+      "fax": "206-252-5321",
+      "principal": "Principal: Liz McFarland",
+      "principalTitle": "Principal",
+      "principalEmail": "emmcfarland@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-two",
+      "location": {
+        "lat": 47.676004414408,
+        "lng": -122.329525589279
+      }
+    },
+    {
+      "id": "greenwoodes",
+      "name": "Greenwood Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "144 NW 80th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98117",
+        "full": "144 NW 80th St., Seattle, WA 98117"
+      },
+      "website": "https://greenwoodes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/greenwoodes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-1400",
+      "fax": "206-252-1401",
+      "principal": "Principal: Erin Taylor",
+      "principalTitle": "Principal",
+      "principalEmail": "ektaylor@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-two",
+      "location": {
+        "lat": 47.686995808075,
+        "lng": -122.358617032869
+      }
+    },
+    {
+      "id": "hamiltonms",
+      "name": "Hamilton International Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "1610 N. 41st St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98103",
+        "full": "1610 N. 41st St., Seattle, WA 98103"
+      },
+      "website": "https://hamiltonms.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/hamiltonms/",
+      "category": "Attendance Area School",
+      "phone": "206-252-5810",
+      "fax": "206-252-5811",
+      "principal": "Principal: Eric Marshall",
+      "principalTitle": "Principal",
+      "principalEmail": "ermarshall@seattleschools.org",
+      "boardDistrict": 3,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-three/",
+      "location": {
+        "lat": 47.656883339602,
+        "lng": -122.338439914585
+      }
+    },
+    {
+      "id": "hawthornees",
+      "name": "Hawthorne Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "4100 39th Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "4100 39th Ave. S., Seattle, WA 98118"
+      },
+      "website": "https://hawthornees.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/hawthornees/",
+      "category": "Attendance Area School",
+      "phone": "206-252-7210",
+      "fax": "206-252-7211",
+      "principal": "Principal: Elizabeth Flavors",
+      "principalTitle": "Principal",
+      "principalEmail": "eaflavors@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.566127447499,
+        "lng": -122.28383600836
+      }
+    },
+    {
+      "id": "hazelwolfk8",
+      "name": "Hazel Wolf K-8",
+      "type": "K-8",
+      "address": {
+        "street": "11530 12th Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98125",
+        "full": "11530 12th Ave. NE, Seattle, WA 98125"
+      },
+      "website": "https://hazelwolfk8.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/hazelwolfk8/",
+      "category": "Option School",
+      "phone": "206-252-4610",
+      "fax": "206-252-4611",
+      "principal": "Principal: Maria Breuder",
+      "principalTitle": "Principal",
+      "principalEmail": "mebreuder@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-one",
+      "location": {
+        "lat": 47.712509146609,
+        "lng": -122.3151152824
+      }
+    },
+    {
+      "id": "highlandparkes",
+      "name": "Highland Park Elementary",
+      "type": "High",
+      "address": {
+        "street": "1012 SW Trenton St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98106",
+        "full": "1012 SW Trenton St., Seattle, WA 98106"
+      },
+      "website": "https://highlandparkes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/highlandparkes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-8240",
+      "fax": "206-252-8241",
+      "principal": "Principal: Mary McDaniel",
+      "principalTitle": "Principal",
+      "principalEmail": "mamcdaniel@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.524710028165,
+        "lng": -122.348231173662
+      }
+    },
+    {
+      "id": "ingrahamhs",
+      "name": "Ingraham High School",
+      "type": "High",
+      "address": {
+        "street": "1819 N. 135th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98133",
+        "full": "1819 N. 135th St., Seattle, WA 98133"
+      },
+      "website": "https://ingrahamhs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/ingrahamhs/",
+      "category": "Attendance Area School",
+      "phone": "206-252-3880",
+      "fax": "206-252-3881",
+      "principal": "Principal: Zack Elvig",
+      "principalTitle": "Principal",
+      "principalEmail": "zcelvig@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-one/",
+      "location": {
+        "lat": 47.726795182781,
+        "lng": -122.337536465625
+      }
+    },
+    {
+      "id": "interagency",
+      "name": "Interagency Academy",
+      "type": "Other",
+      "address": {
+        "street": "8601 Rainier Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "8601 Rainier Ave. S., Seattle, WA 98118"
+      },
+      "website": "https://interagency.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/interagency/",
+      "category": "Alternative Learning Experience School",
+      "phone": "206-743-3930",
+      "fax": "206-743-3931",
+      "principal": "Principal: Sharonda Willingham",
+      "principalTitle": "Principal",
+      "principalEmail": "srwillingham@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-six/",
+      "location": {
+        "lat": 47.526111754455,
+        "lng": -122.270069916238
+      }
+    },
+    {
+      "id": "baldwines",
+      "name": "James Baldwin Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "11725 First Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98125",
+        "full": "11725 First Ave. NE, Seattle, WA 98125"
+      },
+      "website": "https://baldwines.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/baldwines/",
+      "category": "Attendance Area School",
+      "phone": "206-252-4180",
+      "fax": "206-252-4181",
+      "principal": "Principal: Nicole Silver",
+      "principalTitle": "Principal",
+      "principalEmail": "ncsilver@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-one/",
+      "location": {
+        "lat": 47.714267631783,
+        "lng": -122.328851499731
+      }
+    },
+    {
+      "id": "addamsms",
+      "name": "Jane Addams Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "11051 34th Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98125",
+        "full": "11051 34th Ave. NE, Seattle, WA 98125"
+      },
+      "website": "https://addamsms.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/addamsms/",
+      "category": "Attendance Area School",
+      "phone": "206-252-4500",
+      "fax": "206-252-4501",
+      "principal": "Principal: Angela Thomas",
+      "principalTitle": "Principal",
+      "principalEmail": "amthomas@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-one",
+      "location": {
+        "lat": 47.709299967153,
+        "lng": -122.292168114223
+      }
+    },
+    {
+      "id": "hayes",
+      "name": "John Hay Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "201 Garfield St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98109",
+        "full": "201 Garfield St., Seattle, WA 98109"
+      },
+      "website": "https://hayes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/hayes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-2100",
+      "fax": "206-252-2101",
+      "principal": "Principal: Dr. Jerid Morisco",
+      "principalTitle": "Principal",
+      "principalEmail": "jsmorisco@seattleschools.org",
+      "boardDistrict": 4,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-four",
+      "location": {
+        "lat": 47.633101583687,
+        "lng": -122.351913218636
+      }
+    },
+    {
+      "id": "muires",
+      "name": "John Muir Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "3301 S. Horton St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98144",
+        "full": "3301 S. Horton St., Seattle, WA 98144"
+      },
+      "website": "https://muires.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/muires/",
+      "category": "Attendance Area School",
+      "phone": "206-252-7400",
+      "fax": "206-252-7401",
+      "principal": "Principal: Quinta Thomas",
+      "principalTitle": "Principal",
+      "principalEmail": "qothomas@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.573725996649,
+        "lng": -122.290882123218
+      }
+    },
+    {
+      "id": "rogerses",
+      "name": "John Rogers Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "4030 NE 109th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98125",
+        "full": "4030 NE 109th St., Seattle, WA 98125"
+      },
+      "website": "https://rogerses.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/rogerses/",
+      "category": "Attendance Area School",
+      "phone": "206-252-4320",
+      "fax": "206-252-4321",
+      "principal": "Principal: Casie Dimsey",
+      "principalTitle": "Principal",
+      "principalEmail": "cjdimsey@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-one",
+      "location": {
+        "lat": 47.707442778716,
+        "lng": -122.283478164813
+      }
+    },
+    {
+      "id": "stanfordes",
+      "name": "John Stanford International Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "4057 Fifth Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98105",
+        "full": "4057 Fifth Ave. NE, Seattle, WA 98105"
+      },
+      "website": "https://stanfordes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/stanfordes/",
+      "category": "Option School",
+      "phone": "206-252-6080",
+      "fax": "206-252-6081",
+      "principal": "Principal: Antonia Gray",
+      "principalTitle": "Principal",
+      "principalEmail": "alwoods@seattleschools.org",
+      "boardDistrict": 3,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-three/",
+      "location": {
+        "lat": 47.656393024955,
+        "lng": -122.323591202312
+      }
+    },
+    {
+      "id": "kimballes",
+      "name": "Kimball Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "3200 23rd Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98144",
+        "full": "3200 23rd Ave. S., Seattle, WA 98144"
+      },
+      "website": "https://kimballes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/kimballes/",
+      "category": null,
+      "phone": "206-252-7280",
+      "fax": "206-252-7281",
+      "principal": "Principal: Angela Sheffey-Bogan",
+      "principalTitle": "Principal",
+      "principalEmail": "ajsheffey@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.575007893136,
+        "lng": -122.30324728044
+      }
+    },
+    {
+      "id": "lafayettees",
+      "name": "Lafayette Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "2645 California Ave. SW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98116",
+        "full": "2645 California Ave. SW, Seattle, WA 98116"
+      },
+      "website": "https://lafayettees.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/lafayettees/",
+      "category": "Attendance Area School",
+      "phone": "206-252-9500",
+      "fax": "206-252-9501",
+      "principal": "Principal: Cindy Chaput",
+      "principalTitle": "Principal",
+      "principalEmail": "cpchaput@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.580342904201,
+        "lng": -122.386666817711
+      }
+    },
+    {
+      "id": "laurelhurstes",
+      "name": "Laurelhurst Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "4530 46th Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98105",
+        "full": "4530 46th Ave. NE, Seattle, WA 98105"
+      },
+      "website": "https://laurelhurstes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/laurelhurstes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-5400",
+      "fax": "206-252-5401",
+      "principal": "Principal: Tim Snyder",
+      "principalTitle": "Principal",
+      "principalEmail": "tjsnyder@seattleschools.org",
+      "boardDistrict": 3,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-three",
+      "location": {
+        "lat": 47.661602553806,
+        "lng": -122.278260392181
+      }
+    },
+    {
+      "id": "lawtones",
+      "name": "Lawton Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "4000 27th Ave. W.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98199",
+        "full": "4000 27th Ave. W., Seattle, WA 98199"
+      },
+      "website": "https://lawtones.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/lawtones/",
+      "category": "Attendance Area School",
+      "phone": "206-252-2130",
+      "fax": "206-252-2131",
+      "principal": "Principal: Dina Clagg",
+      "principalTitle": "Principal",
+      "principalEmail": "dsmcardle@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-two/",
+      "location": {
+        "lat": 47.656710344714,
+        "lng": -122.390992944026
+      }
+    },
+    {
+      "id": "leschies",
+      "name": "Leschi Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "135 32nd Ave.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98122",
+        "full": "135 32nd Ave., Seattle, WA 98122"
+      },
+      "website": "https://leschies.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/leschies/",
+      "category": "Attendance Area School",
+      "phone": "206-252-2950",
+      "fax": "206-252-2951",
+      "principal": "Principal: Genevieve Ramsey",
+      "principalTitle": "Principal",
+      "principalEmail": "gsramsey@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-one",
+      "location": {
+        "lat": 47.601990728732,
+        "lng": -122.29138553717
+      }
+    },
+    {
+      "id": "lictonspringsk8",
+      "name": "Licton Springs K-8",
+      "type": "K-8",
+      "address": {
+        "street": "3015 NW 68th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98117",
+        "full": "3015 NW 68th St., Seattle, WA 98117"
+      },
+      "website": "https://lictonspringsk8.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/lictonspringsk8/",
+      "category": "Option School",
+      "phone": "206-743-3700",
+      "fax": "206-743-3701",
+      "principal": "Principal: Christy Bowman-White",
+      "principalTitle": "Principal",
+      "principalEmail": "cabowmanwhit@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-two/",
+      "location": {
+        "lat": 47.677963644555,
+        "lng": -122.395951224432
+      }
+    },
+    {
+      "id": "lincolnhs",
+      "name": "Lincoln High School",
+      "type": "High",
+      "address": {
+        "street": "4400 Interlake Ave. N.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98103",
+        "full": "4400 Interlake Ave. N., Seattle, WA 98103"
+      },
+      "website": "https://lincolnhs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/lincolnhs/",
+      "category": "Attendance Area School",
+      "phone": "206-413-2500",
+      "fax": "206-413-2501",
+      "principal": "Principal: Corey Eichner",
+      "principalTitle": "Principal",
+      "principalEmail": null,
+      "boardDistrict": 4,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-four/",
+      "location": {
+        "lat": 47.659568855023,
+        "lng": -122.340602420948
+      }
+    },
+    {
+      "id": "borenstemk8",
+      "name": "Louisa Boren STEM K-8",
+      "type": "K-8",
+      "address": {
+        "street": "5950 Delridge Way SW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98106",
+        "full": "5950 Delridge Way SW, Seattle, WA 98106"
+      },
+      "website": "https://borenstemk8.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/borenstemk8/",
+      "category": "Option School",
+      "phone": "206-252-8450",
+      "fax": "206-252-8451",
+      "principal": "Principal: Adrienne Ollerenshaw",
+      "principalTitle": "Principal",
+      "principalEmail": "amollerensha@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.549570064613,
+        "lng": -122.362933943905
+      }
+    },
+    {
+      "id": "lowelles",
+      "name": "Lowell Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "1058 E. Mercer St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98102",
+        "full": "1058 E. Mercer St., Seattle, WA 98102"
+      },
+      "website": "https://lowelles.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/lowelles/",
+      "category": "Attendance Area School",
+      "phone": "206-252-3020",
+      "fax": null,
+      "principal": "Principal: Chelsea Dziedzic",
+      "principalTitle": "Principal",
+      "principalEmail": "cldziedzic@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-five",
+      "location": {
+        "lat": 47.624321148063,
+        "lng": -122.318753730066
+      }
+    },
+    {
+      "id": "loyalheightses",
+      "name": "Loyal Heights Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "7735 25th Ave. NW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98117",
+        "full": "7735 25th Ave. NW, Seattle, WA 98117"
+      },
+      "website": "https://loyalheightses.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/loyalheightses/",
+      "category": "Attendance Area School",
+      "phone": "206-252-6000",
+      "fax": "206-252-6001",
+      "principal": "Principal: Michael Berkenwald",
+      "principalTitle": "Principal",
+      "principalEmail": "mlberkenwald@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-two/",
+      "location": {
+        "lat": 47.685215061728,
+        "lng": -122.388791188421
+      }
+    },
+    {
+      "id": "madisonms",
+      "name": "Madison Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "3429 45th Ave. SW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98116",
+        "full": "3429 45th Ave. SW, Seattle, WA 98116"
+      },
+      "website": "https://madisonms.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/madisonms/",
+      "category": "Attendance Area School",
+      "phone": "206-252-9200",
+      "fax": "206-252-9201",
+      "principal": "Principal: Dr. Scott Pierce",
+      "principalTitle": "Principal",
+      "principalEmail": "espierce@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.573549963821,
+        "lng": -122.389508349984
+      }
+    },
+    {
+      "id": "madronaes",
+      "name": "Madrona Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "1121 33rd Ave.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98122",
+        "full": "1121 33rd Ave., Seattle, WA 98122"
+      },
+      "website": "https://madronaes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/madronaes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-3100",
+      "fax": "206-252-3101",
+      "principal": "Principal: Regina Carter",
+      "principalTitle": "Principal",
+      "principalEmail": "recarter@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-five",
+      "location": {
+        "lat": 47.611769421912,
+        "lng": -122.290480053587
+      }
+    },
+    {
+      "id": "magnoliaes",
+      "name": "Magnolia Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "2418 28th Ave. W.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98199",
+        "full": "2418 28th Ave. W., Seattle, WA 98199"
+      },
+      "website": "https://magnoliaes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/magnoliaes/",
+      "category": "Attendance Area School",
+      "phone": "206-743-3800",
+      "fax": null,
+      "principal": "Principal: Kelly Walter",
+      "principalTitle": "Principal",
+      "principalEmail": "kmwalter@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-two/",
+      "location": {
+        "lat": 47.64025321136,
+        "lng": -122.39290616952
+      }
+    },
+    {
+      "id": "maplees",
+      "name": "Maple Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "4925 Corson Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98108",
+        "full": "4925 Corson Ave. S., Seattle, WA 98108"
+      },
+      "website": "https://maplees.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/maplees/",
+      "category": "Attendance Area School",
+      "phone": "206-252-8310",
+      "fax": "206-252-8311",
+      "principal": "Principal: Daisy Barragan",
+      "principalTitle": "Principal",
+      "principalEmail": "dabarragan@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.557696458495,
+        "lng": -122.318248378893
+      }
+    },
+    {
+      "id": "kinges",
+      "name": "Martin Luther King, Jr. Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "6725 45th Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "6725 45th Ave. S., Seattle, WA 98118"
+      },
+      "website": "https://kinges.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/kinges/",
+      "category": "Attendance Area School",
+      "phone": "206-252-6770",
+      "fax": "206-252-6771",
+      "principal": "Principal: Patricia Nesbitt",
+      "principalTitle": "Principal",
+      "principalEmail": "plnesbitt@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.542197382248,
+        "lng": -122.276552540303
+      }
+    },
+    {
+      "id": "mcclurems",
+      "name": "McClure Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "1915 First Ave. W.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98119",
+        "full": "1915 First Ave. W., Seattle, WA 98119"
+      },
+      "website": "https://mcclurems.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/mcclurems/",
+      "category": "Attendance Area School",
+      "phone": "206-252-1900",
+      "fax": "206-252-1901",
+      "principal": "Principal: Ann Jennings",
+      "principalTitle": "Principal",
+      "principalEmail": "apjennings@seattleschools.org",
+      "boardDistrict": 4,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-four",
+      "location": {
+        "lat": 47.63610675737,
+        "lng": -122.358380302482
+      }
+    },
+    {
+      "id": "mcdonaldes",
+      "name": "McDonald International Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "144 NE 54th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98105",
+        "full": "144 NE 54th St., Seattle, WA 98105"
+      },
+      "website": "https://mcdonaldes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/mcdonaldes/",
+      "category": "Option School",
+      "phone": "206-252-2900",
+      "fax": "206-252-2901",
+      "principal": "Principal: Zoe Facilla",
+      "principalTitle": "Principal",
+      "principalEmail": "zvfacilla@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-two",
+      "location": {
+        "lat": 47.667955203465,
+        "lng": -122.327518703005
+      }
+    },
+    {
+      "id": "mcgilvraes",
+      "name": "McGilvra Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "1617 38th Ave. E.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98112",
+        "full": "1617 38th Ave. E., Seattle, WA 98112"
+      },
+      "website": "https://mcgilvraes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/mcgilvraes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-3160",
+      "fax": "206-252-3161",
+      "principal": "Principal: Jolene Anderson",
+      "principalTitle": "Principal",
+      "principalEmail": "jaanderson@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-five/",
+      "location": {
+        "lat": 47.63352806184,
+        "lng": -122.284140231868
+      }
+    },
+    {
+      "id": "meanyms",
+      "name": "Meany Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "301 21st Ave. E.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98112",
+        "full": "301 21st Ave. E., Seattle, WA 98112"
+      },
+      "website": "https://meanyms.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/meanyms/",
+      "category": "Attendance Area School",
+      "phone": "206-413-2100",
+      "fax": "206-413-2101",
+      "principal": "Principal: Chanda E. Oatis",
+      "principalTitle": "Principal",
+      "principalEmail": "ceoatis@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-five",
+      "location": {
+        "lat": 47.621443954318,
+        "lng": -122.304805031184
+      }
+    },
+    {
+      "id": "mercerms",
+      "name": "Mercer International Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "1600 S. Columbian Way",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98108",
+        "full": "1600 S. Columbian Way, Seattle, WA 98108"
+      },
+      "website": "https://mercerms.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/mercerms/",
+      "category": "Attendance Area School",
+      "phone": "206-252-8000",
+      "fax": "206-252-8001",
+      "principal": "Principal: Sherrie Encarnacion",
+      "principalTitle": "Principal",
+      "principalEmail": "sencarnacion@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.563248254641,
+        "lng": -122.312640070851
+      }
+    },
+    {
+      "id": "middlecollegehs",
+      "name": "Middle College High School",
+      "type": "High",
+      "address": {
+        "street": "9600 College Way N.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98103",
+        "full": "9600 College Way N., Seattle, WA 98103"
+      },
+      "website": "https://middlecollegehs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/middlecollegehs/",
+      "category": "Alternative Learning Experience School",
+      "phone": null,
+      "fax": null,
+      "principal": "Principal: Keven Wynkoop",
+      "principalTitle": "Principal",
+      "principalEmail": "kswynkoop@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-one",
+      "location": null
+    },
+    {
+      "id": "montlakees",
+      "name": "Montlake Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "2025 E. Calhoun St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98112",
+        "full": "2025 E. Calhoun St., Seattle, WA 98112"
+      },
+      "website": "https://montlakees.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/montlakees/",
+      "category": "Attendance Area School",
+      "phone": "206-252-3300",
+      "fax": "206-252-3301",
+      "principal": "Principal: Tina Wood",
+      "principalTitle": "Principal",
+      "principalEmail": "kawood@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-five/",
+      "location": {
+        "lat": 47.640941587454,
+        "lng": -122.305250624844
+      }
+    },
+    {
+      "id": "halehs",
+      "name": "Nathan Hale High School",
+      "type": "High",
+      "address": {
+        "street": "10750 30th Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98125",
+        "full": "10750 30th Ave. NE, Seattle, WA 98125"
+      },
+      "website": "https://halehs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/halehs/",
+      "category": "Attendance Area School",
+      "phone": "206-252-3680",
+      "fax": "206-252-3681",
+      "principal": "Jolene Grimes Edwards",
+      "principalTitle": "Principal",
+      "principalEmail": "jmgrimes@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-one",
+      "location": {
+        "lat": 47.707546420356,
+        "lng": -122.296143360463
+      }
+    },
+    {
+      "id": "northbeaches",
+      "name": "North Beach Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "9018 24th Ave. NW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98117",
+        "full": "9018 24th Ave. NW, Seattle, WA 98117"
+      },
+      "website": "https://northbeaches.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/northbeaches/",
+      "category": "Attendance Area School",
+      "phone": "206-252-1510",
+      "fax": "206-252-1511",
+      "principal": "Principal: Aron Bodwitch",
+      "principalTitle": "Principal",
+      "principalEmail": "apbodwitch@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-two/",
+      "location": {
+        "lat": 47.694240871405,
+        "lng": -122.38748858395
+      }
+    },
+    {
+      "id": "novahs",
+      "name": "Nova High School",
+      "type": "High",
+      "address": {
+        "street": "2410 E. Cherry St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98122",
+        "full": "2410 E. Cherry St., Seattle, WA 98122"
+      },
+      "website": "https://novahs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/novahs/",
+      "category": "Alternative Learning Experience School",
+      "phone": "206-252-3500",
+      "fax": "206-252-3501",
+      "principal": "Principal: Eyva Winet",
+      "principalTitle": "Principal",
+      "principalEmail": "edwinet@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-five",
+      "location": {
+        "lat": 47.608060988667,
+        "lng": -122.301276369277
+      }
+    },
+    {
+      "id": "olympichillses",
+      "name": "Olympic Hills Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "13018 20th Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98125",
+        "full": "13018 20th Ave. NE, Seattle, WA 98125"
+      },
+      "website": "https://olympichillses.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/olympichillses/",
+      "category": "Attendance Area School",
+      "phone": "206-413-2200",
+      "fax": "206-413-2201",
+      "principal": "Principal: Egypt Charles",
+      "principalTitle": "Principal",
+      "principalEmail": "ebcharles@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-one",
+      "location": {
+        "lat": 47.723140776001,
+        "lng": -122.307190950313
+      }
+    },
+    {
+      "id": "olympicviewes",
+      "name": "Olympic View Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "504 NE 95th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98115",
+        "full": "504 NE 95th St., Seattle, WA 98115"
+      },
+      "website": "https://olympicviewes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/olympicviewes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-5500",
+      "fax": "206-252-5501",
+      "principal": "Principal: Andrew Bean",
+      "principalTitle": "Principal",
+      "principalEmail": "ajbean@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-one/",
+      "location": {
+        "lat": 47.697745491085,
+        "lng": -122.322965395839
+      }
+    },
+    {
+      "id": "orcak8",
+      "name": "Orca K-8",
+      "type": "K-8",
+      "address": {
+        "street": "5215 46th Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "5215 46th Ave. S., Seattle, WA 98118"
+      },
+      "website": "https://orcak8.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/orcak8/",
+      "category": "Option School",
+      "phone": "206-252-6900",
+      "fax": "206-252-6901",
+      "principal": "Principal: Beverly Luster",
+      "principalTitle": "Principal",
+      "principalEmail": "bdluster@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.555061606384,
+        "lng": -122.275457257585
+      }
+    },
+    {
+      "id": "pathfinderk8",
+      "name": "Pathfinder K-8",
+      "type": "K-8",
+      "address": {
+        "street": "1901 SW Genesee St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98106",
+        "full": "1901 SW Genesee St., Seattle, WA 98106"
+      },
+      "website": "https://pathfinderk8.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/pathfinderk8/",
+      "category": "Option School",
+      "phone": "206-252-9710",
+      "fax": "206-252-9711",
+      "principal": "Principal: Daxa Thomas",
+      "principalTitle": "Principal",
+      "principalEmail": "ddthomas1@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.564194858225,
+        "lng": -122.357323141966
+      }
+    },
+    {
+      "id": "queenannees",
+      "name": "Queen Anne Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "2100 Fourth Ave. N.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98109",
+        "full": "2100 Fourth Ave. N., Seattle, WA 98109"
+      },
+      "website": "https://queenannees.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/queenannees/",
+      "category": "Option School",
+      "phone": "206-252-2480",
+      "fax": "206-252-2481",
+      "principal": "Principal: Dan Warren",
+      "principalTitle": "Principal",
+      "principalEmail": "djwarren@seattleschools.org",
+      "boardDistrict": 4,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-four",
+      "location": {
+        "lat": 47.637462752707,
+        "lng": -122.349431154695
+      }
+    },
+    {
+      "id": "rainierbeachhs",
+      "name": "Rainier Beach High School",
+      "type": "High",
+      "address": {
+        "street": "8815 Seward Park Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "8815 Seward Park Ave. S., Seattle, WA 98118"
+      },
+      "website": "https://rainierbeachhs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/rainierbeachhs/",
+      "category": "Attendance Area School",
+      "phone": "206-252-6350",
+      "fax": "206-252-6351",
+      "principal": "Principal: Annie Patu",
+      "principalTitle": "Principal",
+      "principalEmail": null,
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.524000468081,
+        "lng": -122.264689630587
+      }
+    },
+    {
+      "id": "rainierviewes",
+      "name": "Rainier View Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "11650 Beacon Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98178",
+        "full": "11650 Beacon Ave. S., Seattle, WA 98178"
+      },
+      "website": "https://rainierviewes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/rainierviewes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-6700",
+      "fax": "206-252-6701",
+      "principal": "Principal: Justin Booker",
+      "principalTitle": "Principal",
+      "principalEmail": "jobooker@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.498468836741,
+        "lng": -122.263849618826
+      }
+    },
+    {
+      "id": "risingstares",
+      "name": "Rising Star Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "8311 Beacon Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "8311 Beacon Ave. S., Seattle, WA 98118"
+      },
+      "website": "https://risingstares.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/risingstares/",
+      "category": "Attendance Area School",
+      "phone": "206-252-7500",
+      "fax": "206-252-7501",
+      "principal": "Principal: Huyen Lam",
+      "principalTitle": "Principal",
+      "principalEmail": "htlam@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.529340625522,
+        "lng": -122.288164388723
+      }
+    },
+    {
+      "id": "eaglestaffms",
+      "name": "Robert Eagle Staff Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "1330 N. 90th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98103",
+        "full": "1330 N. 90th St., Seattle, WA 98103"
+      },
+      "website": "https://eaglestaffms.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/eaglestaffms/",
+      "category": "Attendance Area School",
+      "phone": "206-413-2300",
+      "fax": "206-413-2301",
+      "principal": "Principal: Zachary (Zac) Stowell",
+      "principalTitle": "Principal",
+      "principalEmail": "zwstowell@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-one/",
+      "location": {
+        "lat": 47.694222297043,
+        "lng": -122.34116099292
+      }
+    },
+    {
+      "id": "roosevelths",
+      "name": "Roosevelt High School",
+      "type": "High",
+      "address": {
+        "street": "1410 NE 66th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98115",
+        "full": "1410 NE 66th St., Seattle, WA 98115"
+      },
+      "website": "https://roosevelths.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/roosevelths/",
+      "category": "Attendance Area School",
+      "phone": "206-252-4810",
+      "fax": "206-252-4811",
+      "principal": "Principal: Ambyr Burrell",
+      "principalTitle": "Principal",
+      "principalEmail": "alburrell@seattleschools.org",
+      "boardDistrict": 3,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-three",
+      "location": {
+        "lat": 47.67657070098,
+        "lng": -122.312947605351
+      }
+    },
+    {
+      "id": "roxhilles",
+      "name": "Roxhill Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "7740 34th Ave. SW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98126",
+        "full": "7740 34th Ave. SW, Seattle, WA 98126"
+      },
+      "website": "https://roxhilles.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/roxhilles/",
+      "category": "Attendance Area School",
+      "phone": "206-252-9570",
+      "fax": "206-252-9571",
+      "principal": "Principal: Kelly Bruno",
+      "principalTitle": "Principal",
+      "principalEmail": "kgbruno@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.533332663079,
+        "lng": -122.375172207511
+      }
+    },
+    {
+      "id": "sacajaweaes",
+      "name": "Sacajawea Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "9501 20th Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98115",
+        "full": "9501 20th Ave. NE, Seattle, WA 98115"
+      },
+      "website": "https://sacajaweaes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/sacajaweaes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-5550",
+      "fax": "206-252-5551",
+      "principal": "Principal: Barrett (Barry) Fisk",
+      "principalTitle": "Principal",
+      "principalEmail": null,
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-one/",
+      "location": {
+        "lat": 47.69758257491,
+        "lng": -122.306899369104
+      }
+    },
+    {
+      "id": "salmonbayk8",
+      "name": "Salmon Bay K-8",
+      "type": "K-8",
+      "address": {
+        "street": "1810 NW 65th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98117",
+        "full": "1810 NW 65th St., Seattle, WA 98117"
+      },
+      "website": "https://salmonbayk8.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/salmonbayk8/",
+      "category": "Option School",
+      "phone": "206-252-1720",
+      "fax": "206-252-1721",
+      "principal": "Principal: Barbara Dixon",
+      "principalTitle": "Principal",
+      "principalEmail": "bbdixon@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-two/",
+      "location": {
+        "lat": 47.676046797768,
+        "lng": -122.380150506859
+      }
+    },
+    {
+      "id": "sandpointes",
+      "name": "Sand Point Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "6208 60th Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98115",
+        "full": "6208 60th Ave. NE, Seattle, WA 98115"
+      },
+      "website": "https://sandpointes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/sandpointes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-4640",
+      "fax": "206-252-4641",
+      "principal": "Principal: Stephanie Zikopoulos",
+      "principalTitle": "Principal",
+      "principalEmail": "smzikopoulos@seattleschools.org",
+      "boardDistrict": 3,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-three",
+      "location": {
+        "lat": 47.673772693144,
+        "lng": -122.263446657826
+      }
+    },
+    {
+      "id": "sanisloes",
+      "name": "Sanislo Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "1812 SW Myrtle St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98106",
+        "full": "1812 SW Myrtle St., Seattle, WA 98106"
+      },
+      "website": "https://sanisloes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/sanisloes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-8380",
+      "fax": "206-252-8381",
+      "principal": "Principal: Erika Ayer",
+      "principalTitle": "Principal",
+      "principalEmail": "ejayer@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.539189573348,
+        "lng": -122.357428072083
+      }
+    },
+    {
+      "id": "skillscenter",
+      "name": "Seattle Skills Center",
+      "type": "Other",
+      "address": {
+        "street": "2445 Third Ave. S.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98134",
+        "full": "2445 Third Ave. S., Seattle, WA 98134"
+      },
+      "website": "https://skillscenter.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/skillscenter/",
+      "category": null,
+      "phone": "206-252-0730",
+      "fax": null,
+      "principal": null,
+      "principalTitle": null,
+      "principalEmail": null,
+      "boardDistrict": null,
+      "boardDistrictUrl": null,
+      "location": {
+        "lat": 47.581543052418,
+        "lng": -122.330074962823
+      }
+    },
+    {
+      "id": "sws",
+      "name": "Seattle World School 9-12",
+      "type": "High",
+      "address": {
+        "street": "1700 E. Union St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98122",
+        "full": "1700 E. Union St., Seattle, WA 98122"
+      },
+      "website": "https://sws.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/sws/",
+      "category": "Service School",
+      "phone": "206-252-2200",
+      "fax": "206-252-2201",
+      "principal": "Principal: Jeff Clark",
+      "principalTitle": "Principal",
+      "principalEmail": "jclark@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-five",
+      "location": {
+        "lat": 47.612960114891,
+        "lng": -122.310084719795
+      }
+    },
+    {
+      "id": "southshorek8",
+      "name": "South Shore PreK-8",
+      "type": "K-8",
+      "address": {
+        "street": "4800 S. Henderson St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "4800 S. Henderson St., Seattle, WA 98118"
+      },
+      "website": "https://southshorek8.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/southshorek8/",
+      "category": "Option School",
+      "phone": "206-252-7600",
+      "fax": "206-252-7601",
+      "principal": "Principal: Jershon Foyston",
+      "principalTitle": "Principal",
+      "principalEmail": "jefoyston@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.523365251231,
+        "lng": -122.272751092266
+      }
+    },
+    {
+      "id": "stevenses",
+      "name": "Stevens Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "1242 18th Ave. E.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98112",
+        "full": "1242 18th Ave. E., Seattle, WA 98112"
+      },
+      "website": "https://stevenses.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/stevenses/",
+      "category": "Attendance Area School",
+      "phone": "206-252-3400",
+      "fax": "206-252-3401",
+      "principal": "Principal: Peter Donovan",
+      "principalTitle": "Principal",
+      "principalEmail": "pgdonovan@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-five/",
+      "location": {
+        "lat": 47.630919872856,
+        "lng": -122.308508105309
+      }
+    },
+    {
+      "id": "centerhs",
+      "name": "The Center School",
+      "type": "Other",
+      "address": {
+        "street": "305 Harrison St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98109",
+        "full": "305 Harrison St., Seattle, WA 98109"
+      },
+      "website": "https://centerhs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/centerhs/",
+      "category": "Option School",
+      "phone": "206-252-9850",
+      "fax": "206-252-9851",
+      "principal": "Principal: Marcus Pimpleton",
+      "principalTitle": "Principal",
+      "principalEmail": "mjpimpleton@seattleschools.org",
+      "boardDistrict": 4,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-four",
+      "location": {
+        "lat": 47.62203268564,
+        "lng": -122.350495952451
+      }
+    },
+    {
+      "id": "thorntoncreekes",
+      "name": "Thornton Creek Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "7712 40th Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98115",
+        "full": "7712 40th Ave. NE, Seattle, WA 98115"
+      },
+      "website": "https://thorntoncreekes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/thorntoncreekes/",
+      "category": "Option School",
+      "phone": "206-252-5300",
+      "fax": "206-252-5301",
+      "principal": "Principal: Brandee Spencer",
+      "principalTitle": "Principal",
+      "principalEmail": "bhspencer@seattleschools.org",
+      "boardDistrict": 3,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-three",
+      "location": {
+        "lat": 47.684977080792,
+        "lng": -122.285180046066
+      }
+    },
+    {
+      "id": "marshalles",
+      "name": "Thurgood Marshall Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "2401 S. Irving St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98144",
+        "full": "2401 S. Irving St., Seattle, WA 98144"
+      },
+      "website": "https://marshalles.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/marshalles/",
+      "category": "Attendance Area School",
+      "phone": "206-252-2800",
+      "fax": "206-252-2801",
+      "principal": "Principal: Ebonisha Washington",
+      "principalTitle": "Principal",
+      "principalEmail": "ebwashington@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-five",
+      "location": {
+        "lat": 47.591167396016,
+        "lng": -122.301171054204
+      }
+    },
+    {
+      "id": "topsk8",
+      "name": "TOPS K-8",
+      "type": "K-8",
+      "address": {
+        "street": "2500 Franklin Ave. E.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98102",
+        "full": "2500 Franklin Ave. E., Seattle, WA 98102"
+      },
+      "website": "https://topsk8.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/topsk8/",
+      "category": "Option School",
+      "phone": "206-252-3510",
+      "fax": "206-252-3511",
+      "principal": "Principal: Madeline Benz",
+      "principalTitle": "Principal",
+      "principalEmail": "mmbenz@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-five/",
+      "location": {
+        "lat": 47.642083670554,
+        "lng": -122.324589598374
+      }
+    },
+    {
+      "id": "viewridgees",
+      "name": "View Ridge Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "7047 50th Ave. NE",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98115",
+        "full": "7047 50th Ave. NE, Seattle, WA 98115"
+      },
+      "website": "https://viewridgees.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/viewridgees/",
+      "category": "Attendance Area School",
+      "phone": "206-252-5600",
+      "fax": "206-252-5601",
+      "principal": "Principal: Rina Geoghagan",
+      "principalTitle": "Principal",
+      "principalEmail": "legeoghagan@seattleschools.org",
+      "boardDistrict": 3,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-three/",
+      "location": {
+        "lat": 47.679769996448,
+        "lng": -122.274395489251
+      }
+    },
+    {
+      "id": "viewlandses",
+      "name": "Viewlands Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "10525 Third Ave. NW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98177",
+        "full": "10525 Third Ave. NW, Seattle, WA 98177"
+      },
+      "website": "https://viewlandses.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/viewlandses/",
+      "category": "Attendance Area School",
+      "phone": "206-252-4400",
+      "fax": "206-252-4401",
+      "principal": "Principal: Carrie Wheeler",
+      "principalTitle": "Principal",
+      "principalEmail": "cawheeler@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-one",
+      "location": {
+        "lat": 47.705383129187,
+        "lng": -122.360854899281
+      }
+    },
+    {
+      "id": "washingtonms",
+      "name": "Washington Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "2101 S. Jackson St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98144",
+        "full": "2101 S. Jackson St., Seattle, WA 98144"
+      },
+      "website": "https://washingtonms.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/washingtonms/",
+      "category": "Attendance Area School",
+      "phone": "206-252-2600",
+      "fax": "206-252-2601",
+      "principal": "Adrian Manriquez",
+      "principalTitle": "Principal",
+      "principalEmail": "admanriquez@seattleschools.org",
+      "boardDistrict": 5,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-five",
+      "location": {
+        "lat": 47.59921024964,
+        "lng": -122.304140209682
+      }
+    },
+    {
+      "id": "wedgwoodes",
+      "name": "Wedgwood Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "2720 NE 85th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98115",
+        "full": "2720 NE 85th St., Seattle, WA 98115"
+      },
+      "website": "https://wedgwoodes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/wedgwoodes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-5670",
+      "fax": "206-252-5671",
+      "principal": "Principal: Christy Smith",
+      "principalTitle": "Principal",
+      "principalEmail": "clsmith2@seattleschools.org",
+      "boardDistrict": 3,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-three/",
+      "location": {
+        "lat": 47.690296404701,
+        "lng": -122.297213186799
+      }
+    },
+    {
+      "id": "westseattlees",
+      "name": "West Seattle Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "6760 34th Ave. SW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98126",
+        "full": "6760 34th Ave. SW, Seattle, WA 98126"
+      },
+      "website": "https://westseattlees.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/westseattlees/",
+      "category": "Attendance Area School",
+      "phone": "206-252-9450",
+      "fax": "206-252-9451",
+      "principal": "Principal: Stephanie Barragan",
+      "principalTitle": "Principal",
+      "principalEmail": "sbbarragan@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.54174782657,
+        "lng": -122.375090621571
+      }
+    },
+    {
+      "id": "westseattlehs",
+      "name": "West Seattle High School",
+      "type": "High",
+      "address": {
+        "street": "3000 California Ave. SW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98116",
+        "full": "3000 California Ave. SW, Seattle, WA 98116"
+      },
+      "website": "https://westseattlehs.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/westseattlehs/",
+      "category": "Attendance Area School",
+      "phone": "206-252-8800",
+      "fax": "206-252-8801",
+      "principal": "Principal: Brian Vance",
+      "principalTitle": "Principal",
+      "principalEmail": "brvance@seattleschools.org",
+      "boardDistrict": 6,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-six",
+      "location": {
+        "lat": 47.577047610037,
+        "lng": -122.386627575046
+      }
+    },
+    {
+      "id": "westwoodlandes",
+      "name": "West Woodland Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "5601 Fourth Ave. NW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98107",
+        "full": "5601 Fourth Ave. NW, Seattle, WA 98107"
+      },
+      "website": "https://westwoodlandes.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/westwoodlandes/",
+      "category": "Attendance Area School",
+      "phone": "206-252-1600",
+      "fax": "206-252-1601",
+      "principal": "Principal: Kelly Vancil",
+      "principalTitle": "Principal",
+      "principalEmail": "krvancil@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-two/",
+      "location": {
+        "lat": 47.669478420272,
+        "lng": -122.361943922291
+      }
+    },
+    {
+      "id": "whitmanms",
+      "name": "Whitman Middle School",
+      "type": "Middle",
+      "address": {
+        "street": "9201 15th Ave. NW",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98117",
+        "full": "9201 15th Ave. NW, Seattle, WA 98117"
+      },
+      "website": "https://whitmanms.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/whitmanms/",
+      "category": "Attendance Area School",
+      "phone": "206-252-1200",
+      "fax": "206-252-1201",
+      "principal": "Principal: John Houston",
+      "principalTitle": "Principal",
+      "principalEmail": "jmhouston@seattleschools.org",
+      "boardDistrict": 1,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-one",
+      "location": {
+        "lat": 47.696125368378,
+        "lng": -122.376881999334
+      }
+    },
+    {
+      "id": "whittieres",
+      "name": "Whittier Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "1320 NW 75th St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98117",
+        "full": "1320 NW 75th St., Seattle, WA 98117"
+      },
+      "website": "https://whittieres.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/whittieres/",
+      "category": "Attendance Area School",
+      "phone": "206-252-1650",
+      "fax": "206-252-1651",
+      "principal": "Principal: Cindy Watters",
+      "principalTitle": "Principal",
+      "principalEmail": "cjwatters@seattleschools.org",
+      "boardDistrict": 2,
+      "boardDistrictUrl": "https://www.seattleschools.org/about/school-board/meet-the-board/district-two/",
+      "location": {
+        "lat": 47.68330229386,
+        "lng": -122.37297552421
+      }
+    },
+    {
+      "id": "lukees",
+      "name": "Wing Luke Elementary",
+      "type": "Elementary",
+      "address": {
+        "street": "3701 S. Kenyon St.",
+        "city": "Seattle",
+        "state": "WA",
+        "zip": "98118",
+        "full": "3701 S. Kenyon St., Seattle, WA 98118"
+      },
+      "website": "https://lukees.seattleschools.org",
+      "profileUrl": "https://www.seattleschools.org/schools/lukees/",
+      "category": "Attendance Area School",
+      "phone": "206-252-7630",
+      "fax": "206-252-7631",
+      "principal": "Principal: JaLynn Montes",
+      "principalTitle": "Principal",
+      "principalEmail": "jmmontes@seattleschools.org",
+      "boardDistrict": 7,
+      "boardDistrictUrl": "https://www.seattleschools.org/district/school-board/meet-the-board/district-seven",
+      "location": {
+        "lat": 47.531495299954,
+        "lng": -122.285826782231
+      }
+    }
+  ]
+}

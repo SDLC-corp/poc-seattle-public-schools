@@ -1,0 +1,52 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  /* Surfaces & ink */
+  --surface: #ffffff;
+  --border: #e3e8ef;
+  --ink-1: #1c2b40;
+  --ink-2: #55657a;
+  --ink-3: #8a96a6;
+  --grid: #edf0f4;
+  --axis: #c5ccd6;
+
+  /* Status (reserved — always paired with a label) */
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-critical: #d03b3b;
+
+  /* Categorical series, fixed order */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-other: #c5ccd5; /* neutral "Other" bucket, deliberately not a hue */
+
+  font-family: 'Segoe UI', system-ui, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #1c2b40;
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #f4f6fa;
+}
+
+button {
+  font: inherit;
+}
