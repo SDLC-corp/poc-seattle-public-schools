@@ -1,0 +1,5 @@
+# Safety net for the whole repo: never commit environment files (keys, secrets, tenant IDs).
+# frontend/.gitignore and backend/.gitignore carry the same rules.
+.env
+.env.*
+!.env.example

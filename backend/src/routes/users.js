@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { readFileSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
 import { getRoles, getRole, roleExists } from '../data/rolesStore.js';
 import { schools } from '../data/store.js';
 import { logAudit, diff, snapshot } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
+import { writeJson } from '../data/atomicWrite.js';
 
 const USER_FIELDS = ['name', 'email', 'phone', 'department', 'jobTitle', 'roleId', 'status'];
 // Audit-friendly view of a user: role name and school access as readable values
@@ -23,10 +23,12 @@ const schoolIds = new Set(schools.map((s) => s.id));
 const fileData = JSON.parse(readFileSync(USERS_FILE, 'utf8'));
 let users = fileData.users;
 
-const persist = () => writeFile(USERS_FILE, JSON.stringify({ ...fileData, users }, null, 2));
+const persist = () => writeJson(USERS_FILE, { ...fileData, users });
 
 // Used by the roles API: a role with users can't be deleted
 export const countUsersWithRole = (roleId) => users.filter((u) => u.roleId === roleId).length;
+// Current user list (read-only use, e.g. people who can sign a surveillance)
+export const listUsers = () => users;
 
 // `role` may be a comma-separated list, e.g. "facilities-manager,inspector"
 function filterUsers({ q, role, school, status }) {

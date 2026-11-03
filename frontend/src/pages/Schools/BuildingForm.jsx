@@ -76,7 +76,7 @@ export default function BuildingForm({ school, building, existing, onClose, onSa
             <label className="uf-field"><span>Year Built *</span><input {...input('yearBuilt', { inputMode: 'numeric', maxLength: 4, placeholder: 'YYYY' })} />{err('yearBuilt')}</label>
             {isNew ? (
               <div className="uf-field">
-                <span id="bf-floors">No. of Floors * <small className="bf-max">max {MAX_FLOORS}</small></span>
+                <span id="bf-floors">Initial Floors * <small className="bf-max">add more later</small></span>
                 <div className="bf-seg" role="radiogroup" aria-labelledby="bf-floors">
                   {Array.from({ length: MAX_FLOORS }, (_, i) => i + 1).map((n) => (
                     <button key={n} type="button" role="radio" aria-checked={form.floors === n}
@@ -86,7 +86,7 @@ export default function BuildingForm({ school, building, existing, onClose, onSa
                 {err('floors')}
               </div>
             ) : (
-              <label className="uf-field"><span>No. of Floors</span><input className="u-input" value={`${building.floors} of ${MAX_FLOORS}`} disabled /></label>
+              <label className="uf-field"><span>No. of Floors</span><input className="u-input" value={building.floors} disabled /></label>
             )}
             <label className="uf-field"><span>Gross Area (sq ft) *</span><input {...input('areaSqFt', { inputMode: 'numeric' })} />{err('areaSqFt')}</label>
             <div className="uf-field">
@@ -115,7 +115,7 @@ export default function BuildingForm({ school, building, existing, onClose, onSa
 
           {!isNew ? null : preAhera && noAcm
             ? <p className="b-note warn"><TriangleAlert size={14} />Built before {PRESUMED_ACM_BEFORE}: AHERA presumes ACM unless sampling shows otherwise. Only choose “No ACM” if lab results confirm it.</p>
-            : <p className="b-note"><Info size={14} />Buildings can have up to {MAX_FLOORS} floors. Pre-{PRESUMED_ACM_BEFORE} buildings are presumed to contain asbestos until sampled.</p>}
+            : <p className="b-note"><Info size={14} />Start with 1–{MAX_FLOORS} floors; add more floors (no limit) in the building's Floors tab. Pre-{PRESUMED_ACM_BEFORE} buildings are presumed to contain asbestos until sampled.</p>}
           {errors.form && <p className="uf-error">{errors.form}</p>}
         </div>
         <footer className="u-modal-foot">

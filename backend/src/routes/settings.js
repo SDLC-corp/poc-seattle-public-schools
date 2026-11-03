@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { readFileSync, existsSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
 import { settingsDefaults } from '../data/settingsDefaults.js';
 import { logAudit, diff } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
+import { writeJson } from '../data/atomicWrite.js';
 
 const SETTINGS_FILE = new URL('../../data/settings.json', import.meta.url);
 const MAX_LOGO_CHARS = 2.8 * 1024 * 1024; // ~2 MB image once base64-encoded
@@ -57,7 +57,7 @@ let current = existsSync(SETTINGS_FILE)
 
 const save = async (settings) => {
   current = settings;
-  await writeFile(SETTINGS_FILE, JSON.stringify(settings, null, 2));
+  await writeJson(SETTINGS_FILE, settings);
 };
 
 const router = Router();

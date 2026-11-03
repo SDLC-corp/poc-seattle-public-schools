@@ -1,6 +1,1484 @@
 {
   "entries": [
     {
+      "id": "AUD-000040",
+      "at": "2026-11-02T12:37:57.817Z",
+      "action": "delete",
+      "module": "Surveillance",
+      "recordId": "SUR-2026-0915",
+      "summary": "Deleted surveillance SUR-2026-0915",
+      "changes": [
+        {
+          "field": "Date",
+          "from": "2026-11-02"
+        },
+        {
+          "field": "Inspector",
+          "from": "Grace Alder"
+        },
+        {
+          "field": "Condition",
+          "from": "Good"
+        },
+        {
+          "field": "Changed Since Last",
+          "from": "No"
+        },
+        {
+          "field": "Corrective Action",
+          "from": "No"
+        },
+        {
+          "field": "Next Due",
+          "from": "2027-04-01"
+        },
+        {
+          "field": "Comments",
+          "from": "TEST - automated check, will be deleted"
+        },
+        {
+          "field": "Action Items",
+          "from": "0"
+        },
+        {
+          "field": "Signed",
+          "from": "Yes"
+        },
+        {
+          "field": "Status",
+          "from": "completed"
+        }
+      ],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000039",
+      "at": "2026-11-02T12:37:57.628Z",
+      "action": "update",
+      "module": "Surveillance",
+      "recordId": "SUR-2026-0915",
+      "summary": "Updated surveillance of Floor Tile & Mastic",
+      "changes": [
+        {
+          "field": "Date",
+          "from": "—",
+          "to": "2026-11-02"
+        },
+        {
+          "field": "Inspector",
+          "from": "—",
+          "to": "Grace Alder"
+        },
+        {
+          "field": "Condition",
+          "from": "—",
+          "to": "Good"
+        },
+        {
+          "field": "Changed Since Last",
+          "from": "—",
+          "to": "No"
+        },
+        {
+          "field": "Corrective Action",
+          "from": "—",
+          "to": "No"
+        },
+        {
+          "field": "Next Due",
+          "from": "—",
+          "to": "2027-04-01"
+        },
+        {
+          "field": "Signed",
+          "from": "No",
+          "to": "Yes"
+        },
+        {
+          "field": "Status",
+          "from": "draft",
+          "to": "completed"
+        }
+      ],
+      "related": null,
+      "link": "/surveillance/records/SUR-2026-0915",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000038",
+      "at": "2026-11-02T12:37:57.502Z",
+      "action": "create",
+      "module": "Surveillance",
+      "recordId": "SUR-2026-0915",
+      "summary": "Saved draft surveillance of Floor Tile & Mastic",
+      "changes": [
+        {
+          "field": "Date",
+          "to": "—"
+        },
+        {
+          "field": "Inspector",
+          "to": "—"
+        },
+        {
+          "field": "Condition",
+          "to": "—"
+        },
+        {
+          "field": "Changed Since Last",
+          "to": "—"
+        },
+        {
+          "field": "Corrective Action",
+          "to": "—"
+        },
+        {
+          "field": "Next Due",
+          "to": "—"
+        },
+        {
+          "field": "Comments",
+          "to": "TEST - automated check, will be deleted"
+        },
+        {
+          "field": "Action Items",
+          "to": "0"
+        },
+        {
+          "field": "Signed",
+          "to": "No"
+        },
+        {
+          "field": "Status",
+          "to": "draft"
+        }
+      ],
+      "related": null,
+      "link": "/surveillance/records/SUR-2026-0915",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000037",
+      "at": "2026-11-02T09:38:33.612Z",
+      "action": "delete",
+      "module": "Schools & Facilities",
+      "recordId": "RM-mvz2gi3f2ko2",
+      "summary": "Deleted room 617 Room 617",
+      "changes": [
+        {
+          "field": "Room",
+          "from": "617 Room 617",
+          "to": "(deleted)"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-fmvz2g5wv",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000036",
+      "at": "2026-11-02T09:38:28.097Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "RM-mvz2gi3f2ko2",
+      "summary": "Added room 617 Room 617 – Sixth Floor, Main Building",
+      "changes": [
+        {
+          "field": "Name",
+          "to": "Room 617"
+        },
+        {
+          "field": "Number",
+          "to": "617"
+        },
+        {
+          "field": "Type",
+          "to": "Other"
+        },
+        {
+          "field": "Description",
+          "to": "—"
+        },
+        {
+          "field": "Max Occupancy",
+          "to": "—"
+        },
+        {
+          "field": "Status",
+          "to": "Active"
+        },
+        {
+          "field": "Outline",
+          "to": "On plan"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-fmvz2g5wv?room=RM-mvz2gi3f2ko2",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000035",
+      "at": "2026-11-02T09:38:14.657Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvz2g5wv",
+      "summary": "Updated Sixth Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "16"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000034",
+      "at": "2026-11-02T09:38:12.320Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvz2g5wv",
+      "summary": "Uploaded floor plan – Sixth Floor, Main Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "(none)",
+          "to": "School_Ground_Floor_Plan_UPDATE (page 1).png"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000033",
+      "at": "2026-11-02T09:38:12.149Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvz2g5wv",
+      "summary": "Added Sixth Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Floor No.",
+          "to": "6"
+        },
+        {
+          "field": "Name",
+          "to": "Sixth Floor"
+        },
+        {
+          "field": "Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Status",
+          "to": "Not Assessed"
+        },
+        {
+          "field": "Detected Room Shapes",
+          "to": "0"
+        },
+        {
+          "field": "Detected Tables",
+          "to": "0"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000032",
+      "at": "2026-11-02T09:14:53.446Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvz1m4ja",
+      "summary": "Updated Fifth Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "16"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000031",
+      "at": "2026-11-02T09:14:51.040Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvz1m4ja",
+      "summary": "Uploaded floor plan – Fifth Floor, Main Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "(none)",
+          "to": "School_Ground_Floor_Plan_UPDATE (page 1).png"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000030",
+      "at": "2026-11-02T09:14:50.751Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvz1m4ja",
+      "summary": "Added Fifth Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Floor No.",
+          "to": "5"
+        },
+        {
+          "field": "Name",
+          "to": "Fifth Floor"
+        },
+        {
+          "field": "Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Status",
+          "to": "Not Assessed"
+        },
+        {
+          "field": "Detected Room Shapes",
+          "to": "0"
+        },
+        {
+          "field": "Detected Tables",
+          "to": "0"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000029",
+      "at": "2026-11-02T09:05:44.921Z",
+      "action": "delete",
+      "module": "ACM Inventory",
+      "recordId": "ACM-mvz19l5d6d72",
+      "summary": "Deleted ACM material TEST Ceiling Tile",
+      "changes": [
+        {
+          "field": "Material",
+          "from": "TEST Ceiling Tile (ACM Present)",
+          "to": "(deleted)"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors/roosevelths-b2-fmvyu4dsu?room=RM-mvyzwygufruy",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000028",
+      "at": "2026-11-02T09:05:05.843Z",
+      "action": "create",
+      "module": "ACM Inventory",
+      "recordId": "ACM-mvz19l5d6d72",
+      "summary": "Added ACM material TEST Ceiling Tile (ACM Present) – room 101 Room 1, TEST plan 1, Library Building",
+      "changes": [
+        {
+          "field": "Name",
+          "to": "TEST Ceiling Tile"
+        },
+        {
+          "field": "Type",
+          "to": "Asbestos Cement (AC)"
+        },
+        {
+          "field": "Location",
+          "to": "Ceiling (entire room)"
+        },
+        {
+          "field": "Quantity",
+          "to": "120 Sq ft"
+        },
+        {
+          "field": "Friability",
+          "to": "Non-Friable"
+        },
+        {
+          "field": "Classification",
+          "to": "Confirmed"
+        },
+        {
+          "field": "Condition",
+          "to": "Good"
+        },
+        {
+          "field": "Risk Ranking",
+          "to": "Low"
+        },
+        {
+          "field": "Assessment Date",
+          "to": "2026-11-02"
+        },
+        {
+          "field": "ACM Status",
+          "to": "ACM Present"
+        },
+        {
+          "field": "Scope",
+          "to": "room"
+        },
+        {
+          "field": "Notes",
+          "to": "—"
+        },
+        {
+          "field": "Related Tracking",
+          "to": "—"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors/roosevelths-b2-fmvyu4dsu?room=RM-mvyzwygufruy",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000027",
+      "at": "2026-11-02T09:00:01.425Z",
+      "action": "delete",
+      "module": "Schools & Facilities",
+      "recordId": "RM-mvz130uycldi",
+      "summary": "Deleted room 119 Room 119",
+      "changes": [
+        {
+          "field": "Room",
+          "from": "119 Room 119",
+          "to": "(deleted)"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors/roosevelths-b2-fmvyu4dsu",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000026",
+      "at": "2026-11-02T08:59:59.560Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "RM-mvz130uycldi",
+      "summary": "Added room 119 Room 119 – TEST plan 1, Library Building",
+      "changes": [
+        {
+          "field": "Name",
+          "to": "Room 119"
+        },
+        {
+          "field": "Number",
+          "to": "119"
+        },
+        {
+          "field": "Type",
+          "to": "Other"
+        },
+        {
+          "field": "Description",
+          "to": "—"
+        },
+        {
+          "field": "Max Occupancy",
+          "to": "—"
+        },
+        {
+          "field": "Status",
+          "to": "Active"
+        },
+        {
+          "field": "Outline",
+          "to": "On plan"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors/roosevelths-b2-fmvyu4dsu?room=RM-mvz130uycldi",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000025",
+      "at": "2026-11-02T08:31:40.581Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "roosevelths-b2-fmvyu4emb",
+      "summary": "Updated TEST plan 2 – Library Building, Roosevelt High School",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "12",
+          "to": "2"
+        },
+        {
+          "field": "Detected Tables",
+          "from": "0",
+          "to": "2"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000024",
+      "at": "2026-11-02T08:30:40.861Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "roosevelths-b2-fmvyu4emb",
+      "summary": "Uploaded floor plan – TEST plan 2, Library Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "test-plan-2.png",
+          "to": "roosevelths-b2-fmvyu4emb-1793608240825.png"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000023",
+      "at": "2026-11-02T08:23:53.450Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "roosevelths-b2-fmvyu4dsu",
+      "summary": "Updated TEST plan 1 – Library Building, Roosevelt High School",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "17",
+          "to": "18"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000022",
+      "at": "2026-11-02T08:04:01.119Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvytjzpv",
+      "summary": "Updated Second Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "11"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000021",
+      "at": "2026-11-02T08:03:51.836Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvytjzpv",
+      "summary": "Uploaded floor plan – Second Floor, Main Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "School_Ground_Floor_Plan_Thin_Room_Labels (page 1).png",
+          "to": "School_Ground_Floor_Plan_Corrected (page 1).png"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000020",
+      "at": "2026-11-02T07:49:53.737Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvytjzpv",
+      "summary": "Updated Second Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "13"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000019",
+      "at": "2026-11-02T07:49:13.470Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvytjzpv",
+      "summary": "Uploaded floor plan – Second Floor, Main Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "School_Ground_Floor_Plan_Updated_v2 (page 1).png",
+          "to": "School_Ground_Floor_Plan_Thin_Room_Labels (page 1).png"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000018",
+      "at": "2026-11-02T06:44:32.554Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvyw8s7w",
+      "summary": "Updated Fourth Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "13"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000017",
+      "at": "2026-11-02T06:44:30.275Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvyw8s7w",
+      "summary": "Uploaded floor plan – Fourth Floor, Main Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "(none)",
+          "to": "School_Ground_Floor_Plan_Walls_Corrected (page 1).png"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000016",
+      "at": "2026-11-02T06:44:30.122Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvyw8s7w",
+      "summary": "Added Fourth Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Floor No.",
+          "to": "4"
+        },
+        {
+          "field": "Name",
+          "to": "Fourth Floor"
+        },
+        {
+          "field": "Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Status",
+          "to": "Not Assessed"
+        },
+        {
+          "field": "Detected Room Shapes",
+          "to": "0"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000015",
+      "at": "2026-11-02T06:32:01.662Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "RM-mvyvsqkzbw3u",
+      "summary": "Added room 212 Room 212 – Second Floor, Main Building",
+      "changes": [
+        {
+          "field": "Name",
+          "to": "Room 212"
+        },
+        {
+          "field": "Number",
+          "to": "212"
+        },
+        {
+          "field": "Type",
+          "to": "Other"
+        },
+        {
+          "field": "Description",
+          "to": "—"
+        },
+        {
+          "field": "Max Occupancy",
+          "to": "—"
+        },
+        {
+          "field": "Status",
+          "to": "Active"
+        },
+        {
+          "field": "Outline",
+          "to": "On plan"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-fmvytjzpv?room=RM-mvyvsqkzbw3u",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000014",
+      "at": "2026-11-02T06:25:57.935Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvytjzpv",
+      "summary": "Updated Second Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "11"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000013",
+      "at": "2026-11-02T06:25:41.063Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvytjzpv",
+      "summary": "Uploaded floor plan – Second Floor, Main Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "School_Floor_2_Plan (page 1).png",
+          "to": "School_Ground_Floor_Plan_Updated_v2 (page 1).png"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000012",
+      "at": "2026-11-02T06:15:07.097Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvyv6xuw",
+      "summary": "Updated Third Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "11"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000011",
+      "at": "2026-11-02T06:15:04.712Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvyv6xuw",
+      "summary": "Uploaded floor plan – Third Floor, Main Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "(none)",
+          "to": "School_Ground_Floor_Plan_Updated (page 1).png"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000010",
+      "at": "2026-11-02T06:15:04.555Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvyv6xuw",
+      "summary": "Added Third Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Floor No.",
+          "to": "3"
+        },
+        {
+          "field": "Name",
+          "to": "Third Floor"
+        },
+        {
+          "field": "Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Status",
+          "to": "Not Assessed"
+        },
+        {
+          "field": "Detected Room Shapes",
+          "to": "0"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000009",
+      "at": "2026-11-02T05:46:03.649Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "roosevelths-b2-fmvyu4emb",
+      "summary": "Updated TEST plan 2 – Library Building, Roosevelt High School",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "12"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000008",
+      "at": "2026-11-02T05:45:39.701Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "roosevelths-b2-fmvyu4dsu",
+      "summary": "Updated TEST plan 1 – Library Building, Roosevelt High School",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "17"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000007",
+      "at": "2026-11-02T05:45:08.311Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "roosevelths-b2-fmvyu4emb",
+      "summary": "Uploaded floor plan – TEST plan 2, Library Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "(none)",
+          "to": "test-plan-2.png"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000006",
+      "at": "2026-11-02T05:45:06.574Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "roosevelths-b2-fmvyu4emb",
+      "summary": "Added TEST plan 2 – Library Building, Roosevelt High School",
+      "changes": [
+        {
+          "field": "Floor No.",
+          "to": "2"
+        },
+        {
+          "field": "Name",
+          "to": "TEST plan 2"
+        },
+        {
+          "field": "Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Status",
+          "to": "Not Assessed"
+        },
+        {
+          "field": "Detected Room Shapes",
+          "to": "0"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000005",
+      "at": "2026-11-02T05:45:06.553Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "roosevelths-b2-fmvyu4dsu",
+      "summary": "Uploaded floor plan – TEST plan 1, Library Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "(none)",
+          "to": "test-plan-1.png"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000004",
+      "at": "2026-11-02T05:45:05.519Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "roosevelths-b2-fmvyu4dsu",
+      "summary": "Added TEST plan 1 – Library Building, Roosevelt High School",
+      "changes": [
+        {
+          "field": "Floor No.",
+          "to": "1"
+        },
+        {
+          "field": "Name",
+          "to": "TEST plan 1"
+        },
+        {
+          "field": "Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Status",
+          "to": "Not Assessed"
+        },
+        {
+          "field": "Detected Room Shapes",
+          "to": "0"
+        }
+      ],
+      "related": {
+        "school": "Roosevelt High School",
+        "building": "Library Building"
+      },
+      "link": "/schools/roosevelths/buildings/roosevelths-b2/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000003",
+      "at": "2026-11-02T05:29:15.159Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvytjzpv",
+      "summary": "Updated Second Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "6"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000002",
+      "at": "2026-11-02T05:29:14.371Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvytjzpv",
+      "summary": "Uploaded floor plan – Second Floor, Main Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "(none)",
+          "to": "School_Floor_2_Plan (page 1).png"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000001",
+      "at": "2026-11-02T05:29:14.185Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmvytjzpv",
+      "summary": "Added Second Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Floor No.",
+          "to": "2"
+        },
+        {
+          "field": "Name",
+          "to": "Second Floor"
+        },
+        {
+          "field": "Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Status",
+          "to": "Not Assessed"
+        },
+        {
+          "field": "Detected Room Shapes",
+          "to": "0"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
       "id": "SAMPLE-00491",
       "at": "2026-11-01T16:35:30.597Z",
       "action": "update",

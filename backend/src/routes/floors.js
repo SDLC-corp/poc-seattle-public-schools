@@ -5,12 +5,11 @@ import { buildings } from '../data/store.js';
 import {
   getFloors, getAllFloors, getFloor, addFloor, updateFloor, removeFloor, setPlanImage, present, planPath, PLAN_DIR,
 } from '../data/floorsStore.js';
-import { MAX_FLOORS, ACM_STATUSES, ACM_CONDITIONS } from '../data/buildingGeometry.js';
-import { floorLayout } from '../data/floorLayout.js';
+import { getRooms, removeFloorRooms } from '../data/roomsStore.js';
+import { syncFloorRooms } from '../data/floorRoomsSync.js';
 import { logAudit, diff } from '../data/auditStore.js';
 
 const MAX_PLAN_BYTES = 5 * 1024 * 1024;
-const MAX_LABELS = 100;
 const MAX_SHAPES = 200;
 // Plan images are checked by their first bytes, not just the declared type
 const IMAGE_TYPES = [
@@ -19,32 +18,9 @@ const IMAGE_TYPES = [
   { ext: 'webp', mime: 'image/webp', test: (b) => b.subarray(0, 4).toString('latin1') === 'RIFF' && b.subarray(8, 12).toString('latin1') === 'WEBP' },
 ];
 
-const SEED = /^[\w:-]{1,60}$/;
 const int = (v) => (v === '' || v === null || v === undefined ? NaN : Number(v));
 const buildingOf = (id) => buildings.find((b) => b.id === id);
 const link = (b) => `/schools/${b.schoolId}/buildings/${b.id}/floors`;
-
-function validateLabels(raw, errors) {
-  if (!Array.isArray(raw)) { errors.labels = 'Labels must be a list'; return []; }
-  if (raw.length > MAX_LABELS) { errors.labels = `At most ${MAX_LABELS} labelled rooms per floor`; return []; }
-  return raw.map((l, i) => {
-    const label = {
-      id: String(l.id ?? `L${i + 1}`).slice(0, 20),
-      roomId: l.roomId ? String(l.roomId).slice(0, 20) : null,
-      name: String(l.name ?? '').trim().slice(0, 60),
-      x: Number(l.x),
-      y: Number(l.y),
-      acmStatus: l.acmStatus ?? 'No ACM',
-      material: String(l.material ?? '').trim().slice(0, 80),
-      condition: l.condition ?? (l.acmStatus === 'Assumed ACM' ? 'Not assessed' : 'Good'),
-    };
-    if (!label.name) errors.labels = `Room label ${i + 1} needs a name`;
-    if (!(label.x >= 0 && label.x <= 1 && label.y >= 0 && label.y <= 1)) errors.labels = `Room label ${i + 1} is outside the plan`;
-    if (!ACM_STATUSES.includes(label.acmStatus)) errors.labels = `Room label ${i + 1} has an invalid ACM status`;
-    if (!ACM_CONDITIONS.includes(label.condition)) errors.labels = `Room label ${i + 1} has an invalid condition`;
-    return label;
-  });
-}
 
 // Room polygons detected on an uploaded plan (OpenCV in the browser); points are 0–1 fractions
 function validateShapes(raw, errors) {
@@ -60,46 +36,58 @@ function validateShapes(raw, errors) {
   }));
 }
 
+// Tables found on the plan by the chairs around them (tessera-style); boxes are 0–1 fractions of the plan
+const MAX_TABLES = 300;
+function validateTables(raw, errors) {
+  const frac = (v) => typeof v === 'number' && v >= 0 && v <= 1;
+  if (!Array.isArray(raw) || raw.length > MAX_TABLES || !raw.every((t) => frac(t?.x) && frac(t?.y) && frac(t?.w) && frac(t?.h))) {
+    errors.tables = 'Invalid tables';
+    return [];
+  }
+  return raw.map((t, i) => ({
+    id: String(t.id ?? `T${i + 1}`).slice(0, 20),
+    x: +t.x.toFixed(4), y: +t.y.toFixed(4), w: +t.w.toFixed(4), h: +t.h.toFixed(4),
+    chairs: Math.min(99, Math.max(0, Math.round(Number(t.chairs) || 0))),
+  }));
+}
+
+const MAX_FLOOR_NUMBER = 200;
+
 function validateFloor(body, existing) {
   const errors = {};
   const buildingId = existing?.buildingId ?? body.buildingId;
   const building = buildingOf(buildingId);
   if (!building) return { errors: { buildingId: 'Choose a building' } };
-  const pickInt = (k) => int(body[k] ?? existing?.[k]);
   const f = {
     buildingId,
     schoolId: building.schoolId,
-    number: pickInt('number'),
+    number: int(body.number ?? existing?.number),
     name: String(body.name ?? existing?.name ?? '').trim().slice(0, 60),
-    rooms: pickInt('rooms'),
-    acmRooms: pickInt('acmRooms'),
-    acmStatus: body.acmStatus ?? existing?.acmStatus,
-    labels: validateLabels(body.labels ?? existing?.labels ?? [], errors),
     shapes: validateShapes(body.shapes ?? existing?.shapes ?? [], errors),
+    tables: validateTables(body.tables ?? existing?.tables ?? [], errors),
   };
   if (existing?.layoutSeed) f.layoutSeed = existing.layoutSeed;
-  else if (!existing && body.layoutSeed !== undefined) {
-    if (SEED.test(String(body.layoutSeed))) f.layoutSeed = String(body.layoutSeed);
-    else errors.layoutSeed = 'Invalid layout';
-  }
+  // Floors added in the app take their room / ACM counts from the rooms mapped on their plan
+  // (see refreshFloorCounts); older sample floors keep the counts they were generated with.
+  if (!existing) Object.assign(f, { derivedCounts: true, rooms: 0, acmRooms: 0, acmStatus: 'Not Assessed' });
   const siblings = getFloors(buildingId).filter((x) => x.id !== existing?.id);
-  if (!existing && siblings.length >= MAX_FLOORS) errors.number = `${building.name} already has the maximum of ${MAX_FLOORS} floors`;
-  else if (!Number.isInteger(f.number) || f.number < 1 || f.number > MAX_FLOORS) errors.number = `Floor number must be 1 to ${MAX_FLOORS}`;
+  if (!Number.isInteger(f.number) || f.number < 0 || f.number > MAX_FLOOR_NUMBER) errors.number = `Floor number must be 0 to ${MAX_FLOOR_NUMBER} (0 = ground floor)`;
   else if (siblings.some((x) => x.number === f.number)) errors.number = `Floor ${f.number} already exists in ${building.name}`;
   if (!f.name) errors.name = 'Floor name is required';
-  if (!Number.isInteger(f.rooms) || f.rooms < 1 || f.rooms > 500) errors.rooms = 'Rooms must be 1 to 500';
-  if (!ACM_STATUSES.includes(f.acmStatus)) errors.acmStatus = 'Choose an ACM status';
-  if (f.acmStatus === 'No ACM') f.acmRooms = 0;
-  else if (!Number.isInteger(f.acmRooms) || f.acmRooms < 1) errors.acmRooms = 'Enter at least 1 ACM room, or choose No ACM';
-  else if (f.acmRooms > f.rooms) errors.acmRooms = 'Can’t exceed the number of rooms';
   return { f, building, errors };
 }
-
 const view = (x) => ({
   'Floor No.': x.number, Name: x.name, Rooms: x.rooms, 'ACM Rooms': x.acmRooms, 'ACM Status': x.acmStatus,
-  'Labelled Rooms': x.labels.map((l) => l.name).join(', ') || '—',
   'Detected Room Shapes': x.shapes?.length ?? 0,
+  'Detected Tables': x.tables?.length ?? 0,
 });
+
+// Mapped rooms on the floor plan and how many have ACM (from the rooms store)
+function roomStats(list) {
+  const count = (s) => list.filter((r) => r.acmStatus === s).length;
+  return { mapped: list.length, acmPresent: count('ACM Present'), assumed: count('Assumed ACM'), noAcm: count('No ACM'), notAssessed: count('Not Assessed') };
+}
+const withRooms = (f) => ({ ...present(f), roomStats: roomStats(getRooms({ floorId: f.id })) });
 
 const router = Router();
 
@@ -108,10 +96,11 @@ const router = Router();
 router.get('/', (req, res) => {
   const { buildingId, schoolId } = req.query;
   if (buildingId) {
-    const list = getFloors(buildingId).map(present);
-    return res.json({ count: list.length, maxFloors: MAX_FLOORS, floors: list });
+    const list = getFloors(buildingId).map(withRooms);
+    return res.json({ count: list.length, floors: list });
   }
   const byId = new Map(buildings.map((b) => [b.id, b]));
+  const roomsByFloor = Map.groupBy(getRooms({ schoolId }), (r) => r.floorId);
   const list = getAllFloors()
     .filter((f) => !schoolId || f.schoolId === schoolId)
     .map((f) => {
@@ -122,24 +111,17 @@ router.get('/', (req, res) => {
         buildingCode: b?.code ?? null,
         schoolName: b?.schoolName ?? null,
         planUrl: f.planImage ? `/api/floors/${f.id}/plan?v=${encodeURIComponent(f.planImage.uploadedAt)}` : null,
+        roomStats: roomStats(roomsByFloor.get(f.id) ?? []),
       };
     })
     .sort((a, b) => (a.schoolName ?? '').localeCompare(b.schoolName ?? '') || (a.buildingCode ?? '').localeCompare(b.buildingCode ?? '') || a.number - b.number);
-  res.json({ count: list.length, maxFloors: MAX_FLOORS, floors: list });
-});
-
-// Sample layout for a floor that hasn't been saved yet (Add Floor panel)
-router.get('/layout-preview', (req, res) => {
-  const layoutSeed = String(req.query.seed ?? '');
-  const number = int(req.query.number);
-  if (!SEED.test(layoutSeed) || !(number >= 1 && number <= MAX_FLOORS)) return res.status(400).json({ error: 'seed and number (1–3) are required' });
-  res.json(floorLayout({ layoutSeed, number }));
+  res.json({ count: list.length, floors: list });
 });
 
 router.get('/:id', (req, res) => {
   const f = getFloor(req.params.id);
   if (!f) return res.status(404).json({ error: 'Floor not found' });
-  res.json(present(f));
+  res.json(withRooms(f));
 });
 
 router.post('/', async (req, res, next) => {
@@ -147,13 +129,15 @@ router.post('/', async (req, res, next) => {
     const { f, building, errors } = validateFloor(req.body ?? {});
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Invalid floor', fields: errors });
     const { floor, building: updated } = await addFloor({ id: `${building.id}-f${Date.now().toString(36)}`, ...f });
+    await syncFloorRooms(floor);
     logAudit(req, {
       action: 'create', module: 'Schools & Facilities', recordId: floor.id, link: link(building),
       summary: `Added ${floor.name} – ${building.name}, ${building.schoolName}`,
       changes: diff({}, view(floor)).map(({ field, to }) => ({ field, to })),
       related: { school: building.schoolName, building: building.name },
     });
-    res.status(201).json({ floor: present(floor), building: updated });
+    // Counts may have changed while syncing rooms, so return the fresh floor and building
+    res.status(201).json({ floor: withRooms(getFloor(floor.id)), building: buildingOf(floor.buildingId) ?? updated });
   } catch (err) {
     next(err);
   }
@@ -166,6 +150,7 @@ router.put('/:id', async (req, res, next) => {
     const { f, building, errors } = validateFloor(req.body ?? {}, existing);
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Invalid floor', fields: errors });
     const { floor, building: updated } = await updateFloor(existing.id, f);
+    await syncFloorRooms(floor);
     const changes = diff(view(existing), view(floor));
     if (changes.length) {
       logAudit(req, {
@@ -175,7 +160,7 @@ router.put('/:id', async (req, res, next) => {
         related: { school: building.schoolName, building: building.name },
       });
     }
-    res.json({ floor: present(floor), building: updated });
+    res.json({ floor: withRooms(getFloor(floor.id)), building: buildingOf(floor.buildingId) ?? updated });
   } catch (err) {
     next(err);
   }
@@ -188,6 +173,7 @@ router.delete('/:id', async (req, res, next) => {
     const building = buildingOf(f.buildingId);
     if (getFloors(f.buildingId).length <= 1) return res.status(409).json({ error: 'A building needs at least one floor' });
     const { building: updated } = await removeFloor(f.id);
+    await removeFloorRooms(f.id);
     logAudit(req, {
       action: 'delete', module: 'Schools & Facilities', recordId: f.id, link: link(building),
       summary: `Deleted ${f.name} – ${building.name}, ${building.schoolName}`,
@@ -212,14 +198,15 @@ router.post('/:id/plan', express.raw({ type: () => true, limit: MAX_PLAN_BYTES }
     await writeFile(path.join(PLAN_DIR, storedName), body);
     const name = String(req.query.name ?? '').replace(/[\\/:*?"<>|]+/g, '_').slice(0, 120) || storedName;
     const { floor } = await setPlanImage(f.id, { storedName, name, mime: type.mime, size: body.length, uploadedAt: new Date().toISOString() });
+    await syncFloorRooms(floor);
     const building = buildingOf(f.buildingId);
     logAudit(req, {
       action: 'update', module: 'Schools & Facilities', recordId: f.id, link: link(building),
       summary: `Uploaded floor plan – ${f.name}, ${building.name}`,
-      changes: [{ field: 'Floor Plan', from: f.planImage?.name ?? 'Sample layout', to: name }],
+      changes: [{ field: 'Floor Plan', from: f.planImage?.name ?? (f.derivedCounts ? '(none)' : 'Sample layout'), to: name }],
       related: { school: building.schoolName, building: building.name },
     });
-    res.json(present(floor));
+    res.json(withRooms(getFloor(floor.id)));
   } catch (err) {
     next(err);
   }
@@ -237,16 +224,17 @@ router.delete('/:id/plan', async (req, res, next) => {
   try {
     const f = getFloor(req.params.id);
     if (!f) return res.status(404).json({ error: 'Floor not found' });
-    if (!f.planImage) return res.json(present(f));
+    if (!f.planImage) return res.json(withRooms(f));
     const { floor } = await setPlanImage(f.id, null);
+    await syncFloorRooms(floor);
     const building = buildingOf(f.buildingId);
     logAudit(req, {
       action: 'update', module: 'Schools & Facilities', recordId: f.id, link: link(building),
       summary: `Removed floor plan image – ${f.name}, ${building.name}`,
-      changes: [{ field: 'Floor Plan', from: f.planImage.name, to: 'Sample layout' }],
+      changes: [{ field: 'Floor Plan', from: f.planImage.name, to: f.derivedCounts ? '(none)' : 'Sample layout' }],
       related: { school: building.schoolName, building: building.name },
     });
-    res.json(present(floor));
+    res.json(withRooms(getFloor(floor.id)));
   } catch (err) {
     next(err);
   }

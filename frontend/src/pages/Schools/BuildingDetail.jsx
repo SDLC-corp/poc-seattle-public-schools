@@ -5,11 +5,12 @@ import {
   SearchX, Info, MapPin, CalendarDays,
 } from 'lucide-react'
 import { request } from '../../lib/api'
+import { useConfirm } from '../../components/ui/useConfirm'
 import { AcmBadge } from './BuildingParts'
 import BuildingForm from './BuildingForm'
 import FloorPanel from './FloorPanel'
 import { InspectionTable, DocumentsCard } from './FacilityTabs'
-import { MAX_FLOORS, PRESUMED_ACM_BEFORE, fmtNum } from './buildingUtils'
+import { PRESUMED_ACM_BEFORE, fmtNum } from './buildingUtils'
 import '../Users/users.css'
 import '../Compliance/compliance.css'
 import './schools.css'
@@ -22,49 +23,67 @@ const TABS = [
   { slug: 'inspections', label: 'Inspections' },
   { slug: 'documents', label: 'Documents' },
 ]
-const CONDITION_CLASS = { Good: 'good', Damaged: 'damaged', 'Significantly Damaged': 'severe', 'Not assessed': 'na' }
+const CONDITION_CLASS = { Good: 'good', Damaged: 'damaged', 'Significantly Damaged': 'severe', 'Not Assessed': 'na' }
 
 function ConditionBadge({ condition }) {
   return <span className={`fp-cond ${CONDITION_CLASS[condition] ?? 'na'}`}>{condition}</span>
 }
-
 function Stat({ label, value, tone }) {
   return <div className="bd-stat"><span>{label}</span><strong className={tone ? `tone-text-${tone}` : ''}>{value}</strong></div>
 }
 
-// Every labelled room across floors (Rooms and ACM Materials tabs)
-function LabelTable({ rows, acmOnly, onOpen }) {
+// Rooms mapped on this building's floor plans (Rooms tab)
+function RoomsTable({ rooms, onOpen }) {
   return (
     <div className="u-table-wrap">
       <table className="u-table c-table b-table">
-        <thead>
-          <tr>
-            {acmOnly ? <><th>Material</th><th>Location</th></> : <><th>Room</th><th>Floor</th></>}
-            <th>ACM Status</th>{!acmOnly && <th>Material</th>}<th>Condition</th><th className="b-col-actions">Plan</th>
-          </tr>
-        </thead>
+        <thead><tr><th>Room No.</th><th>Room Name</th><th>Floor</th><th className="b-col-floor">Type</th><th className="c-num">Materials</th><th>ACM Status</th><th className="b-col-actions">Plan</th></tr></thead>
         <tbody>
-          {rows.map(({ floor, label: l }) => (
-            <tr key={`${floor.id}-${l.id}`} tabIndex={0} onClick={() => onOpen(floor, l.id)} onKeyDown={(e) => { if (e.key === 'Enter') onOpen(floor, l.id) }}>
-              {acmOnly
-                ? <><td><strong>{l.material || 'Unspecified material'}</strong></td><td>{floor.name} · {l.name}</td></>
-                : <><td><strong>{l.name}</strong></td><td>{floor.number} · {floor.name}</td></>}
-              <td><AcmBadge status={l.acmStatus} /></td>
-              {!acmOnly && <td>{l.material || '—'}</td>}
-              <td><ConditionBadge condition={l.condition} /></td>
+          {rooms.map((r) => (
+            <tr key={r.id} tabIndex={0} onClick={() => onOpen(r.floorId, r.id)} onKeyDown={(e) => { if (e.key === 'Enter') onOpen(r.floorId, r.id) }}>
+              <td><strong>{r.number}</strong></td>
+              <td>{r.name}{!r.polygon && <small className="p-sub">Not on plan</small>}</td>
+              <td className="u-nowrap">{r.floorName}</td>
+              <td className="b-col-floor">{r.type}</td>
+              <td className="c-num">{r.materialCount}</td>
+              <td><AcmBadge status={r.acmStatus} /></td>
               <td className="b-col-actions">
-                <button type="button" className="u-row-btn" title="Show on floor plan" aria-label={`Show ${l.name} on the floor plan`}
-                  onClick={(e) => { e.stopPropagation(); onOpen(floor, l.id) }}><MapPin size={14} /></button>
+                <button type="button" className="u-row-btn" title="Open on floor plan" aria-label={`Open room ${r.number} on the floor plan`}
+                  onClick={(e) => { e.stopPropagation(); onOpen(r.floorId, r.id) }}><MapPin size={14} /></button>
               </td>
             </tr>
           ))}
-          {!rows.length && <tr><td colSpan={acmOnly ? 5 : 6} className="u-empty">{acmOnly ? 'No ACM labelled on the floor plans yet.' : 'No rooms labelled on the floor plans yet.'}</td></tr>}
+          {!rooms.length && <tr><td colSpan={7} className="u-empty">No rooms mapped yet. Open a floor's plan to detect or draw rooms.</td></tr>}
         </tbody>
       </table>
     </div>
   )
 }
 
+// ACM materials recorded in this building (ACM Materials tab)
+function MaterialsTable({ materials, onOpen }) {
+  return (
+    <div className="u-table-wrap">
+      <table className="u-table c-table b-table">
+        <thead><tr><th>Material</th><th>Location</th><th className="b-col-floor">Type</th><th className="c-num">Quantity</th><th>ACM Status</th><th>Condition</th><th className="b-col-acmrooms">Risk</th></tr></thead>
+        <tbody>
+          {materials.map((m) => (
+            <tr key={m.id} tabIndex={0} onClick={() => onOpen(m.floorId, m.roomId)} onKeyDown={(e) => { if (e.key === 'Enter') onOpen(m.floorId, m.roomId) }}>
+              <td><strong>{m.name}</strong>{m.scope !== 'room' && <small className="p-sub">{m.scope === 'floor' ? 'Floor-level' : 'Building-level'}</small>}</td>
+              <td>{m.floorName} · {m.roomNumber} {m.roomName}<small className="p-sub">{m.location}</small></td>
+              <td className="b-col-floor">{m.materialType}</td>
+              <td className="c-num u-nowrap">{fmtNum(m.quantity)} {m.unit}</td>
+              <td><AcmBadge status={m.acmStatus} /></td>
+              <td><ConditionBadge condition={m.condition} /></td>
+              <td className={`b-col-acmrooms fr-risk ${m.riskRanking.toLowerCase()}`}>{m.riskRanking}</td>
+            </tr>
+          ))}
+          {!materials.length && <tr><td colSpan={7} className="u-empty">No ACM materials recorded yet. Open a floor's plan, pick a room and add its materials.</td></tr>}
+        </tbody>
+      </table>
+    </div>
+  )
+}
 export default function BuildingDetail() {
   const { schoolId, buildingId, tab: tabSlug = '' } = useParams()
   const navigate = useNavigate()
@@ -75,9 +94,11 @@ export default function BuildingDetail() {
   const [inspections, setInspections] = useState(null) // { schoolId, list }
   const [error, setError] = useState(null)
   const [query, setQuery] = useState('')
-  const [panel, setPanel] = useState(null) // { mode: 'add' | 'view' | 'edit', floorId?, labelId? }
+  const [panel, setPanel] = useState(null) // { mode: 'add' | 'edit', floorId? }
+  const [roomData, setRoomData] = useState(null) // { buildingId, rooms, materials }
   const [editBuilding, setEditBuilding] = useState(false)
   const [toast, setToast] = useState(null)
+  const [confirm, confirmDialog] = useConfirm()
 
   useEffect(() => {
     let cancelled = false
@@ -104,6 +125,17 @@ export default function BuildingDetail() {
     return () => { cancelled = true }
   }, [tabSlug, schoolId, inspections?.schoolId])
 
+  // Rooms + materials for the Rooms and ACM Materials tabs (loaded when one of them opens)
+  useEffect(() => {
+    if ((tabSlug !== 'rooms' && tabSlug !== 'acm') || roomData?.buildingId === buildingId) return undefined
+    let cancelled = false
+    const q = `buildingId=${encodeURIComponent(buildingId)}`
+    Promise.all([request(`/rooms?${q}`), request(`/acm-materials?${q}`)])
+      .then(([r, m]) => { if (!cancelled) setRoomData({ buildingId, rooms: r.rooms, materials: m.materials }) })
+      .catch((err) => { if (!cancelled) setError(err.message) })
+    return () => { cancelled = true }
+  }, [tabSlug, buildingId, roomData?.buildingId])
+
   useEffect(() => {
     if (!toast) return undefined
     const t = setTimeout(() => setToast(null), 4000)
@@ -116,7 +148,8 @@ export default function BuildingDetail() {
   const closePanel = useCallback(() => setPanel(null), [])
   const closeBuildingForm = useCallback(() => setEditBuilding(false), [])
 
-  const labelRows = useMemo(() => (floors ?? []).flatMap((floor) => floor.labels.map((label) => ({ floor, label }))), [floors])
+  const mappedRooms = (floors ?? []).reduce((n, f) => n + (f.roomStats?.mapped ?? 0), 0)
+  const tabRooms = roomData?.buildingId === buildingId ? roomData : null
 
   if (!tab) return <Navigate to={`/schools/${schoolId}/buildings/${buildingId}`} replace />
   if (error === 'notFound' || (current && !b)) {
@@ -133,31 +166,36 @@ export default function BuildingDetail() {
   const term = query.trim().toLowerCase()
   const visibleFloors = (floors ?? []).filter((f) => !term || [f.name, String(f.number), f.acmStatus].some((v) => v.toLowerCase().includes(term)))
   const panelFloor = panel?.floorId ? floors?.find((f) => f.id === panel.floorId) : null
-  const isFull = (floors?.length ?? 0) >= MAX_FLOORS
   const buildingsUrl = `/schools/${schoolId}/buildings`
-  const openFloor = (floor, labelId) => setPanel({ mode: 'view', floorId: floor.id, labelId })
+  // The floor's plan screen, optionally with a room selected
+  const openFloor = (floorId, roomId) => navigate(`/schools/${schoolId}/buildings/${buildingId}/floors/${floorId}${roomId ? `?room=${roomId}` : ''}`)
 
   const applyBuilding = (updated) => {
     if (updated) setData((d) => ({ ...d, buildings: d.buildings.map((x) => (x.id === updated.id ? updated : x)) }))
   }
 
-  const onFloorSaved = (floor, updatedBuilding, isNew, warning) => {
+  // After saving a floor, go straight to its plan to map rooms and ACM
+  // `detect`: a new plan was uploaded, so the floor plan screen detects its rooms on arrival
+  const onFloorSaved = (floor, updatedBuilding, isNew, warning, { detect = false } = {}) => {
     applyBuilding(updatedBuilding)
-    if (floor.buildingId === buildingId) {
-      setFloorData((fd) => ({
-        ...fd,
-        floors: (isNew ? [...fd.floors, floor] : fd.floors.map((f) => (f.id === floor.id ? floor : f))).sort((x, y) => x.number - y.number),
-      }))
-      setPanel({ mode: 'view', floorId: floor.id })
-    } else {
-      setPanel(null)
-    }
-    const where = floor.buildingId === buildingId ? '' : ` to ${updatedBuilding?.name}`
-    setToast(warning ? { kind: 'error', text: warning } : { kind: 'success', text: isNew ? `Added ${floor.name}${where}` : `Saved ${floor.name}` })
+    setPanel(null)
+    navigate(`/schools/${floor.schoolId}/buildings/${floor.buildingId}/floors/${floor.id}`, {
+      state: {
+        detect,
+        toast: warning ? { kind: 'error', text: warning } : { kind: 'success', text: isNew ? `Added ${floor.name}` : `Saved ${floor.name}` },
+      },
+    })
   }
-
   const deleteFloor = async (floor) => {
-    if (!window.confirm(`Delete ${floor.name} (floor ${floor.number}) and its ${floor.labels.length} room label(s)? This can't be undone.`)) return
+    const n = floor.roomStats?.mapped ?? 0
+    const ok = await confirm({
+      title: `Delete ${floor.name}?`,
+      message: `Floor ${floor.number} and its floor plan will be removed from this building. This can't be undone.`,
+      detail: n ? `Its ${n} mapped room${n > 1 ? 's' : ''} and their ACM records will be deleted too.` : null,
+      confirmLabel: 'Delete Floor',
+      tone: 'danger',
+    })
+    if (!ok) return
     try {
       const res = await request(`/floors/${floor.id}`, { method: 'DELETE' })
       applyBuilding(res.building)
@@ -206,10 +244,10 @@ export default function BuildingDetail() {
               </div>
             </div>
             <div className="bd-stats">
-              <Stat label="Total Floors" value={`${b.floors} / ${MAX_FLOORS}`} />
+              <Stat label="Total Floors" value={fmtNum(b.floors)} />
               <Stat label="Total Rooms" value={fmtNum(b.rooms)} />
               <Stat label="ACM Rooms" value={fmtNum(b.roomsWithAcm)} tone={b.roomsWithAcm ? 'critical' : undefined} />
-              <Stat label="Labelled Rooms" value={fmtNum(labelRows.length)} />
+              <Stat label="Mapped Rooms" value={fmtNum(mappedRooms)} />
             </div>
             <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={() => setEditBuilding(true)}><Pencil size={13} />Edit Building</button>
           </section>
@@ -237,14 +275,14 @@ export default function BuildingDetail() {
               {b.source !== 'app' && <p className="ad-sample"><Info size={13} />Building, floor and room figures are sample data.</p>}
             </section>
             <section className="u-card">
-              <header className="u-card-head"><h2>Floors ({floors.length} of {MAX_FLOORS})</h2>
+              <header className="u-card-head"><h2>Floors ({floors.length})</h2>
                 <Link className="u-btn u-btn-outline u-btn-sm" to={`${buildingsUrl}/${buildingId}/floors`}>Manage Floors</Link></header>
               <ul className="bd-floorlist">
                 {[...floors].reverse().map((f) => (
                   <li key={f.id}>
-                    <button type="button" onClick={() => { navigate(`${buildingsUrl}/${buildingId}/floors`); openFloor(f) }}>
+                    <button type="button" onClick={() => openFloor(f.id)}>
                       <span className="bd-fnum">{f.number}</span>
-                      <span><strong>{f.name}</strong><small>{fmtNum(f.rooms)} rooms · {fmtNum(f.acmRooms)} with ACM · {f.labels.length} labelled</small></span>
+                      <span><strong>{f.name}</strong><small>{fmtNum(f.rooms)} rooms · {fmtNum(f.acmRooms)} with ACM · {f.roomStats?.mapped ?? 0} mapped on plan</small></span>
                       <AcmBadge status={f.acmStatus} />
                     </button>
                   </li>
@@ -262,30 +300,29 @@ export default function BuildingDetail() {
                 <label className="u-search"><Search size={15} />
                   <input type="search" placeholder="Search floors…" value={query} onChange={(e) => setQuery(e.target.value)} aria-label="Search floors" />
                 </label>
-                <button type="button" className="u-btn u-btn-primary" disabled={!floors || isFull} onClick={() => setPanel({ mode: 'add' })}
-                  title={isFull ? `This building already has the maximum of ${MAX_FLOORS} floors` : undefined}><Plus size={16} />Add Floor</button>
+                <button type="button" className="u-btn u-btn-primary" disabled={!floors} onClick={() => setPanel({ mode: 'add' })}
+                  ><Plus size={16} />Add Floor</button>
               </div>
             </header>
-            {isFull && <p className="b-note bd-max"><Info size={14} />{b.name} has {MAX_FLOORS} floors, the maximum. Edit or delete a floor to change it.</p>}
             <div className="u-table-wrap">
               <table className="u-table c-table b-table">
                 <thead>
                   <tr><th>Floor No.</th><th>Name</th><th className="c-num">Total Rooms</th><th className="c-num">ACM Rooms</th>
-                    <th className="c-num b-col-acmrooms">Labelled</th><th>Status</th><th className="b-col-actions">Actions</th></tr>
+                    <th className="c-num b-col-acmrooms">Mapped Rooms</th><th>Status</th><th className="b-col-actions">Actions</th></tr>
                 </thead>
                 <tbody>
                   {visibleFloors.map((f) => (
                     <tr key={f.id} className={f.id === panel?.floorId ? 'selected' : ''} tabIndex={0}
-                      onClick={() => openFloor(f)} onKeyDown={(e) => { if (e.key === 'Enter') openFloor(f) }}>
+                      onClick={() => openFloor(f.id)} onKeyDown={(e) => { if (e.key === 'Enter') openFloor(f.id) }}>
                       <td><span className="bd-fnum">{f.number}</span></td>
                       <td><strong>{f.name}</strong>{f.planImage && <small className="p-sub">Plan: {f.planImage.name}</small>}</td>
                       <td className="c-num">{fmtNum(f.rooms)}</td>
                       <td className="c-num">{fmtNum(f.acmRooms)}</td>
-                      <td className="c-num b-col-acmrooms">{f.labels.length}</td>
+                      <td className="c-num b-col-acmrooms">{f.roomStats?.mapped ?? 0}{f.roomStats?.acmPresent ? <small className="p-sub">{f.roomStats.acmPresent} with ACM</small> : null}</td>
                       <td><AcmBadge status={f.acmStatus} /></td>
                       <td className="b-col-actions">
                         <span className="b-actions">
-                          <button type="button" className="u-row-btn" title="View" aria-label={`View ${f.name}`} onClick={(e) => { e.stopPropagation(); openFloor(f) }}><Eye size={14} /></button>
+                          <button type="button" className="u-row-btn" title="Open floor plan & rooms" aria-label={`Open ${f.name} floor plan`} onClick={(e) => { e.stopPropagation(); openFloor(f.id) }}><Eye size={14} /></button>
                           <button type="button" className="u-row-btn" title="Edit" aria-label={`Edit ${f.name}`} onClick={(e) => { e.stopPropagation(); setPanel({ mode: 'edit', floorId: f.id }) }}><Pencil size={14} /></button>
                           <button type="button" className="u-row-btn danger" title={floors.length <= 1 ? 'A building needs at least one floor' : 'Delete'} disabled={floors.length <= 1}
                             aria-label={`Delete ${f.name}`} onClick={(e) => { e.stopPropagation(); deleteFloor(f) }}><Trash2 size={14} /></button>
@@ -301,25 +338,26 @@ export default function BuildingDetail() {
           </section>
         )}
 
-        {b && floors && (tabSlug === 'rooms' || tabSlug === 'acm') && (
+        {b && (tabSlug === 'rooms' || tabSlug === 'acm') && (
           <section className="u-card">
             <header className="u-card-head">
-              <h2>{tabSlug === 'acm' ? 'ACM Materials' : `Labelled Rooms (${labelRows.length})`}</h2>
+              <h2>{tabSlug === 'acm' ? `ACM Materials (${tabRooms?.materials.length ?? '…'})` : `Rooms (${tabRooms?.rooms.length ?? '…'})`}</h2>
               <span className="u-muted u-small">
-                {tabSlug === 'acm'
-                  ? `${labelRows.filter((r) => r.label.acmStatus !== 'No ACM').length} locations · ${labelRows.filter((r) => /Damaged/.test(r.label.condition)).length} damaged`
-                  : `${fmtNum(b.rooms)} rooms in total across ${floors.length} floor${floors.length > 1 ? 's' : ''}`}
+                {tabRooms && (tabSlug === 'acm'
+                  ? `${tabRooms.materials.filter((m) => m.acmStatus === 'ACM Present').length} confirmed · ${tabRooms.materials.filter((m) => m.acmStatus === 'Assumed ACM').length} assumed · ${tabRooms.materials.filter((m) => m.acmStatus !== 'No ACM' && m.riskRanking === 'High').length} high risk`
+                  : `${fmtNum(tabRooms.rooms.length)} mapped of ${fmtNum(b.rooms)} rooms in the building`)}
               </span>
             </header>
-            <LabelTable rows={tabSlug === 'acm' ? labelRows.filter((r) => r.label.acmStatus !== 'No ACM') : labelRows} acmOnly={tabSlug === 'acm'} onOpen={openFloor} />
+            {!tabRooms ? <p className="u-muted u-small">Loading…</p> : tabSlug === 'acm'
+              ? <MaterialsTable materials={tabRooms.materials} onOpen={openFloor} />
+              : <RoomsTable rooms={tabRooms.rooms} onOpen={openFloor} />}
             <p className="ad-sample"><Info size={13} />
               {tabSlug === 'acm'
-                ? 'Damaged or significantly damaged ACM needs a response action under AHERA. Label rooms on the floor plans (Floors tab) to track material and condition.'
-                : 'Rooms appear here once they are labelled on a floor plan. Click a row to see it on the plan.'}
+                ? 'Damaged or friable ACM with a high risk ranking needs a response action under AHERA. Click a row to open the room on its floor plan.'
+                : 'Rooms come from each floor plan (detected, drawn or sample layout). Click a row to open it on the plan and add ACM details.'}
             </p>
           </section>
         )}
-
         {b && tabSlug === 'inspections' && (
           <section className="u-card">
             <header className="u-card-head">
@@ -341,15 +379,16 @@ export default function BuildingDetail() {
       {panel && b && floors && (panel.mode === 'add' || panelFloor) && (
         <>
           <div className="u-drawer-backdrop" onClick={closePanel} />
-          <FloorPanel key={`${panel.mode}-${panel.floorId ?? 'new'}-${panel.labelId ?? ''}`} mode={panel.mode} floor={panelFloor}
-            buildingId={buildingId} buildings={current.buildings} floors={floors} initialLabelId={panel.labelId}
-            onClose={closePanel} onEdit={(f) => setPanel({ mode: 'edit', floorId: f.id })} onSaved={onFloorSaved} />
+          <FloorPanel key={`${panel.mode}-${panel.floorId ?? 'new'}`} mode={panel.mode} floor={panelFloor}
+            buildingId={buildingId} buildings={current.buildings} floors={floors}
+            onClose={closePanel} onSaved={onFloorSaved} />
         </>
       )}
       {editBuilding && b && (
         <BuildingForm school={s} building={b} existing={current.buildings} onClose={closeBuildingForm}
           onSaved={(saved) => { applyBuilding(saved); setEditBuilding(false); setToast({ kind: 'success', text: `Saved ${saved.name}` }) }} />
       )}
+      {confirmDialog}
       {toast && (
         <div className={`u-toast ${toast.kind}`} role="status">
           {toast.kind === 'success' ? <CircleCheck size={16} /> : <CircleAlert size={16} />}

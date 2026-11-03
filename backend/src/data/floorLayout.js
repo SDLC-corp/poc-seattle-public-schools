@@ -39,7 +39,7 @@ export function floorLayout(floor) {
   const used = new Map();
 
   const nameFor = () => {
-    if (floor.number === 1 && groundIdx < GROUND_ROOMS.length && rand() < 0.45) return GROUND_ROOMS[groundIdx++];
+    if (floor.number === 0 && groundIdx < GROUND_ROOMS.length && rand() < 0.45) return GROUND_ROOMS[groundIdx++];
     if (rand() < 0.62) return `Classroom ${floor.number}${String(classroom++).padStart(2, '0')}`;
     const base = OTHER_ROOMS[Math.floor(rand() * OTHER_ROOMS.length)];
     const n = (used.get(base) ?? 0) + 1;
@@ -69,7 +69,7 @@ export function floorLayout(floor) {
     width: PLAN_W,
     depth: PLAN_D,
     corridor: { x: 0, y: CORRIDOR_Y, w: PLAN_W, h: CORRIDOR_H },
-    stairs: { x: stairsX, y: bottomY, w: STAIRS_W, h: bottomH, label: floor.number === 1 ? 'Lobby / Entrance' : 'Stairs' },
+    stairs: { x: stairsX, y: bottomY, w: STAIRS_W, h: bottomH, label: floor.number === 0 ? 'Lobby / Entrance' : 'Stairs' },
     rooms,
     sample: true,
   };

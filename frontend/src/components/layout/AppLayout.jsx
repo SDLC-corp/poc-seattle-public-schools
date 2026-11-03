@@ -6,6 +6,8 @@ import './layout.css'
 
 const STORAGE_KEY = 'sidebar-collapsed'
 const MOBILE_QUERY = '(max-width: 768px)'
+// Wide working screens that start with the sidebar collapsed (Floor Plan & ACM Mapping)
+const WIDE_ROUTES = [/^\/schools\/[^/]+\/buildings\/[^/]+\/floors\/[^/]+/]
 
 function readCollapsed() {
   try {
@@ -21,6 +23,17 @@ export default function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const mainRef = useRef(null)
   const { pathname } = useLocation()
+
+  // On a wide screen the sidebar is collapsed until expanded there; the saved preference is left alone
+  // and applies again on the next page (render-time reset when entering a wide screen, no effect needed)
+  const wide = WIDE_ROUTES.some((r) => r.test(pathname))
+  const [wideOpen, setWideOpen] = useState(false)
+  const [wasWide, setWasWide] = useState(wide)
+  if (wasWide !== wide) {
+    setWasWide(wide)
+    setWideOpen(false)
+  }
+  const railCollapsed = wide ? !wideOpen : collapsed
 
   useEffect(() => {
     try {
@@ -38,6 +51,7 @@ export default function AppLayout() {
   const toggleSidebar = () => {
     // On small screens the sidebar is an overlay drawer instead of a collapsing rail
     if (window.matchMedia(MOBILE_QUERY).matches) setMobileOpen((o) => !o)
+    else if (wide) setWideOpen((o) => !o)
     else setCollapsed((c) => !c)
   }
 
@@ -49,10 +63,10 @@ export default function AppLayout() {
       />
       <div className="app-body">
         <Sidebar
-          collapsed={collapsed}
+          collapsed={railCollapsed}
           mobileOpen={mobileOpen}
           onNavigate={() => setMobileOpen(false)}
-          onExpand={() => setCollapsed(false)}
+          onExpand={() => (wide ? setWideOpen(true) : setCollapsed(false))}
         />
         {mobileOpen && <div className="sidebar-backdrop" onClick={() => setMobileOpen(false)} />}
         <main ref={mainRef} className="app-main">

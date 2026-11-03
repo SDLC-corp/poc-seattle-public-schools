@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
 import { CATEGORIES, programById } from './trainingPrograms.js';
+import { writeJson } from './atomicWrite.js';
 
 const FILE = new URL('../../data/personnel.json', import.meta.url);
 export const DUE_SOON_DAYS = 60;
@@ -9,7 +9,7 @@ const DAY = 86400000;
 let people = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')).people : [];
 let writing = Promise.resolve();
 const persist = () => {
-  writing = writing.then(() => writeFile(FILE, JSON.stringify({ people }, null, 2)));
+  writing = writing.then(() => writeJson(FILE, { people }));
   return writing;
 };
 

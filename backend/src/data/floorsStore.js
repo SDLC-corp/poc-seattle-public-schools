@@ -1,10 +1,11 @@
 import { existsSync, readFileSync, mkdirSync } from 'node:fs';
-import { writeFile, unlink } from 'node:fs/promises';
+import { unlink } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { buildings, updateBuilding } from './store.js';
 import { floorLayout } from './floorLayout.js';
-import { FLOOR_NAMES } from './buildingGeometry.js';
+import { floorName } from './buildingGeometry.js';
+import { writeJson } from './atomicWrite.js';
 
 const FILE = new URL('../../data/floors.json', import.meta.url);
 export const PLAN_DIR = fileURLToPath(new URL('../../uploads/floorplans/', import.meta.url));
@@ -14,7 +15,7 @@ const doc = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')) : { floors
 let floors = doc.floors;
 let writing = Promise.resolve();
 const persist = () => {
-  writing = writing.then(() => writeFile(FILE, JSON.stringify({ ...doc, floors }, null, 2)));
+  writing = writing.then(() => writeJson(FILE, { ...doc, floors }));
   return writing;
 };
 
@@ -23,7 +24,7 @@ const ACM_RANK = { 'ACM Present': 2, 'Assumed ACM': 1, 'No ACM': 0 };
 // API shape: adds the sample layout and the plan image URL (cache-busted)
 export const present = (f) => ({
   ...f,
-  layout: floorLayout(f),
+  layout: f.derivedCounts ? null : floorLayout(f), // app-added floors have no sample layout
   planUrl: f.planImage ? `/api/floors/${f.id}/plan?v=${encodeURIComponent(f.planImage.uploadedAt)}` : null,
 });
 
@@ -56,8 +57,8 @@ export async function seedFloors(building) {
       id: `${building.id}-f${i + 1}`,
       buildingId: building.id,
       schoolId: building.schoolId,
-      number: i + 1,
-      name: FLOOR_NAMES[i],
+      number: i, // 0 = ground floor
+      name: floorName(i),
       rooms: share(building.rooms),
       acmRooms,
       acmStatus: acmRooms ? building.acmStatus : 'No ACM',

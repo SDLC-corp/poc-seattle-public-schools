@@ -10,13 +10,16 @@
     "scrape:schools": "node scripts/scrape-schools.js",
     "generate:buildings": "node scripts/generate-buildings.js",
     "generate:floors": "node scripts/generate-floors.js",
+    "generate:rooms": "node scripts/generate-rooms.js",
     "generate:users": "node scripts/generate-users.js",
     "generate:audit": "node scripts/generate-audit.js",
     "generate:documents": "node scripts/generate-documents.js",
     "generate:notifications": "node scripts/generate-notifications.js",
     "generate:inspections": "node scripts/generate-inspections.js",
     "generate:air": "node scripts/generate-air-monitoring.js",
-    "generate:personnel": "node scripts/generate-personnel.js"
+    "generate:personnel": "node scripts/generate-personnel.js",
+    "generate:surveillance": "node scripts/generate-surveillance.js",
+    "generate:inspection-records": "node scripts/generate-inspection-records.js"
   },
   "dependencies": {
     "cors": "^2.8.6",

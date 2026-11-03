@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
+import { writeJson } from './atomicWrite.js';
 
 const AUDIT_FILE = new URL('../../data/audit.json', import.meta.url);
 
@@ -14,7 +14,7 @@ let entries = existsSync(AUDIT_FILE) ? JSON.parse(readFileSync(AUDIT_FILE, 'utf8
 // Serialise writes so concurrent requests can't interleave file writes
 let writing = Promise.resolve();
 const persist = () => {
-  writing = writing.then(() => writeFile(AUDIT_FILE, JSON.stringify({ entries }, null, 2))).catch(() => {});
+  writing = writing.then(() => writeJson(AUDIT_FILE, { entries })).catch(() => {});
   return writing;
 };
 

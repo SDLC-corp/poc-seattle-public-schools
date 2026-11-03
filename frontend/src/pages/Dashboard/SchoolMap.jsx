@@ -10,27 +10,39 @@ maplibregl.setWorkerUrl(maplibreWorkerUrl)
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
 
+// City buildings without district records: neutral light grey, a little darker as they get taller,
+// so the coloured school buildings stand out
+const CITY_GREY = ['interpolate', ['linear'], ['coalesce', ['get', 'render_height'], 0], 0, '#f1f1ef', 40, '#e2e2e0', 150, '#d0d0ce']
+
 // Basemaps. OpenFreeMap needs no key; satellite needs a MapTiler key in frontend/.env
 const BASEMAPS = [
   {
     id: 'streets', label: 'Streets',
     url: 'https://tiles.openfreemap.org/styles/liberty',
-    cityBuildings: ['interpolate', ['linear'], ['coalesce', ['get', 'render_height'], 0], 0, '#ece6dd', 40, '#ddd5c9', 150, '#c9c0b3'],
+    cityBuildings: CITY_GREY,
     labelColor: '#1c2b40', labelHalo: '#ffffff',
   },
   {
     id: 'light', label: 'Light',
     url: 'https://tiles.openfreemap.org/styles/positron',
-    cityBuildings: ['interpolate', ['linear'], ['coalesce', ['get', 'render_height'], 0], 0, '#e4e8ed', 60, '#cdd4dc'],
+    cityBuildings: CITY_GREY,
     labelColor: '#1c2b40', labelHalo: '#ffffff',
   },
   ...(MAPTILER_KEY ? [{
     id: 'satellite', label: 'Satellite',
     url: `https://api.maptiler.com/maps/hybrid/style.json?key=${MAPTILER_KEY}`,
-    cityBuildings: ['interpolate', ['linear'], ['coalesce', ['get', 'render_height'], 0], 0, '#e3e6ea', 60, '#c9ced6'],
+    cityBuildings: CITY_GREY,
     labelColor: '#ffffff', labelHalo: 'rgba(0, 0, 0, 0.75)',
   }] : []),
 ]
+
+// Map palette for compliance status (pins and 3D school buildings): muted blue / sage / tan,
+// so coloured campuses read clearly against the grey city. `hover` is a lighter tint.
+const MAP_STATUS = {
+  compliant: { color: '#6e9475', hover: '#86ab8c' },
+  dueSoon: { color: '#b59668', hover: '#c9ad82' },
+  overdue: { color: '#3b6aa0', hover: '#5585bd' },
+}
 
 const SEATTLE = [-122.335, 47.61]
 const PITCH_3D = 55
@@ -38,21 +50,17 @@ const BUILDINGS_MIN_ZOOM = 14
 const LABEL_FONT = ['Noto Sans Bold'] // served by both OpenFreeMap and MapTiler
 const STORAGE_KEY = 'school-map-basemap'
 
-// MapLibre paint properties can't read CSS variables, so resolve them once
-const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim()
 const statusColor = () => [
   'match', ['get', 'status'],
-  'compliant', cssVar('--status-good'),
-  'dueSoon', cssVar('--status-warning'),
-  cssVar('--status-critical'),
+  'compliant', MAP_STATUS.compliant.color,
+  'dueSoon', MAP_STATUS.dueSoon.color,
+  MAP_STATUS.overdue.color,
 ]
-// Deeper tones of the same status hues for 3D walls, so lighting reads as shading
-// rather than flat neon; hover lifts them back toward the pin colour.
 const buildingColor = (hover) => [
   'match', ['get', 'status'],
-  'compliant', hover ? '#3dbb47' : '#239a3a',
-  'dueSoon', hover ? '#ffc23d' : '#e79a16',
-  hover ? '#e05a5a' : '#c23a3a',
+  'compliant', hover ? MAP_STATUS.compliant.hover : MAP_STATUS.compliant.color,
+  'dueSoon', hover ? MAP_STATUS.dueSoon.hover : MAP_STATUS.dueSoon.color,
+  hover ? MAP_STATUS.overdue.hover : MAP_STATUS.overdue.color,
 ]
 
 function readBasemap() {
@@ -91,7 +99,7 @@ function buildingsGeoJson(buildings) {
         properties: {
           id: b.id, schoolId: b.schoolId, name: b.name, schoolName: b.schoolName, code: b.code,
           yearBuilt: b.yearBuilt, floors: b.floors, areaSqFt: b.areaSqFt, heightM: b.heightM,
-          presumedAcm: b.presumedAcm, status: b.status,
+          presumedAcm: b.presumedAcm, status: b.status, acmStatus: b.acmStatus, roomsWithAcm: b.roomsWithAcm, rooms: b.rooms,
         },
       })),
   }
@@ -334,7 +342,10 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
         rows: [
           ['Built', p.yearBuilt],
           ['Floors', p.floors],
+          ['Height', p.heightM ? `${p.heightM} m` : null],
           ['Area', `${Number(p.areaSqFt).toLocaleString('en-US')} sq ft`],
+          ['ACM status', p.acmStatus || 'Not assessed'],
+          ['Rooms with ACM', p.rooms ? `${p.roomsWithAcm ?? 0} of ${p.rooms}` : null],
           ['Asbestos', p.presumedAcm ? 'Presumed (pre-1981)' : 'Not presumed'],
         ],
         status: p.status,
@@ -480,7 +491,7 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
 
       <ul className="map-legend">
         {Object.entries(STATUS).map(([key, s]) => (
-          <li key={key}><span className="map-legend-dot" style={{ background: s.color }} />{s.label}</li>
+          <li key={key}><span className="map-legend-dot" style={{ background: MAP_STATUS[key].color }} />{s.label}</li>
         ))}
       </ul>
     </div>

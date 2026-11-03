@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
 import { schools, getSchoolBuildings } from './store.js';
+import { writeJson } from './atomicWrite.js';
 
 const FILE = new URL('../../data/inspections.json', import.meta.url);
 const DAY = 86400000;
@@ -13,7 +13,7 @@ export const SURVEILLANCE_INTERVAL_DAYS = 182; // periodic surveillance every 6 
 let inspections = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')).inspections : [];
 let writing = Promise.resolve();
 const persist = () => {
-  writing = writing.then(() => writeFile(FILE, JSON.stringify({ inspections }, null, 2)));
+  writing = writing.then(() => writeJson(FILE, { inspections }));
   return writing;
 };
 

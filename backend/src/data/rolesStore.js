@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
+import { writeJson } from './atomicWrite.js';
 import {
   defaultRoles, permissions, TONES, ACCESS_SCOPES, SYSTEM_ROLE_ID, SYSTEM_ROLE_REQUIRED,
 } from './roleDefaults.js';
@@ -12,7 +12,7 @@ let roles = existsSync(ROLES_FILE)
   ? JSON.parse(readFileSync(ROLES_FILE, 'utf8')).roles
   : structuredClone(defaultRoles);
 
-const persist = () => writeFile(ROLES_FILE, JSON.stringify({ roles }, null, 2));
+const persist = () => writeJson(ROLES_FILE, { roles });
 
 export const getRoles = () => roles.map((r) => ({ ...r, system: r.id === SYSTEM_ROLE_ID }));
 export const getRole = (id) => getRoles().find((r) => r.id === id);

@@ -1,7 +1,8 @@
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
-import { writeFile, unlink } from 'node:fs/promises';
+import { unlink } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { writeJson } from './atomicWrite.js';
 
 const DOCS_FILE = new URL('../../data/documents.json', import.meta.url);
 export const UPLOAD_DIR = fileURLToPath(new URL('../../uploads/', import.meta.url));
@@ -42,7 +43,7 @@ export const MAX_UPLOAD_BYTES = 25 * 1024 * 1024;
 let docs = existsSync(DOCS_FILE) ? JSON.parse(readFileSync(DOCS_FILE, 'utf8')).documents : [];
 let writing = Promise.resolve();
 const persist = () => {
-  writing = writing.then(() => writeFile(DOCS_FILE, JSON.stringify({ documents: docs }, null, 2)));
+  writing = writing.then(() => writeJson(DOCS_FILE, { documents: docs }));
   return writing;
 };
 

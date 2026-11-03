@@ -1,0 +1,30 @@
+// Badge tones for the inspection screens (dashboard .tone-* classes)
+export const STATE_TONE = { scheduled: 'primary', draft: 'warning', submitted: 'violet', approved: 'good', returned: 'warning' }
+// List status (server: inspectionMeta.statusOf)
+export const STATUS_TONE = { scheduled: 'primary', inProgress: 'warning', pendingReview: 'violet', actionRequired: 'critical', completed: 'good' }
+export const CONDITION_TONE = { Good: 'good', Damaged: 'warning', 'Significantly Damaged': 'critical', 'Not Assessed': 'neutral' }
+export const PRIORITY_TONE = { Low: 'good', Medium: 'warning', High: 'critical', Critical: 'critical' }
+export const CHANGE_TONE = { Improved: 'good', Unchanged: 'neutral', Deteriorated: 'critical', 'First Assessment': 'primary' }
+export const ACTION_TONE = { Pending: 'warning', 'In Progress': 'primary', Completed: 'good' }
+
+const RANK = { Good: 0, Damaged: 1, 'Significantly Damaged': 2 }
+// Same rule as the server (backend/src/data/inspectionMeta.js)
+export const conditionChange = (previous, current) => {
+  if (!previous || !current || RANK[previous] === undefined) return 'First Assessment'
+  const d = RANK[current] - RANK[previous]
+  return d > 0 ? 'Deteriorated' : d < 0 ? 'Improved' : 'Unchanged'
+}
+
+// Form sections (ids are anchors for the section index)
+export const SECTIONS = [
+  { id: 'location', n: 1, title: 'School & Location Details' },
+  { id: 'acm', n: 2, title: 'ACM Material Details' },
+  { id: 'condition', n: 3, title: 'Material Condition Assessment' },
+  { id: 'checklist', n: 4, title: 'Inspection Checklist' },
+  { id: 'sampling', n: 5, title: 'Sampling & Laboratory Details' },
+  { id: 'risk', n: 6, title: 'Risk Assessment & Recommendations' },
+  { id: 'documents', n: 7, title: 'Photos & Documents' },
+  { id: 'comments', n: 8, title: 'Comments & Observations' },
+  { id: 'actions', n: 9, title: 'Action Items' },
+  { id: 'verification', n: 10, title: 'Verification & Signatures' },
+]

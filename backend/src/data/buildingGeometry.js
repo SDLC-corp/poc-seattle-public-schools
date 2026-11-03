@@ -1,7 +1,11 @@
 // Shared by scripts/generate-buildings.js and buildingsStore.js (buildings added in the app)
 export const MAX_FLOORS = 3;
 export const ACM_STATUSES = ['ACM Present', 'Assumed ACM', 'No ACM'];
-export const FLOOR_NAMES = ['Ground Floor', 'Second Floor', 'Third Floor'];
+// Floors are numbered from 0 (ground floor). Suggested names: Ground, First, Second… then "Floor 11".
+const ORDINALS = ['Ground', 'First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth'];
+export const floorName = (n) => (ORDINALS[n] ? `${ORDINALS[n]} Floor` : `Floor ${n}`);
+// Room numbers: floor prefix + 2 digits; the ground floor (0) uses G — G01, G02…, 101…, 201…
+export const roomNumber = (floorNumber, n) => `${floorNumber === 0 ? 'G' : floorNumber}${String(n).padStart(2, '0')}`;
 // AHERA physical-condition categories for ACM (plus "Not assessed" for assumed material)
 export const ACM_CONDITIONS = ['Good', 'Damaged', 'Significantly Damaged', 'Not assessed'];
 // EPA treats buildings constructed before 1981 as presumed to contain asbestos

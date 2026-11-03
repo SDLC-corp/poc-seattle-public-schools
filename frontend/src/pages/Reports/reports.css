@@ -1,0 +1,179 @@
+/* Reports & Analytics. KPI tiles reuse the dashboard's .kpi-card/.tone-*, controls the shared u-* styles,
+   filter fields and sort buttons audit.css (.a-field, .a-sort). */
+
+.rp-page { display: flex; flex-direction: column; gap: 14px; max-width: 1700px; margin: 0 auto; }
+.rp-title { margin: 0; font-size: 24px; font-weight: 600; color: var(--ink-1); }
+.rp-tabs .u-tab { text-decoration: none; white-space: nowrap; }
+.tone-neutral { --tone: var(--ink-2); --tone-bg: #eef1f5; --tone-ring: #dde3ea; }
+
+.rp-section-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.rp-section-head h2 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 19px; font-weight: 600; color: var(--ink-1); }
+.rp-section-head h2 svg { color: var(--primary); }
+
+/* Export dropdown */
+.rp-export { position: relative; }
+.rp-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 30;
+  display: grid;
+  min-width: 250px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(4, 43, 68, 0.14);
+}
+.rp-menu a, .rp-menu button {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--ink-1);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.rp-menu a:hover, .rp-menu button:hover, .rp-menu a:focus-visible, .rp-menu button:focus-visible { background: var(--primary-light); outline: none; }
+.rp-menu svg { margin-top: 1px; color: var(--primary); flex-shrink: 0; }
+.rp-menu small { display: block; color: var(--ink-2); font-size: 11px; }
+
+/* Report sub-tabs (pill style, under the section title) */
+.rp-subtabs { display: flex; gap: 4px; padding-bottom: 8px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+.rp-subtabs button {
+  padding: 7px 14px;
+  border: 0;
+  border-radius: 6px 6px 0 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--ink-1);
+  font: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.rp-subtabs button:hover { color: var(--primary); }
+.rp-subtabs button.active { background: var(--primary-light); color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+
+/* Filters */
+.rp-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  align-items: end;
+}
+.rp-dates { grid-column: span 2; min-width: 280px; }
+.rp-dates > div { display: flex; align-items: center; gap: 6px; }
+.rp-dates input { flex: 1; min-width: 0; height: 34px; }
+.rp-filter-actions { display: flex; gap: 6px; }
+.rp-filter-actions .u-btn { height: 34px; }
+.rp-filter-actions .u-btn-primary { flex: 1; }
+
+.rp-kpis { grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); }
+.rp-kpis .kpi-card:disabled { cursor: default; opacity: 1; transform: none; box-shadow: none; }
+
+/* Records + side list */
+.rp-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: start; }
+.rp-body.with-side { grid-template-columns: minmax(0, 1fr) 320px; }
+.rp-records-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.rp-records-head h3 { margin: 0; font-size: 16px; font-weight: 600; color: var(--ink-1); }
+.rp-records-head .u-search { width: min(360px, 100%); }
+
+.rp-table th { white-space: nowrap; }
+.rp-table th.num, .rp-table td.t-number { text-align: right; }
+.rp-table td { white-space: nowrap; }
+.rp-table td.t-long { white-space: normal; min-width: 260px; max-width: 460px; line-height: 1.4; }
+.rp-table td.t-wrap { white-space: normal; min-width: 140px; line-height: 1.35; }
+.rp-table td.t-mono { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 12px; }
+.rp-table tbody tr:hover td { background: #f8fafc; }
+
+.rp-badge {
+  display: inline-flex;
+  padding: 3px 9px;
+  border-radius: 10px;
+  background: var(--tone-bg);
+  color: var(--tone);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rp-side h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 16px; font-weight: 600; color: var(--ink-1); }
+.rp-side h3 svg { color: var(--primary); }
+.rp-side ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.rp-side li { display: flex; align-items: center; gap: 6px; padding: 4px 4px 4px 0; border: 1px solid var(--border); border-radius: 8px; }
+.rp-side li.current { border-color: var(--primary); background: var(--primary-light); }
+.rp-side-open {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  padding: 6px 10px;
+  border: 0;
+  background: none;
+  color: var(--ink-1);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.rp-side-open svg { color: var(--primary); flex-shrink: 0; }
+.rp-side-open:hover { color: var(--primary); }
+.rp-side-note { margin: 12px 0 0; font-size: 11px; line-height: 1.5; }
+
+.rp-empty { display: grid; justify-items: center; gap: 6px; padding: 48px 20px; text-align: center; color: var(--ink-2); }
+.rp-empty svg { color: var(--ink-3); }
+.rp-empty strong { color: var(--ink-1); font-size: 15px; }
+
+/* Overview */
+.rp-ov-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px; }
+.rp-ov-area { display: block; margin-bottom: 2px; font-size: 11px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink-3); }
+.rp-ov-card { display: flex; flex-direction: column; gap: 12px; }
+.rp-ov-card header { display: flex; gap: 10px; }
+.rp-ov-card h3 { margin: 0 0 2px; font-size: 14px; font-weight: 600; color: var(--ink-1); }
+.rp-ov-card p { margin: 0; font-size: 12px; line-height: 1.45; color: var(--ink-2); }
+.rp-ov-icon { display: grid; place-items: center; flex-shrink: 0; width: 34px; height: 34px; border-radius: 8px; background: var(--tone-bg); color: var(--tone); }
+.rp-ov-total { display: flex; align-items: baseline; gap: 8px; }
+.rp-ov-total strong { font-size: 24px; font-weight: 600; color: var(--ink-1); }
+.rp-ov-total span { font-size: 12px; color: var(--ink-2); }
+.rp-ov-stats { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 13px; }
+.rp-ov-stats li { display: flex; align-items: center; gap: 8px; }
+.rp-ov-stats i { width: 8px; height: 8px; border-radius: 50%; background: var(--tone); }
+.rp-ov-stats span { flex: 1; color: var(--ink-2); }
+.rp-ov-stats strong { font-weight: 600; color: var(--ink-1); }
+.rp-ov-card footer { display: flex; justify-content: space-between; gap: 8px; margin-top: auto; }
+.rp-ov-card footer a { text-decoration: none; gap: 6px; }
+.rp-ov-dl.u-btn-ghost:hover:not(:disabled) { color: var(--primary); background: var(--primary-light); }
+
+/* Below 1600px the table needs the full width: the report list moves under it as a compact grid */
+@media (max-width: 1600px) {
+  .rp-body.with-side { grid-template-columns: minmax(0, 1fr); }
+  .rp-side ul { grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); }
+}
+@media (max-width: 1300px) {
+  .rp-kpis { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+}
+@media (max-width: 640px) {
+  .rp-filters { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .rp-dates, .rp-filter-actions { grid-column: 1 / -1; min-width: 0; }
+  .rp-section-head { flex-wrap: wrap; }
+  /* Two tiles per row; the total spans the row */
+  .rp-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rp-kpis .kpi-card:first-child { grid-column: 1 / -1; }
+  .rp-kpis .kpi-label { white-space: normal; overflow: visible; line-height: 1.2; }
+  .rp-records-head .u-search { width: 100%; }
+}
+
+/* Print / Save as PDF: just the report */
+@media print {
+  .sidebar, .topbar, .rp-tabs, .rp-subtabs, .rp-filters, .rp-export, .rp-side, .rp-records-head .u-search, .u-pager nav, .u-page-size { display: none !important; }
+  .rp-body.with-side { grid-template-columns: 1fr; }
+  .rp-table td.t-long { max-width: none; }
+}

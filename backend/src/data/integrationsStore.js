@@ -1,5 +1,4 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
 import { createCipheriv, createDecipheriv, randomBytes, randomUUID } from 'node:crypto';
 import { INTEGRATIONS, integrationById } from './integrationDefs.js';
 import { buildings } from './store.js';
@@ -7,6 +6,7 @@ import { getAllFloors } from './floorsStore.js';
 import { getDocuments } from './documentsStore.js';
 import { getInspections } from './complianceStore.js';
 import { getRoles } from './rolesStore.js';
+import { writeJson } from './atomicWrite.js';
 
 const FILE = new URL('../../data/integrations.json', import.meta.url);
 const KEY_FILE = new URL('../../data/.integrations.key', import.meta.url);
@@ -76,7 +76,7 @@ if (!state) {
 }
 let writing = Promise.resolve();
 const persist = () => {
-  writing = writing.then(() => writeFile(FILE, JSON.stringify({ note: 'Integration settings. Secrets are AES-256-GCM encrypted.', integrations: state }, null, 2)));
+  writing = writing.then(() => writeJson(FILE, { note: 'Integration settings. Secrets are AES-256-GCM encrypted.', integrations: state }));
   return writing;
 };
 

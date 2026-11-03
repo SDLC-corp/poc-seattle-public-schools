@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
 import { GAP_M, PRESUMED_ACM_BEFORE, offset, rectangle, shape } from './buildingGeometry.js';
+import { writeJson } from './atomicWrite.js';
 
 const dataFile = (file) => new URL(`../../data/${file}`, import.meta.url);
 const load = (file) => JSON.parse(readFileSync(dataFile(file), 'utf8'));
@@ -14,9 +14,9 @@ export const getSchoolBuildings = (schoolId) => buildings.filter((b) => b.school
 
 let writing = Promise.resolve();
 const persist = () => {
-  writing = writing.then(() => writeFile(dataFile('buildings.json'), JSON.stringify({
+  writing = writing.then(() => writeJson(dataFile('buildings.json'), {
     ...buildingsDoc, count: buildings.length, buildings,
-  }, null, 2)));
+  }));
   return writing;
 };
 

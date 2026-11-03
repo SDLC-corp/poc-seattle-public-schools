@@ -1,5 +1,8 @@
 node_modules
+# Environment (API keys, secrets); the template is kept
 .env
+.env.*
+!.env.example
 uploads/
 # Encryption key for integration secrets
 data/.integrations.key

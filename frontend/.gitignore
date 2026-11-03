@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Environment (API keys, Entra IDs); the template is kept
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

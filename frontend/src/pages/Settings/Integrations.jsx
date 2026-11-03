@@ -6,6 +6,9 @@ import {
 import SearchSelect from '../../components/ui/SearchSelect'
 import Toggle from '../../components/ui/Toggle'
 import { request, fmtDateTime } from '../../lib/api'
+import { timeAgo } from '../../lib/timeAgo'
+import LiveConnections from './LiveConnections'
+import DatabaseAccessCard from './DatabaseAccessCard'
 import '../Users/users.css'
 
 // Fallback glyphs when no official logo file is present in /public/integrations/<id>.svg
@@ -16,18 +19,6 @@ const STATUS = {
   error: { label: 'Connection Error', icon: CircleX },
 }
 
-function timeAgo(iso) {
-  if (!iso) return '—'
-  const s = Math.round((Date.now() - Date.parse(iso)) / 1000)
-  if (s < 0) {
-    const m = Math.round(-s / 60)
-    return m < 60 ? `in ${m} min` : `in ${Math.round(m / 60)} h`
-  }
-  if (s < 60) return 'just now'
-  if (s < 3600) return `${Math.round(s / 60)} min ago`
-  if (s < 86400) return `${Math.round(s / 3600)} h ago`
-  return `${Math.round(s / 86400)} d ago`
-}
 const fmtDay = (iso) => (iso ? new Date(`${iso}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—')
 const maskId = (v) => (v ? `${v.slice(0, 8)}-••••-••••-${v.slice(-4)}` : '—')
 
@@ -89,6 +80,7 @@ function Details({ i }) {
 function IntegrationCard({ i, busy, onConfigure, onTest, onSync, onDisconnect }) {
   const [showHistory, setShowHistory] = useState(false)
   const [confirmOff, setConfirmOff] = useState(false)
+  const [now] = useState(() => Date.now())
   const connected = i.status === 'connected'
   const configured = i.status !== 'disconnected'
   const attention = i.status === 'error' || (connected && i.secretDaysLeft !== null && i.secretDaysLeft <= 30)
@@ -136,7 +128,12 @@ function IntegrationCard({ i, busy, onConfigure, onTest, onSync, onDisconnect })
         </div>
         <div>
           <span className="ig-k">Next Sync</span>
-          <span className="ig-v">{i.nextSync ? `${fmtDateTime(i.nextSync)} (every ${i.syncHours} h)` : <span className="ig-muted">{connected ? 'After the first sync' : 'Paused'}</span>}</span>
+          <span className="ig-v">
+            {!i.nextSync ? <span className="ig-muted">{connected ? 'After the first sync' : 'Paused'}</span>
+              // No background scheduler runs in the demo, so a due sync waits for "Sync Now"
+              : Date.parse(i.nextSync) < now ? <span className="ig-warn-text">Due since {fmtDateTime(i.nextSync)} — use Sync Now (every {i.syncHours} h)</span>
+                : `${fmtDateTime(i.nextSync)} (every ${i.syncHours} h)`}
+          </span>
         </div>
         {i.history.length > 0 && (
           <button type="button" className="ig-history-btn" onClick={() => setShowHistory((v) => !v)} aria-expanded={showHistory}>
@@ -327,34 +324,49 @@ export default function Integrations({ onToast }) {
   }
   const closeDialog = useCallback(() => setConfiguring(null), [])
 
-  if (error) return <div className="s-banner error">Couldn't load integrations ({error}).</div>
-  if (!data) return <div className="s-loading">Loading integrations…</div>
-
-  const list = data.integrations
+  // SQL Server is shown as "Microsoft Database Access — coming soon" instead of a configurable card
+  const list = (data?.integrations ?? []).filter((i) => i.id !== 'sql')
   const count = (st) => list.filter((i) => i.status === st).length
   const attention = list.filter((i) => i.status === 'error' || (i.status === 'connected' && i.secretDaysLeft !== null && i.secretDaysLeft <= 30)).length
   const lastSync = list.map((i) => i.lastSuccessfulSync?.at).filter(Boolean).sort().at(-1)
 
   return (
     <div className="ig">
-      {data.demo && (
-        <p className="ig-demo"><Info size={15} /><span><strong>Demo environment:</strong> credentials are validated and stored encrypted, but no requests are sent to Microsoft. Tests skip the live call and syncs are simulated from this app's data.</span></p>
-      )}
-      <div className="ig-summary">
-        <div className="ig-stat good"><CircleCheck size={18} /><strong>{count('connected')}</strong><span>Connected</span></div>
-        <div className="ig-stat muted"><MinusCircle size={18} /><strong>{count('disconnected')}</strong><span>Disconnected</span></div>
-        <div className="ig-stat bad"><TriangleAlert size={18} /><strong>{attention}</strong><span>Need Attention</span></div>
-        <div className="ig-stat"><RefreshCw size={18} /><strong>{lastSync ? timeAgo(lastSync) : '—'}</strong><span>Last Successful Sync</span></div>
-      </div>
-      <div className="ig-grid">
-        {list.map((i) => (
-          <IntegrationCard key={i.id} i={i} busy={busy[i.id]}
-            onConfigure={setConfiguring}
-            onTest={(x) => act(x, 'test', 'test')}
-            onSync={(x) => act(x, 'sync', 'sync', (r) => `${x.name}: ${r.lastSync.message} (simulated).`)}
-            onDisconnect={(x) => act(x, 'off', 'disconnect', () => `${x.name} disconnected. Stored credentials were deleted.`)} />
-        ))}
-      </div>
+      <LiveConnections />
+      <DatabaseAccessCard />
+
+      {/* Server-side (app-only) connections for background sync — admin settings, kept out of the way */}
+      <details className="ig-advanced">
+        <summary>
+          <Settings2 size={15} />
+          <span><strong>Advanced: server connections</strong><small>App registrations with client secrets for background sync{data ? ` · ${count('connected')} connected` : ''}</small></span>
+          <ChevronDown size={15} className="ig-adv-chev" />
+        </summary>
+        {error && <div className="s-banner error">Couldn't load integrations ({error}).</div>}
+        {!data && !error && <div className="s-loading">Loading integrations…</div>}
+        {data && (
+          <>
+            {data.demo && (
+              <p className="ig-demo"><Info size={15} /><span><strong>Demo environment:</strong> credentials are validated and stored encrypted, but no requests are sent to Microsoft. Tests skip the live call and syncs are simulated from this app's data.</span></p>
+            )}
+            <div className="ig-summary">
+              <div className="ig-stat good"><CircleCheck size={18} /><strong>{count('connected')}</strong><span>Connected</span></div>
+              <div className="ig-stat muted"><MinusCircle size={18} /><strong>{count('disconnected')}</strong><span>Disconnected</span></div>
+              <div className="ig-stat bad"><TriangleAlert size={18} /><strong>{attention}</strong><span>Need Attention</span></div>
+              <div className="ig-stat"><RefreshCw size={18} /><strong>{lastSync ? timeAgo(lastSync) : '—'}</strong><span>Last Successful Sync</span></div>
+            </div>
+            <div className="ig-grid">
+              {list.map((i) => (
+                <IntegrationCard key={i.id} i={i} busy={busy[i.id]}
+                  onConfigure={setConfiguring}
+                  onTest={(x) => act(x, 'test', 'test')}
+                  onSync={(x) => act(x, 'sync', 'sync', (r) => `${x.name}: ${r.lastSync.message} (simulated).`)}
+                  onDisconnect={(x) => act(x, 'off', 'disconnect', () => `${x.name} disconnected. Stored credentials were deleted.`)} />
+              ))}
+            </div>
+          </>
+        )}
+      </details>
       {configuring && (
         <ConfigureDialog i={configuring} onClose={closeDialog}
           onSaved={(view) => { replace(view); setConfiguring(null); onToast({ kind: 'success', text: `${view.name} connected.` }) }} />

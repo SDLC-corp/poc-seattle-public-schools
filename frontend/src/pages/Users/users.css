@@ -150,7 +150,8 @@
 .u-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 13px; color: var(--ink-1); }
 
 /* ---------- Table ---------- */
-.u-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
+/* position: relative keeps visually-hidden (.sr-only) header text inside the scroll box */
+.u-table-wrap { position: relative; overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
 .u-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .u-table th {
   padding: 9px 10px;

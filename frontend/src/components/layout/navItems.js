@@ -12,31 +12,15 @@ export const mainNav = [
     children: [
       { id: 'schools-list', label: 'Schools', path: '/schools/list' },
       { id: 'buildings', label: 'Buildings', path: '/schools/buildings' },
+      { id: 'floors', label: 'Floors', path: '/schools/floors' },
       { id: 'rooms', label: 'Rooms & Floor Plans', path: '/schools/rooms' },
+      { id: 'acm-materials', label: 'ACM Materials', path: '/schools/acm-materials' },
     ],
   },
-  {
-    id: 'acm', label: 'ACM Inventory', icon: Layers, path: '/acm',
-    children: [
-      { id: 'acm-locations', label: 'ACM Locations', path: '/acm/locations' },
-      { id: 'acm-materials', label: 'Material Types', path: '/acm/materials' },
-    ],
-  },
-  {
-    id: 'inspections', label: 'Inspections', icon: ClipboardCheck, path: '/inspections',
-    children: [
-      { id: 'inspections-upcoming', label: 'Upcoming', path: '/inspections/upcoming' },
-      { id: 'inspections-history', label: 'History', path: '/inspections/history' },
-    ],
-  },
+  { id: 'acm', label: 'ACM Inventory', icon: Layers, path: '/acm' },
+  { id: 'inspections', label: 'Inspections', icon: ClipboardCheck, path: '/inspections' },
   { id: 'management-plans', label: 'Management Plans', icon: FileText, path: '/management-plans' },
-  {
-    id: 'sampling', label: 'Sampling & Lab Results', icon: FlaskConical, path: '/sampling',
-    children: [
-      { id: 'samples', label: 'Samples', path: '/sampling/samples' },
-      { id: 'lab-results', label: 'Lab Results', path: '/sampling/lab-results' },
-    ],
-  },
+  { id: 'sampling', label: 'Sampling & Lab Results', icon: FlaskConical, path: '/sampling' },
   { id: 'surveillance', label: 'Surveillance', icon: ScanEye, path: '/surveillance' },
   { id: 'response-actions', label: 'Response Actions', icon: TriangleAlert, path: '/response-actions' },
   { id: 'operations', label: 'Operations & Maintenance', icon: Wrench, path: '/operations' },
@@ -46,13 +30,7 @@ export const mainNav = [
   // badgeKey: the sidebar shows a live count for this item (see Sidebar.jsx)
   { id: 'notifications', label: 'Notifications', icon: Bell, badgeKey: 'unreadNotifications', path: '/notifications' },
   { id: 'documents', label: 'Document Management', icon: FolderOpen, path: '/documents' },
-  {
-    id: 'reports', label: 'Reports & Analytics', icon: ChartLine, path: '/reports',
-    children: [
-      { id: 'reports-compliance', label: 'Compliance Reports', path: '/reports/compliance' },
-      { id: 'reports-analytics', label: 'Analytics', path: '/reports/analytics' },
-    ],
-  },
+  { id: 'reports', label: 'Reports & Analytics', icon: ChartLine, path: '/reports' },
 ]
 
 export const adminNav = [

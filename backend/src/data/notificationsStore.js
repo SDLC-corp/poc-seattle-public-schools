@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
+import { writeJson } from './atomicWrite.js';
 
 const FILE = new URL('../../data/notifications.json', import.meta.url);
 
@@ -9,7 +9,7 @@ export const PRIORITIES = ['high', 'medium', 'low'];
 let items = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')).notifications : [];
 let writing = Promise.resolve();
 const persist = () => {
-  writing = writing.then(() => writeFile(FILE, JSON.stringify({ notifications: items }, null, 2))).catch(() => {});
+  writing = writing.then(() => writeJson(FILE, { notifications: items })).catch(() => {});
   return writing;
 };
 

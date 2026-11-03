@@ -1,13 +1,8 @@
 // Main-thread side of room detection: scales the plan image down, sends its pixels to the
-// OpenCV worker (loaded on first use, ~11 MB) and resolves with the detected room polygons.
-const MAX_SIDE = 1400
-
-// How thick walls are and how wide doorways are, relative to the image's short side
-export const DETECTION_PRESETS = {
-  fine: { label: 'Thin walls', wall: 0.0025, gap: 0.035, minArea: 0.002 },
-  standard: { label: 'Standard', wall: 0.004, gap: 0.05, minArea: 0.004 },
-  bold: { label: 'Thick walls / wide doors', wall: 0.007, gap: 0.07, minArea: 0.008 },
-}
+// OpenCV worker (loaded on first use, ~11 MB) and resolves with the detected room polygons and tables.
+// Rooms are found at up to 1400 px; tables on a sharper copy at up to twice that, so small chair symbols keep their shape.
+const ROOM_SIDE = 1400
+const SHARP_SIDE = 2800
 
 let worker = null
 let seq = 0
@@ -32,10 +27,8 @@ function getWorker() {
   return worker
 }
 
-async function toImageData(source) {
-  const blob = source instanceof Blob ? source : await (await fetch(source)).blob()
-  const bitmap = await createImageBitmap(blob)
-  const scale = Math.min(1, MAX_SIDE / Math.max(bitmap.width, bitmap.height))
+function pixels(bitmap, maxSide) {
+  const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height))
   const w = Math.max(1, Math.round(bitmap.width * scale))
   const h = Math.max(1, Math.round(bitmap.height * scale))
   const canvas = document.createElement('canvas')
@@ -45,19 +38,28 @@ async function toImageData(source) {
   ctx.fillStyle = '#fff' // transparent PNGs: treat empty as paper
   ctx.fillRect(0, 0, w, h)
   ctx.drawImage(bitmap, 0, 0, w, h)
-  bitmap.close()
   return ctx.getImageData(0, 0, w, h)
 }
 
-/** source: File/Blob or same-origin image URL. Resolves { shapes, ms }. */
-export async function detectRooms(source, preset = 'standard') {
-  const imageData = await toImageData(source)
-  const { label: _label, ...options } = DETECTION_PRESETS[preset] ?? DETECTION_PRESETS.standard
+async function toImageData(source) {
+  const blob = source instanceof Blob ? source : await (await fetch(source)).blob()
+  const bitmap = await createImageBitmap(blob)
+  const imageData = pixels(bitmap, ROOM_SIDE)
+  const sharpData = pixels(bitmap, SHARP_SIDE)
+  const natural = { width: bitmap.width, height: bitmap.height }
+  bitmap.close()
+  return { imageData, sharpData, natural }
+}
+
+/** source: File/Blob or same-origin image URL. Resolves { shapes, tables, chairs, tablesAsRooms, ms, width, height } (natural image size). */
+export async function detectRooms(source) {
+  const { imageData, sharpData, natural } = await toImageData(source)
   const id = ++seq
-  return new Promise((resolve, reject) => {
+  const result = await new Promise((resolve, reject) => {
     pending.set(id, { resolve, reject })
-    getWorker().postMessage({ id, imageData, options }, [imageData.data.buffer])
+    getWorker().postMessage({ id, imageData, sharpData }, [imageData.data.buffer, sharpData.data.buffer])
   })
+  return { ...result, ...natural }
 }
 
 // Ray-casting point-in-polygon on flat [x0,y0,x1,y1,…] points

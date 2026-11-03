@@ -6,7 +6,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost:5000',
+      // API_TARGET lets a second dev setup point at another backend port
+      '/api': process.env.API_TARGET || 'http://localhost:5000',
     },
   },
 })

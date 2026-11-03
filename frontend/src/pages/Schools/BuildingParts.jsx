@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 import {
-  Building2, Layers, DoorOpen, TriangleAlert, ShieldCheck, ShieldQuestion, CircleCheck, Eye, Pencil, X,
+  Building2, Layers, DoorOpen, TriangleAlert, ShieldCheck, ShieldQuestion, CircleCheck, CircleDashed, Eye, Pencil, X,
   CalendarDays, FolderOpen, Info,
 } from 'lucide-react'
 import { buildingTotals, fmtNum, PRESUMED_ACM_BEFORE } from './buildingUtils'
@@ -9,6 +9,8 @@ const ACM_BADGE = {
   'ACM Present': { cls: 'present', icon: TriangleAlert },
   'Assumed ACM': { cls: 'assumed', icon: ShieldQuestion },
   'No ACM': { cls: 'none', icon: CircleCheck },
+  'Not Assessed': { cls: 'na', icon: CircleDashed },
+  'Not Yet Assessed': { cls: 'na', icon: CircleDashed },
 }
 
 export function AcmBadge({ status }) {

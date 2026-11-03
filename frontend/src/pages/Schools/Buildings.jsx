@@ -4,7 +4,7 @@ import SearchSelect from '../../components/ui/SearchSelect'
 import { request } from '../../lib/api'
 import { BuildingKpis, BuildingsTable, BuildingDetails } from './BuildingParts'
 import BuildingForm from './BuildingForm'
-import { ACM_FILTERS, MAX_FLOORS } from './buildingUtils'
+import { ACM_FILTERS } from './buildingUtils'
 import '../Users/users.css'
 import '../Compliance/compliance.css'
 import './schools.css'
@@ -40,6 +40,9 @@ export default function Buildings() {
     const names = new Map((buildings ?? []).map((b) => [b.schoolId, b.schoolName]))
     return [...names].sort((a, b) => a[1].localeCompare(b[1])).map(([value, label]) => ({ value, label }))
   }, [buildings])
+
+  // Floor-count filter options come from the data (buildings can have any number of floors)
+  const floorCounts = useMemo(() => [...new Set((buildings ?? []).map((b) => b.floors))].sort((a, b) => a - b), [buildings])
 
   const filtered = useMemo(() => {
     const term = query.trim().toLowerCase()
@@ -89,7 +92,7 @@ export default function Buildings() {
             <SearchSelect variant="field" label="ACM status" value={filters.acm} onChange={setFilter('acm')} searchable={false}
               options={[{ value: '', label: 'All ACM Statuses' }, ...Object.entries(ACM_FILTERS).map(([value, f]) => ({ value, label: f.label }))]} />
             <SearchSelect variant="field" label="Floors" value={filters.floors} onChange={setFilter('floors')} searchable={false}
-              options={[{ value: '', label: 'All Floors' }, ...Array.from({ length: MAX_FLOORS }, (_, i) => ({ value: String(i + 1), label: `${i + 1} floor${i ? 's' : ''}` }))]} />
+              options={[{ value: '', label: 'All Floors' }, ...floorCounts.map((n) => ({ value: String(n), label: `${n} floor${n === 1 ? '' : 's'}` }))]} />
             <button type="button" className="u-btn u-btn-outline" disabled={!filtersActive} onClick={() => { setFilters(DEFAULTS); setQuery(''); setPage(1) }}>
               <RotateCcw size={14} />Reset
             </button>

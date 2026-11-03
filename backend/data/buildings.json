@@ -1,6 +1,6 @@
 {
   "note": "MOCK DATA — generated from schools.json by scripts/generate-buildings.js",
-  "generatedAt": "2026-11-01T17:53:15.019Z",
+  "generatedAt": "2026-11-02T04:59:06.912Z",
   "count": 315,
   "buildings": [
     {
@@ -10,16 +10,16 @@
       "code": "ADAMSES-A",
       "name": "Main Building",
       "yearBuilt": 1951,
-      "floors": 1,
+      "floors": 6,
       "areaSqFt": 170034,
       "construction": "Wood Frame",
       "presumedAcm": true,
-      "rooms": 200,
+      "rooms": 268,
       "roomsWithAcm": 59,
       "acmStatus": "Assumed ACM",
-      "heightM": 5,
-      "widthM": 159,
-      "depthM": 99.4,
+      "heightM": 25,
+      "widthM": 64.9,
+      "depthM": 40.6,
       "location": {
         "lat": 47.673097,
         "lng": -122.392893
@@ -29,24 +29,24 @@
         "coordinates": [
           [
             [
-              -122.3939538,
-              47.6726503
+              -122.3933259,
+              47.6729146
             ],
             [
-              -122.3918326,
-              47.6726503
+              -122.3924601,
+              47.6729146
             ],
             [
-              -122.3918326,
-              47.6735433
+              -122.3924601,
+              47.6732794
             ],
             [
-              -122.3939538,
-              47.6735433
+              -122.3933259,
+              47.6732794
             ],
             [
-              -122.3939538,
-              47.6726503
+              -122.3933259,
+              47.6729146
             ]
           ]
         ]
@@ -11879,16 +11879,16 @@
       "code": "ROOSEVELTHS-B",
       "name": "Library Building",
       "yearBuilt": 1965,
-      "floors": 1,
+      "floors": 3,
       "areaSqFt": 14076,
       "construction": "Wood Frame",
       "presumedAcm": true,
-      "rooms": 17,
+      "rooms": 37,
       "roomsWithAcm": 3,
       "acmStatus": "ACM Present",
-      "heightM": 5,
-      "widthM": 45.7,
-      "depthM": 28.6,
+      "heightM": 13,
+      "widthM": 26.4,
+      "depthM": 16.5,
       "location": {
         "lat": 47.676571,
         "lng": -122.311923
@@ -11898,24 +11898,24 @@
         "coordinates": [
           [
             [
-              -122.3122279,
-              47.6764425
+              -122.3120991,
+              47.6764969
             ],
             [
-              -122.3116181,
-              47.6764425
+              -122.3117469,
+              47.6764969
             ],
             [
-              -122.3116181,
-              47.6766995
+              -122.3117469,
+              47.6766451
             ],
             [
-              -122.3122279,
-              47.6766995
+              -122.3120991,
+              47.6766451
             ],
             [
-              -122.3122279,
-              47.6764425
+              -122.3120991,
+              47.6764969
             ]
           ]
         ]

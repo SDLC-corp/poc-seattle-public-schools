@@ -15,7 +15,22 @@ export async function request(path, options = {}) {
   return body
 }
 
-export const initials = (name) => name.split(/\s+/).map((p) => p[0]).join('').slice(0, 2).toUpperCase()
+// Raw file upload (body = the file) with metadata in the query string; same error shape as request()
+export async function uploadFile(path, file, params = {}) {
+  const qs = new URLSearchParams({ name: file.name, ...params }).toString()
+  const res = await fetch(`/api${path}?${qs}`, {
+    method: 'POST', headers: { 'Content-Type': file.type || 'application/octet-stream' }, body: file,
+  })
+  const body = await res.json().catch(() => ({}))
+  if (!res.ok) {
+    const err = new Error(body.error || `HTTP ${res.status}`)
+    err.status = res.status
+    throw err
+  }
+  return body
+}
+
+export const initials =(name) => name.split(/\s+/).map((p) => p[0]).join('').slice(0, 2).toUpperCase()
 
 export const fmtDateTime = (iso) => (iso
   ? new Date(iso).toLocaleString('en-US', { month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })

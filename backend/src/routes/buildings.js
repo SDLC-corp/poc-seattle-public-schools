@@ -3,6 +3,7 @@ import { schools, buildings, getSchoolBuildings, addBuilding, updateBuilding } f
 import { MAX_FLOORS, ACM_STATUSES, PRESUMED_ACM_BEFORE } from '../data/buildingGeometry.js';
 import { logAudit, diff } from '../data/auditStore.js';
 import { seedFloors } from '../data/floorsStore.js';
+import { syncFloorRooms } from '../data/floorRoomsSync.js';
 
 const schoolById = new Map(schools.map((s) => [s.id, s]));
 const CONSTRUCTION = ['Concrete', 'Masonry', 'Steel Frame', 'Wood Frame', 'Modular'];
@@ -31,14 +32,18 @@ function validateBuilding(body, existing, schoolId) {
     errors.name = 'This school already has a building with that name';
   }
   if (!Number.isInteger(b.yearBuilt) || b.yearBuilt < 1850 || b.yearBuilt > THIS_YEAR) errors.yearBuilt = `Enter a year between 1850 and ${THIS_YEAR}`;
-  if (!Number.isInteger(b.floors) || b.floors < 1 || b.floors > MAX_FLOORS) errors.floors = `Floors must be 1 to ${MAX_FLOORS}`;
+  // Initial floors for a new building; afterwards floors are added one by one (no upper limit) in the Floors tab
+  if (!existing && (!Number.isInteger(b.floors) || b.floors < 1 || b.floors > MAX_FLOORS)) errors.floors = `Floors must be 1 to ${MAX_FLOORS}`;
   if (!Number.isInteger(b.areaSqFt) || b.areaSqFt < 200 || b.areaSqFt > 500000) errors.areaSqFt = 'Enter an area between 200 and 500,000 sq ft';
   if (!CONSTRUCTION.includes(b.construction)) errors.construction = 'Choose a construction type';
-  if (!Number.isInteger(b.rooms) || b.rooms < 1 || b.rooms > 1000) errors.rooms = 'Rooms must be 1 to 1,000';
-  if (!ACM_STATUSES.includes(b.acmStatus)) errors.acmStatus = 'Choose an ACM status';
-  if (b.acmStatus === 'No ACM') b.roomsWithAcm = 0;
-  else if (!Number.isInteger(b.roomsWithAcm) || b.roomsWithAcm < 1) errors.roomsWithAcm = 'Enter at least 1 room with ACM';
-  else if (b.roomsWithAcm > b.rooms) errors.roomsWithAcm = 'Can’t exceed the number of rooms';
+  // Rooms / ACM are entered once for a new building; after that they're totals of its floors (not validated here)
+  if (!existing) {
+    if (!Number.isInteger(b.rooms) || b.rooms < 1 || b.rooms > 1000) errors.rooms = 'Rooms must be 1 to 1,000';
+    if (!ACM_STATUSES.includes(b.acmStatus)) errors.acmStatus = 'Choose an ACM status';
+    if (b.acmStatus === 'No ACM') b.roomsWithAcm = 0;
+    else if (!Number.isInteger(b.roomsWithAcm) || b.roomsWithAcm < 1) errors.roomsWithAcm = 'Enter at least 1 room with ACM';
+    else if (b.roomsWithAcm > b.rooms) errors.roomsWithAcm = 'Can’t exceed the number of rooms';
+  }
   return { b, errors };
 }
 
@@ -82,7 +87,7 @@ router.post('/', async (req, res, next) => {
     const { b, errors } = validateBuilding(req.body ?? {}, null, school.id);
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Invalid building', fields: errors });
     const added = await addBuilding(school, b);
-    await seedFloors(added);
+    for (const floor of await seedFloors(added)) await syncFloorRooms(floor); // sample-layout rooms per floor
     const created = buildings.find((x) => x.id === added.id); // totals re-synced from its floors
     logAudit(req, {
       action: 'create', module: 'Schools & Facilities', recordId: created.id, link: `/schools/${school.id}/buildings`,

@@ -1,0 +1,12 @@
+/* In-app confirmation dialog (ConfirmDialog.jsx) */
+.cd-backdrop { z-index: 80; }
+.cd-dialog { position: relative; width: min(440px, 100%); }
+.cd-body { display: flex; gap: 14px; padding: 22px 22px 18px; }
+.cd-icon { display: grid; place-items: center; flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; background: var(--primary-light); color: var(--primary); }
+.cd-dialog.danger .cd-icon { background: #fdeeee; color: #c03030; }
+.cd-body h2 { margin: 2px 28px 6px 0; font-size: 16px; font-weight: 600; color: var(--ink-1); }
+.cd-body p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+.cd-body .cd-detail { margin-top: 8px; padding: 8px 10px; border-radius: 6px; background: #fff6e6; color: #7a4d00; font-size: 12px; }
+.cd-close { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 6px; background: none; color: var(--ink-3); cursor: pointer; }
+.cd-close:hover { background: var(--primary-light); color: var(--ink-1); }
+.cd-foot { gap: 8px; padding: 12px 18px; background: #f8fafc; border-radius: 0 0 10px 10px; }

@@ -18,6 +18,17 @@ import SchoolDetail from './pages/Schools/SchoolDetail'
 import Buildings from './pages/Schools/Buildings'
 import BuildingDetail from './pages/Schools/BuildingDetail'
 import RoomsFloorPlans from './pages/Schools/RoomsFloorPlans'
+import FloorRooms from './pages/Schools/FloorRooms'
+import LabSamples from './pages/LabSamples/LabSamples'
+import Reports from './pages/Reports/Reports'
+import AcmInventory from './pages/AcmInventory/AcmInventory'
+import Surveillance from './pages/Surveillance/Surveillance'
+import SurveillanceForm from './pages/Surveillance/SurveillanceForm'
+import Inspections from './pages/Inspections/Inspections'
+import InspectionForm from './pages/Inspections/InspectionForm'
+import LoginPage from './pages/Login/LoginPage'
+import Microsoft365 from './pages/Microsoft365/Microsoft365'
+import RequireAuth from './auth/RequireAuth'
 import { applyBrandColors } from './theme'
 
 const APP_NAME = 'Seattle Public Schools – Asbestos Compliance'
@@ -49,7 +60,10 @@ function DocumentTitle() {
   const { pathname } = useLocation()
   useEffect(() => {
     const nav = findNav(pathname)
-    const page = nav ? (nav.child?.label ?? nav.item.label) : 'Not found'
+    // Pages reached from the user menu rather than the sidebar
+    const page = pathname === '/login' ? 'Sign in'
+      : pathname.startsWith('/microsoft-365') ? 'Microsoft 365'
+        : nav ? (nav.child?.label ?? nav.item.label) : 'Not found'
     document.title = `${page} · ${APP_NAME}`
   }, [pathname])
   return null
@@ -79,7 +93,8 @@ function App() {
     <>
       <DocumentTitle />
       <Routes>
-        <Route element={<AppLayout />}>
+        <Route path="login" element={<LoginPage />} />
+        <Route element={<RequireAuth><AppLayout /></RequireAuth>}>
           <Route index element={<LandingRedirect landingPath={landingPath} />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="users/:tab?" element={<UsersRoles />} />
@@ -91,13 +106,27 @@ function App() {
           <Route path="air-monitoring/:tab?" element={<AirMonitoring />} />
           <Route path="personnel/:tab?" element={<Personnel />} />
           <Route path="contractors" element={<Navigate to="/personnel" replace />} />
+          <Route path="sampling" element={<LabSamples />} />
+          <Route path="sampling/*" element={<Navigate to="/sampling" replace />} />
+          <Route path="reports/:tab?/:report?" element={<Reports />} />
+          <Route path="acm/:tab?" element={<AcmInventory />} />
+          <Route path="surveillance/new" element={<SurveillanceForm />} />
+          <Route path="surveillance/records/:id" element={<SurveillanceForm />} />
+          <Route path="surveillance/:tab?" element={<Surveillance />} />
+          <Route path="inspections/new" element={<InspectionForm />} />
+          <Route path="inspections/records/:id" element={<InspectionForm />} />
+          <Route path="inspections/:tab?" element={<Inspections />} />
+          <Route path="microsoft-365/:tab?" element={<Microsoft365 />} />
           <Route path="help" element={<HelpPage />} />
           <Route path="schools" element={<Navigate to="/schools/list" replace />} />
           <Route path="schools/list" element={<Schools />} />
           <Route path="schools/buildings" element={<Buildings />} />
-          <Route path="schools/rooms" element={<RoomsFloorPlans />} />
+          <Route path="schools/floors" element={<RoomsFloorPlans view="floors" />} />
+          <Route path="schools/rooms" element={<RoomsFloorPlans view="rooms" />} />
+          <Route path="schools/acm-materials" element={<RoomsFloorPlans view="acm" />} />
           <Route path="schools/:schoolId/:tab?" element={<SchoolDetail />} />
           <Route path="schools/:schoolId/buildings/:buildingId/:tab?" element={<BuildingDetail />} />
+          <Route path="schools/:schoolId/buildings/:buildingId/floors/:floorId" element={<FloorRooms />} />
           <Route path="*" element={<PlaceholderPage />} />
         </Route>
       </Routes>
