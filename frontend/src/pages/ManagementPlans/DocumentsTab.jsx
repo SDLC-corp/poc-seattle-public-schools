@@ -119,7 +119,7 @@ export default function DocumentsTab({ schoolId, schoolName, plan }) {
                         <a className="u-row-btn dc-btn" href={d.download} title="Download" aria-label={`Download ${d.name}`}><Download size={16} /></a>
                       </>
                     ) : (
-                      <Link className="u-row-btn dc-btn" to="/documents/management-plans" title={d.source === 'sharepoint' ? 'Stored in SharePoint – open Document Management' : 'Sample record (no file) – open Document Management'} aria-label={`Open ${d.name} in Document Management`}><FolderOpen size={15} /></Link>
+                      <Link className="u-row-btn dc-btn" to="/reports/documents/management-plans" title={d.source === 'sharepoint' ? 'Stored in SharePoint – open Documents' : 'Sample record (no file) – open Documents'} aria-label={`Open ${d.name} in Documents`}><FolderOpen size={15} /></Link>
                     )}
                   </div></td>
                 </tr>
@@ -135,7 +135,7 @@ export default function DocumentsTab({ schoolId, schoolName, plan }) {
           {!term && <button type="button" className="u-btn u-btn-primary" onClick={() => setUploading(true)} disabled={!facets}><Plus size={15} />Upload Plan Document</button>}
         </div>
       )}
-      <p className="mp-reg-count">Plan documents from Document Management (type “Management Plan”) and the school’s O&amp;M plan · <Link to="/documents/management-plans" className="ai-link">Open Document Management</Link></p>
+      <p className="mp-reg-count">Plan documents from Document Management (type “Management Plan”) and the school’s O&amp;M plan · <Link to="/reports/documents/management-plans" className="ai-link">Open Documents</Link></p>
 
       <div className="mp-reg-note">
         <Info size={20} />

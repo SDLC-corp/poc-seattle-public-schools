@@ -1,11 +1,16 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { writeJson } from './atomicWrite.js';
 
 const AUDIT_FILE = new URL('../../data/audit.json', import.meta.url);
 
-// No authentication yet: everything done through the app is attributed to the demo user
-// shown in the top bar. Replace with the signed-in user once auth exists.
-export const CURRENT_USER = { id: 'demo', name: 'John Doe', email: 'john.doe@seattleschools.org', role: 'EHS Manager' };
+// Requests without a verified Microsoft sign-in (demo mode) are attributed to the demo user
+export const DEMO_USER = { id: 'demo', name: 'John Doe', email: 'john.doe@seattleschools.org', role: 'EHS Manager' };
+
+// The signed-in user for the request being handled (set by auth.js), else the demo user
+const requestUser = new AsyncLocalStorage();
+export const runAs = (user, fn) => requestUser.run(user, fn);
+export const currentUser = () => requestUser.getStore() ?? DEMO_USER;
 
 export const ACTIONS = ['create', 'update', 'delete', 'login', 'logout', 'login_failed', 'export'];
 
@@ -46,7 +51,7 @@ export function logAudit(req, { action, module, recordId, summary, changes = [],
     changes,
     related,
     link,
-    user: CURRENT_USER,
+    user: currentUser(),
     ip: req ? clientIp(req) : 'system',
     source: 'app',
   };

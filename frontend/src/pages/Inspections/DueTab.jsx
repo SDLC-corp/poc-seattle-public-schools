@@ -11,6 +11,7 @@ import Pager from '../Surveillance/Pager'
 import { fmtDay, floorLink, toQs } from '../Surveillance/survMeta'
 import { fmtTime } from './inspMeta'
 import { request } from '../../lib/api'
+import DueDate from '../../lib/DueDate'
 
 function Kpi({ icon: Icon, value, label, sub, tone, active, onClick }) {
   return (
@@ -79,7 +80,7 @@ export default function DueTab({ view, meta, reload, onSchedule }) {
 
   return (
     <>
-      <div className={`ai-filters in-filters in-due-filters${overdue ? ' in-filters-4' : ''}`}>
+      <div className={`ai-filters in-filters${overdue ? ' in-filters-4' : ''}`}>
         <LocationFilters tree={tree} value={location} onChange={(v) => { setLocation(v); setPage(1) }} />
         <div className="a-field">
           <span>Inspection Type</span>
@@ -107,7 +108,7 @@ export default function DueTab({ view, meta, reload, onSchedule }) {
         </div>
       </div>
 
-      <div className="a-kpis ai-kpis">
+      <div className="a-kpis in-kpis in-kpis-5">
         {overdue
           ? <Kpi icon={CalendarX2} value={s?.total} label="Total Overdue" sub={s && `${s.soon} more than 30 days late`} tone="critical" active={!reason} onClick={() => pick('')} />
           : <Kpi icon={CalendarClock} value={s?.total} label="Total Upcoming" sub={s && `${s.soon} due in the next 7 days`} tone="primary" active={!reason} onClick={() => pick('')} />}
@@ -133,7 +134,7 @@ export default function DueTab({ view, meta, reload, onSchedule }) {
             <tbody>
               {data?.items.map((x) => (
                 <tr key={x.key}>
-                  <td className="ai-room"><strong className="in-plain">{fmtDay(x.dueDate)}{x.dueTime && ` · ${fmtTime(x.dueTime)}`}</strong><small className={x.days < 0 ? 'sv-late' : undefined}>{whenText(x.days)}</small></td>
+                  <td className="ai-room"><strong className="in-plain"><DueDate date={x.dueDate}>{fmtDay(x.dueDate)}{x.dueTime && ` · ${fmtTime(x.dueTime)}`}</DueDate></strong><small className={x.days < 0 ? 'sv-late' : undefined}>{whenText(x.days)}</small></td>
                   <td className="ai-room">
                     {x.inspectionId ? <Link to={`/inspections/records/${x.inspectionId}`} className="sv-id">{x.inspectionId}</Link> : <span className="u-muted">Not created</span>}
                     <small>{x.type}</small>

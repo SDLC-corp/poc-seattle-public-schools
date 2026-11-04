@@ -7,8 +7,11 @@ import { programById } from '../data/trainingPrograms.js';
 import * as S from '../data/omStore.js';
 import * as M from '../data/omMeta.js';
 import { MAX_ATTACHMENT_BYTES } from '../data/acmMeta.js';
-import { logAudit, CURRENT_USER } from '../data/auditStore.js';
+import { logAudit, currentUser } from '../data/auditStore.js';
 import { sniff, storeUpload, sendStored } from './uploadCheck.js';
+import { getRecord, getRecords, updateRecord } from '../data/inspectionRecordsStore.js';
+import { listUsers } from './users.js';
+import { syncInspectionStages } from '../data/inspectionLifecycle.js';
 
 const router = Router();
 const MODULE = 'Operations & Maintenance';
@@ -49,11 +52,79 @@ function trainingCheck(person, type) {
   return { programId, program: programById[programId].name, status: st, ok: st === 'valid' || st === 'dueSoon', expiresOn: latest?.expiresOn ?? null };
 }
 
+// An activity created from an inspection keeps that inspection's action item (and so its stage) in step
+const ACTION_STATUS = { pending: 'Pending', inProgress: 'In Progress', completed: 'Completed' };
+async function syncInspection(activity, { removed = false } = {}) {
+  const r = activity.inspectionId && getRecord(activity.inspectionId);
+  if (!r) return;
+  const items = removed
+    ? r.actionItems.filter((x) => x.omActivityId !== activity.id)
+    : r.actionItems.map((x) => (x.omActivityId === activity.id ? { ...x, status: ACTION_STATUS[activity.state] ?? x.status, dueDate: activity.dueDate, assignee: activity.assignedToName } : x));
+  const updated = await updateRecord(r.id, { actionItems: items });
+  await syncInspectionStages(updated);
+}
+
 const assignees = () => getPeople().filter((p) => M.ASSIGNEE_CATEGORIES.includes(p.category) && p.status === 'active');
+
+/**
+ * The inspection's sample of the activity's ACM: its sample ID and, once it has gone to the lab, where it's listed
+ * (Lab & Sampling Results, or Air Monitoring for an air sample — ids as inspectionSamples.js makes them).
+ */
+const NO_SAMPLE = { sampleId: null, sampleLink: null, labSampleId: null, labReportNo: null, sampleResult: null };
+function sampleOf(r, materialId) {
+  if (!r) return NO_SAMPLE;
+  const acms = [r, ...(r.extra ?? [])];
+  const i = acms.findIndex((x) => x.materialId === materialId);
+  const s = acms[i]?.sampling;
+  if (s?.required !== 'Yes') return NO_SAMPLE;
+  const sent = Boolean(s.sentToLabAt) || !r.reviewGates;
+  const air = s.sampleType === 'Air Sample';
+  return {
+    sampleId: s.sampleId || `${r.id}-${i + 1}`,
+    sampleLink: !sent ? null : air ? `/air-monitoring/events/AIR-${r.id}-${i + 1}` : `/sampling/samples/ins-${r.id}-${i}`,
+    labSampleId: s.labSampleId || null, labReportNo: s.labReportNo || null, sampleResult: s.result || null,
+  };
+}
+
+// Submitted inspections indexed by ACM (own and extra), room, building and school, newest first — to find the
+// inspection related to an activity raised outside one
+function inspectionsByAcm() {
+  const idx = { acm: new Map(), room: new Map(), building: new Map(), school: new Map() };
+  const add = (map, key, r) => { if (!key) return; if (!map.has(key)) map.set(key, []); map.get(key).push(r); };
+  for (const r of [...getRecords()].filter((x) => x.state !== 'draft').sort((a, b) => String(b.date ?? '').localeCompare(String(a.date ?? '')))) {
+    for (const id of new Set([r.materialId, ...(r.extra ?? []).map((x) => x.materialId)])) add(idx.acm, id, r);
+    add(idx.room, r.roomId, r);
+    add(idx.building, r.buildingId, r);
+    add(idx.school, r.schoolId, r);
+  }
+  return idx;
+}
+// An inspection's first sample (of any ACM), for a related inspection that didn't sample this activity's ACM
+const anySample = (r) => {
+  const acms = [r, ...(r.extra ?? [])];
+  const x = acms.find((y) => y.sampling?.required === 'Yes');
+  return x ? sampleOf(r, x.materialId) : NO_SAMPLE;
+};
+/**
+ * The inspection an activity belongs to: its own; or, for one raised in O&M, the latest inspection of the same ACM —
+ * else of the same room, building or school — on or before the activity was created (else the latest). The sample
+ * is that inspection's sample of the ACM, or its first sample when the ACM wasn't sampled.
+ */
+function inspectionLinks(a, records, idx) {
+  if (a.inspectionId) return { inspectionId: a.inspectionId, relatedInspection: false, ...sampleOf(records.get(a.inspectionId), a.materialId) };
+  const day = String(a.createdAt ?? '').slice(0, 10);
+  const pick = (list = []) => list.find((x) => String(x.date ?? '') <= day) ?? list[0] ?? null;
+  const r = pick(idx.acm.get(a.materialId)) ?? pick(idx.room.get(a.roomId)) ?? pick(idx.building.get(a.buildingId)) ?? pick(idx.school.get(a.schoolId));
+  if (!r) return { inspectionId: null, relatedInspection: false, ...NO_SAMPLE };
+  const own = sampleOf(r, a.materialId);
+  return { inspectionId: r.id, relatedInspection: true, ...(own.sampleId ? own : anySample(r)) };
+}
 
 function rows() {
   const place = placeLookup();
   const mats = new Map(getMaterials().map((m) => [m.id, m]));
+  const records = new Map(getRecords().map((r) => [r.id, r]));
+  const byAcm = inspectionsByAcm();
   const today = todayIso();
   return S.all('activities').map((a) => {
     const m = mats.get(a.materialId);
@@ -64,6 +135,8 @@ function rows() {
       completedAt: a.completedAt, materialId: a.materialId, materialName: m?.name ?? '(deleted material)', materialType: m?.materialType ?? '',
       schoolId: a.schoolId, buildingId: a.buildingId, floorId: a.floorId, roomId: a.roomId, ...place(a),
       attachments: a.attachments?.length ?? 0, createdAt: a.createdAt,
+      workCategory: a.workCategory || null, contractorName: a.contractorName || null,
+      ...inspectionLinks(a, records, byAcm),
     };
   });
 }
@@ -73,7 +146,7 @@ function filterRows(list, { school, building, floor, type, status, assignee, q }
   return list.filter((r) => (!school || r.schoolId === school) && (!building || r.buildingId === building) && (!floor || r.floorId === floor)
     && (!type || r.type === type) && (!assignee || r.assignedToId === assignee)
     && (!status || (status === 'open' ? r.status !== 'completed' : r.status === status))
-    && (!term || [r.id, r.materialId, r.materialName, r.roomNumber, r.roomName, r.description, r.assignedToName, r.schoolName]
+    && (!term || [r.id, r.materialId, r.materialName, r.roomNumber, r.roomName, r.description, r.assignedToName, r.schoolName, r.inspectionId, r.sampleId, r.contractorName]
       .some((v) => String(v ?? '').toLowerCase().includes(term))));
 }
 
@@ -95,6 +168,10 @@ router.get('/meta', (req, res) => {
   res.json({
     types: M.ACTIVITY_TYPES.map((t) => ({ ...t, trainingName: programById[t.training].name })),
     priorities: M.PRIORITIES, statusLabels: M.STATUS_LABELS, controls: M.CONTROLS, sopCategories: M.SOP_CATEGORIES,
+    workCategories: M.WORK_CATEGORIES, reasons: M.REASONS, outcomes: M.OUTCOMES,
+    // Contractor companies (from personnel) and app users, offered for Contractor / Supervisor / Reviewed By
+    contractors: [...new Set(getPeople().filter((p) => p.kind === 'Contractor' && p.status === 'active').map((p) => p.organization).filter(Boolean))].sort(),
+    users: listUsers().filter((u) => u.status === 'active').map((u) => ({ name: u.name, role: u.jobTitle || u.roleId })).sort((x, y) => x.name.localeCompare(y.name)),
     nextId: S.nextActivityId(),
     assignees: assignees().map((p) => ({
       id: p.id, name: p.name, category: p.categoryLabel, organization: p.organization,
@@ -103,12 +180,24 @@ router.get('/meta', (req, res) => {
   });
 });
 
+// ?inspection= limits the list to that inspection's ACMs (new activities are created from an inspection)
 router.get('/materials', (req, res) => {
   const place = placeLookup();
-  res.json(getMaterials().filter((m) => SURVEYED.includes(m.acmStatus)).map((m) => {
+  const r = req.query.inspection ? getRecord(req.query.inspection) : null;
+  const only = r ? new Set(inspectionAcms(r)) : null;
+  res.json(getMaterials().filter((m) => (only ? only.has(m.id) : SURVEYED.includes(m.acmStatus))).map((m) => {
     const p = place(m);
     return { id: m.id, name: m.name, acmStatus: m.acmStatus, place: `${p.schoolName} / ${p.buildingName} / ${p.floorName} / ${p.roomNumber} ${p.roomName}`.trim() };
   }).sort((a, b) => a.place.localeCompare(b.place, 'en', { numeric: true })));
+});
+
+// Inspections that can be attached to an activity: those of the ACM's school, the ACM's own first, newest first
+router.get('/inspections', (req, res) => {
+  const m = getMaterial(req.query.material);
+  if (!m) return res.json([]);
+  const list = getRecords().filter((r) => r.schoolId === m.schoolId && r.state !== 'draft')
+    .sort((x, y) => Number(y.materialId === m.id) - Number(x.materialId === m.id) || String(y.date ?? '').localeCompare(String(x.date ?? '')));
+  res.json(list.slice(0, 200).map((r) => ({ id: r.id, type: r.type, date: r.date ?? null, sameAcm: r.materialId === m.id || (r.extra ?? []).some((x) => x.materialId === m.id) })));
 });
 
 // --- Activities ---
@@ -138,9 +227,9 @@ router.get('/activities', (req, res) => {
 router.get('/activities/export.csv', (req, res) => {
   const list = filterRows(rows(), req.query).sort((a, b) => b.dueDate.localeCompare(a.dueDate));
   logAudit(req, { action: 'export', module: MODULE, recordId: 'om-activities.csv', summary: `Exported ${list.length} O&M activities to CSV` });
-  const header = ['Activity ID', 'Activity Type', 'Description', 'School', 'Building', 'Floor', 'Room', 'ACM ID', 'ACM Material', 'Priority', 'Due Date', 'Assigned To', 'Status', 'Completed'];
-  const lines = list.map((r) => [r.id, r.type, r.description, r.schoolName, r.buildingName, r.floorName, `${r.roomNumber} ${r.roomName}`.trim(),
-    r.materialId, r.materialName, r.priority, r.dueDate, r.assignedToName, r.statusLabel, r.completedAt?.slice(0, 10) ?? '']);
+  const header = ['Activity ID', 'Inspection ID', 'Sample ID', 'Activity Type', 'Work Category', 'Description', 'School', 'Building', 'Floor', 'Room', 'ACM ID', 'ACM Material', 'Priority', 'Due Date', 'Assigned To', 'Contractor', 'Status', 'Completed'];
+  const lines = list.map((r) => [r.id, r.inspectionId ?? '', r.sampleId ?? '', r.type, r.workCategory ?? '', r.description, r.schoolName, r.buildingName, r.floorName, `${r.roomNumber} ${r.roomName}`.trim(),
+    r.materialId, r.materialName, r.priority, r.dueDate, r.assignedToName, r.contractorName ?? '', r.statusLabel, r.completedAt?.slice(0, 10) ?? '']);
   res.type('text/csv').attachment('om-activities.csv').send([header, ...lines].map((l) => l.map(csvCell).join(',')).join('\r\n'));
 });
 
@@ -157,11 +246,14 @@ function activityDetail(a) {
   const plan = S.find('plans', `PLAN-${a.schoolId}`);
   const status = statusOf(a);
   return {
-    activity: { ...a, status, statusLabel: M.STATUS_LABELS[status] },
+    // fromInspection: created from the inspection's O&M tasks, so the inspection link is fixed
+    activity: { ...a, status, statusLabel: M.STATUS_LABELS[status], fromInspection: Boolean(a.inspectionId && getRecord(a.inspectionId)?.actionItems?.some((x) => x.omActivityId === a.id)) },
     material: m ? { id: m.id, name: m.name, materialType: m.materialType, acmStatus: m.acmStatus, friability: m.friability, condition: m.condition, quantity: m.quantity, unit: m.unit, location: m.location } : null,
     location: { schoolId: a.schoolId, buildingId: a.buildingId, floorId: a.floorId, roomId: a.roomId, ...placeLookup()(a) },
     assigneeTraining: person ? { ...trainingCheck(person, a.type), name: person.name, category: person.categoryLabel } : null,
     plan: plan ? { id: plan.id, name: plan.name, version: plan.version, nextReview: plan.nextReview } : null,
+    // The inspection and its sample of this ACM (the activity's own inspection, or the latest of the ACM)
+    inspection: inspectionLinks(a, new Map(getRecords().map((r) => [r.id, r])), inspectionsByAcm()),
   };
 }
 
@@ -187,6 +279,27 @@ function validate(body, existing) {
     priority: pick('priority', 'Medium'), dueDate: String(pick('dueDate', '') ?? ''),
     assignedToId: person?.id ?? null, assignedToName: person?.name ?? null, state: pick('state', 'pending'),
   };
+  // Activity details and the people involved (all optional; older activities have none)
+  const text = (k, max) => String(pick(k, '') ?? '').trim().slice(0, max);
+  Object.assign(a, {
+    workCategory: text('workCategory', 60), activityDate: text('activityDate', 10), reason: text('reason', 60), disturbance: text('disturbance', 3),
+    contractorName: text('contractorName', 120), supervisor: text('supervisor', 80), trainingVerified: text('trainingVerified', 3),
+  });
+  if (a.workCategory && !M.WORK_CATEGORIES.includes(a.workCategory)) errors.workCategory = 'Choose a work category';
+  if (a.reason && !M.REASONS.includes(a.reason)) errors.reason = 'Choose the reason';
+  if (a.activityDate && !validDay(a.activityDate)) errors.activityDate = 'Enter a valid date';
+  for (const k of ['disturbance', 'trainingVerified']) if (a[k] && !M.YES_NO.includes(a[k])) errors[k] = 'Choose Yes or No';
+  // The inspection this work belongs to: kept when the activity was created from one; otherwise any inspection of
+  // the ACM's school can be attached
+  const fromInspection = existing?.inspectionId && getRecord(existing.inspectionId)?.actionItems?.some((x) => x.omActivityId === existing.id);
+  const inspectionId = fromInspection ? existing.inspectionId : text('inspectionId', 40) || null;
+  if (inspectionId && !fromInspection) {
+    const r = getRecord(inspectionId);
+    if (!r) errors.inspectionId = 'Inspection not found';
+    else if (material && r.schoolId !== material.schoolId) errors.inspectionId = 'Choose an inspection of the same school';
+  }
+  a.inspectionId = inspectionId;
+
   if (!M.TYPE_VALUES.includes(a.type)) errors.type = 'Choose the activity type';
   if (!a.description) errors.description = 'Describe the work';
   if (!M.PRIORITIES.includes(a.priority)) errors.priority = 'Choose a priority';
@@ -196,35 +309,67 @@ function validate(body, existing) {
 
   const w = body.work !== undefined ? body.work : existing?.work;
   if (w) {
+    const s = (v, max) => String(v ?? '').trim().slice(0, max);
     a.work = {
       performedOn: String(w.performedOn ?? ''), hours: w.hours === '' || w.hours == null ? null : Number(w.hours),
-      notes: String(w.notes ?? '').trim().slice(0, 1000),
+      notes: s(w.notes, 1000),
       controls: Object.fromEntries(M.CONTROLS.map((c) => [c.key, Boolean(w.controls?.[c.key])])),
+      // Completion & documentation
+      startTime: s(w.startTime, 5), endTime: s(w.endTime, 5), outcome: s(w.outcome, 30), followUpRequired: s(w.followUpRequired, 3),
+      followUpNotes: s(w.followUpNotes, 500), wasteDetails: s(w.wasteDetails, 500), reviewedBy: s(w.reviewedBy, 80),
     };
     if (a.work.performedOn && !validDay(a.work.performedOn)) errors['work.performedOn'] = 'Enter a valid date';
     else if (a.work.performedOn > todayIso()) errors['work.performedOn'] = 'Can’t be in the future';
     if (a.work.hours != null && (!Number.isFinite(a.work.hours) || a.work.hours < 0 || a.work.hours > 200)) errors['work.hours'] = 'Enter hours between 0 and 200';
+    const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
+    for (const k of ['startTime', 'endTime']) if (a.work[k] && !TIME.test(a.work[k])) errors[`work.${k}`] = 'Enter a valid time';
+    if (a.work.startTime && a.work.endTime && !errors['work.endTime'] && a.work.endTime <= a.work.startTime) errors['work.endTime'] = 'End time must be after the start time';
+    if (a.work.outcome && !M.OUTCOMES.includes(a.work.outcome)) errors['work.outcome'] = 'Choose the outcome';
+    if (a.work.followUpRequired && !M.YES_NO.includes(a.work.followUpRequired)) errors['work.followUpRequired'] = 'Choose Yes or No';
+    if (a.work.followUpRequired === 'Yes' && !a.work.followUpNotes) errors['work.followUpNotes'] = 'Describe the follow-up needed';
   }
   if (a.state === 'completed') {
-    if (!a.work?.performedOn) errors['work.performedOn'] = 'Date the work was performed is required';
+    if (!a.work?.performedOn) errors['work.performedOn'] = 'Completion date is required';
     if (!a.work?.notes) errors['work.notes'] = 'Describe the work performed';
+    if (!a.work?.outcome) errors['work.outcome'] = 'Choose the work outcome';
+    if (!a.work?.followUpRequired) errors['work.followUpRequired'] = 'Say whether follow-up is required';
   }
   return { a, person, errors };
 }
 
+// The ACMs an inspection covers (its own and any extra ones)
+const inspectionAcms = (r) => [r.materialId, ...(r.extra ?? []).map((x) => x.materialId)].filter(Boolean);
+
+/**
+ * New O&M activities are created from an inspection (its O&M Tasks): the inspection must be submitted, the ACM one
+ * of the inspection's, and the activity becomes one of the inspection's O&M tasks (action items) so its stage follows.
+ */
 router.post('/activities', async (req, res, next) => {
   try {
     const { a, person, errors } = validate({ ...req.body, state: req.body?.state === 'inProgress' ? 'inProgress' : 'pending' });
+    const r = a.inspectionId ? getRecord(a.inspectionId) : null;
+    if (!a.inspectionId) errors.inspectionId = 'O&M activities are created from an inspection';
+    else if (r && r.state !== 'submitted' && r.state !== 'approved') errors.inspectionId = 'O&M tasks can be added once the inspection has been submitted';
+    else if (r && a.materialId && !inspectionAcms(r).includes(a.materialId)) errors.materialId = 'Choose one of the inspection’s ACMs';
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
     const now = new Date().toISOString();
     const created = await S.add('activities', {
       id: S.nextActivityId(), ...a, work: null, completedAt: null, completedBy: null, attachments: [],
-      history: [{ at: now, by: CURRENT_USER.name, action: 'Created' }, { at: now, by: CURRENT_USER.name, action: `Assigned to ${person.name}` }],
-      createdAt: now, createdBy: { id: CURRENT_USER.id, name: CURRENT_USER.name }, sample: false,
+      history: [{ at: now, by: currentUser().name, action: `Created from inspection ${r.id}` }, { at: now, by: currentUser().name, action: `Assigned to ${person.name}` }],
+      createdAt: now, createdBy: { id: currentUser().id, name: currentUser().name }, sample: false,
     });
+    // One of the inspection's O&M tasks
+    const items = [...(r.actionItems ?? [])];
+    const n = items.reduce((m, x) => Math.max(m, Number(String(x.id).split('-')[1]) || 0), 0);
+    items.push({
+      id: `AI-${n + 1}`, action: `${created.type}: ${created.description}`, assignedTo: 'O&M – Maintenance', assignee: person.name,
+      priority: created.priority === 'Urgent' ? 'Critical' : created.priority, dueDate: created.dueDate, status: 'Pending', omActivityId: created.id, materialId: created.materialId,
+    });
+    const updated = await updateRecord(r.id, { actionItems: items });
+    await syncInspectionStages(updated);
     logAudit(req, {
-      action: 'create', module: MODULE, recordId: created.id, link: link(created), summary: `Created ${created.type.toLowerCase()} ${created.id}`,
-      changes: [{ field: 'Type', to: created.type }, { field: 'Assigned To', to: person.name }, { field: 'Due Date', to: created.dueDate }],
+      action: 'create', module: MODULE, recordId: created.id, link: link(created), summary: `Created ${created.type.toLowerCase()} ${created.id} from inspection ${r.id}`,
+      changes: [{ field: 'Type', to: created.type }, { field: 'Inspection', to: r.id }, { field: 'Assigned To', to: person.name }, { field: 'Due Date', to: created.dueDate }],
     });
     res.status(201).json(activityDetail(created));
   } catch (err) {
@@ -248,14 +393,22 @@ router.put('/activities/:id', async (req, res, next) => {
     track('Priority', existing.priority, a.priority);
     track('Due Date', existing.dueDate, a.dueDate);
     track('Assigned To', existing.assignedToName, a.assignedToName);
+    track('Inspection', existing.inspectionId ?? null, a.inspectionId);
+    track('Work Category', existing.workCategory || null, a.workCategory || null);
+    track('Activity Date', existing.activityDate || null, a.activityDate || null);
+    track('Reason', existing.reason || null, a.reason || null);
+    track('Disturbance to ACM', existing.disturbance || null, a.disturbance || null);
+    track('Contractor', existing.contractorName || null, a.contractorName || null);
+    track('Supervisor', existing.supervisor || null, a.supervisor || null);
+    track('Training Verified', existing.trainingVerified || null, a.trainingVerified || null);
     track('Status', M.STATUS_LABELS[existing.state], M.STATUS_LABELS[a.state]);
-    if (existing.assignedToId !== a.assignedToId) events.push({ at: now, by: CURRENT_USER.name, action: `Assigned to ${person.name}` });
-    if (existing.state !== a.state) events.push({ at: now, by: CURRENT_USER.name, action: a.state === 'completed' ? 'Completed' : `Status → ${M.STATUS_LABELS[a.state]}` });
-    if (!events.length && changes.length) events.push({ at: now, by: CURRENT_USER.name, action: 'Updated details' });
+    if (existing.assignedToId !== a.assignedToId) events.push({ at: now, by: currentUser().name, action: `Assigned to ${person.name}` });
+    if (existing.state !== a.state) events.push({ at: now, by: currentUser().name, action: a.state === 'completed' ? 'Completed' : `Status → ${M.STATUS_LABELS[a.state]}` });
+    if (!events.length && changes.length) events.push({ at: now, by: currentUser().name, action: 'Updated details' });
     const patch = {
       ...a,
       completedAt: a.state === 'completed' ? now : null,
-      completedBy: a.state === 'completed' ? CURRENT_USER.name : null,
+      completedBy: a.state === 'completed' ? currentUser().name : null,
       history: [...(existing.history ?? []), ...events],
     };
     const updated = await S.update('activities', existing.id, patch);
@@ -266,6 +419,7 @@ router.put('/activities/:id', async (req, res, next) => {
         changes: changes.length ? changes : [{ field: 'Work Record', to: 'Updated' }],
       });
     }
+    await syncInspection(updated);
     res.json(activityDetail(updated));
   } catch (err) {
     next(err);
@@ -279,6 +433,7 @@ router.delete('/activities/:id', async (req, res, next) => {
     if (a.state !== 'pending') return res.status(409).json({ error: 'Only activities that haven’t started can be deleted' });
     await S.remove('activities', a.id);
     logAudit(req, { action: 'delete', module: MODULE, recordId: a.id, summary: `Deleted O&M activity ${a.id}`, changes: [{ field: 'Type', from: a.type }, { field: 'Assigned To', from: a.assignedToName }] });
+    await syncInspection(a, { removed: true });
     res.status(204).end();
   } catch (err) {
     next(err);
@@ -293,8 +448,8 @@ router.post('/activities/:id/attachments', express.raw({ type: () => true, limit
     const type = sniff(req.body);
     if (!type) return res.status(400).json({ error: 'Upload a JPG, PNG, WebP or PDF file' });
     if (a.attachments.length >= 30) return res.status(409).json({ error: 'At most 30 files per activity' });
-    const file = await storeUpload(S.FILE_DIR, req.body, type, { name: req.query.name, uploadedBy: { id: CURRENT_USER.id, name: CURRENT_USER.name } });
-    await S.update('activities', a.id, { attachments: [...a.attachments, file], history: [...a.history, { at: new Date().toISOString(), by: CURRENT_USER.name, action: `Attached ${file.name}` }] });
+    const file = await storeUpload(S.FILE_DIR, req.body, type, { name: req.query.name, uploadedBy: { id: currentUser().id, name: currentUser().name } });
+    await S.update('activities', a.id, { attachments: [...a.attachments, file], history: [...a.history, { at: new Date().toISOString(), by: currentUser().name, action: `Attached ${file.name}` }] });
     logAudit(req, { action: 'create', module: MODULE, recordId: a.id, link: link(a), summary: `Attached ${file.name} to ${a.id}`, changes: [{ field: 'Document', to: file.name }] });
     res.status(201).json(file);
   } catch (err) {
@@ -368,7 +523,7 @@ router.post('/plans/:id/attachments', express.raw({ type: () => true, limit: MAX
     if (!p) return res.status(404).json({ error: 'O&M plan not found' });
     const type = sniff(req.body, ['pdf']);
     if (!type) return res.status(400).json({ error: 'Upload the plan as a PDF' });
-    const file = await storeUpload(S.FILE_DIR, req.body, type, { name: req.query.name, uploadedBy: { id: CURRENT_USER.id, name: CURRENT_USER.name } });
+    const file = await storeUpload(S.FILE_DIR, req.body, type, { name: req.query.name, uploadedBy: { id: currentUser().id, name: currentUser().name } });
     await S.update('plans', p.id, { attachments: [...(p.attachments ?? []), file] });
     logAudit(req, { action: 'create', module: MODULE, recordId: p.id, link: '/operations/plans', summary: `Uploaded ${file.name} to ${p.name}`, changes: [{ field: 'Plan Document', to: file.name }] });
     res.status(201).json(file);
@@ -404,11 +559,11 @@ router.post('/procedures', express.raw({ type: () => true, limit: MAX_ATTACHMENT
     const type = sniff(req.body, ['pdf']);
     if (!type) errors.file = 'Attach the procedure as a PDF';
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
-    const file = await storeUpload(S.FILE_DIR, req.body, type, { name: req.query.name, uploadedBy: { id: CURRENT_USER.id, name: CURRENT_USER.name } });
+    const file = await storeUpload(S.FILE_DIR, req.body, type, { name: req.query.name, uploadedBy: { id: currentUser().id, name: currentUser().name } });
     const sop = await S.add('procedures', {
       id: S.nextSopId(), title: String(title).trim().slice(0, 120), category, description: String(description ?? '').trim().slice(0, 300),
       version: String(version ?? '1.0').trim().slice(0, 20) || '1.0', effectiveDate: effectiveDate || todayIso(), file,
-      createdAt: new Date().toISOString(), createdBy: { id: CURRENT_USER.id, name: CURRENT_USER.name }, sample: false,
+      createdAt: new Date().toISOString(), createdBy: { id: currentUser().id, name: currentUser().name }, sample: false,
     });
     logAudit(req, { action: 'create', module: MODULE, recordId: sop.id, link: '/operations/procedures', summary: `Uploaded procedure ${sop.id} “${sop.title}”`, changes: [{ field: 'Category', to: category }, { field: 'File', to: file.name }] });
     res.status(201).json(sop);
@@ -424,7 +579,7 @@ router.post('/procedures/:id/file', express.raw({ type: () => true, limit: MAX_A
     if (!p) return res.status(404).json({ error: 'Procedure not found' });
     const type = sniff(req.body, ['pdf']);
     if (!type) return res.status(400).json({ error: 'Attach the procedure as a PDF' });
-    const file = await storeUpload(S.FILE_DIR, req.body, type, { name: req.query.name, uploadedBy: { id: CURRENT_USER.id, name: CURRENT_USER.name } });
+    const file = await storeUpload(S.FILE_DIR, req.body, type, { name: req.query.name, uploadedBy: { id: currentUser().id, name: currentUser().name } });
     await S.update('procedures', p.id, { file });
     logAudit(req, { action: 'update', module: MODULE, recordId: p.id, link: '/operations/procedures', summary: `Uploaded document for ${p.id}`, changes: [{ field: 'File', from: p.file?.name ?? '—', to: file.name }] });
     res.status(201).json(file);

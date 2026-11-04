@@ -38,6 +38,7 @@ function NavItem({ item, badges, collapsed, pathname, onNavigate, open, onToggle
       ) : (
         <NavLink
           to={item.path}
+          state={{ navRoot: true }}
           className={`nav-link${isActive ? ' active' : ''}`}
           title={collapsed ? item.label : undefined}
           onClick={onNavigate}
@@ -52,6 +53,7 @@ function NavItem({ item, badges, collapsed, pathname, onNavigate, open, onToggle
             <li key={child.id}>
               <NavLink
                 to={child.path}
+                state={{ navRoot: true }}
                 className={`nav-sublink${isPathActive(child.path, pathname) ? ' active' : ''}`}
                 onClick={onNavigate}
               >

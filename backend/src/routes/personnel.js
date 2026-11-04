@@ -1,23 +1,38 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
+import { randomUUID } from 'node:crypto';
+import { unlink } from 'node:fs/promises';
 import { PROGRAMS, CATEGORIES, programById } from '../data/trainingPrograms.js';
 import {
-  getPeople, getPerson, addPerson, updatePerson, addRecord, nextId, recordStatus, DUE_SOON_DAYS,
+  getPeople, getPerson, addPerson, updatePerson, addRecord, updateRecord, nextId, recordStatus, DUE_SOON_DAYS, CERT_DIR, certPath,
 } from '../data/personnelStore.js';
 import { schools } from '../data/store.js';
-import { logAudit, diff } from '../data/auditStore.js';
+import { logAudit, diff, currentUser } from '../data/auditStore.js';
+import { MAX_ATTACHMENT_BYTES } from '../data/acmMeta.js';
+import {
+  getMaterials, getMaterial, addMaterial, updateMaterial, removeMaterial, nextMaterialId, MATERIAL_DIR, materialPath,
+} from '../data/trainingMaterialsStore.js';
+import { sniff, storeUpload, sendStored } from './uploadCheck.js';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
 // Looked up live so schools added in the app are found
 const schoolById = { get: (id) => schools.find((s) => s.id === id), has: (id) => schools.some((s) => s.id === id) };
 
+// Certified (all required training current) / not certified (a required course never taken) / overdue (lapsed)
+const certStatus = (p) => (p.required.some((r) => r.status === 'missing') ? 'notCertified'
+  : p.required.some((r) => r.status === 'expired') ? 'overdue' : 'certified');
+
 // kind: Employee | Contractor | Inspector (role filter on the screen)
+// status: compliant | dueSoon | expired (training status) or certified | notCertified | overdue (as on School Compliance)
 function filterPeople({ q, kind, category, status, school }) {
   const term = q?.trim().toLowerCase();
+  const statusOk = (p) => (!status ? true
+    : ['certified', 'notCertified', 'overdue'].includes(status) ? certStatus(p) === status
+      : p.trainingStatus === status);
   return getPeople().filter((p) =>
     (!kind || p.kind === kind)
     && (!category || p.category === category)
-    && (!status || p.trainingStatus === status)
+    && statusOk(p)
     && (!school || p.schoolId === school)
     && (!term || [p.name, p.id, p.organization, p.email, p.categoryLabel].some((v) => v?.toLowerCase().includes(term))))
     .sort((a, b) => {
@@ -120,6 +135,151 @@ router.get('/summary', (req, res) => {
   res.json({ byCategory, byProgram });
 });
 
+// Per school: who is certified (all required training current), not certified (a required course never
+// taken) or overdue (a required course lapsed). People without a school are grouped as District-wide.
+router.get('/schools', (req, res) => {
+  const groups = new Map();
+  for (const p of getPeople().filter((x) => x.status !== 'inactive')) {
+    const key = p.schoolId ?? '';
+    if (!groups.has(key)) groups.set(key, { id: key, name: key ? schoolById.get(key)?.name ?? p.schoolName ?? key : 'District-wide (no school)', certified: [], notCertified: [], overdue: [] });
+    const missing = p.required.filter((r) => r.status === 'missing');
+    const lapsed = p.required.filter((r) => r.status === 'expired');
+    const person = {
+      id: p.id, name: p.name, categoryLabel: p.categoryLabel, kind: p.kind,
+      dueSoon: p.trainingStatus === 'dueSoon', nextExpiry: p.nextExpiry,
+      missing: missing.map((r) => r.programName),
+      lapsed: lapsed.map((r) => ({ programName: r.programName, expiresOn: r.record.expiresOn })),
+    };
+    const g = groups.get(key);
+    if (missing.length) g.notCertified.push(person);
+    else if (lapsed.length) g.overdue.push(person);
+    else g.certified.push(person);
+  }
+  const schools = [...groups.values()].map((g) => ({
+    ...g,
+    total: g.certified.length + g.notCertified.length + g.overdue.length,
+    status: g.notCertified.length ? 'notCertified' : g.overdue.length ? 'overdue' : 'certified',
+  })).sort((a, b) => (a.id ? 0 : 1) - (b.id ? 0 : 1) || a.name.localeCompare(b.name));
+  res.json({ schools });
+});
+
+// --- Training material (learning modules): files or links per training program ---
+
+const MAX_MATERIAL_BYTES = 100 * 1024 * 1024;
+const MATERIAL_TYPES = ['pdf', 'png', 'jpg', 'webp', 'mp4', 'webm'];
+const kindOf = (ext) => (ext === 'pdf' ? 'pdf' : ['mp4', 'webm'].includes(ext) ? 'video' : 'image');
+const httpUrl = (v) => {
+  try {
+    return ['http:', 'https:'].includes(new URL(v).protocol);
+  } catch {
+    return false;
+  }
+};
+
+// title / description / programId (and url for a link); `partial` keeps fields that aren't sent
+function validateMaterial(b, existing) {
+  const v = {
+    programId: b.programId ?? existing?.programId,
+    title: String(b.title ?? existing?.title ?? '').trim().slice(0, 120),
+    description: String(b.description ?? existing?.description ?? '').trim().slice(0, 400),
+  };
+  const errors = {};
+  if (!programById[v.programId]) errors.programId = 'Choose the training program';
+  if (!v.title) errors.title = 'Title is required';
+  if ((existing?.kind ?? b.kind) === 'link') {
+    v.url = String(b.url ?? existing?.url ?? '').trim().slice(0, 500);
+    if (!httpUrl(v.url)) errors.url = 'Enter a full link starting with https://';
+  }
+  return { v, errors };
+}
+
+const materialView = (m) => ({ ...m, programName: programById[m.programId]?.name ?? m.programId });
+const by = () => ({ id: currentUser().id, name: currentUser().name });
+
+router.get('/materials', (req, res) => {
+  res.json({ materials: getMaterials().map(materialView).sort((a, b) => a.programName.localeCompare(b.programName) || a.title.localeCompare(b.title)) });
+});
+
+// Upload a file: raw body (PDF, JPG, PNG, WebP, MP4 or WebM; max 100 MB) with ?programId=&title=&description=&name=
+router.post('/materials', express.raw({ type: () => true, limit: MAX_MATERIAL_BYTES }), async (req, res, next) => {
+  try {
+    const { v, errors } = validateMaterial({ ...req.query, title: req.query.title || String(req.query.name ?? '').replace(/\.[^.]+$/, '') });
+    const type = sniff(req.body, MATERIAL_TYPES);
+    if (!type) errors.file = 'Upload a PDF, image (JPG, PNG, WebP) or video (MP4, WebM)';
+    if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
+    const file = await storeUpload(MATERIAL_DIR, req.body, type, { name: req.query.name, uploadedBy: by() });
+    const m = await addMaterial({ id: nextMaterialId(), ...v, kind: kindOf(type.ext), file, url: null, createdAt: new Date().toISOString(), createdBy: by() });
+    logAudit(req, { action: 'create', module: 'Personnel & Training', recordId: m.id, link: '/personnel/training', summary: `Added training material “${m.title}” (${programById[m.programId].name})`, changes: [{ field: 'File', to: file.name }] });
+    res.status(201).json(materialView(m));
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Add a link (e.g. an online course or a hosted video): { programId, title, url, description? }
+router.post('/materials/link', async (req, res, next) => {
+  try {
+    const { v, errors } = validateMaterial({ ...req.body, kind: 'link' });
+    if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
+    const m = await addMaterial({ id: nextMaterialId(), ...v, kind: 'link', file: null, createdAt: new Date().toISOString(), createdBy: by() });
+    logAudit(req, { action: 'create', module: 'Personnel & Training', recordId: m.id, link: '/personnel/training', summary: `Added training link “${m.title}” (${programById[m.programId].name})`, changes: [{ field: 'Link', to: m.url }] });
+    res.status(201).json(materialView(m));
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Edit title / description / program (and the url of a link)
+router.put('/materials/:mid', async (req, res, next) => {
+  try {
+    const existing = getMaterial(req.params.mid);
+    if (!existing) return res.status(404).json({ error: 'Training material not found' });
+    const { v, errors } = validateMaterial(req.body ?? {}, existing);
+    if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
+    const updated = await updateMaterial(existing.id, { ...v, updatedAt: new Date().toISOString(), updatedBy: by() });
+    const view = (m) => ({ Program: programById[m.programId]?.name, Title: m.title, Description: m.description, Link: m.url ?? undefined });
+    const changes = diff(view(existing), view(updated));
+    if (changes.length) logAudit(req, { action: 'update', module: 'Personnel & Training', recordId: existing.id, link: '/personnel/training', summary: `Updated training material “${updated.title}”`, changes });
+    res.json(materialView(updated));
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Replace the file of an uploaded material (the kind follows the new file)
+router.post('/materials/:mid/file', express.raw({ type: () => true, limit: MAX_MATERIAL_BYTES }), async (req, res, next) => {
+  try {
+    const existing = getMaterial(req.params.mid);
+    if (!existing || existing.kind === 'link') return res.status(404).json({ error: 'Training material not found' });
+    const type = sniff(req.body, MATERIAL_TYPES);
+    if (!type) return res.status(400).json({ error: 'Upload a PDF, image (JPG, PNG, WebP) or video (MP4, WebM)' });
+    const file = await storeUpload(MATERIAL_DIR, req.body, type, { name: req.query.name, uploadedBy: by() });
+    await unlink(materialPath(existing.file.storedName)).catch(() => {});
+    const updated = await updateMaterial(existing.id, { file, kind: kindOf(type.ext), updatedAt: new Date().toISOString(), updatedBy: by() });
+    logAudit(req, { action: 'update', module: 'Personnel & Training', recordId: existing.id, link: '/personnel/training', summary: `Replaced the file of “${existing.title}”`, changes: [{ field: 'File', from: existing.file.name, to: file.name }] });
+    res.json(materialView(updated));
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/materials/:mid/file', (req, res) => {
+  const m = getMaterial(req.params.mid);
+  if (!m?.file) return res.status(404).json({ error: 'File not found' });
+  sendStored(res, m.file, materialPath(m.file.storedName), req.query.download === '1');
+});
+
+router.delete('/materials/:mid', async (req, res, next) => {
+  try {
+    const m = await removeMaterial(req.params.mid);
+    if (!m) return res.status(404).json({ error: 'Training material not found' });
+    logAudit(req, { action: 'delete', module: 'Personnel & Training', recordId: m.id, link: '/personnel/training', summary: `Removed training material “${m.title}”`, changes: [{ field: m.file ? 'File' : 'Link', from: m.file?.name ?? m.url, to: '—' }] });
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get('/:id', (req, res) => {
   const p = getPerson(req.params.id);
   if (!p) return res.status(404).json({ error: 'Person not found' });
@@ -160,30 +320,99 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-// POST /api/personnel/:id/records  { programId, completedOn: "YYYY-MM-DD", certificateNo?, provider? }
+const validDay = (v) => ISO_DAY.test(String(v ?? '')) && !Number.isNaN(Date.parse(v));
+
+/**
+ * A certificate / training completion:
+ * { programId (certificate type), completedOn, expiresOn?, certificateNo?, provider?, certificateUrl? }
+ * expiresOn defaults to the program's renewal period ('' = no expiry only for programs that don't expire).
+ * The certificate file is uploaded separately. `existing` keeps the id and file when updating.
+ */
+function validateRecord(body, existing) {
+  const b = body ?? {};
+  const prog = programById[b.programId];
+  const text = (v, max) => String(v ?? '').trim().slice(0, max) || null;
+  const errors = {};
+  if (!prog) errors.programId = 'Choose the certificate type';
+  if (!validDay(b.completedOn)) errors.completedOn = 'Enter the completion / issue date';
+  else if (Date.parse(`${b.completedOn}T00:00:00`) > Date.now()) errors.completedOn = 'Completion date can’t be in the future';
+  const certificateNo = text(b.certificateNo, 40);
+  if (prog?.accredited && !certificateNo) errors.certificateNo = 'Accredited courses need a certificate number';
+  const certificateUrl = text(b.certificateUrl, 500);
+  if (certificateUrl) {
+    try {
+      if (!['http:', 'https:'].includes(new URL(certificateUrl).protocol)) throw new Error();
+    } catch {
+      errors.certificateUrl = 'Enter a full link starting with https://';
+    }
+  }
+  let expiresOn = null;
+  if (b.expiresOn) {
+    if (!validDay(b.expiresOn)) errors.expiresOn = 'Enter a valid expiry date';
+    else if (validDay(b.completedOn) && b.expiresOn <= b.completedOn) errors.expiresOn = 'Expiry must be after the completion date';
+    else expiresOn = b.expiresOn;
+  } else if (prog?.renewalMonths && validDay(b.completedOn)) {
+    const d = new Date(`${b.completedOn}T00:00:00`);
+    d.setMonth(d.getMonth() + prog.renewalMonths);
+    const pad = (n) => String(n).padStart(2, '0');
+    expiresOn = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+  if (Object.keys(errors).length) return { errors };
+
+  return {
+    errors,
+    prog,
+    record: {
+      ...existing,
+      id: existing?.id ?? randomUUID().slice(0, 8),
+      programId: b.programId,
+      completedOn: b.completedOn,
+      expiresOn,
+      certificateNo,
+      provider: text(b.provider, 80),
+      certificateUrl,
+      certificateFile: existing?.certificateFile ?? null,
+      recordedAt: existing?.recordedAt ?? new Date().toISOString(),
+      recordedBy: existing?.recordedBy ?? currentUser().name,
+      ...(existing ? { updatedAt: new Date().toISOString(), updatedBy: currentUser().name } : {}),
+    },
+  };
+}
+
+// Update a certificate (type, number, dates, provider, link). Older sample records without an id are matched by
+// ?programId=&completedOn= and get an id on save.
+router.put('/:id/records/:recordId', async (req, res, next) => {
+  try {
+    const person = getPerson(req.params.id);
+    if (!person) return res.status(404).json({ error: 'Person not found' });
+    const existing = person.records.find((r) => r.id === req.params.recordId)
+      ?? (req.params.recordId === 'legacy' ? person.records.find((r) => !r.id && r.programId === req.query.programId && r.completedOn === req.query.completedOn) : null);
+    if (!existing) return res.status(404).json({ error: 'Training record not found' });
+    const { record, prog, errors } = validateRecord(req.body, existing);
+    if (Object.keys(errors).length) return res.status(400).json({ error: 'Invalid certificate', fields: errors });
+    const updated = await updatePerson(person.id, { records: person.records.map((r) => (r === existing ? record : r)) });
+    const view = (r) => ({
+      'Certificate Type': programById[r.programId]?.name ?? r.programId, Completed: r.completedOn, Expires: r.expiresOn ?? 'No expiry',
+      'Certificate No.': r.certificateNo, Provider: r.provider, 'Certificate Link': r.certificateUrl,
+    });
+    const changes = diff(view(existing), view(record));
+    if (changes.length) {
+      logAudit(req, { action: 'update', module: 'Personnel & Training', recordId: person.id, link: '/personnel', summary: `Updated ${prog.name} certificate for ${person.name}`, changes });
+    }
+    res.json({ ...updated, recordId: record.id });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/personnel/:id/records — see validateRecord
 router.post('/:id/records', async (req, res, next) => {
   try {
     const person = getPerson(req.params.id);
     if (!person) return res.status(404).json({ error: 'Person not found' });
-    const { programId, completedOn } = req.body ?? {};
-    const prog = programById[programId];
-    const errors = {};
-    if (!prog) errors.programId = 'Choose a training program';
-    if (!ISO_DAY.test(String(completedOn ?? '')) || Number.isNaN(Date.parse(completedOn))) errors.completedOn = 'Enter the completion date';
-    else if (Date.parse(`${completedOn}T00:00:00`) > Date.now()) errors.completedOn = 'Completion date can’t be in the future';
-    if (prog?.accredited && !String(req.body.certificateNo ?? '').trim()) errors.certificateNo = 'Accredited courses need a certificate number';
+    const { record, prog, errors } = validateRecord(req.body);
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Invalid training record', fields: errors });
-
-    const d = new Date(`${completedOn}T00:00:00`);
-    if (prog.renewalMonths) d.setMonth(d.getMonth() + prog.renewalMonths);
-    const pad = (n) => String(n).padStart(2, '0');
-    const record = {
-      programId,
-      completedOn,
-      expiresOn: prog.renewalMonths ? `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` : null,
-      certificateNo: String(req.body.certificateNo ?? '').trim().slice(0, 40) || null,
-      provider: String(req.body.provider ?? '').trim().slice(0, 80) || null,
-    };
+    const { completedOn } = record;
     const updated = await addRecord(person.id, record);
     logAudit(req, {
       action: 'create', module: 'Personnel & Training', recordId: person.id, link: '/personnel',
@@ -194,7 +423,53 @@ router.post('/:id/records', async (req, res, next) => {
         { field: 'Training Status', from: person.trainingStatus, to: updated.trainingStatus },
       ],
     });
-    res.status(201).json(updated);
+    res.status(201).json({ ...updated, recordId: record.id });
+  } catch (err) {
+    next(err);
+  }
+});
+
+const findRecord = (req) => getPerson(req.params.id)?.records.find((r) => r.id === req.params.recordId);
+
+// The certificate itself: raw body (PDF / JPG / PNG / WebP, max 10 MB) with ?name=; replaces an earlier file
+router.post('/:id/records/:recordId/certificate', express.raw({ type: () => true, limit: MAX_ATTACHMENT_BYTES }), async (req, res, next) => {
+  try {
+    const record = findRecord(req);
+    if (!record) return res.status(404).json({ error: 'Training record not found' });
+    const type = sniff(req.body);
+    if (!type) return res.status(400).json({ error: 'Upload the certificate as a PDF, JPG, PNG or WebP file' });
+    const file = await storeUpload(CERT_DIR, req.body, type, { name: req.query.name, uploadedBy: { id: currentUser().id, name: currentUser().name } });
+    if (record.certificateFile) await unlink(certPath(record.certificateFile.storedName)).catch(() => {});
+    const updated = await updateRecord(req.params.id, record.id, { certificateFile: file });
+    logAudit(req, {
+      action: 'update', module: 'Personnel & Training', recordId: updated.id, link: '/personnel',
+      summary: `Uploaded certificate for ${programById[record.programId]?.name ?? record.programId} (${updated.name})`,
+      changes: [{ field: 'Certificate File', from: record.certificateFile?.name ?? '—', to: file.name }],
+    });
+    res.status(201).json(file);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/:id/records/:recordId/certificate', (req, res) => {
+  const file = findRecord(req)?.certificateFile;
+  if (!file) return res.status(404).json({ error: 'No certificate file for this record' });
+  sendStored(res, file, certPath(file.storedName), req.query.download === '1');
+});
+
+router.delete('/:id/records/:recordId/certificate', async (req, res, next) => {
+  try {
+    const record = findRecord(req);
+    if (!record?.certificateFile) return res.status(404).json({ error: 'No certificate file for this record' });
+    await unlink(certPath(record.certificateFile.storedName)).catch(() => {});
+    const updated = await updateRecord(req.params.id, record.id, { certificateFile: null });
+    logAudit(req, {
+      action: 'delete', module: 'Personnel & Training', recordId: updated.id, link: '/personnel',
+      summary: `Removed certificate file for ${programById[record.programId]?.name ?? record.programId} (${updated.name})`,
+      changes: [{ field: 'Certificate File', from: record.certificateFile.name, to: '—' }],
+    });
+    res.status(204).end();
   } catch (err) {
     next(err);
   }

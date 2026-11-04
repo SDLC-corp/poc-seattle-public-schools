@@ -21,7 +21,9 @@ import surveillanceRoutes from './surveillance.js';
 import inspectionRecordsRoutes from './inspectionRecords.js';
 import omRoutes from './om.js';
 import managementPlansRoutes from './managementPlans.js';
+import trendsRoutes from './trends.js';
 import testRoutes from './test.js';
+import { currentUser } from '../data/auditStore.js';
 
 const router = Router();
 
@@ -47,7 +49,11 @@ router.use('/surveillance', surveillanceRoutes);
 router.use('/inspection-records', inspectionRecordsRoutes);
 router.use('/om', omRoutes);
 router.use('/management-plans', managementPlansRoutes);
+router.use('/trends', trendsRoutes);
 router.use('/test', testRoutes);
+
+// Who the backend is crediting for this session's actions (the verified signed-in user, else the demo user)
+router.get('/me', (req, res) => res.json({ ...currentUser(), signedIn: Boolean(req.user) }));
 
 router.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });

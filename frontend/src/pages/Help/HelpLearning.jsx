@@ -16,8 +16,8 @@ const GETTING_STARTED = [
 const GUIDES = [
   { title: 'Log an air monitoring sample and enter the lab result', to: '/air-monitoring' },
   { title: 'Track inspections and mark them completed', to: '/compliance' },
-  { title: 'Upload a management plan or lab report', to: '/documents' },
-  { title: 'Record staff asbestos training', to: '/personnel' },
+  { title: 'Upload a management plan or lab report', to: '/reports/documents' },
+  { title: 'Record staff asbestos training', to: '/personnel/people' },
   { title: 'Add a user and assign school access', to: '/users' },
   { title: 'Review who changed what in the Audit Logs', to: '/audit' },
 ]

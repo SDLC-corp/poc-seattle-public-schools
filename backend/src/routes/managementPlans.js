@@ -16,7 +16,7 @@ import { getRecords as getSurveillance } from '../data/surveillanceStore.js';
 import * as OM from '../data/omStore.js';
 import { listUsers } from './users.js';
 import { getWorkflow, saveWorkflow, removeWorkflow } from '../data/planWorkflowStore.js';
-import { logAudit, CURRENT_USER } from '../data/auditStore.js';
+import { logAudit, currentUser } from '../data/auditStore.js';
 
 const MODULE = 'Management Plans';
 const HANDLES = new Set(['t', 'b', 'l', 'r']);
@@ -934,7 +934,7 @@ router.put('/:schoolId/risk-assessment/:materialId', async (req, res, next) => {
     const before = getAssessment(m.id);
     const level = levelFor(materialRisk * priorityRisk);
     const ranking = level === 'Very Low' ? 'Low' : level;
-    await saveAssessment(m.id, { materialRisk, priorityRisk, notes, date: todayIso(), assessedBy: CURRENT_USER.name, at: new Date().toISOString() });
+    await saveAssessment(m.id, { materialRisk, priorityRisk, notes, date: todayIso(), assessedBy: currentUser().name, at: new Date().toISOString() });
     if (m.riskRanking !== ranking) await updateMaterial(m.id, { riskRanking: ranking });
     logAudit(req, {
       action: before ? 'update' : 'create', module: MODULE, recordId: m.id, link: '/management-plans/risk',
@@ -1004,7 +1004,7 @@ router.put('/:schoolId/workflow', async (req, res, next) => {
       });
     }
     const saved = await saveWorkflow(school.id, {
-      nodes: cleanNodes, edges: cleanEdges, updatedAt: new Date().toISOString(), updatedBy: CURRENT_USER.name,
+      nodes: cleanNodes, edges: cleanEdges, updatedAt: new Date().toISOString(), updatedBy: currentUser().name,
     });
     logAudit(req, {
       action: 'update', module: MODULE, recordId: school.id, link: '/management-plans/workflow',

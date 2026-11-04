@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { X, Info, Upload, ImageOff, LoaderCircle, FileUp } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
-import { request, API_BASE } from '../../lib/api'
+import { request, API_BASE, authHeaders } from '../../lib/api'
 import { floorName } from './buildingUtils'
 
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
@@ -11,7 +11,7 @@ const MAX_PDF_BYTES = 25 * 1024 * 1024
 
 async function uploadPlan(floorId, file) {
   const res = await fetch(`${API_BASE}/floors/${floorId}/plan?name=${encodeURIComponent(file.name)}`, {
-    method: 'POST', headers: { 'Content-Type': file.type }, body: file,
+    method: 'POST', headers: { 'Content-Type': file.type, ...(await authHeaders()) }, body: file,
   })
   const body = await res.json().catch(() => ({}))
   if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`)

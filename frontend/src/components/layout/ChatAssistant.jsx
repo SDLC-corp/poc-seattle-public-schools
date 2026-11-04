@@ -35,7 +35,7 @@ const QUESTIONS = [
         'Arrange an assessment by an accredited asbestos contractor or consultant.',
         'Record the incident, then re-occupy only after written clearance.',
       ],
-      links: [{ label: 'Emergency Response steps & contacts', to: '/management-plans/emergency' }, { label: 'Report an incident', to: '/operations/activities/new' }],
+      links: [{ label: 'Emergency Response steps & contacts', to: '/management-plans/emergency' }, { label: 'Report an incident (start an inspection)', to: '/inspections/new' }],
     }),
   },
   {
@@ -141,8 +141,27 @@ function Answer({ a, shown, onAsk, onNavigate }) {
   )
 }
 
+// Popups, side panels and drawers on the page (not the assistant itself)
+const OVERLAYS = '[aria-modal="true"], .u-modal-backdrop, .lr-drawer, .p-drawer, .compliance-page.details-open'
+
+// True while a popup or side panel is open, so the floating button doesn't cover its buttons
+function useOverlayOpen() {
+  const [overlay, setOverlay] = useState(false)
+  useEffect(() => {
+    let frame = 0
+    const check = () => { frame = 0; setOverlay(Boolean(document.querySelector(OVERLAYS))) }
+    const observer = new MutationObserver(() => { if (!frame) frame = requestAnimationFrame(check) })
+    // Class changes too: some panels stay in the page and open by class (e.g. Compliance details)
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] })
+    check()
+    return () => { observer.disconnect(); cancelAnimationFrame(frame) }
+  }, [])
+  return overlay
+}
+
 export default function ChatAssistant() {
   const [open, setOpen] = useState(false)
+  const overlay = useOverlayOpen()
   const [messages, setMessages] = useState([]) // { from: 'user' | 'bot', text?, answer?, shown? }
   const [typing, setTyping] = useState(false)
   const [input, setInput] = useState('')
@@ -245,10 +264,13 @@ export default function ChatAssistant() {
           </form>
         </section>
       )}
-      <button type="button" className={`ca-fab${open ? ' open' : ''}`} onClick={() => setOpen((o) => !o)} aria-label={open ? 'Close assistant' : 'Open asbestos assistant'} aria-expanded={open}>
-        {open ? <X size={24} /> : <Sparkles size={24} />}
-        {!open && <span className="ca-fab-label">Ask AI</span>}
-      </button>
+      {/* Hidden while a popup or side panel is open (it would cover their buttons) */}
+      {(open || !overlay) && (
+        <button type="button" className={`ca-fab${open ? ' open' : ''}`} onClick={() => setOpen((o) => !o)} aria-label={open ? 'Close assistant' : 'Open asbestos assistant'} aria-expanded={open}>
+          {open ? <X size={24} /> : <Sparkles size={24} />}
+          {!open && <span className="ca-fab-label">Ask AI</span>}
+        </button>
+      )}
     </>
   )
 }

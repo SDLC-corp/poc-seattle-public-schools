@@ -12495,7 +12495,24 @@
         "collectionDate": "2026-10-30",
         "sampleLocation": "Floor (entire room)",
         "laboratory": "Accredited PLM Lab B (sample)",
-        "result": "Pending"
+        "result": "No Asbestos Detected",
+        "measuredValue": 0,
+        "measureUnit": "%",
+        "limitValue": 1,
+        "passFail": "Pass",
+        "asbestosTypes": [],
+        "labSampleId": "test",
+        "analysisMethod": "PLM Point Count (400 points)",
+        "analysisStandard": "AHERA TEM (40 CFR 763 App. A)",
+        "analysisDate": "2026-11-03",
+        "labReportNo": "test",
+        "resultNotes": "test",
+        "resultRecordedAt": "2026-11-04T11:29:47.827Z",
+        "resultRecordedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "resultUpdatedAt": "2026-11-04T11:29:47.827Z"
       },
       "risk": {
         "priority": "Low",
@@ -12533,7 +12550,119 @@
         "id": "u121",
         "name": "Samuel Jessup"
       },
-      "sample": true
+      "sample": true,
+      "stageOverride": {
+        "stage": "closed",
+        "basis": "lab",
+        "note": "Done all",
+        "by": {
+          "id": "demo",
+          "name": "John Doe"
+        },
+        "at": "2026-11-04T06:06:54.877Z"
+      },
+      "updatedAt": "2026-11-04T11:29:47.828Z",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "COMPLETED",
+          "at": "2026-10-30",
+          "by": {
+            "id": null,
+            "name": "Samuel Jessup"
+          },
+          "reason": "Inspector: Samuel Jessup",
+          "derived": true
+        },
+        {
+          "stage": "inProgress",
+          "status": "COMPLETED",
+          "at": "2026-10-30",
+          "by": {
+            "id": null,
+            "name": "Samuel Jessup"
+          },
+          "reason": "Recorded by Samuel Jessup",
+          "derived": true
+        },
+        {
+          "stage": "submitted",
+          "status": "COMPLETED",
+          "at": "2026-10-30",
+          "by": {
+            "id": null,
+            "name": "Samuel Jessup"
+          },
+          "reason": "Approved by Samuel Fenwick",
+          "derived": true
+        },
+        {
+          "stage": "lab",
+          "status": "SKIPPED",
+          "at": "2026-10-30",
+          "by": null,
+          "reason": "Skipped by a manual stage change",
+          "derived": true
+        },
+        {
+          "stage": "action",
+          "status": "COMPLETED",
+          "at": "2026-11-02",
+          "by": null,
+          "reason": "1 of 1 action item completed",
+          "derived": true
+        },
+        {
+          "stage": "followUp",
+          "status": "SKIPPED",
+          "at": "2026-11-02",
+          "by": null,
+          "reason": "Skipped by a manual stage change",
+          "derived": true
+        },
+        {
+          "stage": "closed",
+          "status": "COMPLETED",
+          "at": "2026-11-02",
+          "by": {
+            "id": null,
+            "name": "Samuel Fenwick"
+          },
+          "reason": "Set manually: Done all",
+          "derived": true
+        },
+        {
+          "stage": "lab",
+          "status": "COMPLETED",
+          "at": "2026-11-04T11:29:17.439Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "SMP-13382 · Asbestos Detected · Fail"
+        },
+        {
+          "stage": "followUp",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-04T11:29:17.439Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Waiting for a follow-up inspection of this ACM"
+        },
+        {
+          "stage": "closed",
+          "status": "PENDING",
+          "at": "2026-11-04T11:29:17.439Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Reopened"
+        }
+      ],
+      "extra": []
     },
     {
       "id": "INS-2026-00089",
@@ -14384,14 +14513,14 @@
     {
       "id": "INS-2027-00005",
       "type": "Follow-up Inspection",
-      "date": null,
+      "date": "2026-11-04",
       "scheduledDate": "2027-01-16",
       "materialId": "ACM-dunlapes-b1-f3-r7-1",
       "schoolId": "dunlapes",
       "buildingId": "dunlapes-b1",
       "floorId": "dunlapes-b1-f3",
       "roomId": "dunlapes-b1-f3-r7",
-      "locationDescription": "",
+      "locationDescription": "HVAC duct in ceiling plenum, Staff Room 2",
       "homogeneousAreaId": "",
       "inspectorId": "u120",
       "inspectorName": "Rowan Pemberton",
@@ -14400,14 +14529,99 @@
         "number": "WA-INS-79113",
         "expiresOn": "2027-02-28"
       },
-      "assessment": {},
-      "checklist": {},
-      "sampling": {},
-      "risk": {},
-      "comments": "",
-      "actionItems": [],
+      "assessment": {
+        "currentCondition": "Good",
+        "previousCondition": "Good",
+        "conditionChange": "Unchanged",
+        "damageType": "Cracks",
+        "damageExtent": "Minor (localized, < 10%)",
+        "waterDamage": "Yes",
+        "potentialDisturbance": "Low",
+        "labelled": "Yes",
+        "managementPlanUpdated": "Yes"
+      },
+      "checklist": {
+        "goodCondition": "Yes",
+        "damaged": "No",
+        "labelled": "Yes",
+        "inManagementPlan": "Yes",
+        "waterDamage": "Yes",
+        "furtherAssessment": "Yes",
+        "immediateAction": "Yes"
+      },
+      "sampling": {
+        "required": "Yes",
+        "sampleType": "Air Sample",
+        "sampleId": "TEST-1",
+        "collectionDate": "2026-11-04",
+        "laboratory": "Accredited PLM Lab A (sample)",
+        "testMethod": "Airborne fibres – PCM (NIOSH 7400)",
+        "notes": "test",
+        "result": "Below Limit",
+        "airType": "Area",
+        "durationMin": 93,
+        "sentToLabAt": "2026-11-04T08:16:00.114Z",
+        "sentToLabBy": {
+          "id": "u002",
+          "name": "Rowan Jessup"
+        },
+        "airValue": 0.001,
+        "passFail": "Pass",
+        "limitValue": 0.01,
+        "measureUnit": "f/cc",
+        "resultNotes": "test",
+        "resultRecordedAt": "2026-11-04T08:41:48.334Z",
+        "resultRecordedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "resultUpdatedAt": "2026-11-04T08:41:48.334Z"
+      },
+      "risk": {
+        "priority": "Low",
+        "damageSeverity": "None",
+        "recommendedAction": "No Action – Continue O&M",
+        "immediateAttention": "Yes",
+        "followUpRequired": "No",
+        "targetDate": "2026-11-26"
+      },
+      "comments": "test sdsd dfsdf",
+      "actionItems": [
+        {
+          "id": "AI-1",
+          "action": "test",
+          "assignedTo": "Facilities Manager",
+          "priority": "Low",
+          "dueDate": "2026-11-18",
+          "status": "Pending"
+        },
+        {
+          "id": "AI-2",
+          "action": "Minor Repair: test",
+          "assignedTo": "O&M – Maintenance",
+          "assignee": "Samuel Underwood",
+          "priority": "Medium",
+          "dueDate": "2026-11-18",
+          "status": "In Progress",
+          "omActivityId": "OM-2026-0271",
+          "materialId": "ACM-dunlapes-b1-f3-r7-1"
+        },
+        {
+          "id": "AI-3",
+          "action": "Minor Repair: test",
+          "assignedTo": "O&M – Maintenance",
+          "assignee": "Samuel Underwood",
+          "priority": "Medium",
+          "dueDate": "2026-11-18",
+          "status": "Pending",
+          "omActivityId": "OM-2026-0272",
+          "materialId": "ACM-dunlapes-b1-f3-r7-1"
+        }
+      ],
       "verification": {
-        "reviewStatus": "Not Submitted"
+        "reviewStatus": "Pending Review",
+        "inspectorSignature": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXoAAACjCAYAAACE5tXDAAAQAElEQVR4Aeyd25Mj113Hz2ldZkZax4sddtebHcn3Mq4k65F2baccUhQUhgIeoArKpsBJ8cBrUlz/h1BAVXjkzcRQkFTBSwKhAhQpTLHxrrRrEyeU2SU7mtmsE9vBG680V/XJOZrp1mlJMyONWq2+fLrU6nPrc36/z5G+Ojp9cwQLBCAQOoFytabK1bq3uuKRZz9jxdU9y+e/G3qjVAiBAwgg9AeAIRkC0xGQ/u7dXdkVNy69rITqp8lc1Y8QgMCMCSD0MwZM9dkjsHTu4r/bXm/euvJTJi6F8pVe6sWkJWrF2MQSQOgT23UYHlcCjrP7qQHbrpt4O7/wO2brrUzfeCTYzpoAQj9rwtSfOQJKyP68je19b/qmn9Bl+qYPg9BMCSD0M8VL5cME0p8ihfSdVN3+dI1JlMJVZmtWqRezZYXArAkg9LMmTP3ZIvDYJz9n6bzoLJV+zwbA9I1Ng3BUBBD6qEjTTiYIlLfv/nnA0f999QuBONM3ARxEoiGQVKGPhg6tQGBCAko5/rxNcNKmXxHTN30WhKIhgNBHw5lWMkJAT7v7Qm8Luu1+u7sTmM4pP3Rh1c4nDIGwCSD0YROlvswSKFdWXNv5duvqE3bcD69/KzCdo7rusp9HIHwC1CgQej4EEAiHwONC9qdtxN7FUW8dUrV19o19+PaQPciCwDEJIPTHBMduELAJlCq1//HjWsLbp3Kf9uMjAu18wbp4SgounhoBiaTQCCD0oaGkonQTONS7+3WuPzevpD4Me/nyKzrt4NeNSy9bt74RXDx1MCpypieA0E/PkBoyTmBpeeUdKX2dF8WFhS+Og0TtTe/0iurd+xX0UniDQHgEEPrwWFJTRgk4TmBuXrz/1n99ZhwUnUKR6ZtxQFFmagII/dQIJ6qAwikjUD630rVd2i10r9nxQ8N6+kZP5/tF9PTNg36EAARCJIDQhwiTqjJIIOf0v0Natbeuv74yCQWpXP+UTCmlWDj79Dcm2Z+yEBiHgDNOIcpAAALDBJbO1Tft1G3RfdeOjxNut65+xC6Xzw/d4tjOJpwlAiH6itCHCJOqskVAOmrB81gpJXZa137Si0+wfVuX9Uf1Qo/qFysXvqrTeEEgNAIIfWgoqShLBPKVpwJn2ihXbh3X//ZqIzCqzwn3l45bF/tBYBQBhH4UFdIgcASBBeF82C6ysd5YtOMThmc4qp/QEoqnkgBCn8puxalZElh6bKVhplj8Nrr9A6p+2oQBRvUTAqP4RAQQ+olwURgCQjjbsmZzaK9fzdnxY4YZ1R8THLsdTQChP5oRJYSAwT6Bk49/4q+EkMJbXFcfhfUiU271qP4Buwrm6m0ahKchgNBPQ499M0dge2vrt22nN9aaYX6HfqDrDpyBs3D26X/WabwgMBWBMD+kUxnCzhCIPYELF16UQkrPTqUXLxzWdnBUn8/vPh9W3dSTXQKRCn12MeN5GgiU33H/xvaj02o+asdDCutRvez6denflaXl+t/78RGBU6c+evpEtf5qqVq7Wa7W/0yc/nh5RDGSMkwAoc9w5+P6RAQqwhrN7z9Y5P/EDJb26pX77GodKX7NjvvhMytPnnio9sHdpYXbSojnpJBVnff7pcXiC3rLCwI+AYTeR0EAAgcTKFVqN+3c9v1ilhc1/UgIe1QvhB7V/4MYWEpF5yvKlSekEPol/EUqseZHEhvA8DAJIPRh0qSutBI4KfXiOadHz0o0m1/z4rPY6lF94IIsPar/1cF2tElnAmmO+Gquqx5rt658PZBOJPMEEPqjPgL1ekGP5lSpWlflaq0/d3rUfuSnhsBSpfZD25lCwfmSHZ9R+H0xMKpfOPfUV4S9SNX//krVaX+38Ss/Wm9et4sQhoAh0P+gmBjrEIHyu2JLj5z2/xtLR4t9//S3odIkxIxAKOY45gPg1aSH83euX37Ri85yq0f1ebv+XC73y+Lcx37LTuuHZRgXbfWrI5QqAgj9xN0pZVmP7ovn6nrENfHO7JAwAsMPFtl5I0oX3K7c9dozE/Flp/jK4rmP7539oyxxt8PeDmwhsE8Aod8HcdCmvdpw7Gd7euUKOXGvPkDG6N4DktZtzul/R/RofuvGG+ejdHVj/UpBuMEDs7lc4TdL1dqOtsNov970Xna4l8AbBDwC/Q+xl8J2iEBntem4rjBfrECelgBZrtTjKfanzn/e/PMwqzhz8U8DhhMZi8DSuVrg1sPbsvvOWDuGXKi9diUvlAx8/qSQeSGUP10zg2u3QvaC6uZJAKEfk/7GWqNoRvdCj+oCu+hvnBHT0vL5wNOGAmXmECkv5f/Ia7a84P6BF2Y7PgHpiKJdemf12ik7HmW43bpSlDL3g8GPn2+DVIEDxn46AQhoAgi9hjDBS7VbDSncIbkX0skvlJdjNLofUITSufP+XO8E/ma2aH754g+llL7/blcERvd+RoSBuzdfO90p3Pczo5rU/zrn9iM0yp7spsXTc4T+GP3SXjPz9nJjaFdHSDO6F4/89B8P5UWcoH+QHLtJmcvnxIc/9pd2GuGDCSxI9yfs3I31qR4sYlc1Xfj617/RXtWDDdX//Onf9P+frlL2TjuBgBik3dkw/eusXimZL5z+kulXsObybufzS9WVuc/d6+MKAdtK5eLvIvbBvhoVW3j4mTdFfzAv9D+4uffloJ3t1pWSo9R/mLWz2rhvMJ84BGwCCL1N4xhh/SXTDN2AoJpqHOH0Rvel5VrHxOex6uMKjj3JZLSrJ/anV74wD3uS0mZ+d/dJz1bTsfofXM6LR7Qdq5kPWs1PmXWswhTKNAEtUpn2PxTn26tXHSG3R152Lh25pKdzXFGvF0JpbMJKutu5wJWSPbFfdD47YTWZKX7y8U+8rAykfY9ViA8W2a+SDQQiJ+BE3mJKG2zf/O/nzVSOdm/U33xZfldsl6q1UXl6l9m9Nt9+7TFduxmY6s3ey9KxvQTefQLbW1sv2XxCfrCI3w4BCERJAKEPmbYW+5xetVYMP2JOir2raheXexe7hNzycHVeirbHCSi9ztBTSpyFozkEXo8894emj7w0pRcvzBYCSSaA0M+o99qrTUcLrNTVD2qsyDkyX6rUlaz+7Jd1fiSvwSkIPaUUy3nnSGAc0Eh5d+NP7KxOK9THBNpVE4ZApAQQ+hnj1mLvuLtqc1DtzSnaJXHn13vz9zO2wVTfm4JQ9qFZIXTbg2aZolldzwphekXsL8P/yPYz2EAgcQSOFvrEuRQ/gzduNZc6vXOfd0fN0ffOzikvz/4WyDuuujFIR/+zGGXTYLHUx0uV2rrvpP75a5/KfdqPE4BAwgkg9BF2YLv1+oHz98Ixt0Cuq94B2xmd/ri93jQHZgMe6zGsLFVidEVvwLroIlIvXmtK6tH85cuveHG2EEg6AYR+Dj142Py91NMH5UXns2ZaZaHyVOgPOlFawwZdlrrR0vL8L/AatCuq+NJy8Gyo4kLxr6NqO2Xt4E5MCSD0c+yYg+bvPZPyMucYwTd3yFxcrt3y0qfZSilH7i4dRy5m9Ala2vUAlPffuvTSSEgkQiChBBD6OXecN3/vihFDbc82KbTky7NG9MOcZtFT0V4LvW1OSKdUWZn7zbt6xkT0NvRgkXy0DxaJyE2ayTgBhD4mH4CN/dMxldi5Iw4RfalF3wh+bz1bm+5ceP3bsuXutG0EUjrFherTN+20qMORtpdz/O+AxiGifrBIpL7SWGYJ+B/yzBKImeOd1TdOenP4rnAPPyOmIHM9wa/qg7iVFbd89kLg4RSDrumygTl/qYS7u/bGia7e2mXzolu959HaP9lpaQwvfaQWeIbAtshzT/c0djQ+CYQ+xh+CjdWrvbN09Fy+1GYOzrTopP5Lj8SlKKi8FnO1v7qL1bov7PecXvmmLu33t6msvdbM6TSx2WrklBs8x97dkb8oZnT2j2kzDqvMiQVhLbutb95vRQlCIDUE/C9+ajzyHEnZVot970rbHaF29RSD0emjPNQ6JvYO5uoRv7voPB3YodO9Zsc7aw39WQjehdOc/WOXSVM4jg8WSRNffIkXAf3ljpdBWHM4ge3VZqHTavREX+lFqKA4H763l6tU551rK17M27ZXr+rPg/4Z8RL01vw70JvUvYpxfbBI6kjjUBwI6C92HMzAhuMQMPdiabeu9kRfj/ilWbuqq+f1tVgfNObXPw5tfeD3oPZM3uDe5UrtoNoOqibW6UuPrTT0Qe2+ja6euOrHCGWPQOo9RuhT1sWbrWt6Xr/ptFuNfeEXrtb23svt7txot46+UVdH/2MIKLtWxXI1PWLvbDk1r9uVPjThHavw0thCIG0EEPq09eiAP+ZAqxn5m3Vj/Y1HB7IPjHZW9Zx9UO1FeeAK0gN3jnFG8eGLt4MPFtFKH2N7MQ0CYRBA6MOgmM46VLv1cD7gmiOlHtnrqaFAaqIiha57xpzC5Bm9sXb0Pxyv7FFb8iEQVwIIfVx7JhZ2fbnbLm8ETkEUQsrScjLvi1Oq1gP/UY53IFuwQCBxBBD6xHVZxAZ/+9vb7U33L+xWpePIUiV4IzA7P45hY689kjeK39YHsuNoKzZBIGwCCH3YRKetL477f//q59wdp2mbJvWyVDnftdPiGl5cru1qc32dV1rlO6tPPhtXe7ELAmETQOjDJprS+ja+d7m+01W37UOXjsw75erht12YN47S8rOv5hxz7ZhliSr8pxBfNFcKW4kEIZBeAgh9evs2dM+215tnt12xGaxY5QsP1T8IpsUl9tIzQu48Z1vTdVW3s3bpk3YaYQgklMDYZiP0Y6OioCGws95YcndF4MyboitOLD5w8TsmP05rqfrmJelP2Jh7giq1udYMnkkUJ4OxBQIzIoDQzwhsmqvduNXIaakPiH2u6D5ReLB2Jy5+7x187au8npYX5lqCuNiHHRCIkgBCHyXtFLXVXmvkXNE1+ul7VVTyQ4OP5fMzIwwsVi4EDr6apjvm4ewmwDpEgIT0E0Do09/HM/NwY/WaI9zgTdWc3kVVA+erz8yC4YqXHqg1ctLt3X55L1cJd1sFzhjaS+cdAtkhgNBnp69n4ml77aqjpT4wsjcNlat1VayuBJ5eZdJnu770jCzImhD9KZuuK7obt5t1wQKBDBNA6DPc+WG5vtFqODuiuzVYX0E4pVKlHpjLHywTZpyDr2HSpK40EUDo09Sbc/Rle/XaYvu90y8IczWSZYeUQprRvVh6/gUrOfRgqVJzdVN+veYvRmeMO3X6OxCAQIoJIPQp7tzIXbv7j19qt5pycN7e2FE+9d7fFh6sz2QqZ/SVrw1p2mWFAASEiJnQ0yVpIGDm7btSDU3lFJUohX3bhN7BV0fk+tyUUDscfO3zIAQBhJ7PwIwIbN5s6qmcky8OVu/IvFOq1kKat/+NJ52i5ODrIGTiEBggwIh+AAjREAnc/de/M483VHqxa5VC7s3bC/GknT5puFS98aa9j26GK19tICkP4974BBD68VlR8pgEegdFbUH2RQAABZRJREFUXTE0ii9Xa2/ee+9Hv3acajn4ehxq7JNVAgh9Vns+Yr/NlbTbUgwcjJVi9+TCLxTPrUx064Thg69KcOVrxB1Kc4kigNAnqruSbezOzcaJ/ObWvwj7XsfapULO+VCpUnfLD148o6OHvgoP1t8buu2wmz/+LYcPbY1MCKSDAEKfjn5MjBd3vv+tn2+vNq2zZPZMN+fbC+XeLlVGH6gtnj1/u2yutlXivr099t5d1d3trL/GQ0T2cPAOgZEEEPqRWEicMQHXHKR1d5WrBhqSejGCvlStu4tn6t/pCXylrgqF/NBoX+llo3WtMFAFUQhAYIAAQj8A5HhR9joOgY1bzZyZW1fDei/0B1PmFsQTPYGXwdrNxbc7O7tv9w7yBrOIQQACIwjo79OIVJIgECGBTuuq4yzk/m1wdD/KhD2Bb8jt773+wKh80iAAgWECCP0wE1LmQOCDt177OTO67yqhp3OCkm9iRuDNdA8CP4fOoclQCcyjMoR+HtRp80ACm62Gns5pSiPqXX10Vu0WGuYHAIE/EBkZEDiSAEJ/JCIKzIvA5qqew7916cK82qddCKSFAEKflp7Ej2wRwFsITEAAoZ8AFkUhAAEIJJEAQp/EXsNmCEAAAhMQQOgngJW+ongEAQhkgQBCn4VexkcIQCDTBBD6THc/zkMAAlkgEIbQZ4ETPkIAAhBILAGEPrFdh+EQgAAExiOA0I/HiVIQgEAYBKhjLgQQ+rlgp1EIQAAC0RFA6KNjTUsQgAAE5kIAoZ8LdhqdjgB7QwACkxBA6CehRVkIQAACCSSA0Cew0zAZAhCAwCQEsiz0k3CiLAQgAIHEEkDoE9t1GA4BCEBgPAII/XicKAUBCGSZQMJ9R+gT3oGYDwEIQOAoAgj9UYTIhwAEIJBwAgh9wjsQ85NEAFshMB8CCP18uNMqBCAAgcgIIPSRoaYhCEAAAvMhgNDPh/s0rbIvBCAAgYkIIPQT4aIwBCAAgeQRQOiT12dYDAEIQGA8AvulEPp9EGwgAAEIpJUAQp/WnsUvCEAAAvsEEPp9EGwgAIGDCJCedAIIfdJ7EPshAAEIHEEAoT8CENkQgAAEkk4AoU96DybHfiyFAATmRAChnxN4moUABCAQFQGEPirStAMBCEBgTgQSJ/Rz4kSzEIAABBJLAKFPbNdhOAQgAIHxCCD043GiFAQgkDgCGOwRQOg9EmwhAAEIpJQAQp/SjsUtCEAAAh4BhN4jwRYCowmQCoHEE0DoE9+FOAABCEDgcAII/eF8yIUABCCQeAIIfURdSDMQgAAE5kUAoZ8XedqFAAQgEBEBhD4i0DQDAQhAYDwC4ZdC6MNnSo0QgAAEYkUAoY9Vd2AMBCAAgfAJIPThM6VGCMSBADZAwCeA0PsoCEAAAhBIJwGEPp39ilcQgAAEfAIIvY+CwCgCpEEAAskngNAnvw/xAAIQgMChBBD6Q/GQCQEIQCD5BKIR+uRzwgMIQAACiSWA0Ce26zAcAhCAwHgEEPrxOFEKAhCIhgCtzIAAQj8DqFQJAQhAIE4EEPo49Qa2QAACEJgBAYR+BlCpcv4EsAACEOgTQOj7LAhBAAIQSCUBhD6V3YpTEIAABPoEEPo+i+EQKRCAAARSQAChT0En4gIEIACBwwgg9IfRIQ8CEIDAeARiXQqhj3X3YBwEIACB6Qkg9NMzpAYIQAACsSaA0Me6ezAuawTwFwKzIIDQz4IqdUIAAhCIEQGEPkadgSkQgAAEZkEAoZ8F1XnXSfsQgAAELAIIvQWDIAQgAIE0EkDo09ir+AQBCEDAInCI0FulCEIAAhCAQGIJIPSJ7ToMhwAEIDAeAYR+PE6UggAEDiFAVrwJIPTx7h+sgwAEIDA1AYR+aoRUAAEIQCDeBBD6ePdPtqzDWwhAYCYEfgwAAP//werUbAAAAAZJREFUAwCeDvKDs1iBVgAAAABJRU5ErkJggg==",
+        "completionDate": "2026-11-04"
       },
       "assignment": {
         "assignedBy": {
@@ -14417,14 +14631,218 @@
         "assignedAt": "2027-01-05T18:30:00.000Z",
         "notes": ""
       },
-      "state": "scheduled",
-      "attachments": [],
+      "state": "submitted",
+      "attachments": [
+        {
+          "id": "e1ddc7b9-1f3e-4d69-959a-1ec4f8ab21ff",
+          "name": "Bright Modern Classroom with Blue Chairs.png",
+          "mime": "image/png",
+          "size": 2114659,
+          "storedName": "e1ddc7b9-1f3e-4d69-959a-1ec4f8ab21ff.png",
+          "uploadedAt": "2026-11-04T08:05:52.282Z",
+          "category": "Material Condition Photo",
+          "uploadedBy": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          }
+        }
+      ],
       "createdAt": "2027-01-03T18:30:00.000Z",
       "createdBy": {
         "id": "u001",
         "name": "Samuel Fenwick"
       },
-      "sample": true
+      "sample": true,
+      "checklistNotes": {},
+      "extra": [],
+      "reviewGates": true,
+      "stageReviews": [
+        {
+          "id": "RV-1",
+          "stage": "submitted",
+          "status": "approved",
+          "requestedAt": "2026-11-04T08:07:57.428Z",
+          "requestedBy": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "note": "Inspection submitted – review it and send the samples to the laboratory.",
+          "requestFileIds": [],
+          "reviewerId": "u002",
+          "reviewerName": "Rowan Jessup",
+          "comments": "",
+          "fileIds": [],
+          "reviewDate": "2026-11-04",
+          "signature": "data:image/png;base64,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",
+          "decidedAt": "2026-11-04T08:16:00.114Z"
+        },
+        {
+          "id": "RV-2",
+          "stage": "lab",
+          "status": "approved",
+          "requestedAt": "2026-11-04T08:56:29.521Z",
+          "requestedBy": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "note": "Lab results recorded – no O&M work needed. Please schedule a follow-up inspection.",
+          "requestFileIds": [],
+          "outcome": "followUp",
+          "followUpPlan": {
+            "inspectorId": "u120",
+            "inspectorName": "Rowan Pemberton",
+            "scheduledDate": "2026-12-04",
+            "scheduledTime": "09:00",
+            "notes": ""
+          },
+          "reviewerId": "u002",
+          "reviewerName": "Rowan Jessup",
+          "comments": "",
+          "fileIds": [],
+          "reviewDate": "2026-11-04",
+          "signature": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABSAAAACjCAYAAACaCbDAAAAQAElEQVR4AezdW4xkW1kH8L1290zfBgRCQAhdPQNETqKBM1UTFWNQE42CDwpRE2JMSLwkPPliDA++GmN488Go0Qd8MKiJYGK8RRJIFJDT1Y1cooBHp6vxHDnkiOFMVU93T+/N2tM9Mz3VPaenpm778qupPVW1L2t9329VJpl/qrrTxI0AAQIECBAgQIAAAQIECBCou4D+CBAgMDcBAeTc6E1MgAABAgQIECDQPAEdEyBAgAABAgSaJyCAbN6a65gAAQIECBAgQIAAAQIECBAgQIDAzAQEkDOjNtGwgNcECBAgQIAAAQIECBAgQIBA/QV0SEAA6T1AgAABAgQIECBAgACB+gvokAABAgQIzE1AADk3ehMTIECAAAECzRPQMQECBAgQIECAAIHmCQggm7fmOiZAgAABAgQIECBAgAABAgQIECAwM4G5BZAz69BEBAgQIECAAAECBAgQIECAwNwETEyAAAEBpPcAAQIECBAgQIAAgfoL6JAAAQIECBAgMDcBAeTc6E1MgAABAs0T0DEBAgQIECBAgAABAgSaJyCAbN6a65gAAQIECBAgQIAAAQIECBAgUH8BHZZGQABZmqVQCAECBAgQIECAAAECBOonoCMCBAgQICCA9B4gQIAAAQIECNRfQIcECBAgQIAAAQIE5iYggJwbvYkJEGiegI4JECBAgAABAgQIECBAgEDzBJoXQDZvjXVMgAABAgQIECBAgAABAgSaJ6BjAgRKIyCALM1SKIQAAQIECBAgQIBA/QR0RIAAAQIECBAQQHoPECBAgACB+gvokAABAgQIECBAgAABAnMTEEDOjd7EzRPQMQECBAgQIECAAAECBAgQIFB/AR0OCwggh0W8JkCAAAECBAgQIECAAIHqC+iAAAECBEojIIAszVIohAABAgQIECBQPwEdESBAgAABAgQIEBBAeg8QIECg/gI6JECAAAECBAgQIECAAAECcxMQQM6M3kQECBAgQIAAAQIECBAgQIBA/QV0SIDAsIAAcljEawIECBAgQIAAAQIEqi+gAwIECBAgQKA0AgLI0iyFQggQIECAQP0EdESAAAECBAgQIECAAAEBpPcAgfoL6JBAbQWWr914aW2jk62sX8/LtC296em/rC26xggQIECAAAECBAgQKKtAaesSQJZ2aRRGgAABAqcFXn2t8+GVVufOWqudx9Dx7raQ5VfiOSFN06RM2+LCws8VNS5vtA9ife4ECBAgQIBAowQ0S4AAAQLDAgLIYRGvCRAgQKAUApdaN/59db2T3QscD7LkN9KQLCQhJFW5xWIvFUHkWquTX2ld/1JV6lYngVoIaIIAAQIECBAgQKA0AgLI0iyFQggQIFA/gVE6uvd16tWN4084Xg75UyFNQnJB4JgneZJlWWm2JM/Pth2SJA/p9xZh5GqrfSdpdX7+7En2ECBAgAABAgQIECBAoJ4CaT3b0tUpAU8JECBQOoGX+zp1SMLL1Hsc7uUx5Uuz/L/6O90w2NkKe7vbpdn6va2QHi58OI+3GDue6SWEsLAWkr+IQWR+pdV58cwJdhAgQIAAAQIECBB4MgFXESitgACytEujMAIECNRH4Em/Tn38YcI8yY6SLDlc+LN+DBtPQsf0pd2tt5RV6KXnPvebg95WWtR7FPJvxrz0TKkxiEzykLxmdaOTr623s6U3fv/Hz5xkBwECBAhUUEDJBAgQIECAwLCAAHJYxGsCBAgQGFtgeb19a2X9er66McLXqfPjzwvmRVqX5fv9F//ndYNeNxQh3t7Xuwv95z73i2MXNocBbt/cel3xqch+WHl3noWj4y4fFHL3855pCIuXjn6m+FmRK+s39h8c9eyJBVxIgAABAgQIECBAgEBpBASQpVkKhRCon4COmiWwst4+WmsVgWM7X0jDWpqmSYh/LlLI8uKWvtCPYePg+CvVaX93azm59b/fvOjaSh2/+c9/P9jdXCwC1Tzkz55be0iSNM0vr7U6eRHgftebn/7UuefZSYAAAQIECBAgQIAAgRIJXFRKetEJjhMgQIAAgfMElq+9/e9WW53s3qcc0zSkSQjx1GKLD+fd87gzz/I7Wfap4qvUxbbX20oHvWdeH4805j64ufXWovdiS5JwmB9/1zy5f4uERYB752jhXWvFp0hb1791/5gnBAgQIECAAIHzBewlQIBAaQXS0lamMAIECBAoncDqmzv/t9pqZ8Un9BaySz8V88bifn6dx6FanoTsoL946QNF2NbvdUO/t53u727/6PkXNW9vf2fz8qC3FRYWs8/e/fr5GYKYRob0VUUQGcPew+Spp9555hQ7CBAokYBSCBAgQIAAAQIEhgUEkMMiXhMgQIDAQwJLV9u3i9Axhl95OEpeHeItiZnYQyedvLibOWbx78P8o/0YqvV3umn/5vZS8uxnP3JyymweKjjLt5/dfudgp/jFNd2Q5cntGEYOdREie1hcHax+uvh69hve8H3vHTrBSwIECBAgQIAAAQIECJRSQABZymWpR1G6IECgugL3Qsfik46LeViKmWMo4q/zOopxY5GV7cewMQyKTzjuxhDtua33n3eufY8nsNfrrsQwMmRp2Bm+IoSQFF/P/vblpb+6st45czxxI0CAAAECBAgQIDBjAdMRuEhAAHmRkOMECBBoiMB5oWMSzm++CB0PQvrVk9Ax7fe6y+efae84Anv/vXm1ML6ytPT+PN6Gx8rTpLXWunFneL/XBAgQINBIAU0TIECAAIHSCgggS7s0CiNAgMD0BWLoeFB8vfr0Jx2HQ8c8llF8xDGLf/VfefDeIhAb9Lrp4c1n3hYPuc9A4Btf/fRHB72ttLAvwt+Hpgz5QvHzIV+9/kMffGi/F3MSMC0BAgQIECBAgAABAsMCAshhEa8JEKi+gA5eVmAodLwU4u3lQsfBTjcUXwfei6Fj8sUvfvxlB3dw6gJF+JvmYeir1yE5SPd/PwaRz0+9ABMQIECAAAECBAgQIEBgRIGpBZAj1uF0AgQIEJiiwP3QcaOTL+ZhtNBxinUZ+skEXuptXu0f7L8vKT6e+tAQ4bvXNjpHD+3yggABAgQIECAwZQHDEyBA4CIBAeRFQo4TIECgogL3Q8fWqdBxqJciv8pjilV8vfqhTzoOnedlCQWe/9LH+r1uyJIw/DMg07WNdr567cZWCatWEgEC0xMwMgECBAgQIECgtAICyNIujcIIECAwusC5oePQL5IROo7u+vhXzP7MvZ3NS0dJerMIkh/MHpKQ5dfvBpEbnc8+2O8ZAQIECBAgQIAAAQIEZi8ggJy9uRmnLWB8Ag0TEDo2bMHPaff2zjPXBgcH78vzIl4+fUIMIpPkB1Y3OvkrNtp/e/qI5wQIECBAgAABAgQqL6CByggIICuzVAolQIDAAwGh4wMLz04Env/Sxwa9rZDl+eHJnvsPIT7LkvDutVZnOKGMR9wJECBAgMB4Aq4mQIAAAQIXCQggLxJynAABAiUQWNx4x+7yRjtbbbWzIkTyi2RKsCglLWGvt3W5v9Mtgsj9MyXGJHJ1o51fWW9vnjlmR9UF1E+AAAECBAgQIECgtAICyNIujcIIEKiewGQqXrp6o7uy8XQWg6IsBo55sS0li29aSMLdWxJDpNMzFR9pK37+n18kc1rF8xhELp8XRIb4BsrT0Invq+wV1zp/RIoAAQIECBAgQIAAAQLTFqhfADltMeMTIEBgggJXrr7jz4sg6GS7GzYu5nk7TRZCDIpCvCXFNjyl0HFYxOtHCdwLIuPx/aR448QnxT2+r8JRlvzqynr7cPVa52+KfTYCBAgQIECAQKUEFEuAQGUEBJCVWSqFEiBQZYFXfc87/3h548b+2nonWy22VjuPoWOe54u/UARBJ9u5YeODvov0KG5Zng92umGwsxX2el3/jj8A8uxlBPo73eX8UvjtPHnwm2pCPD9Nw2LIkp8uvtq/utHZE0ZGFHcCBEYScDIBAgQIECBA4CIB/3G9SMhxAgQIPKbA0lve3l1qveNotXU9W1m/nq9tdO5vh/sHv7yQ5JeTNAmh2EJIQgiPHjnmjMefVotpY3aUZ5eO/qUfA8e72+5W+ugLHWmowGO1PXh287dicJ2GPHzlzAXx7Rjvy6fDyDPn2EGAAAECBAgQIECAAIEnEPCf2CdAcwmB8wXsbYLA5avt51bXY8DYamdrG+18NW7F41oMGxfvXGovhsU0hDSk6aj/vMbEMWaN0TAL+e2/7ve64e62s50Odj+f7v3n5384HnMnMBGBW73Np/o73RBvX8nzJDsOu08NHZPIeF+O7+ts9erTf3jqiKcECBAgQIAAAQIECCQIRhUY9X/Io47vfAIECFRL4D3veddqq/3SynoMGOO2GoPFGMIcf5Kx1ckv5eENMV2MEWOI+UxIij9J/DsZ8ZbHW7wku3z58h8UQdC9TzbG5wu3el/+2XjMncDUBW7d3Hxq0OsuFGF3koTtGEQexS05dQshW/i1GLq/uNLq/M6p/Z4SIECAAIH5C6iAAAECBCojIICszFIplECzBFaKTxmuX8/j49S3+wFjETZ++RufCiFcSdMQkriF5NTtoRen9t97mt97khxnOFmeZ3HL87zff+trfyKGi+HeNuhtpfH5wre+9pkPPrjKMwLzE+jvbLZjELm4vJT8YEjyF+9XEt/3IU1fk4bkQ2sb7aOV1vWby2+6/iP3j3vSeAEABAgQIECAAAECBC4SEEBeJOQ4AQIzF1i52snSmADGLZnFNnqDeQwYi7QxT+7mizFlPAz58zG8KULFuyFj8Uti+rtb6V7cYth4JfnEP/zT6PM89hVOJDAxgRe/1v3XWztbr01C+nvxjX708MAxigzpxsJC+sm1jc5/rLVu/NLDx70iQIAAAQIECBAgQIDAWQEB5FmTJ9zjMgIEJiUQsiLcm9Ro442TZVmS51l+J7+T3Vk83O7vdGPAuBUGJ78QZq+3lQ52t9ODm1tvjDOVp/BYjDuBcQT6N5/59RiqLyYh+cckCS/FMDIZur0tCfmfrm7cePfQfi8JECBAgAABAjUX0B4BAqMKCCBHFXM+AQJTFxjEUO/oKDsqwr9ZbHnMGJO4HSXh4NLS5T85DhmLoLEb9na3w6C3ne73/m1h/9kvtKfevAkIlEygf7P7k/2dzVf29w9fnyT5J2IgefhQiXn2wkOvvSBAgMCsBMxDgAABAgQIVEZAAFmZpVIogWYJ3P769mIR/s1iG+x2037cbu9sLv3/Vz/zK82S1i2BxxT4xhde6O9s/XgMJC/HEPJ38zz7SAjhxwa9re5jjuA0AgQIECBAgAABAgQaKiCAbOjCa7tWApohQIDATAViCPmhQW/7A7dubn5yphObjAABAgQIECBAgECzBSrbvQCyskuncAIECBAgQIAAAQIECBCYvYAZCRAgQGBUAQHkqGLOJ0CAAAECBAgQmL+ACggQIECAAAECBCojIICszFIplAABAuUTUBEBAgQIECBAgAABl8LstQAADCRJREFUAgQIELhIQAB5kVD5j6uQAAECBAgQIECAAAECBAgQqL+ADglUVkAAWdmlUzgBAgQIECBAgAABArMXMCMBAgQIECAwqoAAclQx5xMgQIAAAQLzF1ABAQIECBAgQIAAAQKVERBAVmapFEqgfAIqIkCAAAECBAgQIECAAAECBOovMG6HAshxBV1PgAABAgQIECBAgAABAgSmL2AGAgQIVFZAAFnZpVM4AQIECBAgQIDA7AXMSIAAAQIECBAgMKqAAHJUMecTIECAwPwFVECAAAECBAgQIECAAAEClREQQFZmqcpXqIoIECBAgAABAgQIECBAgACB+gvokMC4AgLIcQVdT4AAAQIECBAgQIAAgekLmIEAAQIECFRWQABZ2aVTOAECBAgQIDB7ATMSIECAAAECBAgQIDCqgAByVDHnEyAwfwEVECBAgAABAgQIECBAgAABApUReOIAsjIdKpQAAQIECBAgQIAAAQIECBB4YgEXEiBAYFwBAeS4gq4nQIAAAQIECBAgMH0BMxAgQIAAAQIEKisggKzs0imcAAECBGYvYEYCBAgQIECAAAECBAgQGFVAADmqmPPnL6ACAgQIECBAgAABAgQIECBAoP4COqyNgACyNkupEQIECBAgQIAAAQIECExewIgECBAgQGBcAQHkuIKuJ0CAAAECBAhMX8AMBAgQIECAAAECBCorIICs7NIpnACB2QuYkQABAgQIECBAgAABAgQIEBhVoHoB5KgdOp8AAQIECBAgQIAAAQIECBConoCKCRCojYAAsjZLqRECBAgQIECAAAECkxcwIgECBAgQIEBgXAEB5LiCridAgAABAtMXMAMBAgQIECBAgAABAgQqKyCArOzSKXz2AmYkQIAAAQIECBAgQIAAAQIE6i+gw0kLCCAnLWo8AgQIECBAgAABAgQIEBhfwAgECBAgUBsBAWRtllIjBAgQIECAAIHJCxiRAAECBAgQIECAwLgCAshxBV1PgACB6QuYgQABAgQIECBAgAABAgQIVFZAAPnYS+dEAgQIECBAgAABAgQIECBAoP4COiRAYNICAshJixqPAAECBAgQIECAAIHxBYxAgAABAgQI1EZAAFmbpdQIAQIECBCYvIARCRAgQIAAAQIECBAgMK6AAHJcQdcTmL6AGQgQIECAAAECBAgQIECAAIH6C9S2QwFkbZdWYwQIECBAgAABAgQIECAwuoArCBAgQGDSAgLISYsajwABAgQIECBAYHwBIxAgQIAAAQIECNRGQABZm6XUCAECBCYvYEQCBAgQIECAAAECBAgQIDCugAByXMHpX28GAgQIECBAgAABAgQIECBAoP4COiRQWwEBZG2XVmMECBAgQIAAAQIECIwu4AoCBAgQIEBg0gICyEmLGo8AAQIECBAYX8AIBAgQIECAAAECBAjURkAAWZul1AiByQsYkQABAgQIECBAgAABAgQIEKi/wLQ7FEBOW9j4BAgQIECAAAECBAgQIEDgYgFnECBAoLYCAsjaLq3GCBAgQIAAAQIERhdwBQECBAgQIECAwKQFBJCTFjUeAQIECIwvYAQCBAgQIECAAAECBAgQqI2AALI2Szn5RoxIgAABAgQIECBAgAABAgQI1F9AhwSmLSCAnLaw8QkQIECAAAECBAgQIHCxgDMIECBAgEBtBQSQtV1ajREgQIAAAQKjC7iCAAECBAgQIECAAIFJCwggJy1qPAIExhcwAgECBAgQIECAAAECBAgQIFAbgUcGkLXpUCMECBAgQIAAAQIECBAgQIDAIwUcIECAwLQFBJDTFjY+AQIECBAgQIAAgYsFnEGAAAECBAgQqK2AALK2S6sxAgQIEBhdwBUECBAgQIAAAQIECBAgMGkBAeSkRY03voARCBAgQIAAAQIECBAgQIAAgfoL6LAxAgLIxiy1RgkQIECAAAECBAgQIHBWwB4CBAgQIDBtAQHktIWNT4AAAQIECBC4WMAZBAgQIECAAAECBGorIICs7dJqjACB0QVcQYAAAQIECBAgQIAAAQIECExaoHwB5KQ7NB4BAgQIECBAgAABAgQIECBQPgEVESDQGAEBZGOWWqMECBAgQIAAAQIEzgrYQ4AAAQIECBCYtoAActrCxidAgAABAhcLOIMAAQIECBAgQIAAAQK1FRBA1nZpNTa6gCsIECBAgAABAgQIECBAgACB+gvocNYCAshZi5uPAAECBAgQIECAAAECBJKEAQECBAg0RkAA2Zil1igBAgQIECBA4KyAPQQIECBAgAABAgSmLSCAnLaw8QkQIHCxgDMIECBAgAABAgQIECBAgEBtBQSQ95fWEwIECBAgQIAAAQIECBAgQKD+AjokQGDWAgLIWYubjwABAgQIECBAgACBJGFAgAABAgQINEZAANmYpdYoAQIECBA4K2APAQIECBAgQIAAAQIEpi0ggJy2sPEJXCzgDAIECBAgQIAAAQIECBAgQKD+Ao3tUADZ2KXXOAECBAgQIECAAAECBJoooGcCBAgQmLWAAHLW4uYjQIAAAQIECBBIEgYECBAgQIAAAQKNERBANmapNUqAAIGzAvYQIECAAAECBAgQIECAAIFpCwggpy188fjOIECAAAECBAgQIECAAAECBOovoEMCjRUQQDZ26TVOgAABAgQIECBAoIkCeiZAgAABAgRmLSCAnLW4+QgQIECAAIEkYUCAAAECBAgQIECAQGMEBJCNWWqNEjgrYA8BAgQIECBAgAABAgQIECBQf4F5dyiAnPcKmJ8AAQIECBAgQIAAAQIEmiCgRwIECDRWQADZ2KXXOAECBAgQIECgiQJ6JkCAAAECBAgQmLWAAHLW4uYjQIAAgSRhQIAAAQIECBAgQIAAAQKNERBANmapzzZqDwECBAgQIECAAAECBAgQIFB/AR0SmLeAAHLeK2B+AgQIECBAgAABAgSaIKBHAgQIECDQWAEBZGOXXuMECBAgQKCJAnomQIAAAQIECBAgQGDWAgLIWYubjwCBJGFAgAABAgQIECBAgAABAgQI1F/gpEMB5AmEBwIECBAgQIAAAQIECBAgUEcBPREgQGDeAgLIea+A+QkQIECAAAECBJogoEcCBAgQIECAQGMFBJCNXXqNEyBAoIkCeiZAgAABAgQIECBAgACBWQsIIGctbr4kYUCAAAECBAgQIECAAAECBAjUX0CHBE4EBJAnEB4IECBAgAABAgQIECBQRwE9ESBAgACBeQsIIOe9AuYnQIAAAQIEmiCgRwIECBAgQIAAAQKNFRBANnbpNU6giQJ6JkCAAAECBAgQIECAAAECBGYtMPsActYdmo8AAQIECBAgQIAAAQIECBCYvYAZCRAgcCIggDyB8ECAAAECBAgQIECgjgJ6IkCAAAECBAjMW0AAOe8VMD8BAgQINEFAjwQIECBAgAABAgQIEGisgACysUvfxMb1TIAAAQIECBAgQIAAAQIECNRfQIdlExBAlm1F1EOAAAECBAgQIECAAIE6COiBAAECBAicCAggTyA8ECBAgAABAgTqKKAnAgQIECBAgAABAvMWEEDOewXMT4BAEwT0SIAAAQIECBAgQIAAAQIEGivQoACysWuscQIECBAgQIAAAQIECBAg0CABrRIgUDYBAWTZVkQ9BAgQIECAAAECBOogoAcCBAgQIECAwImAAPIEwgMBAgQIEKijgJ4IECBAgAABAgQIECAwbwEB5LxXwPxNENAjAQIECBAgQIAAAQIECBAgUH8BHT5CQAD5CBi7CRAgQIAAAQIECBAgQKCKAmomQIAAgbIJCCDLtiLqIUCAAAECBAjUQUAPBAgQIECAAAECBE4EBJAnEB4IECBQRwE9ESBAgAABAgQIECBAgACBeQsIIKe/AmYgQIAAAQIECBAgQIAAAQIE6i+gQwIEHiEggHwEjN0ECBAgQIAAAQIECFRRQM0ECBAgQIBA2QQEkGVbEfUQIECAAIE6COiBAAECBAgQIECAAAECJwICyBMIDwTqKKAnAgQIECBAgAABAgQIECBAoP4CZe9QAFn2FVIfAQIECBAgQIAAAQIECFRBQI0ECBAg8AgBAeQjYOwmQIAAAQIECBCoooCaCRAgQIAAAQIEyiYggCzbiqiHAAECdRDQAwECBAgQIECAAAECBAgQOBH4DgAAAP//Y4qaCgAAAAZJREFUAwCRjvOSeaWbMwAAAABJRU5ErkJggg==",
+          "confirmedSamples": [
+            "ACM-dunlapes-b1-f3-r7-1"
+          ],
+          "decidedAt": "2026-11-04T08:57:52.850Z",
+          "childInspectionId": "INS-2026-00127"
+        }
+      ],
+      "updatedAt": "2026-11-04T09:12:59.250Z",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "COMPLETED",
+          "at": "2027-01-05",
+          "by": {
+            "id": null,
+            "name": "Samuel Fenwick"
+          },
+          "reason": "Assigned by Samuel Fenwick to Rowan Pemberton",
+          "derived": true
+        },
+        {
+          "stage": "inProgress",
+          "status": "COMPLETED",
+          "at": "2026-11-04",
+          "by": {
+            "id": null,
+            "name": "Rowan Pemberton"
+          },
+          "reason": "Recorded by Rowan Pemberton",
+          "derived": true
+        },
+        {
+          "stage": "submitted",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-04",
+          "by": {
+            "id": null,
+            "name": "Rowan Pemberton"
+          },
+          "reason": "Waiting for review – samples go to the laboratory once approved",
+          "derived": true
+        },
+        {
+          "stage": "followUp",
+          "status": "NOT_REQUIRED",
+          "at": "2026-11-04",
+          "by": null,
+          "reason": "No follow-up required",
+          "derived": true
+        },
+        {
+          "stage": "submitted",
+          "status": "COMPLETED",
+          "at": "2026-11-04T08:16:00.137Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Final review pending"
+        },
+        {
+          "stage": "lab",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-04T08:16:00.137Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "TEST-1 · Pending"
+        },
+        {
+          "stage": "lab",
+          "status": "SKIPPED",
+          "at": "2026-11-04T08:16:21.282Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Skipped by a manual stage change"
+        },
+        {
+          "stage": "action",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-04T08:16:21.282Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Set manually: test"
+        },
+        {
+          "stage": "lab",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-04T08:16:47.619Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "TEST-1 · Pending"
+        },
+        {
+          "stage": "action",
+          "status": "PENDING",
+          "at": "2026-11-04T08:16:47.619Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "0 of 1 action item completed"
+        },
+        {
+          "stage": "lab",
+          "status": "COMPLETED",
+          "at": "2026-11-04T08:57:53.007Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "TEST-1 · Below Limit · Pass"
+        },
+        {
+          "stage": "action",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-04T08:57:53.007Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "0 of 3 action items completed"
+        },
+        {
+          "stage": "followUp",
+          "status": "PENDING",
+          "at": "2026-11-04T08:57:53.007Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Follow-up inspection INS-2026-00127 scheduled for 2026-12-04 · Rowan Pemberton"
+        }
+      ],
+      "stageOverride": null
     },
     {
       "type": "3-Year Reinspection",
@@ -14470,6 +14888,68 @@
       },
       "sample": false,
       "id": "INS-2026-00126"
+    },
+    {
+      "type": "Follow-up Inspection",
+      "date": null,
+      "scheduledDate": "2026-12-04",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-dunlapes-b1-f3-r7-1",
+      "schoolId": "dunlapes",
+      "buildingId": "dunlapes-b1",
+      "floorId": "dunlapes-b1-f3",
+      "roomId": "dunlapes-b1-f3-r7",
+      "locationDescription": "HVAC duct in ceiling plenum, Staff Room 2",
+      "homogeneousAreaId": "",
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "extra": [],
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "parentId": "INS-2027-00005",
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-04T08:57:52.893Z",
+        "notes": "Follow-up of inspection INS-2027-00005"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-04T08:57:52.893Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00127",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-04",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Follow-up of inspection INS-2027-00005 · Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-04T08:57:53.023Z"
     }
   ]
 }

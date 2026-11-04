@@ -34,7 +34,12 @@ export function inspectionStatus(i, today = startOfToday()) {
   return 'scheduled';
 }
 
-export const withStatus = (i) => ({ ...i, status: inspectionStatus(i) });
+// booked: an inspector and date are confirmed — completed, booked with Schedule, or far enough ahead to count as
+// scheduled. Due-soon / overdue inspections nobody has booked still need scheduling.
+export const withStatus = (i) => {
+  const status = inspectionStatus(i);
+  return { ...i, status, booked: status === 'completed' || status === 'scheduled' || Boolean(i.bookedAt) };
+};
 export const getInspections = () => inspections.map(withStatus);
 export const getInspection = (id) => {
   const i = inspections.find((x) => x.id === id);
@@ -101,6 +106,15 @@ export async function completeInspection(id, notes = '') {
   }
   await persist();
   return { inspection: withStatus(i), next: next && withStatus(next) };
+}
+
+// Book an inspection: its date and inspector (recorded as booked by whom and when)
+export async function bookInspection(id, { date, inspectorId, inspectorName, by }) {
+  const i = inspections.find((x) => x.id === id);
+  const before = { date: i.scheduledDate, inspector: i.inspectorName };
+  Object.assign(i, { scheduledDate: date, inspectorId, inspectorName, bookedAt: new Date().toISOString(), bookedBy: by });
+  await persist();
+  return { inspection: withStatus(i), before };
 }
 
 export async function rescheduleInspection(id, date) {

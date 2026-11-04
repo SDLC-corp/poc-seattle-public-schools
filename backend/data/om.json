@@ -14891,8 +14891,20 @@
       "dueDate": "2026-12-09",
       "assignedToId": "P-0029",
       "assignedToName": "Elliot Kinsley",
-      "state": "pending",
-      "work": null,
+      "state": "inProgress",
+      "work": {
+        "performedOn": "2026-11-04",
+        "hours": null,
+        "notes": "",
+        "controls": {
+          "wetMethods": false,
+          "hepaVacuum": false,
+          "barriers": false,
+          "ppe": false,
+          "wasteBagged": false,
+          "areaCleared": false
+        }
+      },
       "completedAt": null,
       "completedBy": null,
       "attachments": [],
@@ -14906,6 +14918,11 @@
           "at": "2026-10-26T19:30:00.000Z",
           "by": "Rowan Jessup",
           "action": "Assigned to Elliot Kinsley"
+        },
+        {
+          "at": "2026-11-04T09:12:02.166Z",
+          "by": "Mayuri Kundalwal",
+          "action": "Status → In Progress"
         }
       ],
       "createdAt": "2026-10-26T18:30:00.000Z",
@@ -14913,7 +14930,8 @@
         "id": "u002",
         "name": "Rowan Jessup"
       },
-      "sample": true
+      "sample": true,
+      "updatedAt": "2026-11-04T09:12:02.167Z"
     },
     {
       "id": "OM-2026-0269",
@@ -14988,6 +15006,100 @@
         "name": "Samuel Fenwick"
       },
       "sample": true
+    },
+    {
+      "id": "OM-2026-0271",
+      "type": "Minor Repair",
+      "description": "test",
+      "materialId": "ACM-dunlapes-b1-f3-r7-1",
+      "schoolId": "dunlapes",
+      "buildingId": "dunlapes-b1",
+      "floorId": "dunlapes-b1-f3",
+      "roomId": "dunlapes-b1-f3-r7",
+      "priority": "Medium",
+      "dueDate": "2026-11-18",
+      "assignedToId": "P-0010",
+      "assignedToName": "Samuel Underwood",
+      "state": "inProgress",
+      "work": {
+        "performedOn": "2026-11-04",
+        "hours": null,
+        "notes": "",
+        "controls": {
+          "wetMethods": false,
+          "hepaVacuum": false,
+          "barriers": false,
+          "ppe": false,
+          "wasteBagged": false,
+          "areaCleared": false
+        }
+      },
+      "completedAt": null,
+      "completedBy": null,
+      "attachments": [],
+      "inspectionId": "INS-2027-00005",
+      "history": [
+        {
+          "at": "2026-11-04T08:41:14.460Z",
+          "by": "Mayuri Kundalwal",
+          "action": "Created from inspection INS-2027-00005"
+        },
+        {
+          "at": "2026-11-04T08:41:14.460Z",
+          "by": "Mayuri Kundalwal",
+          "action": "Assigned to Samuel Underwood"
+        },
+        {
+          "at": "2026-11-04T09:12:59.217Z",
+          "by": "Mayuri Kundalwal",
+          "action": "Status → In Progress"
+        }
+      ],
+      "createdAt": "2026-11-04T08:41:14.460Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "updatedAt": "2026-11-04T09:12:59.217Z"
+    },
+    {
+      "id": "OM-2026-0272",
+      "type": "Minor Repair",
+      "description": "test",
+      "materialId": "ACM-dunlapes-b1-f3-r7-1",
+      "schoolId": "dunlapes",
+      "buildingId": "dunlapes-b1",
+      "floorId": "dunlapes-b1-f3",
+      "roomId": "dunlapes-b1-f3-r7",
+      "priority": "Medium",
+      "dueDate": "2026-11-18",
+      "assignedToId": "P-0010",
+      "assignedToName": "Samuel Underwood",
+      "state": "pending",
+      "work": null,
+      "completedAt": null,
+      "completedBy": null,
+      "attachments": [],
+      "inspectionId": "INS-2027-00005",
+      "history": [
+        {
+          "at": "2026-11-04T08:41:48.400Z",
+          "by": "Mayuri Kundalwal",
+          "action": "Created from inspection INS-2027-00005"
+        },
+        {
+          "at": "2026-11-04T08:41:48.400Z",
+          "by": "Mayuri Kundalwal",
+          "action": "Assigned to Samuel Underwood"
+        }
+      ],
+      "createdAt": "2026-11-04T08:41:48.400Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false
     }
   ],
   "plans": [

@@ -3,6 +3,9 @@ import { Outlet, useLocation } from 'react-router'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
 import ChatAssistant from './ChatAssistant'
+import NavTrail from './NavTrail'
+import { useAuth } from '../../auth/authContext'
+import { request } from '../../lib/api'
 import './layout.css'
 
 const STORAGE_KEY = 'sidebar-collapsed'
@@ -24,6 +27,14 @@ export default function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const mainRef = useRef(null)
   const { pathname } = useLocation()
+  const { account } = useAuth()
+  // The person the backend credits with this session's actions (verified sign-in, else the demo user)
+  const [me, setMe] = useState(null)
+  useEffect(() => {
+    let cancelled = false
+    request('/me').then((u) => { if (!cancelled) setMe({ name: u.name, role: u.role }) }).catch(() => {})
+    return () => { cancelled = true }
+  }, [account?.id])
 
   // On a wide screen the sidebar is collapsed until expanded there; the saved preference is left alone
   // and applies again on the next page (render-time reset when entering a wide screen, no effect needed)
@@ -60,7 +71,7 @@ export default function AppLayout() {
     <div className="app-shell">
       <Topbar
         onToggleSidebar={toggleSidebar}
-        user={{ name: 'John Doe', role: 'EHS Manager' }}
+        user={me ?? { name: account?.name ?? 'John Doe', role: account ? '' : 'EHS Manager' }}
       />
       <div className="app-body">
         <Sidebar
@@ -71,6 +82,7 @@ export default function AppLayout() {
         />
         {mobileOpen && <div className="sidebar-backdrop" onClick={() => setMobileOpen(false)} />}
         <main ref={mainRef} className="app-main">
+          <NavTrail />
           <Outlet />
         </main>
       </div>

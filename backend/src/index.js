@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import apiRoutes from './routes/index.js';
+import { authenticate } from './auth.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,7 +14,8 @@ const allowedOrigins = new Set(['http://localhost:5173', ...(process.env.CLIENT_
 app.use(cors({ origin: (origin, done) => done(null, !origin || allowedOrigins.has(origin)) }));
 app.use(express.json({ limit: '3mb' })); // settings can carry an uploaded logo (≤2 MB)
 
-app.use('/api', apiRoutes);
+// Credits each request to the signed-in Microsoft user (verified token), else the demo user
+app.use('/api', authenticate, apiRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });

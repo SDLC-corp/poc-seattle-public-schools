@@ -1,11 +1,26 @@
 // Backend base URL, e.g. https://api.example.org/api. Unset: same-origin /api (Vite proxies it in dev).
 export const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '')
 
+// The signed-in user's token for this API (set by the auth provider); the backend credits actions to them
+let apiTokenProvider = null
+export const setApiTokenProvider = (fn) => { apiTokenProvider = fn }
+
+// { Authorization } for the signed-in user, or {} (demo mode, or no token available)
+export async function authHeaders() {
+  if (!apiTokenProvider) return {}
+  try {
+    const token = await apiTokenProvider()
+    return token ? { Authorization: `Bearer ${token}` } : {}
+  } catch {
+    return {}
+  }
+}
+
 // Shared fetch + formatting helpers. Errors carry the server's per-field messages in `fields`.
 export async function request(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
     ...options,
+    headers: { 'Content-Type': 'application/json', ...(await authHeaders()), ...options.headers },
     body: options.body ? JSON.stringify(options.body) : undefined,
   })
   const body = res.status === 204 ? {} : await res.json().catch(() => ({}))
@@ -22,7 +37,7 @@ export async function request(path, options = {}) {
 export async function uploadFile(path, file, params = {}) {
   const qs = new URLSearchParams({ name: file.name, ...params }).toString()
   const res = await fetch(`${API_BASE}${path}?${qs}`, {
-    method: 'POST', headers: { 'Content-Type': file.type || 'application/octet-stream' }, body: file,
+    method: 'POST', headers: { 'Content-Type': file.type || 'application/octet-stream', ...(await authHeaders()) }, body: file,
   })
   const body = await res.json().catch(() => ({}))
   if (!res.ok) {

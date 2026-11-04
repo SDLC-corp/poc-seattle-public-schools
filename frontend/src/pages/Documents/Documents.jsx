@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link, Navigate, useNavigate, useParams } from 'react-router'
+import { Link, Navigate, useNavigate } from 'react-router'
 import {
   FileText, Cloud, CloudUpload, Lock, Plus, FolderPlus, Search, ChevronLeft, ChevronRight, RotateCcw,
   Ellipsis, Eye, Download, Trash2, CircleCheck, CircleAlert, CloudOff, RefreshCw, X,
@@ -63,8 +63,10 @@ function RowMenu({ doc, onPreview, onDelete }) {
   )
 }
 
-export default function Documents() {
-  const { category = '' } = useParams()
+// Documents tab of Reports & Analytics (/reports/documents/:category)
+const BASE = '/reports/documents'
+
+export default function Documents({ category = '' }) {
   const navigate = useNavigate()
   const tab = CATEGORY_TABS.find((t) => t.slug === category)
 
@@ -177,7 +179,7 @@ export default function Documents() {
     return () => clearTimeout(t)
   }, [bulkConfirm])
 
-  if (!tab) return <Navigate to="/documents" replace />
+  if (!tab) return <Navigate to={BASE} replace />
 
   const pageDocs = data?.documents ?? []
   const allChecked = pageDocs.length > 0 && pageDocs.every((d) => checked.has(d.id))
@@ -198,11 +200,8 @@ export default function Documents() {
 
   return (
     <div className="docs-page">
-      <div className="u-head">
-        <div>
-          <h1>Document Management</h1>
-          <p>Store, manage and share asbestos compliance documents</p>
-        </div>
+      <div className="u-head d-head">
+        <p>Store, manage and share asbestos compliance documents.</p>
         <div className="u-head-actions">
           <button type="button" className="u-btn u-btn-primary" onClick={() => setUploadOpen(true)} disabled={!facets}>
             <Plus size={16} />Upload Document
@@ -220,7 +219,7 @@ export default function Documents() {
         {CATEGORY_TABS.map((t) => (
           <button key={t.slug} type="button" role="tab" aria-selected={t.slug === category}
             className={`u-tab${t.slug === category ? ' active' : ''}`}
-            onClick={() => navigate(t.slug ? `/documents/${t.slug}` : '/documents')}>
+            onClick={() => navigate(t.slug ? `${BASE}/${t.slug}` : BASE)}>
             {t.label}
           </button>
         ))}

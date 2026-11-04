@@ -6,6 +6,16 @@ export const CONDITION_TONE = { Good: 'good', Damaged: 'warning', 'Significantly
 export const PRIORITY_TONE = { Low: 'good', Medium: 'warning', High: 'critical', Critical: 'critical' }
 export const CHANGE_TONE = { Improved: 'good', Unchanged: 'neutral', Deteriorated: 'critical', 'First Assessment': 'primary' }
 export const ACTION_TONE = { Pending: 'warning', 'In Progress': 'primary', Completed: 'good' }
+export const RESULT_TONE = { 'Asbestos Detected': 'critical', 'Exceeds Limit': 'critical', 'No Asbestos Detected': 'good', 'Below Limit': 'good', Pending: 'warning', 'Not Analyzed': 'neutral' }
+export const PASS_TONE = { Pass: 'good', Fail: 'critical' }
+
+const withUnit = (v, unit) => `${v}${unit === '%' ? '' : ' '}${unit ?? ''}`
+// A sample's lab measurement, e.g. "3% Chrysotile" or "0.004 f/cc" (server: inspectionMeta.resultSummary)
+export const measureText = (s) => {
+  const v = s?.airValue ?? s?.measuredValue
+  return v == null ? '' : `${withUnit(v, s.measureUnit)}${s.asbestosTypes?.length ? ` ${s.asbestosTypes.join(', ')}` : ''}`
+}
+export const limitText = (s) => (s?.limitValue == null ? '' : `limit ${withUnit(s.limitValue, s.measureUnit)}`)
 
 // "13:30" → "1:30 PM"
 export const fmtTime = (hhmm) => {

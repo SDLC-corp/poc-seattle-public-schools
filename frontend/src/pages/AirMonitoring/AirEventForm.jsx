@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { X, Info } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import { request } from '../../lib/api'
+import '../LabSamples/labSamples.css' // the right-side panel (.lr-drawer)
 
 // datetime-local wants "YYYY-MM-DDTHH:mm" in local time
 const toLocalInput = (iso) => {
@@ -10,7 +11,11 @@ const toLocalInput = (iso) => {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
-// Log a new monitoring event or edit an existing one (e.g. enter the lab result later)
+
+/**
+ * Log a new monitoring event, or complete a pending one (enter its fibre count). Once the fibre count is
+ * recorded the event is submitted and can no longer be changed.
+ */
 export default function AirEventForm({ event, meta, schools, buildings, onClose, onSaved }) {
   const isNew = !event
   const [nowInput] = useState(() => toLocalInput(new Date().toISOString()))
@@ -23,10 +28,10 @@ export default function AirEventForm({ event, meta, schools, buildings, onClose,
     method: event?.method ?? 'PCM',
     durationMin: event?.durationMin ?? 240,
     result: event?.result ?? '',
-    contractorName: event?.contractorName ?? '',
-    inspectorName: event?.inspectorName ?? '',
-    project: event?.project ?? '',
+
     notes: event?.notes ?? '',
+    labSampleId: event?.labSampleId ?? '',
+    labReportNo: event?.labReportNo ?? '',
   }))
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(false)
@@ -74,13 +79,13 @@ export default function AirEventForm({ event, meta, schools, buildings, onClose,
   })
 
   return (
-    <div className="u-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose() }}>
-      <form className="u-modal" role="dialog" aria-modal="true" aria-labelledby="af-title" onSubmit={submit} noValidate>
-        <header className="u-modal-head">
-          <h2 id="af-title">{isNew ? 'Log Air Monitoring' : `Edit ${event.id}`}</h2>
+    <div className="lr-drawer-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose() }}>
+      <form className="lr-drawer" role="dialog" aria-modal="true" aria-labelledby="af-title" onSubmit={submit} noValidate>
+        <header className="u-modal-head lr-drawer-head">
+          <h2 id="af-title">{isNew ? 'Log Air Monitoring' : `Enter Fibre Count – ${event.id}`}</h2>
           <button type="button" className="u-row-btn" onClick={onClose} aria-label="Close"><X size={16} /></button>
         </header>
-        <div className="u-modal-body">
+        <div className="u-modal-body lr-drawer-body">
           <div className="uf-grid">
             <div className="uf-field">
               <span>School *</span>
@@ -120,22 +125,29 @@ export default function AirEventForm({ event, meta, schools, buildings, onClose,
               {errors.durationMin && <em>{errors.durationMin}</em>}
             </label>
             <label className="uf-field">
-              <span>Result ({limit.unit}) — leave empty if pending</span>
+              <span>Fibre Count ({limit.unit}) — leave empty if pending</span>
               <input type="number" min={0} step="any" placeholder="Pending lab result" {...input('result')} />
               {errors.result && <em>{errors.result}</em>}
+            </label>
+            <label className="uf-field">
+              <span>Lab Sample ID</span>
+              <input {...input('labSampleId', { placeholder: 'e.g. LAB-2026-13382', maxLength: 60 })} />
+            </label>
+            <label className="uf-field">
+              <span>Lab Report No.</span>
+              <input {...input('labReportNo', { placeholder: 'e.g. LAB-RPT-2026-13382', maxLength: 60 })} />
             </label>
           </div>
 
           <p className={`af-limit af-${preview}`}>
             <Info size={14} />
             Limit: <strong>{limit.value} {limit.unit}</strong> ({limit.basis}).
-            {preview === 'pending' ? ' Status will be Pending until a result is entered.' : ` This result will be recorded as ${preview === 'exceedance' ? 'an Exceedance' : 'Compliant'}.`}
+            {preview === 'pending'
+              ? ' Status will be Pending until the fibre count is entered.'
+              : ` This will be recorded as ${preview === 'exceedance' ? 'an Exceedance' : 'Compliant'} and submitted – it can’t be changed afterwards.`}
           </p>
 
           <div className="uf-grid">
-            <label className="uf-field"><span>Contractor</span><input {...input('contractorName')} /></label>
-            <label className="uf-field"><span>Inspector</span><input {...input('inspectorName')} /></label>
-            <label className="uf-field uf-wide"><span>Project</span><input {...input('project', { placeholder: 'e.g. Abatement – Classroom Wing' })} /></label>
             <label className="uf-field uf-wide">
               <span>Notes</span>
               <textarea className="u-input af-notes" rows={3} value={form.notes} onChange={(ev) => set('notes')(ev.target.value)} />
@@ -143,9 +155,11 @@ export default function AirEventForm({ event, meta, schools, buildings, onClose,
           </div>
           {errors.form && <p className="uf-error">{errors.form}</p>}
         </div>
-        <footer className="u-modal-foot">
+        <footer className="u-modal-foot lr-drawer-foot">
           <button type="button" className="u-btn u-btn-outline" onClick={onClose}>Cancel</button>
-          <button type="submit" className="u-btn u-btn-primary" disabled={saving}>{saving ? 'Saving…' : isNew ? 'Log Event' : 'Save Changes'}</button>
+          <button type="submit" className="u-btn u-btn-primary" disabled={saving}>
+            {saving ? 'Saving…' : form.result !== '' ? 'Submit' : isNew ? 'Log as Pending' : 'Save as Pending'}
+          </button>
         </footer>
       </form>
     </div>

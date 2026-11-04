@@ -2,8 +2,12 @@
    and inspections.css (.in-*), controls users.css. */
 
 .om-sub { margin: 4px 0 0; font-size: 13px; color: var(--ink-2); }
+.om-from-insp { display: block; margin-top: 2px; font-size: 11px; color: var(--ink-2); }
+.om-from-insp a { color: var(--primary); }
 .ai-head h1 .ai-badge { margin-left: 4px; font-size: 13px; }
-.om-filters { grid-template-columns: repeat(5, minmax(120px, 1fr)) minmax(240px, 1.6fr); }
+/* One row: school, building, floor, type, status, assignee, search */
+.om-filters { grid-template-columns: repeat(6, minmax(110px, 1fr)) minmax(220px, 1.5fr); }
+.om-filters .ai-search-field { grid-column: auto; }
 .om-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 14px; align-items: start; }
 .om-main { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .om-side { position: sticky; top: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -99,7 +103,7 @@
 .om-timeline small { font-size: 11.5px; color: var(--ink-2); }
 .om-meta-line { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 12.5px; color: var(--ink-2); }
 
-@media (max-width: 1500px) {
+@media (max-width: 1100px) {
   .om-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .om-filters .ai-search-field { grid-column: span 3; }
 }
@@ -121,3 +125,15 @@
   .om-sop { grid-template-columns: minmax(0, 1fr); }
   .om-sop-icon { display: none; }
 }
+
+/* Completion & Documentation: three columns */
+.om-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.om-span-2 { grid-column: span 2; }
+.om-span-3 { grid-column: 1 / -1; }
+.om-photo-hint { display: flex; align-items: center; gap: 5px; margin: 0; }
+@media (max-width: 900px) {
+  .om-grid-3 { grid-template-columns: minmax(0, 1fr); }
+  .om-span-2, .om-span-3 { grid-column: auto; }
+}
+.om-insp small { display: block; margin-top: 2px; font-size: 11px; }
+.om-insp small a { color: var(--primary); }

@@ -100,3 +100,8 @@ button {
     scrollbar-color: var(--scrollbar-thumb) transparent;
   }
 }
+
+/* Due dates (lib/DueDate.jsx): red once overdue, amber when due soon */
+.due-date { display: inline-flex; align-items: center; padding: 1px 8px; border-radius: 10px; font-weight: 600; white-space: nowrap; }
+.due-overdue { background: #fbe1e1; color: #b02a2a; }
+.due-soon { background: #fdf0d5; color: #8f5a00; }

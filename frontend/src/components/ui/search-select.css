@@ -31,6 +31,8 @@
   cursor: pointer;
 }
 .ss-field-trigger:hover { border-color: #c7d3e0; }
+.ss-trigger:disabled { background: #f4f6f9; color: var(--ink-3); cursor: not-allowed; }
+.ss-trigger:disabled:hover { border-color: var(--border); }
 .ss-field-trigger:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
 .ss-field .ss-value { flex: 1; max-width: none; font-weight: 400; white-space: nowrap; }
 .ss-field.open .ss-field-trigger { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }

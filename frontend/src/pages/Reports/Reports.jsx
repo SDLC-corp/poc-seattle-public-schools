@@ -3,6 +3,7 @@ import { Inbox } from 'lucide-react'
 import ReportView from './ReportView'
 import ReportsOverview from './ReportsOverview'
 import { TABS } from './reportMeta'
+import Documents from '../Documents/Documents'
 import '../Users/users.css'
 import '../Audit/audit.css'
 import './reports.css'
@@ -13,12 +14,13 @@ export default function Reports() {
   const navigate = useNavigate()
   const tab = TABS.find((t) => t.id === (tabParam ?? 'overview'))
   if (!tab) return <Navigate to="/reports" replace />
+  const isDocs = tab.id === 'documents'
   const reportId = tab.reports?.includes(reportParam) ? reportParam : tab.reports?.[0]
-  if (reportParam && reportParam !== reportId) return <Navigate to={`/reports/${tab.id}`} replace />
+  if (!isDocs && reportParam && reportParam !== reportId) return <Navigate to={`/reports/${tab.id}`} replace />
 
   return (
     <div className="rp-page">
-      <h1 className="rp-title">Reports &amp; Analytics</h1>
+      <h1 className="rp-title">Reports, Analytics &amp; Documents</h1>
 
       <nav className="u-tabs rp-tabs" aria-label="Report areas">
         {TABS.map((t) => (
@@ -30,6 +32,7 @@ export default function Reports() {
       </nav>
 
       {tab.id === 'overview' && <ReportsOverview />}
+      {isDocs && <Documents category={reportParam ?? ''} />}
 
       {tab.reports && !tab.reports.length && (
         <div className="u-card rp-empty">

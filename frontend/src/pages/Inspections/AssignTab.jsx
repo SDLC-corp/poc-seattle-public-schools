@@ -10,7 +10,7 @@ import { request } from '../../lib/api'
 
 const STATUS_TONE = { 'ACM Present': 'critical', 'Assumed ACM': 'warning', 'No ACM': 'good', 'Not Yet Assessed': 'neutral' }
 // Targeted inspections pick specific materials (with search); the other types cover every ACM in a place
-const PICK_TYPES = ['Damage Assessment', 'Pre-Renovation Inspection', 'Post-Abatement Inspection']
+const PICK_TYPES = ['Pre-Renovation Inspection']
 const isAcm = (m) => m.acmStatus === 'ACM Present' || m.acmStatus === 'Assumed ACM'
 
 /**

@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import {
-  getInspections, getInspection, schoolRows, schoolCompliance, completeInspection, rescheduleInspection,
+  getInspections, getInspection, schoolRows, schoolCompliance, completeInspection, rescheduleInspection, bookInspection,
 } from '../data/complianceStore.js';
-import { logAudit } from '../data/auditStore.js';
+import { logAudit, currentUser } from '../data/auditStore.js';
+import { listUsers } from './users.js';
 import { notify } from '../data/notificationsStore.js';
 
 const STATUS_LABEL = { compliant: 'Compliant', dueSoon: 'Due Soon', overdue: 'Non-Compliant' };
@@ -134,6 +135,39 @@ router.post('/inspections/:id/reschedule', async (req, res, next) => {
       action: 'update', module: 'Inspection', recordId: inspection.id, link: '/compliance',
       summary: `Rescheduled ${inspection.type} – ${inspection.schoolName}`,
       changes: [{ field: 'Scheduled Date', from, to: date }],
+      related: { school: inspection.schoolName, building: inspection.buildingName },
+    });
+    res.json({ inspection, school: schoolCompliance(inspection.schoolId) });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Accredited inspectors who can be booked (active app users with the inspector role)
+const inspectors = () => listUsers().filter((u) => u.roleId === 'inspector' && u.status === 'active')
+  .map((u) => ({ id: u.id, name: u.name })).sort((a, b) => a.name.localeCompare(b.name));
+
+router.get('/meta', (req, res) => res.json({ inspectors: inspectors() }));
+
+// POST /api/compliance/inspections/:id/schedule  { date: "YYYY-MM-DD", inspectorId } — book the date and inspector
+router.post('/inspections/:id/schedule', async (req, res, next) => {
+  try {
+    const existing = getInspection(req.params.id);
+    if (!existing) return res.status(404).json({ error: 'Inspection not found' });
+    if (existing.completedAt) return res.status(409).json({ error: 'Completed inspections can’t be scheduled' });
+    const date = String(req.body?.date ?? '');
+    const person = inspectors().find((p) => p.id === req.body?.inspectorId);
+    const errors = {};
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(date))) errors.date = 'Choose the inspection date';
+    else if (date < new Date().toISOString().slice(0, 10)) errors.date = 'The date can’t be in the past';
+    if (!person) errors.inspectorId = 'Choose the inspector';
+    if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
+    const me = currentUser();
+    const { inspection, before } = await bookInspection(existing.id, { date, inspectorId: person.id, inspectorName: person.name, by: { id: me.id, name: me.name } });
+    logAudit(req, {
+      action: 'update', module: 'Inspection', recordId: inspection.id, link: '/compliance',
+      summary: `Scheduled ${inspection.type} – ${inspection.schoolName}`,
+      changes: [{ field: 'Scheduled Date', from: before.date, to: date }, { field: 'Inspector', from: before.inspector ?? '—', to: person.name }],
       related: { school: inspection.schoolName, building: inspection.buildingName },
     });
     res.json({ inspection, school: schoolCompliance(inspection.schoolId) });

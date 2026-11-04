@@ -10,7 +10,7 @@ import Toggle from '../../components/ui/Toggle'
 import { mainNav } from '../../components/layout/navItems'
 import { applyBrandColors } from '../../theme'
 import './settings.css'
-import { API_BASE } from '../../lib/api'
+import { API_BASE, authHeaders } from '../../lib/api'
 
 const opts = (values, fmt = String) => values.map((v) => ({ value: v, label: fmt(v) }))
 
@@ -65,8 +65,8 @@ function validate(s) {
 
 async function api(path, options) {
   const res = await fetch(`${API_BASE}/settings${path}`, {
-    headers: { 'Content-Type': 'application/json' },
     ...options,
+    headers: { 'Content-Type': 'application/json', ...(await authHeaders()), ...options?.headers },
   })
   const body = await res.json().catch(() => ({}))
   if (!res.ok) throw new Error(body.details?.join('. ') || body.error || `HTTP ${res.status}`)

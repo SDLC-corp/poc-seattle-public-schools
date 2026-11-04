@@ -3,14 +3,20 @@ import { MsalProvider, useMsal } from '@azure/msal-react'
 import { InteractionRequiredAuthError, InteractionStatus } from '@azure/msal-browser'
 import { msalInstance, entraConfigured, SCOPES, rememberPostLoginPath, takePostLoginPath, markSignedOut } from './msalConfig'
 import { AuthContext } from './authContext'
+import { setApiTokenProvider } from '../lib/api'
 
 function MsalAuth({ children }) {
   const { instance, inProgress, accounts } = useMsal()
   const account = instance.getActiveAccount() ?? accounts[0] ?? null
 
+  // Every API request carries the signed-in user's token for this app's API (set during render so the
+  // pages' first requests already have it)
+  setApiTokenProvider(account && SCOPES.api.length ? async () => (await instance.acquireTokenSilent({ scopes: SCOPES.api, account })).accessToken : null)
+
   const signIn = useCallback((from) => {
     rememberPostLoginPath(from)
-    return instance.loginRedirect({ scopes: SCOPES.login, prompt: 'select_account' })
+    // Consent to this app's API at sign-in too, so its token can be fetched silently
+    return instance.loginRedirect({ scopes: SCOPES.login, extraScopesToConsent: SCOPES.api, prompt: 'select_account' })
   }, [instance])
 
   const signOut = useCallback(() => {

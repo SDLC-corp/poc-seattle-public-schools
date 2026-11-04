@@ -80,7 +80,7 @@ function build() {
     const reviewDate = isoDay(t + num(1, 10) * DAY);
     const actions = ACTIONS[current];
     out.push({
-      type: severe ? 'Damage Assessment' : pick(TYPES.slice(0, 3)),
+      type: severe ? 'Follow-up Inspection' : pick(TYPES.slice(0, 3)),
       date,
       scheduledDate: isoDay(t - num(0, 10) * DAY),
       materialId: m.id, schoolId: m.schoolId, buildingId: m.buildingId, floorId: m.floorId, roomId: m.roomId,

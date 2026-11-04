@@ -1,6 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
 import { CATEGORIES, programById } from './trainingPrograms.js';
 import { writeJson } from './atomicWrite.js';
+import { uploadDir } from './paths.js';
 
 const FILE = new URL('../../data/personnel.json', import.meta.url);
 export const DUE_SOON_DAYS = 60;
@@ -85,3 +87,13 @@ export async function addRecord(id, record) {
   await persist();
   return getPerson(id);
 }
+
+// Change one training record (by its id), e.g. to attach the certificate file
+export async function updateRecord(id, recordId, patch) {
+  people = people.map((p) => (p.id === id ? { ...p, records: p.records.map((r) => (r.id === recordId ? { ...r, ...patch } : r)) } : p));
+  await persist();
+  return getPerson(id);
+}
+
+export const CERT_DIR = uploadDir('certificates');
+export const certPath = (storedName) => path.join(CERT_DIR, path.basename(storedName));

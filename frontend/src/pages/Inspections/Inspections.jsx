@@ -8,15 +8,13 @@ import SearchSelect from '../../components/ui/SearchSelect'
 import { useConfirm } from '../../components/ui/useConfirm'
 import ExportMenu from '../Reports/ExportMenu'
 import Badge from '../AcmInventory/Badge'
-import HistoryTab from '../AcmInventory/HistoryTab'
 import LocationFilters from '../Surveillance/LocationFilters'
 import RowMenu from '../Surveillance/RowMenu'
 import Pager from '../Surveillance/Pager'
 import AssignTab from './AssignTab'
-import AssignmentsTab from './AssignmentsTab'
 import CalendarTab from './CalendarTab'
 import DueTab from './DueTab'
-import FindingsTab from './FindingsTab'
+import CompletedTab from './CompletedTab'
 import ReassignDialog from './ReassignDialog'
 import { fmtDay, floorLink, toQs } from '../Surveillance/survMeta'
 import { STATUS_TONE, fmtTime } from './inspMeta'
@@ -27,16 +25,16 @@ import '../Reports/reports.css'
 import '../AcmInventory/acmInventory.css'
 import '../Surveillance/surveillance.css'
 import './inspections.css'
+import DueDate from '../../lib/DueDate'
 
 const TABS = [
   { id: 'list', label: 'Inspection List', path: '/inspections' },
   { id: 'upcoming', label: 'Upcoming', path: '/inspections/upcoming' },
   { id: 'overdue', label: 'Overdue', path: '/inspections/overdue' },
-  { id: 'assign', label: 'Assign Inspection', path: '/inspections/assign' },
-  { id: 'my-assignments', label: 'My Assignments', path: '/inspections/my-assignments' },
+  { id: 'completed', label: 'Completed', path: '/inspections/completed' },
   { id: 'calendar', label: 'Inspection Calendar', path: '/inspections/calendar' },
-  { id: 'history', label: 'Inspection History', path: '/inspections/history' },
-  { id: 'findings', label: 'Findings', path: '/inspections/findings' },
+  // Opened from the "Assign Inspection" button, not shown as a tab
+  { id: 'assign', label: 'Assign Inspection', path: '/inspections/assign', hidden: true },
 ]
 const NO_LOCATION = { school: '', building: '', floor: '' }
 const NO_FILTERS = { type: '', status: '', q: '' }
@@ -217,7 +215,10 @@ function ListTab({ meta, selected, setSelected, reload, onToast, onReassign }) {
                       <input type="checkbox" checked={selected.has(r.id)} disabled={!canPick} onChange={() => toggleRow(r.id)}
                         aria-label={`Select ${r.id}`} title={canPick ? undefined : 'Submitted and completed inspections can’t be reassigned'} />
                     </td>
-                    <td className="u-nowrap"><Link to={`/inspections/records/${r.id}`} className="sv-id">{r.id}</Link></td>
+                    <td className="u-nowrap">
+                      <Link to={`/inspections/records/${r.id}`} className="sv-id">{r.id}</Link>
+                      {r.parentId && <small className="in-child-of">Follow-up of <Link to={`/inspections/records/${r.parentId}?tab=followUp`}>{r.parentId}</Link></small>}
+                    </td>
                     <td className="in-type">{r.type}</td>
                     <td className="in-wrap">{r.schoolName}</td>
                     <td className="in-wrap">{r.buildingName}</td>
@@ -227,7 +228,7 @@ function ListTab({ meta, selected, setSelected, reload, onToast, onReassign }) {
                     <td className="ai-room">
                       {r.date ? <strong className="in-plain">{fmtDay(r.date)}</strong> : <><strong className="in-plain">{fmtDay(r.scheduledDate)}{r.scheduledTime && ` · ${fmtTime(r.scheduledTime)}`}</strong><small className={r.overdue ? 'sv-late' : undefined}>{r.overdue ? 'Not started — overdue' : 'Scheduled'}</small></>}
                     </td>
-                    <td className="u-nowrap">{fmtDay(r.nextDue)}</td>
+                    <td className="u-nowrap"><DueDate date={r.nextDue}>{fmtDay(r.nextDue)}</DueDate></td>
                     <td>
                       <Badge tone={STATUS_TONE[r.status]}>{r.status === 'completed' && <CircleCheck size={12} />}{r.status === 'actionRequired' && <TriangleAlert size={12} />}{r.statusText}</Badge>
                       {r.state === 'returned' && <small className="in-sub-badge"><Undo2 size={11} />Returned</small>}
@@ -322,16 +323,14 @@ export default function Inspections() {
         </div>
       </div>
       <nav className="u-tabs ai-tabs" aria-label="Inspection views">
-        {TABS.map((t) => <Link key={t.id} to={t.path} className={`u-tab${t.id === tab.id ? ' active' : ''}`} aria-current={t.id === tab.id ? 'page' : undefined}>{t.label}</Link>)}
+        {TABS.filter((t) => !t.hidden || t.id === tab.id).map((t) => <Link key={t.id} to={t.path} className={`u-tab${t.id === tab.id ? ' active' : ''}`} aria-current={t.id === tab.id ? 'page' : undefined}>{t.label}</Link>)}
       </nav>
 
       {tab.id === 'list' && <ListTab meta={meta} selected={selected} setSelected={setSelected} reload={reload} onToast={setToast} onReassign={(ids) => openReassign(ids ?? [...selected])} />}
       {(tab.id === 'upcoming' || tab.id === 'overdue') && <DueTab key={tab.id} view={tab.id} meta={meta} reload={reload} onSchedule={(ids) => openReassign(ids, true)} />}
+      {tab.id === 'completed' && <CompletedTab meta={meta} />}
       {tab.id === 'assign' && <AssignTab meta={meta} onToast={setToast} onDone={(text) => { setToast({ kind: 'success', text }); navigate('/inspections') }} />}
-      {tab.id === 'my-assignments' && <AssignmentsTab meta={meta} />}
       {tab.id === 'calendar' && <CalendarTab />}
-      {tab.id === 'history' && <HistoryTab module="Inspections" title="Inspection History" />}
-      {tab.id === 'findings' && <FindingsTab onToast={setToast} />}
 
       {reassigning && (
         <ReassignDialog ids={reassigning} meta={meta} mode={scheduleMode ? 'schedule' : undefined} onClose={() => setReassigning(null)}

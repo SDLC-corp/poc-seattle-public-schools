@@ -8,7 +8,7 @@ import {
 } from '../data/surveillanceStore.js';
 import { MAX_ATTACHMENT_BYTES } from '../data/acmMeta.js';
 import { listUsers } from './users.js';
-import { logAudit, diff, CURRENT_USER } from '../data/auditStore.js';
+import { logAudit, diff, currentUser } from '../data/auditStore.js';
 import { sniff, storeUpload, sendStored } from './uploadCheck.js';
 
 const router = Router();
@@ -343,7 +343,7 @@ router.post('/', async (req, res, next) => {
   try {
     const { r, material, errors } = validate(req.body ?? {});
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
-    const created = await addRecord({ ...r, attachments: [], createdAt: new Date().toISOString(), createdBy: { id: CURRENT_USER.id, name: CURRENT_USER.name }, sample: false });
+    const created = await addRecord({ ...r, attachments: [], createdAt: new Date().toISOString(), createdBy: { id: currentUser().id, name: currentUser().name }, sample: false });
     const conditionChange = await syncMaterialCondition(req, created, material);
     logAudit(req, {
       action: 'create', module: 'Surveillance', recordId: created.id, link: link(created),
@@ -421,7 +421,7 @@ router.post('/records/:id/attachments', express.raw({ type: () => true, limit: M
     const type = sniff(req.body);
     if (!type) return res.status(400).json({ error: 'Upload a JPG, PNG, WebP or PDF file' });
     if (r.attachments.length >= 20) return res.status(409).json({ error: 'At most 20 documents per surveillance' });
-    const file = await storeUpload(FILE_DIR, req.body, type, { name: req.query.name, uploadedBy: { id: CURRENT_USER.id, name: CURRENT_USER.name } });
+    const file = await storeUpload(FILE_DIR, req.body, type, { name: req.query.name, uploadedBy: { id: currentUser().id, name: currentUser().name } });
     await addAttachment(r.id, file);
     logAudit(req, { action: 'create', module: 'Surveillance', recordId: r.id, link: link(r), summary: `Attached ${file.name} to surveillance ${r.id}`, changes: [{ field: 'Document', to: file.name }] });
     res.status(201).json(file);

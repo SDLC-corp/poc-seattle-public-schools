@@ -1,4 +1,4 @@
-import { TriangleAlert, CircleCheck, ShieldQuestion, CircleHelp } from 'lucide-react'
+import { TriangleAlert, CircleCheck, ShieldQuestion, CircleHelp, Hourglass } from 'lucide-react'
 
 // Result classes from the backend's classifier (backend/src/data/labSamplesStore.js)
 export const RESULT_META = {
@@ -6,6 +6,8 @@ export const RESULT_META = {
   none: { label: 'No Asbestos Detected', icon: CircleCheck },
   assumed: { label: 'Assumed ACM', icon: ShieldQuestion },
   inconclusive: { label: 'Not Analyzed', icon: CircleHelp },
+  // Sent from an inspection, result not recorded yet
+  pending: { label: 'Pending at Lab', icon: Hourglass },
 }
 
 // Status colour always comes with an icon and text, never colour alone

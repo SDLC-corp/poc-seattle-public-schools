@@ -1,6 +1,42 @@
 {
   "notifications": [
     {
+      "id": "NTF-000007",
+      "type": "inspection",
+      "priority": "medium",
+      "title": "Inspection stage waiting for review",
+      "message": "Laboratory Analysis of inspection INS-2027-00005 is ready for review.",
+      "description": "Mayuri Kundalwal sent the Laboratory Analysis stage of inspection INS-2027-00005 for review: Lab results recorded – no O&M work needed. Please schedule a follow-up inspection. They ask for a follow-up inspection (Rowan Pemberton, 2026-12-04 09:00) – approving schedules it.",
+      "schoolId": "dunlapes",
+      "schoolName": "Dunlap Elementary",
+      "buildingName": null,
+      "rooms": null,
+      "dueDate": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "linkLabel": "Review the stage",
+      "createdAt": "2026-11-04T08:56:29.542Z",
+      "read": false,
+      "sample": false
+    },
+    {
+      "id": "NTF-000006",
+      "type": "compliance",
+      "priority": "high",
+      "title": "Air Monitoring Exceedance",
+      "message": "Area air sample TEST-1 at 207 Staff Room 2 measured 10 f/cc (limit 0.01 f/cc).",
+      "description": "Inspection INS-2027-00005 (Duct Wrap) at Dunlap Elementary, Main Building exceeded the Action level (PCM clearance). Stop work in the area if abatement is ongoing, review containment, and re-sample before re-occupancy.",
+      "schoolId": "dunlapes",
+      "schoolName": "Dunlap Elementary",
+      "buildingName": "Main Building",
+      "rooms": "207 Staff Room 2",
+      "dueDate": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "linkLabel": "Open inspection",
+      "createdAt": "2026-11-04T08:41:14.425Z",
+      "read": false,
+      "sample": false
+    },
+    {
       "id": "NTF-000005",
       "type": "compliance",
       "priority": "low",

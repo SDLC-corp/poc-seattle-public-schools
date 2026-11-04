@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import {
-  X, CalendarDays, Map as MapIcon, Layers, CalendarClock, CircleCheck, School, ChevronRight, Info,
+  X, CalendarDays, CalendarPlus, Map as MapIcon, Layers, CalendarClock, CircleCheck, School, ChevronRight, Info,
 } from 'lucide-react'
 import { InspectionStatusBadge, SchoolStatusBadge } from './complianceMeta'
 import { request, fmtDate } from '../../lib/api'
 import { fmtDay, isoDay } from './complianceUtils'
+import DueDate from '../../lib/DueDate'
 
 function Row({ label, children }) {
   return (
@@ -16,7 +17,7 @@ function Row({ label, children }) {
   )
 }
 
-function InspectionView({ inspection: i, onChanged, notify, onOpenSchool }) {
+function InspectionView({ inspection: i, onChanged, notify, onOpenSchool, onSchedule }) {
   const [reschedule, setReschedule] = useState(false)
   const [date, setDate] = useState(i.scheduledDate)
   const [confirmComplete, setConfirmComplete] = useState(false)
@@ -61,8 +62,8 @@ function InspectionView({ inspection: i, onChanged, notify, onOpenSchool }) {
         <Row label="Building">{i.buildingName}</Row>
         <Row label="Floor">{i.floor}</Row>
         <Row label="Rooms">{i.rooms}</Row>
-        <Row label="Assigned Inspector">{i.inspectorName}</Row>
-        <Row label={i.completedAt ? 'Scheduled For' : 'Due Date'}>{fmtDay(i.scheduledDate)}</Row>
+        <Row label="Assigned Inspector">{i.booked ? i.inspectorName : <span className="c-sched-late">Not scheduled yet</span>}</Row>
+        <Row label={i.completedAt ? 'Scheduled For' : 'Due Date'}><DueDate date={i.scheduledDate} done={Boolean(i.completedAt)} soonDays={14}>{fmtDay(i.scheduledDate)}</DueDate></Row>
         {i.completedAt && <Row label="Completed On">{fmtDate(i.completedAt)}</Row>}
         <Row label="Priority"><span className={`n-priority ${i.priority}`}>{i.priority[0].toUpperCase() + i.priority.slice(1)}</span></Row>
         <Row label="Inspection ID"><span className="a-mono">{i.id}</span></Row>
@@ -71,7 +72,9 @@ function InspectionView({ inspection: i, onChanged, notify, onOpenSchool }) {
 
       <h3 className="cd-h">Actions</h3>
       <div className="cd-actions">
-        <Link className="u-btn u-btn-primary" to={open ? '/inspections/upcoming' : '/inspections/history'}><CalendarDays size={15} />View Inspection</Link>
+        {/* Due soon / overdue and not booked yet: choose the date and inspector */}
+        {open && !i.booked && <button type="button" className="u-btn u-btn-primary" onClick={() => onSchedule(i)}><CalendarPlus size={15} />Schedule Inspection</button>}
+        <Link className={`u-btn ${open && !i.booked ? 'u-btn-outline' : 'u-btn-primary'}`} to={open ? '/inspections/upcoming' : '/inspections/completed'}><CalendarDays size={15} />View Inspection</Link>
         <Link className="u-btn u-btn-outline" to={i.buildingId ? `/schools/${i.schoolId}/buildings/${i.buildingId}/floors` : `/schools/floors?school=${i.schoolId}`}><MapIcon size={15} />View Floor Plan</Link>
         <Link className="u-btn u-btn-outline" to="/acm/locations"><Layers size={15} />View ACM Records</Link>
         {open && (reschedule ? (
@@ -123,7 +126,7 @@ function SchoolView({ school: s, onSelectInspection }) {
         {open.map((i) => (
           <li key={i.id}>
             <button type="button" className={`c-event c-ev-${i.status}`} onClick={() => onSelectInspection(i.id)}>
-              <span className="c-ev-text"><strong>{i.type}</strong><small>{fmtDay(i.scheduledDate)} · {i.buildingName}</small></span>
+              <span className="c-ev-text"><strong>{i.type}</strong><small>{fmtDay(i.scheduledDate)} · {i.buildingName} · {i.booked ? i.inspectorName : <span className="c-sched-late">not scheduled</span>}</small></span>
               <InspectionStatusBadge status={i.status} />
               <ChevronRight size={14} className="c-ev-arrow" />
             </button>
@@ -139,7 +142,7 @@ function SchoolView({ school: s, onSelectInspection }) {
 }
 
 // Right-hand panel: shows whichever was clicked last — an inspection (calendar/events) or a school (table/map)
-export default function ComplianceDetails({ selection, refreshKey, onClose, onSelect, onChanged, notify }) {
+export default function ComplianceDetails({ selection, refreshKey, onClose, onSelect, onChanged, notify, onSchedule }) {
   const [data, setData] = useState(null)
 
   useEffect(() => {
@@ -164,7 +167,7 @@ export default function ComplianceDetails({ selection, refreshKey, onClose, onSe
       {selection && !current && <p className="c-details-empty">Loading…</p>}
       {current && selection.kind === 'inspection' && (
         <InspectionView key={current.id + current.scheduledDate + current.status} inspection={current}
-          onChanged={onChanged} notify={notify} onOpenSchool={(id) => onSelect({ kind: 'school', id })} />
+          onChanged={onChanged} notify={notify} onOpenSchool={(id) => onSelect({ kind: 'school', id })} onSchedule={onSchedule} />
       )}
       {current && selection.kind === 'school' && (
         <SchoolView school={current} onSelectInspection={(id) => onSelect({ kind: 'inspection', id })} />

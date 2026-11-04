@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import {
   TriangleAlert, Hand, Users, Construction, Phone, PhoneCall, UserSearch, ClipboardList, CircleCheck, ShieldCheck, Package, FileText, Download,
-  ExternalLink, ArrowUp, ArrowDown, Trash2, Plus, Pencil, X, Siren,
+  ArrowUp, ArrowDown, Trash2, Plus, Pencil, X, Siren,
 } from 'lucide-react'
 import { request, API_BASE } from '../../lib/api'
 
@@ -184,7 +184,7 @@ export default function EmergencyTab({ schoolId, schoolName }) {
           <h2>Emergency Procedures</h2>
           <p>Define the actions to take in the event of suspected or actual disturbance, damage, or unexpected release of asbestos at {schoolName}.</p>
         </div>
-        <Link to="/operations/activities/new" className="u-btn u-btn-primary em-report"><Siren size={15} />Report an Incident</Link>
+        <Link to="/inspections/new" className="u-btn u-btn-primary em-report"><Siren size={15} />Report an Incident</Link>
       </header>
 
       <div className="em-layout">
@@ -247,7 +247,7 @@ export default function EmergencyTab({ schoolId, schoolName }) {
                   <span><strong>{r.title}</strong><small>{r.id} · {r.category} · v{r.version}</small></span>
                   {r.hasFile
                     ? <a className="u-row-btn" href={`${API_BASE}/om/procedures/${r.id}/file`} title={`Download ${r.fileName}`} aria-label={`Download ${r.title}`}><Download size={16} /></a>
-                    : <Link className="u-row-btn" to="/operations/procedures" title="Open in Procedures & SOPs (no file attached yet)" aria-label={`Open ${r.title} in Procedures & SOPs`}><ExternalLink size={15} /></Link>}
+                    : <span className="u-muted" title="No file attached yet">No file</span>}
                 </li>
               ))}
               <li>

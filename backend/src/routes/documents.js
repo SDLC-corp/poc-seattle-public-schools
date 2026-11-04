@@ -6,7 +6,7 @@ import {
   DOC_TYPES, CATEGORIES, ACCESS_LEVELS, FILE_TYPES, MAX_UPLOAD_BYTES, UPLOAD_DIR,
 } from '../data/documentsStore.js';
 import { schools, buildings } from '../data/store.js';
-import { logAudit, getEntries, CURRENT_USER } from '../data/auditStore.js';
+import { logAudit, getEntries, currentUser } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
 import { publicView } from '../data/integrationsStore.js';
 
@@ -110,7 +110,7 @@ router.post('/', express.raw({ type: () => true, limit: MAX_UPLOAD_BYTES }), asy
       source: 'upload',
       storedName,
       uploadedAt: new Date().toISOString(),
-      uploadedBy: { id: CURRENT_USER.id, name: CURRENT_USER.name },
+      uploadedBy: { id: currentUser().id, name: currentUser().name },
       sample: false,
     });
     logAudit(req, {

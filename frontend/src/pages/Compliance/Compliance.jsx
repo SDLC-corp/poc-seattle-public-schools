@@ -10,6 +10,8 @@ import ComplianceByType from './ComplianceByType'
 import ComplianceCalendar from './ComplianceCalendar'
 import ComplianceDetails from './ComplianceDetails'
 import InspectionsTab from './InspectionsTab'
+import ScheduleDialog from './ScheduleDialog'
+import DueDate from '../../lib/DueDate'
 import { SchoolStatusBadge } from './complianceMeta'
 import { request, fmtDate, API_BASE } from '../../lib/api'
 import { fmtDay } from './complianceUtils'
@@ -62,6 +64,7 @@ export default function Compliance() {
   const [refreshKey, setRefreshKey] = useState(0)
   const [selection, setSelection] = useState(null) // { kind: 'inspection' | 'school', id }
   const [detailsOpen, setDetailsOpen] = useState(false)
+  const [scheduling, setScheduling] = useState(null) // the inspection being booked (date + inspector)
   const [toast, setToast] = useState(null)
   const [error, setError] = useState(null)
 
@@ -138,6 +141,21 @@ export default function Compliance() {
             active={status === 'overdue'} onClick={() => setStatusFilter('overdue')} />
         </div>
 
+        {/* Calendar under the KPIs, with the breakdown by school type and the status donut on the right */}
+        <div className="c-top">
+          <ComplianceCalendar refreshKey={refreshKey} selectedInspectionId={selection?.kind === 'inspection' ? selection.id : null}
+            onSelectInspection={(id) => select({ kind: 'inspection', id })} />
+          <div className="c-charts">
+            <ComplianceByType byType={summary?.byType} activeType={schoolType}
+              onSelectType={(t) => { setTypeFilter(t); if (tabSlug) navigate('/compliance') }} />
+            <section className="u-card card-chart c-donut-card">
+              <header className="u-card-head"><h2>Compliance Status</h2></header>
+              <DonutChart data={donutData} centerValue={summary ? `${summary.compliancePct}%` : '—'} centerLabel="Compliant" showCounts
+                ariaLabel="Schools by compliance status" />
+            </section>
+          </div>
+        </div>
+
         <nav className="u-tabs" role="tablist" aria-label="Compliance views">
           {TABS.map((t) => (
             <button key={t.slug} type="button" role="tab" aria-selected={t.slug === tabSlug}
@@ -150,14 +168,6 @@ export default function Compliance() {
 
         {tabSlug === '' && (
           <>
-            <div className="c-overview">
-              <ComplianceByType byType={summary?.byType} activeType={schoolType} onSelectType={setTypeFilter} />
-              <section className="u-card card-chart c-donut-card">
-                <header className="u-card-head"><h2>Compliance Status</h2></header>
-                <DonutChart data={donutData} centerValue={summary ? `${summary.compliancePct}%` : '—'} centerLabel="Compliant" showCounts
-                  ariaLabel="Schools by compliance status" />
-              </section>
-            </div>
 
             <section className="u-card">
               <header className="u-card-head c-table-head">
@@ -196,7 +206,7 @@ export default function Compliance() {
                         <td className="c-num">{s.buildings}</td>
                         <td className="c-num c-col-acm">{s.acmLocations}</td>
                         <td className="u-nowrap c-col-last">{fmtDate(s.lastInspection)}</td>
-                        <td className="u-nowrap">{fmtDay(s.nextDue)}</td>
+                        <td className="u-nowrap"><DueDate date={s.nextDue}>{fmtDay(s.nextDue)}</DueDate></td>
                         <td><SchoolStatusBadge status={s.status} /></td>
                         <td className="u-col-actions" onClick={(e) => e.stopPropagation()}>
                           <button type="button" className="n-more" title={s.nextInspectionId ? 'Open next inspection' : 'Open school details'}
@@ -231,9 +241,9 @@ export default function Compliance() {
           </>
         )}
 
-        {tabSlug === 'inspections' && <InspectionsTab preset="tracking" refreshKey={refreshKey} selectedId={selection?.id} onSelect={(id) => select({ kind: 'inspection', id })} />}
-        {tabSlug === 'deadlines' && <InspectionsTab preset="deadlines" refreshKey={refreshKey} selectedId={selection?.id} onSelect={(id) => select({ kind: 'inspection', id })} />}
-        {tabSlug === 'history' && <InspectionsTab preset="history" refreshKey={refreshKey} selectedId={selection?.id} onSelect={(id) => select({ kind: 'inspection', id })} />}
+        {tabSlug === 'inspections' && <InspectionsTab preset="tracking" refreshKey={refreshKey} selectedId={selection?.id} onSelect={(id) => select({ kind: 'inspection', id })} onSchedule={setScheduling} />}
+        {tabSlug === 'deadlines' && <InspectionsTab preset="deadlines" refreshKey={refreshKey} selectedId={selection?.id} onSelect={(id) => select({ kind: 'inspection', id })} onSchedule={setScheduling} />}
+        {tabSlug === 'history' && <InspectionsTab preset="history" refreshKey={refreshKey} selectedId={selection?.id} onSelect={(id) => select({ kind: 'inspection', id })} onSchedule={setScheduling} />}
         {tabSlug === 'corrective-actions' && (
           <div className="u-card u-placeholder">
             <Construction size={28} />
@@ -243,12 +253,15 @@ export default function Compliance() {
         )}
       </div>
 
-      <ComplianceCalendar refreshKey={refreshKey} selectedInspectionId={selection?.kind === 'inspection' ? selection.id : null}
-        onSelectInspection={(id) => select({ kind: 'inspection', id })} />
 
       <div className="u-drawer-backdrop" onClick={() => setDetailsOpen(false)} />
       <ComplianceDetails selection={selection} refreshKey={refreshKey} onSelect={select}
-        onClose={() => { setSelection(null); setDetailsOpen(false) }} onChanged={refreshAll} notify={notify} />
+        onClose={() => { setSelection(null); setDetailsOpen(false) }} onChanged={refreshAll} notify={notify} onSchedule={setScheduling} />
+
+      {scheduling && (
+        <ScheduleDialog inspection={scheduling} onClose={() => setScheduling(null)}
+          onScheduled={(i) => { setScheduling(null); refreshAll(); notify('success', `${i.type} at ${i.schoolName} scheduled for ${fmtDay(i.scheduledDate)} with ${i.inspectorName}.`) }} />
+      )}
 
       {toast && (
         <div className={`u-toast ${toast.kind}`} role="status">

@@ -43,7 +43,7 @@ export default function Topbar({ onToggleSidebar, user }) {
       </label>
 
       <div className="topbar-actions">
-        <Link to="/notifications/unread" className="icon-btn bell-btn" aria-label={`Notifications (${unread} unread)`} title={`${unread} unread notifications`}>
+        <Link to="/notifications" className="icon-btn bell-btn" aria-label={`Notifications (${unread} unread)`} title={`${unread} unread notifications`}>
           <Bell size={22} />
           {unread > 0 && <span className="bell-badge">{unread > 99 ? '99+' : unread}</span>}
         </Link>

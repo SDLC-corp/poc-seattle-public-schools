@@ -186,3 +186,7 @@
   .d-filters { grid-template-columns: minmax(0, 1fr); }
   .d-filters .u-search { grid-column: auto; }
 }
+
+/* Inside Reports & Documents: a one-line intro with the actions */
+.d-head { align-items: center; }
+.d-head > p { margin: 0; font-size: 13px; color: var(--ink-2); }

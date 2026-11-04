@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Search, ChevronLeft, ChevronRight, CalendarPlus } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import { InspectionStatusBadge } from './complianceMeta'
+import DueDate from '../../lib/DueDate'
 import { request } from '../../lib/api'
 import { fmtDay, isoDay } from './complianceUtils'
 
@@ -18,7 +19,7 @@ const PRESETS = {
   history: { title: 'Compliance History (completed inspections)', filter: (i) => Boolean(i.completedAt), sort: 'desc' },
 }
 
-export default function InspectionsTab({ preset, refreshKey, selectedId, onSelect }) {
+export default function InspectionsTab({ preset, refreshKey, selectedId, onSelect, onSchedule }) {
   const cfg = PRESETS[preset]
   const [all, setAll] = useState(null)
   const [query, setQuery] = useState('')
@@ -73,11 +74,15 @@ export default function InspectionsTab({ preset, refreshKey, selectedId, onSelec
             {visible.map((i) => (
               <tr key={i.id} className={i.id === selectedId ? 'selected' : ''} onClick={() => onSelect(i.id)}
                 tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') onSelect(i.id) }}>
-                <td className="u-nowrap">{fmtDay(i.scheduledDate)}</td>
+                <td className="u-nowrap"><DueDate date={i.scheduledDate} done={Boolean(i.completedAt)} soonDays={14}>{fmtDay(i.scheduledDate)}</DueDate></td>
                 <td>{i.schoolName}</td>
                 <td className="c-col-building">{i.buildingName}</td>
                 <td className="u-nowrap">{i.type}</td>
-                <td className="c-col-inspector u-nowrap">{i.inspectorName}</td>
+                {/* The inspector once it's booked; a due-soon / overdue inspection nobody has booked gets Schedule */}
+                <td className="c-col-inspector u-nowrap" onClick={(e) => { if (!i.booked) e.stopPropagation() }}>
+                  {i.booked ? i.inspectorName
+                    : <button type="button" className="u-btn u-btn-outline u-btn-sm c-sched-btn" onClick={() => onSchedule(i)}><CalendarPlus size={13} />Schedule</button>}
+                </td>
                 <td><InspectionStatusBadge status={i.status} /></td>
               </tr>
             ))}

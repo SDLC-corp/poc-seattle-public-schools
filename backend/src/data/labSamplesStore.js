@@ -25,6 +25,8 @@ export const RESULT_CLASSES = {
   none: 'No Asbestos Detected',
   assumed: 'Assumed ACM',
   inconclusive: 'Not Analyzed / Inconclusive',
+  // Samples sent from inspections that are still awaiting their result
+  pending: 'Pending at Lab',
 };
 
 const titleCase = (s) => s.toLowerCase().replace(/\b[a-z]/g, (c) => c.toUpperCase());

@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import {
-  Layers, TriangleAlert, CircleAlert, CircleCheck, Building2, MapPin, Search, Download, Plus, Eye, Pencil, Ellipsis, Info, RotateCcw, Wrench,
-} from 'lucide-react'
+  Layers, TriangleAlert, CircleAlert, CircleCheck, Building2, MapPin, Search, Download, Plus, Eye, Pencil, Ellipsis, Info, RotateCcw, } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import Badge from '../AcmInventory/Badge'
 import AddAcmDialog from '../AcmInventory/AddAcmDialog'
@@ -43,7 +42,6 @@ export function RowMenu({ record }) {
       </button>
       {open && (
         <div className="ai-menu" role="menu">
-          <button type="button" role="menuitem" onClick={() => navigate(`/operations/activities/new?material=${encodeURIComponent(record.id)}`)}><Wrench size={14} />Create O&amp;M work order</button>
           <button type="button" role="menuitem" onClick={() => navigate(floorLink(record))}><MapPin size={14} />Open room on floor plan</button>
         </div>
       )}

@@ -38,7 +38,6 @@ function RowMenu({ r, onReset }) {
       {open && (
         <div className="ai-menu" role="menu">
           {r.work && <button type="button" role="menuitem" onClick={go(`/operations/activities/${r.work.id}`)}><Wrench size={14} />Open work order {r.work.id}</button>}
-          <button type="button" role="menuitem" onClick={go(`/operations/activities/new?material=${encodeURIComponent(r.id)}`)}><Plus size={14} />Create O&amp;M work order</button>
           <button type="button" role="menuitem" onClick={go(floorLink(r))}><MapPin size={14} />Open room on floor plan</button>
           {r.customised && <button type="button" role="menuitem" onClick={() => { setOpen(false); onReset() }}><RotateCcw size={14} />Reset to standard</button>}
         </div>

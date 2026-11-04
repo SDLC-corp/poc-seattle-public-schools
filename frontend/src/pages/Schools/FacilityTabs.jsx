@@ -54,7 +54,7 @@ export function DocumentsCard({ filter, emptyText = 'No documents yet.', showBui
     <section className="u-card">
       <header className="u-card-head">
         <h2>Documents {data && `(${data.total})`}</h2>
-        <Link className="u-btn u-btn-outline u-btn-sm" to="/documents"><FolderOpen size={13} />Document Management</Link>
+        <Link className="u-btn u-btn-outline u-btn-sm" to="/reports/documents"><FolderOpen size={13} />Documents</Link>
       </header>
       <div className="u-table-wrap">
         <table className="u-table c-table">

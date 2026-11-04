@@ -5,6 +5,7 @@ import { getMaterials, allRooms } from './roomsStore.js';
 import { getEvents } from './airStore.js';
 import { getPeople } from './personnelStore.js';
 import { getLabData } from './labSamplesStore.js';
+import * as OM from './omStore.js';
 
 /**
  * Report definitions for the Reports & Analytics screen. Every report produces flat rows with the
@@ -56,6 +57,12 @@ const TRAINING_STATUS = {
   dueSoon: { label: 'Expiring Soon', tone: 'warning' },
   expired: { label: 'Expired', tone: 'critical' },
   missing: { label: 'Missing', tone: 'critical' },
+};
+const OM_STATUS = {
+  completed: { label: 'Completed', tone: 'good' },
+  inProgress: { label: 'In Progress', tone: 'warning' },
+  pending: { label: 'Pending', tone: 'neutral' },
+  overdue: { label: 'Overdue', tone: 'critical' },
 };
 const SCHOOL_STATUS = {
   compliant: { label: 'Compliant', tone: 'good' },
@@ -369,6 +376,63 @@ export const REPORTS = {
       { key: 'soon', label: 'Expiring ≤ 60 Days', value: countBy(rows, 'dueSoon'), tone: 'warning', icon: 'clock', status: 'dueSoon' },
       { key: 'expired', label: 'Expired', value: countBy(rows, 'expired'), tone: 'critical', icon: 'alert', status: 'expired' },
       { key: 'missing', label: 'Missing', value: countBy(rows, 'missing'), tone: 'violet', icon: 'help', status: 'missing' },
+    ],
+  },
+  'om-activities': {
+    title: 'O&M Activities',
+    description: 'Operations & maintenance work on ACM: what was done, where, by whom and whether it is complete.',
+    module: 'Operations & Maintenance',
+    filters: ['school', 'building', 'floor', 'status', 'date'],
+    statusLabel: 'Status',
+    statuses: OM_STATUS,
+    columns: [
+      { key: 'date', label: 'Due Date', type: 'date' },
+      { key: 'id', label: 'Activity ID' },
+      { key: 'inspectionId', label: 'Inspection ID' },
+      { key: 'school', label: 'Facility', type: 'wrap' },
+      { key: 'building', label: 'Building', type: 'wrap', csvOnly: true },
+      { key: 'room', label: 'Room', type: 'wrap' },
+      { key: 'type', label: 'Activity Type', type: 'wrap' },
+      { key: 'material', label: 'ACM Material', type: 'wrap' },
+      { key: 'assignee', label: 'Assigned To' },
+      { key: 'contractor', label: 'Contractor', csvOnly: true },
+      { key: 'priority', label: 'Priority', csvOnly: true },
+      { key: 'completed', label: 'Completed', type: 'date', csvOnly: true },
+      { key: 'status', label: 'Status', type: 'status' },
+    ],
+    rows: () => {
+      const floors = floorById();
+      const rooms = new Map(allRooms().map((r) => [r.id, r]));
+      const mats = new Map(getMaterials().map((m) => [m.id, m]));
+      const today = todayMs();
+      return OM.all('activities').map((a) => {
+        const room = rooms.get(a.roomId);
+        return {
+          id: a.id,
+          date: a.dueDate ?? '',
+          schoolId: a.schoolId,
+          school: schoolName.get(a.schoolId) ?? a.schoolId,
+          buildingId: a.buildingId,
+          building: buildingName.get(a.buildingId) ?? '',
+          floor: floors.get(a.floorId)?.name ?? '',
+          status: a.state !== 'completed' && a.dueDate && dayMs(a.dueDate) < today ? 'overdue' : a.state,
+          inspectionId: a.inspectionId ?? '',
+          room: room ? `${room.number} ${room.name}`.trim() : '',
+          type: a.type,
+          material: mats.get(a.materialId)?.name ?? '',
+          assignee: a.assignedToName ?? '',
+          contractor: a.contractorName ?? '',
+          priority: a.priority ?? '',
+          completed: a.completedAt?.slice(0, 10) ?? '',
+        };
+      });
+    },
+    stats: (rows) => [
+      { key: 'total', label: 'O&M Activities', value: rows.length, tone: 'primary', icon: 'clipboard' },
+      { key: 'done', label: 'Completed', value: countBy(rows, 'completed'), tone: 'good', icon: 'check', status: 'completed' },
+      { key: 'progress', label: 'In Progress', value: countBy(rows, 'inProgress'), tone: 'warning', icon: 'clock', status: 'inProgress' },
+      { key: 'pending', label: 'Pending', value: countBy(rows, 'pending'), tone: 'violet', icon: 'calendar', status: 'pending' },
+      { key: 'overdue', label: 'Overdue', value: countBy(rows, 'overdue'), tone: 'critical', icon: 'alert', status: 'overdue' },
     ],
   },
   compliance: {

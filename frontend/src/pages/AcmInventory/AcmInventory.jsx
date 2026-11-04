@@ -129,6 +129,55 @@ export default function AcmInventory() {
         </div>
       </div>
 
+      {tab.id !== 'history' && (
+        <div className="ai-filters">
+          <div className="a-field">
+            <span>Facility</span>
+            <SearchSelect variant="field" label="Facility" value={filters.school} onChange={setFilter('school')} searchPlaceholder="Search facilities…"
+              options={[{ value: '', label: 'All Facilities' }, ...(tree ?? []).map((x) => ({ value: x.id, label: x.name }))]} />
+          </div>
+          <div className="a-field">
+            <span>Building</span>
+            <SearchSelect variant="field" label="Building" value={filters.building} onChange={setFilter('building')}
+              options={[{ value: '', label: school ? 'All Buildings' : 'Select a facility first' }, ...(school?.buildings ?? []).map((x) => ({ value: x.id, label: x.name }))]} />
+          </div>
+          <div className="a-field">
+            <span>Floor</span>
+            <SearchSelect variant="field" label="Floor" value={filters.floor} onChange={setFilter('floor')} searchable={false}
+              options={[{ value: '', label: building ? 'All Floors' : 'Select a building first' }, ...(building?.floors ?? []).map((x) => ({ value: x.id, label: x.name }))]} />
+          </div>
+          <div className="a-field">
+            <span>Material Type</span>
+            <SearchSelect variant="field" label="Material type" value={filters.type} onChange={setFilter('type')} searchable={false}
+              options={[{ value: '', label: 'All Material Types' }, ...meta.types.map((x) => ({ value: x, label: x }))]} />
+          </div>
+          <div className="a-field">
+            <span>Condition</span>
+            <SearchSelect variant="field" label="Condition" value={filters.condition} onChange={setFilter('condition')} searchable={false}
+              options={[{ value: '', label: 'All Conditions' }, ...[...meta.conditions, 'Not Assessed'].filter((x, i, a) => a.indexOf(x) === i).map((x) => ({ value: x, label: x }))]} />
+          </div>
+          <div className="a-field">
+            <span>ACM Status</span>
+            <SearchSelect variant="field" label="ACM status" value={filters.status} onChange={setFilter('status')} searchable={false}
+              options={[{ value: '', label: 'All Statuses' }, ...meta.statuses.map((x) => ({ value: x, label: x }))]} />
+          </div>
+          <div className="a-field ai-search-field">
+            <span>Search</span>
+            <div className="ai-search-row">
+              <label className="u-search">
+                <Search size={15} />
+                <input type="search" placeholder="Room, material or ACM ID…" value={filters.q}
+                  onChange={(e) => setFilter('q')(e.target.value)} aria-label="Search ACM inventory" />
+              </label>
+              <button type="button" className="u-btn u-btn-outline ai-reset" disabled={!filtersActive} aria-label="Reset filters" title="Reset filters"
+                onClick={() => { setFilters(EMPTY_FILTERS); setDebouncedQ(''); setPage(1) }}>
+                <RotateCcw size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <nav className="u-tabs ai-tabs" aria-label="ACM inventory views">
         {TABS.map((t) => (
           <Link key={t.id} to={t.id === 'inventory' ? '/acm' : `/acm/${t.id}`}
@@ -139,69 +188,20 @@ export default function AcmInventory() {
       </nav>
 
       {tab.id !== 'history' && (
-        <>
-          <div className="ai-filters">
-            <div className="a-field">
-              <span>Facility</span>
-              <SearchSelect variant="field" label="Facility" value={filters.school} onChange={setFilter('school')} searchPlaceholder="Search facilities…"
-                options={[{ value: '', label: 'All Facilities' }, ...(tree ?? []).map((x) => ({ value: x.id, label: x.name }))]} />
-            </div>
-            <div className="a-field">
-              <span>Building</span>
-              <SearchSelect variant="field" label="Building" value={filters.building} onChange={setFilter('building')}
-                options={[{ value: '', label: school ? 'All Buildings' : 'Select a facility first' }, ...(school?.buildings ?? []).map((x) => ({ value: x.id, label: x.name }))]} />
-            </div>
-            <div className="a-field">
-              <span>Floor</span>
-              <SearchSelect variant="field" label="Floor" value={filters.floor} onChange={setFilter('floor')} searchable={false}
-                options={[{ value: '', label: building ? 'All Floors' : 'Select a building first' }, ...(building?.floors ?? []).map((x) => ({ value: x.id, label: x.name }))]} />
-            </div>
-            <div className="a-field">
-              <span>Material Type</span>
-              <SearchSelect variant="field" label="Material type" value={filters.type} onChange={setFilter('type')} searchable={false}
-                options={[{ value: '', label: 'All Material Types' }, ...meta.types.map((x) => ({ value: x, label: x }))]} />
-            </div>
-            <div className="a-field">
-              <span>Condition</span>
-              <SearchSelect variant="field" label="Condition" value={filters.condition} onChange={setFilter('condition')} searchable={false}
-                options={[{ value: '', label: 'All Conditions' }, ...[...meta.conditions, 'Not Assessed'].filter((x, i, a) => a.indexOf(x) === i).map((x) => ({ value: x, label: x }))]} />
-            </div>
-            <div className="a-field">
-              <span>ACM Status</span>
-              <SearchSelect variant="field" label="ACM status" value={filters.status} onChange={setFilter('status')} searchable={false}
-                options={[{ value: '', label: 'All Statuses' }, ...meta.statuses.map((x) => ({ value: x, label: x }))]} />
-            </div>
-            <div className="a-field ai-search-field">
-              <span>Search</span>
-              <div className="ai-search-row">
-                <label className="u-search">
-                  <Search size={15} />
-                  <input type="search" placeholder="Room, material or ACM ID…" value={filters.q}
-                    onChange={(e) => setFilter('q')(e.target.value)} aria-label="Search ACM inventory" />
-                </label>
-                <button type="button" className="u-btn u-btn-outline ai-reset" disabled={!filtersActive} aria-label="Reset filters" title="Reset filters"
-                  onClick={() => { setFilters(EMPTY_FILTERS); setDebouncedQ(''); setPage(1) }}>
-                  <RotateCcw size={14} />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="a-kpis ai-kpis">
-            <Kpi icon={Layers} value={s?.total} label="Total ACM Records" tone="primary"
-              sub={s && `${s.acmPresent.toLocaleString('en-US')} present · ${s.assumed.toLocaleString('en-US')} assumed`}
-              active={!filters.condition} onClick={() => setFilter('condition')('')} />
-            <Kpi icon={CircleCheck} value={s?.good} label="Good" sub={pct(s?.goodPct)} tone="good"
-              active={filters.condition === 'Good'} onClick={() => toggleCondition('Good')} />
-            <Kpi icon={TriangleAlert} value={s?.damaged} label="Damaged" sub={pct(s?.damagedPct)} tone="warning"
-              active={filters.condition === 'Damaged'} onClick={() => toggleCondition('Damaged')} />
-            <Kpi icon={OctagonAlert} value={s?.significantlyDamaged} label="Significantly Damaged" sub={pct(s?.significantlyDamagedPct)} tone="critical"
-              active={filters.condition === 'Significantly Damaged'} onClick={() => toggleCondition('Significantly Damaged')} />
-            <Kpi icon={School} value={s?.facilities} label="Facilities" tone="violet"
-              sub={s && `${s.notAssessed.toLocaleString('en-US')} records not assessed`}
-              active={false} onClick={() => navigate('/acm/buildings')} />
-          </div>
-        </>
+        <div className="a-kpis ai-kpis">
+          <Kpi icon={Layers} value={s?.total} label="Total ACM Records" tone="primary"
+            sub={s && `${s.acmPresent.toLocaleString('en-US')} present · ${s.assumed.toLocaleString('en-US')} assumed`}
+            active={!filters.condition} onClick={() => setFilter('condition')('')} />
+          <Kpi icon={CircleCheck} value={s?.good} label="Good" sub={pct(s?.goodPct)} tone="good"
+            active={filters.condition === 'Good'} onClick={() => toggleCondition('Good')} />
+          <Kpi icon={TriangleAlert} value={s?.damaged} label="Damaged" sub={pct(s?.damagedPct)} tone="warning"
+            active={filters.condition === 'Damaged'} onClick={() => toggleCondition('Damaged')} />
+          <Kpi icon={OctagonAlert} value={s?.significantlyDamaged} label="Significantly Damaged" sub={pct(s?.significantlyDamagedPct)} tone="critical"
+            active={filters.condition === 'Significantly Damaged'} onClick={() => toggleCondition('Significantly Damaged')} />
+          <Kpi icon={School} value={s?.facilities} label="Facilities" tone="violet"
+            sub={s && `${s.notAssessed.toLocaleString('en-US')} records not assessed`}
+            active={false} onClick={() => navigate('/acm/buildings')} />
+        </div>
       )}
 
       {tab.id === 'inventory' && (

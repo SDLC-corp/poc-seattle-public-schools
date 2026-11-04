@@ -36,8 +36,13 @@ export const takePostLoginPath = () => {
 
 // Delegated Microsoft Graph permissions. Sign-in asks only for the basics; Outlook and SharePoint
 // are consented to separately when the user connects them (incremental consent).
+// This app's own API (VITE_ENTRA_API_SCOPE, e.g. api://<client-id>/access_as_user): its token tells the
+// backend who is signed in, so actions are credited to that person
+const apiScope = import.meta.env.VITE_ENTRA_API_SCOPE?.trim() || ''
+
 export const SCOPES = {
   login: ['openid', 'profile', 'email', 'User.Read'],
+  api: apiScope ? [apiScope] : [],
   outlook: ['Mail.Read', 'Mail.Send', 'Calendars.ReadWrite'],
   sharepoint: ['Sites.Read.All', 'Files.ReadWrite.All'],
 }

@@ -16,6 +16,7 @@ export default function SearchSelect({
   searchPlaceholder = 'Search…',
   emptyText = 'No matches',
   wide = false,
+  disabled = false,
   id,
 }) {
   const [open, setOpen] = useState(false)
@@ -110,6 +111,7 @@ export default function SearchSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={variant === 'field' ? `${label}: ${selected?.label ?? ''}` : undefined}
+        disabled={disabled}
         onClick={() => (open ? closeMenu() : openMenu())}
         onKeyDown={(e) => {
           if (!open && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {

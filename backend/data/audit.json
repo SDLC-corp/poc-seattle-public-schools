@@ -1,6 +1,696 @@
 {
   "entries": [
     {
+      "id": "AUD-000089",
+      "at": "2026-11-04T11:29:47.866Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00088",
+      "summary": "Recorded lab results for inspection INS-2026-00088",
+      "changes": [
+        {
+          "field": "Result SMP-13382",
+          "from": "Asbestos Detected · 2% Amosite · Fail (limit 1%)",
+          "to": "No Asbestos Detected · 0% · Pass (limit 1%)"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00088",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000088",
+      "at": "2026-11-04T11:29:17.431Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00088",
+      "summary": "Recorded lab results for inspection INS-2026-00088",
+      "changes": [
+        {
+          "field": "SMP-13382 Laboratory Sample ID",
+          "from": "—",
+          "to": "test"
+        },
+        {
+          "field": "SMP-13382 Analysis Method",
+          "from": "—",
+          "to": "PLM Point Count (400 points)"
+        },
+        {
+          "field": "SMP-13382 Analysis Standard",
+          "from": "—",
+          "to": "AHERA TEM (40 CFR 763 App. A)"
+        },
+        {
+          "field": "SMP-13382 Analysis Date",
+          "from": "—",
+          "to": "2026-11-03"
+        },
+        {
+          "field": "SMP-13382 Lab Report No.",
+          "from": "—",
+          "to": "test"
+        },
+        {
+          "field": "Result SMP-13382",
+          "from": "Pending",
+          "to": "Asbestos Detected · 2% Amosite · Fail (limit 1%)"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00088",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000087",
+      "at": "2026-11-04T09:44:17.246Z",
+      "action": "update",
+      "module": "Air Monitoring",
+      "recordId": "AM-2026-S018",
+      "summary": "Updated air monitoring event – Garfield High School",
+      "changes": [
+        {
+          "field": "result",
+          "from": "pending",
+          "to": "0.001 f/cc"
+        },
+        {
+          "field": "status",
+          "from": "pending",
+          "to": "compliant"
+        }
+      ],
+      "related": {
+        "school": "Garfield High School",
+        "building": "Early Learning Center",
+        "room": "Corridor B"
+      },
+      "link": "/air-monitoring",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000086",
+      "at": "2026-11-04T09:12:59.248Z",
+      "action": "update",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0271",
+      "summary": "Updated O&M activity OM-2026-0271",
+      "changes": [
+        {
+          "field": "Status",
+          "from": "Pending",
+          "to": "In Progress"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0271",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000085",
+      "at": "2026-11-04T09:12:02.220Z",
+      "action": "update",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0268",
+      "summary": "Updated O&M activity OM-2026-0268",
+      "changes": [
+        {
+          "field": "Status",
+          "from": "Pending",
+          "to": "In Progress"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0268",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000084",
+      "at": "2026-11-04T08:57:52.955Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00127",
+      "summary": "Scheduled follow-up inspection INS-2026-00127 of inspection INS-2027-00005 with Rowan Pemberton for 2026-12-04 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Follow-up Inspection"
+        },
+        {
+          "field": "Follow-up Of",
+          "to": "INS-2027-00005"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Rowan Pemberton"
+        },
+        {
+          "field": "Scheduled",
+          "to": "2026-12-04 09:00"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00127",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000083",
+      "at": "2026-11-04T08:57:52.886Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Reviewed stage Laboratory Analysis of inspection INS-2027-00005: approved",
+      "changes": [
+        {
+          "field": "Stage Review",
+          "from": "Pending",
+          "to": "Approved"
+        },
+        {
+          "field": "Reviewer",
+          "to": "Rowan Jessup"
+        },
+        {
+          "field": "Review Date",
+          "to": "2026-11-04"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000082",
+      "at": "2026-11-04T08:56:29.539Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Sent stage Laboratory Analysis of inspection INS-2027-00005 for review",
+      "changes": [
+        {
+          "field": "Stage Review",
+          "to": "Pending"
+        },
+        {
+          "field": "Note",
+          "to": "Lab results recorded – no O&M work needed. Please schedule a follow-up inspection."
+        },
+        {
+          "field": "Requested",
+          "to": "Follow-up inspection with Rowan Pemberton on 2026-12-04 09:00"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000081",
+      "at": "2026-11-04T08:56:29.346Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Recorded lab results for inspection INS-2027-00005",
+      "changes": [],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000080",
+      "at": "2026-11-04T08:43:09.004Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Recorded lab results for inspection INS-2027-00005",
+      "changes": [],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000079",
+      "at": "2026-11-04T08:41:48.483Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Added 1 O&M task to inspection INS-2027-00005",
+      "changes": [
+        {
+          "field": "O&M Task",
+          "to": "OM-2026-0272 – Minor Repair"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000078",
+      "at": "2026-11-04T08:41:48.427Z",
+      "action": "create",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0272",
+      "summary": "Created minor repair OM-2026-0272 from inspection INS-2027-00005",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Minor Repair"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Samuel Underwood"
+        },
+        {
+          "field": "Due Date",
+          "to": "2026-11-18"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0272",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000077",
+      "at": "2026-11-04T08:41:48.361Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Recorded lab results for inspection INS-2027-00005",
+      "changes": [
+        {
+          "field": "Result TEST-1",
+          "from": "Exceeds Limit · 10 f/cc · Fail (limit 0.01 f/cc)",
+          "to": "Below Limit · 0.001 f/cc · Pass (limit 0.01 f/cc)"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000076",
+      "at": "2026-11-04T08:41:14.513Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Added 1 O&M task to inspection INS-2027-00005",
+      "changes": [
+        {
+          "field": "O&M Task",
+          "to": "OM-2026-0271 – Minor Repair"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000075",
+      "at": "2026-11-04T08:41:14.483Z",
+      "action": "create",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0271",
+      "summary": "Created minor repair OM-2026-0271 from inspection INS-2027-00005",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Minor Repair"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Samuel Underwood"
+        },
+        {
+          "field": "Due Date",
+          "to": "2026-11-18"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0271",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000074",
+      "at": "2026-11-04T08:41:14.424Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Recorded lab results for inspection INS-2027-00005",
+      "changes": [
+        {
+          "field": "Result TEST-1",
+          "from": "Pending",
+          "to": "Exceeds Limit · 10 f/cc · Fail (limit 0.01 f/cc)"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000073",
+      "at": "2026-11-04T08:16:47.614Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Stage of inspection INS-2027-00005 set back to automatic",
+      "changes": [
+        {
+          "field": "Stage",
+          "from": "Corrective Action / Remediation",
+          "to": "Laboratory Analysis"
+        },
+        {
+          "field": "Reason",
+          "to": "test"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000072",
+      "at": "2026-11-04T08:16:21.281Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Stage of inspection INS-2027-00005 changed",
+      "changes": [
+        {
+          "field": "Stage",
+          "from": "Laboratory Analysis",
+          "to": "Corrective Action / Remediation"
+        },
+        {
+          "field": "Reason",
+          "to": "test"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000071",
+      "at": "2026-11-04T08:16:00.136Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Reviewed stage Inspection Submitted of inspection INS-2027-00005: approved",
+      "changes": [
+        {
+          "field": "Stage Review",
+          "from": "Pending",
+          "to": "Approved"
+        },
+        {
+          "field": "Reviewer",
+          "to": "Rowan Jessup"
+        },
+        {
+          "field": "Review Date",
+          "to": "2026-11-04"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000070",
+      "at": "2026-11-04T08:07:57.440Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Submitted Follow-up Inspection of Duct Wrap for review",
+      "changes": [
+        {
+          "field": "Date",
+          "from": "—",
+          "to": "2026-11-04"
+        },
+        {
+          "field": "Condition",
+          "from": "—",
+          "to": "Good"
+        },
+        {
+          "field": "Condition Change",
+          "from": "—",
+          "to": "Unchanged"
+        },
+        {
+          "field": "Priority",
+          "from": "—",
+          "to": "Low"
+        },
+        {
+          "field": "Recommended Action",
+          "from": "—",
+          "to": "No Action – Continue O&M"
+        },
+        {
+          "field": "Sample Required",
+          "from": "—",
+          "to": "Yes"
+        },
+        {
+          "field": "Sample Result",
+          "from": "—",
+          "to": "Pending"
+        },
+        {
+          "field": "Action Items",
+          "from": "0",
+          "to": "1"
+        },
+        {
+          "field": "Status",
+          "from": "Scheduled",
+          "to": "Pending Review"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000069",
+      "at": "2026-11-04T08:05:52.297Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2027-00005",
+      "summary": "Attached material condition photo to inspection INS-2027-00005",
+      "changes": [
+        {
+          "field": "Material Condition Photo",
+          "to": "Bright Modern Classroom with Blue Chairs.png"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2027-00005",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000068",
+      "at": "2026-11-04T06:06:54.946Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00088",
+      "summary": "Stage of inspection INS-2026-00088 changed",
+      "changes": [
+        {
+          "field": "Stage",
+          "from": "Laboratory Analysis",
+          "to": "Closed"
+        },
+        {
+          "field": "Reason",
+          "to": "Done all"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00088",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
       "id": "AUD-000067",
       "at": "2026-11-03T12:02:44.083Z",
       "action": "update",

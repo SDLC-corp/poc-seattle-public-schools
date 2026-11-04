@@ -6,7 +6,7 @@ import {
   addFile, removeFile, filePath, FILE_DIR,
 } from '../data/roomsStore.js';
 import * as META from '../data/acmMeta.js';
-import { logAudit, diff, CURRENT_USER } from '../data/auditStore.js';
+import { logAudit, diff, currentUser } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
 import { sniff, storeUpload, sendStored } from './uploadCheck.js';
 import { refreshBuildingFloors } from '../data/floorRoomsSync.js';
@@ -107,7 +107,7 @@ router.post('/', async (req, res, next) => {
   try {
     const { m, room, errors } = validateMaterial(req.body ?? {});
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Check the highlighted fields', fields: errors });
-    const created = await addMaterial({ ...m, createdBy: { id: CURRENT_USER.id, name: CURRENT_USER.name } });
+    const created = await addMaterial({ ...m, createdBy: { id: currentUser().id, name: currentUser().name } });
     await refreshBuildingFloors(created.buildingId); // room / floor ACM status may have changed
     const place = `room ${room.number} ${room.name}, ${getFloor(room.floorId)?.name}, ${buildingOf(room.buildingId)?.name}`;
     logAudit(req, {
@@ -182,7 +182,7 @@ router.post('/:id/attachments', express.raw({ type: () => true, limit: META.MAX_
     const kind = META.ATTACHMENT_TYPES.includes(req.query.type) ? req.query.type : type.ext === 'pdf' ? 'Other' : 'Photo';
     const file = await storeUpload(FILE_DIR, req.body, type, {
       name: req.query.name, type: kind, description: String(req.query.description ?? '').trim().slice(0, 120),
-      uploadedBy: { id: CURRENT_USER.id, name: CURRENT_USER.name },
+      uploadedBy: { id: currentUser().id, name: currentUser().name },
     });
     await addFile('attachment', m.id, file);
     logAudit(req, { action: 'create', module: 'ACM Inventory', recordId: m.id, link: link(m), summary: `Attached ${kind.toLowerCase()} to ${m.name}`, changes: [{ field: 'Attachment', to: file.name }] });

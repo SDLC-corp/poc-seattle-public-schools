@@ -13,13 +13,15 @@ export const TABS = [
     reports: ['inspection-summary', 'detailed-inspection', 'reinspection', 'bulk-samples', 'air-monitoring'],
   },
   { id: 'surveillance', label: 'Surveillance', title: 'Surveillance Reports', reports: ['surveillance'] },
-  { id: 'response-actions', label: 'Response Actions', title: 'Response Action Reports', reports: [], module: 'response actions' },
-  { id: 'om', label: 'O&M', title: 'O&M Reports', reports: [], module: 'operations & maintenance activities' },
+  { id: 'om', label: 'O&M', title: 'O&M Reports', reports: ['om-activities'] },
   { id: 'training', label: 'Training', title: 'Training Reports', reports: ['training'] },
   { id: 'compliance', label: 'Compliance', title: 'Compliance Reports', reports: ['compliance'] },
+  // Document Management, as a tab here (its categories are the next part of the path)
+  { id: 'documents', label: 'Documents' },
 ]
 
 export const REPORT_LABELS = {
+  'om-activities': 'O&M Activities',
   'inspection-summary': 'Inspection Summary',
   'detailed-inspection': 'Detailed Inspection',
   reinspection: '3-Year Reinspection',

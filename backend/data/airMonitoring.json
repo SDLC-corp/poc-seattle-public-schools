@@ -29,7 +29,7 @@
       "type": "Area",
       "method": "PCM",
       "durationMin": 372,
-      "result": null,
+      "result": 0.001,
       "contractorName": "Priya Vance",
       "inspectorName": "Rowan Pemberton",
       "project": "Abatement – Classroom Wing",

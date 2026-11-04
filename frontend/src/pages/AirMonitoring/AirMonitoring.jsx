@@ -1,27 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router'
 import {
-  Wind, CircleCheck, TriangleAlert, Clock, Plus, Download, Search, ChevronLeft, ChevronRight, RotateCcw,
-  Ellipsis, CircleAlert, Construction,
+  Wind, CircleCheck, Download, Search, ChevronLeft, ChevronRight, RotateCcw,
+  CircleAlert, Eye, Pencil,
 } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import DonutChart from '../../components/charts/DonutChart'
 import AirTrendChart from './AirTrendChart'
 import AirEventForm from './AirEventForm'
-import AirDetails from './AirDetails'
+import SampleResultDialog from '../LabSamples/SampleResultDialog'
 import { AirStatusBadge } from './airMeta'
 import { request, API_BASE } from '../../lib/api'
 import '../Users/users.css'
 import '../Compliance/compliance.css'
 import './air.css'
 
-const TABS = [
-  { slug: '', label: 'Overview' },
-  { slug: 'events', label: 'Monitoring Events' },
-  { slug: 'exceedances', label: 'Exceedances' },
-  { slug: 'contractors', label: 'Contractors' },
-  { slug: 'reports', label: 'Reports' },
-]
+// One view (the overview); older tab links (/air-monitoring/events etc.) come back here
+const TABS = [{ slug: '', label: 'Overview' }]
 const RANGES = [
   { value: '30', label: 'Last 30 days', days: 30 },
   { value: '90', label: 'Last 90 days', days: 90 },
@@ -43,22 +38,15 @@ function pageList(page, pages) {
   return sorted.flatMap((p, i) => (i && p - sorted[i - 1] > 1 ? ['…', p] : [p]))
 }
 
-function Kpi({ icon: Icon, value, label, tone, active, onClick }) {
-  return (
-    <button type="button" className={`kpi-card kpi-clickable tone-${tone}${active ? ' active' : ''}`} onClick={onClick} aria-pressed={active}>
-      <span className="kpi-icon"><Icon size={18} strokeWidth={1.8} /></span>
-      <span className="kpi-text">
-        <strong>{value ?? '—'}</strong>
-        <span className="kpi-label">{label}</span>
-      </span>
-    </button>
-  )
-}
 
 export default function AirMonitoring() {
   const { tab: tabSlug = '' } = useParams()
   const navigate = useNavigate()
   const tab = TABS.find((t) => t.slug === tabSlug)
+  // ?event=<id> (older links) → that event's details page
+  const [params] = useSearchParams()
+  const linkedEvent = params.get('event')
+  const openEvent = (eventId) => navigate(`/air-monitoring/events/${encodeURIComponent(eventId)}`)
 
   const [meta, setMeta] = useState(null)
   const [schools, setSchools] = useState([])
@@ -71,10 +59,8 @@ export default function AirMonitoring() {
   const [data, setData] = useState(null)
   const [trend, setTrend] = useState(null)
   const [refreshKey, setRefreshKey] = useState(0)
-  const [selectedId, setSelectedId] = useState(null)
-  const [detail, setDetail] = useState(null)
-  const [detailsOpen, setDetailsOpen] = useState(false)
   const [form, setForm] = useState(null) // { event? }
+  const [enteringResult, setEnteringResult] = useState(null) // { inspectionId, materialId } of an inspection's air sample
   const [toast, setToast] = useState(null)
   const [error, setError] = useState(null)
   const [now] = useState(() => Date.now())
@@ -117,7 +103,6 @@ export default function AirMonitoring() {
       if (cancelled) return
       setData(d)
       setError(null)
-      setSelectedId((id) => (d.events.some((e) => e.id === id) ? id : d.events[0]?.id ?? null))
     }).catch((err) => { if (!cancelled) setError(err.message) })
     return () => { cancelled = true }
   }, [listQs, refreshKey])
@@ -130,73 +115,33 @@ export default function AirMonitoring() {
     return () => { cancelled = true }
   }, [trendQs, refreshKey, tabSlug])
 
-  useEffect(() => {
-    if (!selectedId) return
-    let cancelled = false
-    request(`/air-monitoring/${selectedId}`).then((d) => { if (!cancelled) setDetail(d) }).catch(() => {})
-    return () => { cancelled = true }
-  }, [selectedId, refreshKey])
-  const selected = detail?.id === selectedId ? detail : null
-
   const notify = useCallback((kind, text) => setToast({ kind, text }), [])
 
+  if (linkedEvent) return <Navigate to={`/air-monitoring/events/${encodeURIComponent(linkedEvent)}`} replace />
   if (!tab) return <Navigate to="/air-monitoring" replace />
 
   const setFilter = (k) => (v) => {
     setFilters((f) => ({ ...f, [k]: v, ...(k === 'school' ? { building: '' } : {}) }))
     setPage(1)
   }
-  const statusKpi = (s) => ({
-    active: tabSlug !== 'exceedances' && filters.status === s,
-    onClick: () => { if (tabSlug === 'exceedances') navigate('/air-monitoring'); setFilter('status')(filters.status === s ? '' : s) },
-  })
   const filtersActive = query || JSON.stringify(filters) !== JSON.stringify(DEFAULTS)
   const schoolBuildings = buildings.filter((b) => b.schoolId === filters.school)
   const stats = data?.stats
-  const pct = (n) => (stats?.total ? ` (${Math.round((n / stats.total) * 100)}%)` : '')
   const from = data?.total ? (data.page - 1) * data.pageSize + 1 : 0
   const to = data ? Math.min(data.total, data.page * data.pageSize) : 0
-  const placeholder = tabSlug === 'contractors' || tabSlug === 'reports'
 
   return (
-    <div className={`air-page${detailsOpen ? ' details-open' : ''}`}>
+    <div className="air-page">
       <div className="air-main">
         <div className="c-head">
           <div>
             <h1><Wind size={22} />Air Monitoring</h1>
             <p>Manage air monitoring activities, results and compliance for asbestos projects.</p>
           </div>
-          <button type="button" className="u-btn u-btn-primary" disabled={!meta} onClick={() => setForm({})}>
-            <Plus size={16} />Log Air Monitoring
-          </button>
         </div>
 
-        <nav className="u-tabs" role="tablist" aria-label="Air monitoring views">
-          {TABS.map((t) => (
-            <button key={t.slug} type="button" role="tab" aria-selected={t.slug === tabSlug}
-              className={`u-tab${t.slug === tabSlug ? ' active' : ''}`}
-              onClick={() => navigate(t.slug ? `/air-monitoring/${t.slug}` : '/air-monitoring')}>{t.label}</button>
-          ))}
-        </nav>
-
-        {placeholder ? (
-          <div className="u-card u-placeholder">
-            <Construction size={28} />
-            <strong>{tab.label}</strong>
-            <span>This view hasn't been built yet. Monitoring events and exceedances are available now.</span>
-          </div>
-        ) : (
           <>
-            <div className="air-kpis">
-              <Kpi icon={Wind} value={stats?.total} label="Total Monitoring Events" tone="primary"
-                active={!filters.status && tabSlug !== 'exceedances'} onClick={() => { setFilter('status')(''); if (tabSlug === 'exceedances') navigate('/air-monitoring') }} />
-              <Kpi icon={CircleCheck} value={stats?.compliant} label={`Compliant Results${pct(stats?.compliant ?? 0)}`} tone="good" {...statusKpi('compliant')} />
-              <Kpi icon={TriangleAlert} value={stats?.exceedance} label={`Exceedance / Action${pct(stats?.exceedance ?? 0)}`} tone="critical"
-                active={tabSlug === 'exceedances' || filters.status === 'exceedance'}
-                onClick={() => (tabSlug === 'exceedances' ? navigate('/air-monitoring') : setFilter('status')(filters.status === 'exceedance' ? '' : 'exceedance'))} />
-              <Kpi icon={Clock} value={stats?.pending} label={`Pending Results${pct(stats?.pending ?? 0)}`} tone="warning" {...statusKpi('pending')} />
-            </div>
-
+            {/* Filters on one line (the status split is in the Results by Status chart) */}
             <div className="air-filters">
               <div className="a-field"><span>School</span>
                 <SearchSelect variant="field" label="School" value={filters.school} onChange={setFilter('school')} searchPlaceholder="Search schools…"
@@ -260,7 +205,7 @@ export default function AirMonitoring() {
                 <div className="c-table-tools">
                   <label className="u-search">
                     <Search size={15} />
-                    <input type="search" placeholder="Search by school, building, room or project…" value={query}
+                    <input type="search" placeholder="Search by school, room, sample or inspection ID…" value={query}
                       onChange={(e) => setQuery(e.target.value)} aria-label="Search monitoring events" />
                   </label>
                   <a className="u-btn u-btn-outline" href={`${API_BASE}/air-monitoring/export.csv?${baseParams}`} download><Download size={15} />Export</a>
@@ -270,29 +215,54 @@ export default function AirMonitoring() {
                 <table className="u-table c-table air-table">
                   <thead>
                     <tr>
-                      <th>Date</th><th>School</th><th className="air-col-building">Building</th><th>Location / Room</th><th>Type</th>
-                      <th className="air-col-method">Method</th><th className="air-num">Result</th><th>Status</th><th className="u-col-actions">Actions</th>
+                      <th>Date</th><th>Inspection ID</th><th>Sample ID</th><th>School</th><th className="air-col-building">Building</th><th>Location / Room</th><th>Type</th>
+                      <th className="air-col-method">Method</th><th className="air-num">Result (Fibre Count)</th><th>Status</th><th className="u-col-actions">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {data?.events.map((e) => (
-                      <tr key={e.id} className={e.id === selectedId ? 'selected' : ''} onClick={() => { setSelectedId(e.id); setDetailsOpen(true) }}
-                        tabIndex={0} onKeyDown={(ev) => { if (ev.key === 'Enter') { setSelectedId(e.id); setDetailsOpen(true) } }}>
+                      <tr key={e.id} className="air-row" onClick={() => openEvent(e.id)}
+                        tabIndex={0} onKeyDown={(ev) => { if (ev.key === 'Enter') openEvent(e.id) }}>
                         <td className="u-nowrap">{fmtDate(e.sampledAt)}</td>
+                        {/* Air sample taken during an inspection, or a logged event's related inspection at the school */}
+                        <td className="u-nowrap">
+                          {e.inspectionId || e.relatedInspectionId
+                            ? <Link to={`/inspections/records/${e.inspectionId ?? e.relatedInspectionId}${e.inspectionId ? '?tab=lab' : ''}`} className="sv-id"
+                              title={e.inspectionId ? undefined : 'Related inspection at this school'} onClick={(ev) => ev.stopPropagation()}>{e.inspectionId ?? e.relatedInspectionId}</Link>
+                            : <span className="u-muted" title="Logged in Air Monitoring – no inspection at this school">Logged here</span>}
+                        </td>
+                        <td className="u-nowrap air-sample-cell">
+                          {e.sampleId ? <span className="a-mono">{e.sampleId}</span> : <span className="u-muted">—</span>}
+                          {e.labSampleId && <small title="Laboratory sample ID">{e.labSampleId}</small>}
+                        </td>
                         <td>{e.schoolName}</td>
                         <td className="air-col-building">{e.buildingName}</td>
                         <td>{e.location}</td>
                         <td>{e.type}</td>
                         <td className="air-col-method">{e.method}</td>
-                        <td className="air-num u-nowrap">{e.result === null ? '—' : <>{e.result} <small>{e.limit.unit}</small></>}</td>
+                        <td className="air-num u-nowrap">{e.result === null ? <span className="u-muted">Pending</span> : <><strong>{e.result}</strong> <small>{e.limit.unit}</small></>}</td>
                         <td><AirStatusBadge status={e.status} /></td>
                         <td className="u-col-actions" onClick={(ev) => ev.stopPropagation()}>
-                          <button type="button" className="n-more" aria-label={`Edit ${e.id}`} title={e.result === null ? 'Enter result' : 'Edit'}
-                            onClick={() => setForm({ event: e })}><Ellipsis size={18} /></button>
+                          {/* Edit: a pending logged event's fibre count, or an inspection air sample's lab result until its review
+                              approves it; anything else is read only. View always opens the event. */}
+                          {(() => {
+                            const editable = e.inspectionId ? e.resultsEditable : e.result === null
+                            const label = e.result === null ? 'Enter results' : 'Update results'
+                            return (
+                              <span className="air-acts">
+                                <button type="button" className="n-more" disabled={!editable} aria-label={`${label} for ${e.id}`}
+                                  title={editable ? label : 'Submitted – read only'}
+                                  onClick={() => (e.inspectionId ? setEnteringResult({ inspectionId: e.inspectionId, materialId: e.materialId }) : setForm({ event: e }))}>
+                                  <Pencil size={16} />
+                                </button>
+                                <button type="button" className="n-more" aria-label={`View ${e.id}`} title="View details" onClick={() => openEvent(e.id)}><Eye size={17} /></button>
+                              </span>
+                            )
+                          })()}
                         </td>
                       </tr>
                     ))}
-                    {data && !data.events.length && <tr><td colSpan={9} className="u-empty">No monitoring events match these filters.</td></tr>}
+                    {data && !data.events.length && <tr><td colSpan={11} className="u-empty">No monitoring events match these filters.</td></tr>}
                   </tbody>
                 </table>
               </div>
@@ -314,24 +284,20 @@ export default function AirMonitoring() {
               )}
             </section>
           </>
-        )}
       </div>
 
-      {!placeholder && (
-        <>
-          <div className="u-drawer-backdrop" onClick={() => setDetailsOpen(false)} />
-          <AirDetails event={selected} onEdit={() => selected && setForm({ event: selected })} onClose={() => setDetailsOpen(false)} />
-        </>
+      {enteringResult && (
+        <SampleResultDialog {...enteringResult} onClose={() => setEnteringResult(null)}
+          onSaved={(text, warn) => { setEnteringResult(null); setRefreshKey((k) => k + 1); notify(warn ? 'error' : 'success', text) }} />
       )}
-
       {form && meta && (
         <AirEventForm event={form.event} meta={meta} schools={schools} buildings={buildings} onClose={() => setForm(null)}
           onSaved={(saved, isNew) => {
             setForm(null)
-            setSelectedId(saved.id)
             setRefreshKey((k) => k + 1)
             notify(saved.status === 'exceedance' ? 'error' : 'success',
-              `${isNew ? 'Logged' : 'Updated'} ${saved.id}${saved.status === 'exceedance' ? ' — exceedance recorded and a notification was raised.' : '.'}`)
+              saved.result === null ? `${isNew ? 'Logged' : 'Saved'} ${saved.id} – pending until the fibre count is entered.`
+                : `${saved.id} submitted${saved.status === 'exceedance' ? ' — exceedance recorded and a notification was raised.' : '.'}`)
           }} />
       )}
 

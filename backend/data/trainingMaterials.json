@@ -1,0 +1,272 @@
+{
+  "materials": [
+    {
+      "id": "TM-0001",
+      "programId": "awareness",
+      "title": "Asbestos Awareness (2-hour) – Course Outline",
+      "description": "Sample course outline: modules, duration and the requirement it meets.",
+      "kind": "pdf",
+      "url": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      },
+      "file": {
+        "id": "sample-awareness-outline.pdf",
+        "name": "awareness-course-outline.pdf",
+        "mime": "application/pdf",
+        "size": 1912,
+        "storedName": "sample-awareness-outline.pdf",
+        "uploadedAt": "2026-11-04T10:27:16.475Z",
+        "uploadedBy": {
+          "id": "system",
+          "name": "System (sample)"
+        }
+      }
+    },
+    {
+      "id": "TM-0002",
+      "programId": "om-16",
+      "title": "Operations & Maintenance (16-hour) – Course Outline",
+      "description": "Sample course outline: modules, duration and the requirement it meets.",
+      "kind": "pdf",
+      "url": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      },
+      "file": {
+        "id": "sample-om-16-outline.pdf",
+        "name": "om-16-course-outline.pdf",
+        "mime": "application/pdf",
+        "size": 1916,
+        "storedName": "sample-om-16-outline.pdf",
+        "uploadedAt": "2026-11-04T10:27:16.475Z",
+        "uploadedBy": {
+          "id": "system",
+          "name": "System (sample)"
+        }
+      }
+    },
+    {
+      "id": "TM-0003",
+      "programId": "designated-person",
+      "title": "AHERA Designated Person – Course Outline",
+      "description": "Sample course outline: modules, duration and the requirement it meets.",
+      "kind": "pdf",
+      "url": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      },
+      "file": {
+        "id": "sample-designated-person-outline.pdf",
+        "name": "designated-person-course-outline.pdf",
+        "mime": "application/pdf",
+        "size": 1873,
+        "storedName": "sample-designated-person-outline.pdf",
+        "uploadedAt": "2026-11-04T10:27:16.475Z",
+        "uploadedBy": {
+          "id": "system",
+          "name": "System (sample)"
+        }
+      }
+    },
+    {
+      "id": "TM-0004",
+      "programId": "inspector",
+      "title": "AHERA Building Inspector – Course Outline",
+      "description": "Sample course outline: modules, duration and the requirement it meets.",
+      "kind": "pdf",
+      "url": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      },
+      "file": {
+        "id": "sample-inspector-outline.pdf",
+        "name": "inspector-course-outline.pdf",
+        "mime": "application/pdf",
+        "size": 1879,
+        "storedName": "sample-inspector-outline.pdf",
+        "uploadedAt": "2026-11-04T10:27:16.475Z",
+        "uploadedBy": {
+          "id": "system",
+          "name": "System (sample)"
+        }
+      }
+    },
+    {
+      "id": "TM-0005",
+      "programId": "management-planner",
+      "title": "AHERA Management Planner – Course Outline",
+      "description": "Sample course outline: modules, duration and the requirement it meets.",
+      "kind": "pdf",
+      "url": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      },
+      "file": {
+        "id": "sample-management-planner-outline.pdf",
+        "name": "management-planner-course-outline.pdf",
+        "mime": "application/pdf",
+        "size": 1892,
+        "storedName": "sample-management-planner-outline.pdf",
+        "uploadedAt": "2026-11-04T10:27:16.475Z",
+        "uploadedBy": {
+          "id": "system",
+          "name": "System (sample)"
+        }
+      }
+    },
+    {
+      "id": "TM-0006",
+      "programId": "supervisor",
+      "title": "Abatement Contractor/Supervisor – Course Outline",
+      "description": "Sample course outline: modules, duration and the requirement it meets.",
+      "kind": "pdf",
+      "url": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      },
+      "file": {
+        "id": "sample-supervisor-outline.pdf",
+        "name": "supervisor-course-outline.pdf",
+        "mime": "application/pdf",
+        "size": 1886,
+        "storedName": "sample-supervisor-outline.pdf",
+        "uploadedAt": "2026-11-04T10:27:16.475Z",
+        "uploadedBy": {
+          "id": "system",
+          "name": "System (sample)"
+        }
+      }
+    },
+    {
+      "id": "TM-0007",
+      "programId": "worker",
+      "title": "Abatement Worker – Course Outline",
+      "description": "Sample course outline: modules, duration and the requirement it meets.",
+      "kind": "pdf",
+      "url": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      },
+      "file": {
+        "id": "sample-worker-outline.pdf",
+        "name": "worker-course-outline.pdf",
+        "mime": "application/pdf",
+        "size": 1871,
+        "storedName": "sample-worker-outline.pdf",
+        "uploadedAt": "2026-11-04T10:27:16.475Z",
+        "uploadedBy": {
+          "id": "system",
+          "name": "System (sample)"
+        }
+      }
+    },
+    {
+      "id": "TM-0008",
+      "programId": "respirator",
+      "title": "Respirator Fit Test – Course Outline",
+      "description": "Sample course outline: modules, duration and the requirement it meets.",
+      "kind": "pdf",
+      "url": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      },
+      "file": {
+        "id": "sample-respirator-outline.pdf",
+        "name": "respirator-course-outline.pdf",
+        "mime": "application/pdf",
+        "size": 1849,
+        "storedName": "sample-respirator-outline.pdf",
+        "uploadedAt": "2026-11-04T10:27:16.475Z",
+        "uploadedBy": {
+          "id": "system",
+          "name": "System (sample)"
+        }
+      }
+    },
+    {
+      "id": "TM-0009",
+      "programId": "awareness",
+      "title": "EPA – Asbestos and School Buildings",
+      "url": "https://www.epa.gov/asbestos/asbestos-and-school-buildings",
+      "description": "EPA overview of AHERA responsibilities for schools, including staff training.",
+      "kind": "link",
+      "file": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      }
+    },
+    {
+      "id": "TM-0010",
+      "programId": "designated-person",
+      "title": "AHERA regulation – 40 CFR Part 763 (eCFR)",
+      "url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-R/part-763",
+      "description": "Full text of the asbestos rules for schools (Subpart E), including training and management plans.",
+      "kind": "link",
+      "file": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      }
+    },
+    {
+      "id": "TM-0011",
+      "programId": "om-16",
+      "title": "OSHA – Asbestos",
+      "url": "https://www.osha.gov/asbestos",
+      "description": "OSHA asbestos standards and guidance for workers who may disturb ACM.",
+      "kind": "link",
+      "file": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      }
+    },
+    {
+      "id": "TM-0012",
+      "programId": "respirator",
+      "title": "OSHA – Respiratory Protection",
+      "url": "https://www.osha.gov/respiratory-protection",
+      "description": "Respirator selection, medical evaluation and annual fit-testing requirements.",
+      "kind": "link",
+      "file": null,
+      "sample": true,
+      "createdAt": "2026-11-04T10:27:16.475Z",
+      "createdBy": {
+        "id": "system",
+        "name": "System (sample)"
+      }
+    }
+  ]
+}

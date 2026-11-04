@@ -1,22 +1,20 @@
 /* Buttons, tabs, cards, tables reuse the shared u-* styles (pages/Users/users.css);
    KPI tiles reuse the dashboard's .kpi-card / .kpi-clickable; badges reuse .n-priority.
 
-   Layout: wide screens  → [ main | calendar | details ]
-           laptops       → [ main | calendar ]
-                           [ main | details  ]   (details stay on the right, under the calendar)
-           small screens → main, calendar; details slide in as a drawer */
-.compliance-page {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 290px 330px;
-  grid-template-areas: 'main cal det';
-  gap: 14px;
-  max-width: 1800px;
-  margin: 0 auto;
-  align-items: start;
-}
-.c-main { grid-area: main; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.c-cal { grid-area: cal; }
-.c-details { grid-area: det; }
+   Layout: header, KPIs, then [ calendar | by-type graph + status donut ], tabs and the table full width.
+   Details slide in from the right when a school or inspection is opened. */
+.compliance-page { max-width: 1800px; margin: 0 auto; }
+.c-main { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+.c-top { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(360px, 1fr); gap: 14px; align-items: stretch; }
+.c-charts { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.c-charts > .u-card { flex: 1; }
+/* Calendar: month grid beside the selected day's events */
+.c-cal-body { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(220px, 1fr); gap: 16px; align-items: start; }
+.c-cal-body .c-grid { gap: 6px; }
+.c-cal-body .c-day { aspect-ratio: auto; height: 66px; font-size: 14px; }
+.c-cal-body .c-events { padding-top: 0; padding-left: 16px; border-top: 0; border-left: 1px solid var(--grid); }
+.c-cal-body .c-events ul { max-height: 420px; }
 
 .c-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
 .c-head h1 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 22px; font-weight: 600; color: var(--ink-1); line-height: 1.2; }
@@ -28,8 +26,7 @@
 .c-kpis .kpi-icon svg { width: 16px; height: 16px; }
 .c-kpis .kpi-text small { font-size: 11px; }
 
-/* Overview: by-type breakdown + donut */
-.c-overview { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr); gap: 14px; }
+/* By-type breakdown + donut */
 .c-donut-card { display: flex; flex-direction: column; }
 
 .c-bytype { display: flex; flex-direction: column; }
@@ -194,8 +191,17 @@
 .c-evs-overdue { color: #b02a2a; }
 .compliance-page .u-tab { padding: 0 12px; font-size: 13px; }
 
-/* Details */
-.c-details { position: sticky; top: 0; display: flex; flex-direction: column; gap: 10px; max-height: calc(100vh - var(--topbar-h) - 48px); overflow-y: auto; }
+/* Details: a panel that slides in from the right */
+.c-details {
+  position: fixed; top: var(--topbar-h); right: 0; bottom: 0; z-index: 40;
+  display: flex; flex-direction: column; gap: 10px; width: min(420px, 100vw); max-height: none; overflow-y: auto;
+  border-radius: 0; box-shadow: -8px 0 28px rgba(4, 43, 68, 0.2);
+  transform: translateX(105%); transition: transform 0.22s ease;
+}
+.compliance-page.details-open .c-details { transform: none; }
+.compliance-page.details-open > .u-drawer-backdrop {
+  display: block; position: fixed; inset: var(--topbar-h) 0 0 0; z-index: 35; background: rgba(4, 43, 68, 0.35);
+}
 .c-details-empty { margin: 0; padding: 24px 6px; font-size: 13px; color: var(--ink-3); text-align: center; line-height: 1.5; }
 .cd-title { display: flex; align-items: center; gap: 8px; padding: 10px; border-radius: 8px; background: #f5f8fb; }
 .cd-title strong, .cd-school-link { flex: 1; min-width: 0; font-size: 14px; font-weight: 700; color: var(--ink-1); }
@@ -215,48 +221,29 @@
 .c-btn-success:hover:not(:disabled) { border-color: #0c7f0c; }
 .c-btn-success-solid { background: #0c7f0c; color: #fff; }
 
-/* Laptops: details move under the calendar, still on the right */
 @media (max-width: 1599px) {
-  .compliance-page {
-    grid-template-columns: minmax(0, 1fr) 320px;
-    grid-template-areas: 'main cal' 'main det';
-    grid-template-rows: auto 1fr;
-  }
-  .c-details { top: 0; max-height: none; }
   .c-col-acm { display: none; }
 }
 @media (max-width: 1400px) {
-  .c-overview { grid-template-columns: minmax(0, 1fr); }
+  .c-top { grid-template-columns: minmax(0, 1fr); }
+  .c-charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .c-col-last { display: none; }
   .c-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 1100px) {
-  .compliance-page { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'main' 'cal'; grid-template-rows: auto; }
-  .c-details {
-    position: fixed;
-    top: var(--topbar-h);
-    right: 0;
-    bottom: 0;
-    z-index: 40;
-    width: min(380px, 100vw);
-    max-height: none;
-    border-radius: 0;
-    box-shadow: -8px 0 28px rgba(4, 43, 68, 0.2);
-    transform: translateX(105%);
-    transition: transform 0.22s ease;
-  }
-  .compliance-page.details-open .c-details { transform: none; }
-  .compliance-page.details-open > .u-drawer-backdrop {
-    display: block;
-    position: fixed;
-    inset: var(--topbar-h) 0 0 0;
-    z-index: 35;
-    background: rgba(4, 43, 68, 0.35);
-  }
   .c-table-tools { width: 100%; }
   .c-table-tools .u-search { flex: 1; width: auto; }
+}
+@media (max-width: 800px) {
+  .c-charts, .c-cal-body { grid-template-columns: minmax(0, 1fr); }
+  .c-cal-body .c-events { padding-left: 0; padding-top: 10px; border-left: 0; border-top: 1px solid var(--grid); }
 }
 @media (max-width: 700px) {
   .c-ifilters { grid-template-columns: minmax(0, 1fr); }
   .c-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+/* Schedule an inspection (right-side panel) */
+.lr-drawer.c-sched { width: min(440px, 100vw); }
+.c-sched-fields { display: grid; gap: 14px; margin-top: 14px; }
+.c-sched-late { color: #b02a2a; font-weight: 600; }
+.c-sched-btn { height: 28px; padding: 0 10px; }

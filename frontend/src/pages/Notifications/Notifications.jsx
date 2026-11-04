@@ -1,22 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router'
 import {
-  Bell, CalendarCheck, ShieldAlert, Layers, ShieldCheck, Inbox, CheckCheck, Search, Ellipsis,
-  ChevronLeft, ChevronRight, RotateCcw, Check, MailOpen, Eye, Trash2, X, CircleCheck, CircleAlert,
+  Bell, CheckCheck, Search, Ellipsis, ChevronLeft, ChevronRight, RotateCcw, Check, MailOpen, ExternalLink, Trash2, X, CircleCheck, CircleAlert,
 } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
-import NotificationDetails from './NotificationDetails'
-import { NotificationIcon, TypeBadge } from './notifMeta'
+import { NotificationIcon, TypeBadge, PriorityBadge } from './notifMeta'
 import { request, fmtDateTime } from '../../lib/api'
 import { setUnreadCount } from '../../lib/unreadNotifications'
 import '../Users/users.css'
 import './notifications.css'
 
-const TABS = [
-  { slug: '', label: 'All Notifications', countKey: 'all' },
-  { slug: 'unread', label: 'Unread', countKey: 'unread' },
-  { slug: 'priority', label: 'Priority', countKey: 'priority' },
-]
 const TYPE_OPTIONS = [
   { value: 'inspection', label: 'Inspections' },
   { value: 'compliance', label: 'Compliance' },
@@ -43,18 +36,6 @@ function pageList(page, pages) {
   return sorted.flatMap((p, i) => (i && p - sorted[i - 1] > 1 ? ['…', p] : [p]))
 }
 
-// KPI card that filters by type (click again to clear)
-function Kpi({ icon: Icon, value, label, tone, active, onClick }) {
-  return (
-    <button type="button" className={`kpi-card kpi-clickable tone-${tone}${active ? ' active' : ''}`} onClick={onClick} aria-pressed={active}>
-      <span className="kpi-icon"><Icon size={18} strokeWidth={1.8} /></span>
-      <span className="kpi-text">
-        <strong>{value ?? '—'}</strong>
-        <span className="kpi-label">{label}</span>
-      </span>
-    </button>
-  )
-}
 
 function RowMenu({ n, onOpen, onToggleRead, onDelete }) {
   const [open, setOpen] = useState(false)
@@ -73,7 +54,7 @@ function RowMenu({ n, onOpen, onToggleRead, onDelete }) {
       </button>
       {open && (
         <div className="u-menu" role="menu" onClick={(e) => e.stopPropagation()}>
-          <button type="button" role="menuitem" onClick={run(onOpen)}><Eye size={14} />Open</button>
+          {n.link && <button type="button" role="menuitem" onClick={run(onOpen)}><ExternalLink size={14} />{n.linkLabel ?? 'Open'}</button>}
           <button type="button" role="menuitem" onClick={run(onToggleRead)}>
             {n.read ? <><MailOpen size={14} />Mark as unread</> : <><Check size={14} />Mark as read</>}
           </button>
@@ -87,7 +68,6 @@ function RowMenu({ n, onOpen, onToggleRead, onDelete }) {
 export default function Notifications() {
   const { tab: tabSlug = '' } = useParams()
   const navigate = useNavigate()
-  const tab = TABS.find((t) => t.slug === tabSlug)
 
   const [filters, setFilters] = useState(DEFAULTS)
   const [query, setQuery] = useState('')
@@ -97,20 +77,10 @@ export default function Notifications() {
   const [data, setData] = useState(null)
   const [schools, setSchools] = useState([])
   const [refreshKey, setRefreshKey] = useState(0)
-  const [selectedId, setSelectedId] = useState(null)
-  // Details start open beside the list on desktop; on small screens they're a drawer opened by a click
-  const [detailsOpen, setDetailsOpen] = useState(() => !window.matchMedia('(max-width: 960px)').matches)
   const [checked, setChecked] = useState(() => new Set())
   const [toast, setToast] = useState(null)
   const [error, setError] = useState(null)
   const [now] = useState(() => Date.now())
-
-  const [pageFor, setPageFor] = useState(tabSlug)
-  if (pageFor !== tabSlug) { // switching tabs: back to page 1, clear selection
-    setPageFor(tabSlug)
-    setPage(1)
-    setChecked(new Set())
-  }
 
   useEffect(() => {
     request('/schools').then((d) => setSchools(d.schools)).catch(() => {})
@@ -129,7 +99,7 @@ export default function Notifications() {
 
   const range = RANGES.find((r) => r.value === filters.range)
   const params = new URLSearchParams({
-    tab: tabSlug, q: debouncedQ, type: filters.type, school: filters.school, priority: filters.priority, page, pageSize,
+    q: debouncedQ, type: filters.type, school: filters.school, priority: filters.priority, page, pageSize,
   })
   if (range?.days) {
     params.set('from', isoDate(now - (range.days - 1) * DAY))
@@ -144,7 +114,6 @@ export default function Notifications() {
       setData(d)
       setError(null)
       setUnreadCount(d.counts.unread)
-      setSelectedId((id) => (d.notifications.some((n) => n.id === id) ? id : d.notifications[0]?.id ?? null))
     }).catch((err) => { if (!cancelled) setError(err.message) })
     return () => { cancelled = true }
   }, [qs, refreshKey])
@@ -176,13 +145,18 @@ export default function Notifications() {
     } catch (err) { notify('error', err.message) }
   }
 
-  if (!tab) return <Navigate to="/notifications" replace />
+  // Opening a notification marks it read and goes to the record it's about (no separate details view)
+  const open = (n) => {
+    if (!n.read) setRead([n.id], true)
+    if (n.link) navigate(n.link)
+  }
+
+  // Older /notifications/unread and /priority links land on the single list
+  if (tabSlug) return <Navigate to="/notifications" replace />
 
   const setFilter = (key) => (value) => { setFilters((f) => ({ ...f, [key]: value })); setPage(1) }
   const filtersActive = query || JSON.stringify(filters) !== JSON.stringify(DEFAULTS)
   const list = data?.notifications ?? []
-  const selected = list.find((n) => n.id === selectedId) ?? null
-  const unreadByType = data?.unreadByType ?? {}
   const allChecked = list.length > 0 && list.every((n) => checked.has(n.id))
   const toggleAll = () => setChecked((prev) => {
     const next = new Set(prev)
@@ -195,47 +169,20 @@ export default function Notifications() {
     else next.add(id)
     return next
   })
-  const typeKpi = (type) => ({
-    active: filters.type === type,
-    onClick: () => setFilter('type')(filters.type === type ? '' : type),
-  })
   const from = data?.total ? (data.page - 1) * data.pageSize + 1 : 0
   const to = data ? Math.min(data.total, data.page * data.pageSize) : 0
 
   return (
-    <div className={`notif-page${detailsOpen && selected ? ' details-open' : ''}`}>
+    <div className="notif-page">
       <div className="n-main">
         <div className="n-head">
           <div>
-            <h1><Bell size={22} />Notifications</h1>
+            <h1><Bell size={22} />Notifications{data?.counts.unread > 0 && <span className="n-unread-count">{data.counts.unread} unread</span>}</h1>
             <p>Stay updated on inspections, compliance, ACM activities, and system alerts.</p>
           </div>
-        </div>
-
-        <div className="n-kpis">
-          <Kpi icon={Inbox} value={data?.counts.unread} label="Total Unread" tone="critical"
-            active={tabSlug === 'unread' && !filters.type} onClick={() => { setFilter('type')(''); navigate(tabSlug === 'unread' ? '/notifications' : '/notifications/unread') }} />
-          <Kpi icon={CalendarCheck} value={unreadByType.inspection} label="Inspections" tone="primary" {...typeKpi('inspection')} />
-          <Kpi icon={ShieldAlert} value={unreadByType.compliance} label="Compliance" tone="warning" {...typeKpi('compliance')} />
-          <Kpi icon={Layers} value={unreadByType.acm} label="ACM Updates" tone="violet" {...typeKpi('acm')} />
-          <Kpi icon={ShieldCheck} value={unreadByType.system} label="System Alerts" tone="good" {...typeKpi('system')} />
-          <Kpi icon={Bell} value={unreadByType.other} label="Other" tone="teal" {...typeKpi('other')} />
-        </div>
-
-        <div className="n-tabbar">
-          <nav className="u-tabs" role="tablist" aria-label="Notification views">
-            {TABS.map((t) => (
-              <button key={t.slug} type="button" role="tab" aria-selected={t.slug === tabSlug}
-                className={`u-tab${t.slug === tabSlug ? ' active' : ''}`}
-                onClick={() => navigate(t.slug ? `/notifications/${t.slug}` : '/notifications')}>
-                {t.label}{data && ` (${data.counts[t.countKey]})`}
-              </button>
-            ))}
-          </nav>
-          <div className="n-tab-actions">
-            <button type="button" className="n-link" onClick={markAllRead} disabled={!data?.counts.unread}>
-              <CheckCheck size={15} />Mark All as Read
-            </button>          </div>
+          <button type="button" className="u-btn u-btn-outline" onClick={markAllRead} disabled={!data?.counts.unread}>
+            <CheckCheck size={15} />Mark All as Read
+          </button>
         </div>
 
         <section className="u-card">
@@ -280,8 +227,8 @@ export default function Notifications() {
               </thead>
               <tbody>
                 {list.map((n) => (
-                  <tr key={n.id} className={`${n.id === selectedId ? 'selected' : ''}${n.read ? '' : ' unread'}`}
-                    onClick={() => { setSelectedId(n.id); setDetailsOpen(true) }}>
+                  <tr key={n.id} className={`${n.read ? '' : 'unread'}${n.link ? ' n-linked' : ''}`} onClick={() => open(n)}
+                    title={n.link ? `${n.linkLabel ?? 'Open'} →` : undefined}>
                     <td className="n-col-check" onClick={(e) => e.stopPropagation()}>
                       {n.read || checked.has(n.id)
                         ? <input type="checkbox" checked={checked.has(n.id)} onChange={() => toggleOne(n.id)} aria-label={`Select ${n.title}`} />
@@ -295,7 +242,7 @@ export default function Notifications() {
                       <span className="n-cell">
                         <NotificationIcon n={n} />
                         <span>
-                          <strong>{n.title}</strong>
+                          <strong>{n.title}{n.priority === 'high' && <PriorityBadge priority={n.priority} />}</strong>
                           <small>{n.message}</small>
                         </span>
                       </span>
@@ -304,13 +251,13 @@ export default function Notifications() {
                     <td className="n-col-school">{n.schoolName ?? 'All Schools'}</td>
                     <td className="n-date">{fmtDateTime(n.createdAt)}</td>
                     <td className="u-col-actions" onClick={(e) => e.stopPropagation()}>
-                      <RowMenu n={n} onOpen={() => { setSelectedId(n.id); setDetailsOpen(true) }}
+                      <RowMenu n={n} onOpen={() => open(n)}
                         onToggleRead={() => setRead([n.id], !n.read)} onDelete={() => remove([n.id])} />
                     </td>
                   </tr>
                 ))}
                 {data && !list.length && (
-                  <tr><td colSpan={6} className="u-empty">{tabSlug === 'unread' && !filtersActive ? "You're all caught up." : 'No notifications match these filters.'}</td></tr>
+                  <tr><td colSpan={6} className="u-empty">{filtersActive ? 'No notifications match these filters.' : 'No notifications yet.'}</td></tr>
                 )}
               </tbody>
             </table>
@@ -336,8 +283,6 @@ export default function Notifications() {
         </section>
       </div>
 
-      <div className="u-drawer-backdrop" onClick={() => setDetailsOpen(false)} />
-      <NotificationDetails n={selected} now={now} onClose={() => setDetailsOpen(false)} onToggleRead={(n) => setRead([n.id], !n.read)} />
 
       {toast && (
         <div className={`u-toast ${toast.kind}`} role="status">

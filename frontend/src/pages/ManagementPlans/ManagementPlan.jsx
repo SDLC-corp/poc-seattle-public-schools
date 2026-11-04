@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import {
   FileText, Building2, Layers, TriangleAlert, CalendarDays, CalendarCheck, ShieldCheck, Download, ChevronRight,
-  Workflow, UserRound, Siren, Pencil, Ellipsis, Printer, CalendarClock,
+  Workflow, UserRound, Siren, Ellipsis, Printer, CalendarClock,
 } from 'lucide-react'
 import Badge from '../AcmInventory/Badge'
 import WorkflowEditor from './WorkflowEditor'
@@ -90,7 +90,6 @@ function MoreMenu({ schoolId }) {
       {open && (
         <div className="ai-menu mp-more-menu" role="menu">
           <button type="button" role="menuitem" onClick={() => go(`/schools/${schoolId}`)}><Building2 size={14} />Open school</button>
-          <button type="button" role="menuitem" onClick={() => go('/operations/plans')}><FileText size={14} />O&amp;M plan details</button>
           <button type="button" role="menuitem" onClick={() => { setOpen(false); window.print() }}><Printer size={14} />Print</button>
         </div>
       )}
@@ -138,7 +137,6 @@ export default function ManagementPlan() {
           </p>
         </div>
         <div className="mp-head-actions">
-          <Link to="/operations/plans" className="u-btn u-btn-outline"><Pencil size={15} />Edit Plan</Link>
           <button type="button" className="u-btn u-btn-outline" onClick={() => window.print()}><Download size={15} />Download PDF</button>
           <MoreMenu schoolId={school.id} />
         </div>

@@ -3,7 +3,7 @@ import { integrationById } from '../data/integrationDefs.js';
 import {
   listIntegrations, publicView, getState, saveConnection, disconnect, recordTest, runSync,
 } from '../data/integrationsStore.js';
-import { logAudit, CURRENT_USER } from '../data/auditStore.js';
+import { logAudit, currentUser } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
 
 const GUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -98,7 +98,7 @@ router.post('/:id/connect', async (req, res, next) => {
     const { errors, config, secrets } = validate(def, req.body?.values ?? {}, stored);
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Check the highlighted fields', fields: errors });
     const wasConnected = stored.status === 'connected';
-    const view = await saveConnection(def.id, { config, secrets }, { id: CURRENT_USER.id, name: CURRENT_USER.name });
+    const view = await saveConnection(def.id, { config, secrets }, { id: currentUser().id, name: currentUser().name });
     const changed = def.fields.filter((f) => f.type !== 'secret' && JSON.stringify(stored.config[f.key]) !== JSON.stringify(config[f.key]));
     logAudit(req, {
       action: wasConnected ? 'update' : 'create', module: 'Settings', recordId: `integration:${def.id}`, link: '/integrations',
@@ -112,7 +112,7 @@ router.post('/:id/connect', async (req, res, next) => {
     if (!wasConnected) {
       notify({
         type: 'system', priority: 'low', title: `${def.name} Connected`, link: '/integrations', linkLabel: 'View Integrations',
-        message: `${def.name} was connected by ${CURRENT_USER.name}.`,
+        message: `${def.name} was connected by ${currentUser().name}.`,
       });
     }
     res.json(view);
@@ -127,7 +127,7 @@ router.post('/:id/sync', async (req, res, next) => {
     if (!def) return res.status(404).json({ error: 'Unknown integration' });
     const s = getState(def.id);
     if (s.status === 'disconnected' || !Object.keys(s.secrets).length) return res.status(409).json({ error: `Connect ${def.name} before syncing` });
-    const view = await runSync(def.id, { id: CURRENT_USER.id, name: CURRENT_USER.name });
+    const view = await runSync(def.id, { id: currentUser().id, name: currentUser().name });
     logAudit(req, {
       action: 'update', module: 'Settings', recordId: `integration:${def.id}`, link: '/integrations',
       summary: `Ran ${def.name} sync – ${view.lastSync.message}`,
@@ -151,7 +151,7 @@ router.post('/:id/disconnect', async (req, res, next) => {
     });
     notify({
       type: 'system', priority: 'medium', title: `${def.name} Disconnected`, link: '/integrations', linkLabel: 'View Integrations',
-      message: `${def.name} was disconnected by ${CURRENT_USER.name}. Its stored credentials were deleted.`,
+      message: `${def.name} was disconnected by ${currentUser().name}. Its stored credentials were deleted.`,
     });
     res.json(view);
   } catch (err) {

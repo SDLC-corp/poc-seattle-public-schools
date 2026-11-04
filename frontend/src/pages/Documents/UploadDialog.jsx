@@ -3,7 +3,7 @@ import { X, UploadCloud } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import { FileBadge } from './docUtils'
 import { fmtSize } from './docMeta'
-import { API_BASE } from '../../lib/api'
+import { API_BASE, authHeaders } from '../../lib/api'
 
 const ACCESS_HINTS = {
   Public: 'Anyone who can sign in to the platform',
@@ -48,7 +48,7 @@ export default function UploadDialog({ facets, schools, buildings, defaultType, 
     setMeta((m) => ({ ...m, name: m.name || f.name }))
   }
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
     const local = {}
     if (!file) local.file = 'Choose a file to upload'
@@ -58,10 +58,12 @@ export default function UploadDialog({ facets, schools, buildings, defaultType, 
     if (Object.keys(local).length) { setErrors(local); return }
 
     const params = new URLSearchParams({ ...meta, name: meta.name.trim() })
+    const auth = await authHeaders()
     const xhr = new XMLHttpRequest()
     xhrRef.current = xhr
     xhr.open('POST', `${API_BASE}/documents?${params}`)
     xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream')
+    if (auth.Authorization) xhr.setRequestHeader('Authorization', auth.Authorization)
     xhr.upload.onprogress = (ev) => { if (ev.lengthComputable) setProgress(Math.round((ev.loaded / ev.total) * 100)) }
     xhr.onload = () => {
       xhrRef.current = null

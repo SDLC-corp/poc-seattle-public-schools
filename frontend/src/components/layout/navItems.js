@@ -1,7 +1,6 @@
 import {
   House, School, Layers, ClipboardCheck, FileText, FlaskConical, ScanEye,
-  TriangleAlert, Wrench, Wind, GraduationCap, ListChecks, Bell, FolderOpen,
-  ChartLine, UsersRound, History, Settings, LifeBuoy, Plug,
+  Wrench, Wind, GraduationCap, ListChecks, Bell, ChartLine, TrendingDown, UsersRound, History, Settings, LifeBuoy, Plug,
 } from 'lucide-react'
 
 // Every item has a route `path`. Child items are placeholders until the real pages are defined.
@@ -19,17 +18,17 @@ export const mainNav = [
   { id: 'inspections', label: 'Inspections', icon: ClipboardCheck, path: '/inspections' },
   // hidden: kept for routing and page titles, not shown in the sidebar
   { id: 'management-plans', label: 'Management Plans', icon: FileText, path: '/management-plans', hidden: true },
-  { id: 'sampling', label: 'Sampling & Lab Results', icon: FlaskConical, path: '/sampling' },
-  { id: 'surveillance', label: 'Surveillance', icon: ScanEye, path: '/surveillance' },
-  { id: 'response-actions', label: 'Response Actions', icon: TriangleAlert, path: '/response-actions' },
-  { id: 'operations', label: 'Operations & Maintenance', icon: Wrench, path: '/operations' },
+  { id: 'sampling', label: 'Lab & Sampling Results', icon: FlaskConical, path: '/sampling' },
   { id: 'air-monitoring', label: 'Air Monitoring', icon: Wind, path: '/air-monitoring' },
+  { id: 'surveillance', label: 'Surveillance', icon: ScanEye, path: '/surveillance' },
+  { id: 'operations', label: 'Operations & Maintenance', icon: Wrench, path: '/operations' },
   { id: 'personnel', label: 'Personnel, Training & Certifications', icon: GraduationCap, path: '/personnel' },
   { id: 'compliance', label: 'Compliance & Tracking', icon: ListChecks, path: '/compliance' },
-  // badgeKey: the sidebar shows a live count for this item (see Sidebar.jsx)
-  { id: 'notifications', label: 'Notifications', icon: Bell, badgeKey: 'unreadNotifications', path: '/notifications' },
-  { id: 'documents', label: 'Document Management', icon: FolderOpen, path: '/documents' },
-  { id: 'reports', label: 'Reports & Analytics', icon: ChartLine, path: '/reports' },
+  { id: 'trends', label: 'Trend Analysis', icon: TrendingDown, path: '/trends' },
+  // Reached from the top bar's bell (hidden from the sidebar). badgeKey: a live count if it's shown (see Sidebar.jsx)
+  { id: 'notifications', label: 'Notifications', icon: Bell, badgeKey: 'unreadNotifications', path: '/notifications', hidden: true },
+  // Reports & Analytics with Document Management as its Documents tab
+  { id: 'reports', label: 'Reports & Documents', icon: ChartLine, path: '/reports' },
 ]
 
 export const adminNav = [

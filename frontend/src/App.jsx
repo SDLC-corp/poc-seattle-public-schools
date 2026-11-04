@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Navigate, Route, Routes, useLocation, Link } from 'react-router'
+import { Navigate, Route, Routes, useLocation, useParams, Link } from 'react-router'
 import { Construction, SearchX } from 'lucide-react'
 import AppLayout from './components/layout/AppLayout'
 import { findNav, pathForId } from './components/layout/navItems'
@@ -11,10 +11,10 @@ import ActivityForm from './pages/Operations/ActivityForm'
 import ManagementPlan from './pages/ManagementPlans/ManagementPlan'
 import UsersRoles from './pages/Users/UsersRoles'
 import AuditLogs from './pages/Audit/AuditLogs'
-import Documents from './pages/Documents/Documents'
 import Notifications from './pages/Notifications/Notifications'
 import Compliance from './pages/Compliance/Compliance'
 import AirMonitoring from './pages/AirMonitoring/AirMonitoring'
+import AirEventPage from './pages/AirMonitoring/AirEventPage'
 import Personnel from './pages/Personnel/Personnel'
 import HelpPage from './pages/Help/HelpPage'
 import Schools from './pages/Schools/Schools'
@@ -24,6 +24,8 @@ import BuildingDetail from './pages/Schools/BuildingDetail'
 import RoomsFloorPlans from './pages/Schools/RoomsFloorPlans'
 import FloorRooms from './pages/Schools/FloorRooms'
 import LabSamples from './pages/LabSamples/LabSamples'
+import SamplePage from './pages/LabSamples/SamplePage'
+import Trends from './pages/Trends/Trends'
 import Reports from './pages/Reports/Reports'
 import AcmInventory from './pages/AcmInventory/AcmInventory'
 import Surveillance from './pages/Surveillance/Surveillance'
@@ -36,6 +38,12 @@ import RequireAuth from './auth/RequireAuth'
 import { applyBrandColors } from './theme'
 import { API_BASE } from './lib/api'
 const APP_NAME = 'Seattle Public Schools – Asbestos Compliance'
+
+// Document Management is the Documents tab of Reports & Analytics; older /documents links land there
+function DocumentsRedirect() {
+  const { category } = useParams()
+  return <Navigate to={`/reports/documents${category ? `/${category}` : ''}`} replace />
+}
 
 // Placeholder for menu entries whose page isn't built yet; anything else is a 404
 function PlaceholderPage() {
@@ -108,13 +116,16 @@ function App() {
           <Route path="operations/activities/:id" element={<ActivityForm />} />
           <Route path="operations/:tab?" element={<Operations />} />
           <Route path="audit/:tab?" element={<AuditLogs />} />
-          <Route path="documents/:category?" element={<Documents />} />
+          <Route path="documents/:category?" element={<DocumentsRedirect />} />
           <Route path="notifications/:tab?" element={<Notifications />} />
           <Route path="compliance/:tab?" element={<Compliance />} />
+          <Route path="air-monitoring/events/:id" element={<AirEventPage />} />
           <Route path="air-monitoring/:tab?" element={<AirMonitoring />} />
           <Route path="personnel/:tab?" element={<Personnel />} />
-          <Route path="contractors" element={<Navigate to="/personnel" replace />} />
+          <Route path="contractors" element={<Navigate to="/personnel/people" replace />} />
           <Route path="sampling" element={<LabSamples />} />
+          <Route path="sampling/samples/:id" element={<SamplePage />} />
+          <Route path="trends" element={<Trends />} />
           <Route path="sampling/*" element={<Navigate to="/sampling" replace />} />
           <Route path="reports/:tab?/:report?" element={<Reports />} />
           <Route path="acm/:tab?" element={<AcmInventory />} />

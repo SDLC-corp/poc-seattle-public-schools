@@ -10,6 +10,7 @@ import Badge from '../AcmInventory/Badge'
 import SignaturePad from './SignaturePad'
 import { TABS, CONDITION_TONE, STATUS, ACTION_TONE, fmtDay, isoToday, addDays, shortAcm, floorLink } from './survMeta'
 import { request, uploadFile, API_BASE } from '../../lib/api'
+import { useGoBack } from '../../lib/useGoBack'
 import '../Users/users.css'
 import '../Audit/audit.css'
 import '../AcmInventory/acmInventory.css'
@@ -38,6 +39,7 @@ export default function SurveillanceForm() {
   const { id } = useParams()
   const [params] = useSearchParams()
   const navigate = useNavigate()
+  const goBack = useGoBack('/surveillance')
   const routerLocation = useLocation()
   const [confirm, confirmDialog] = useConfirm()
   const fileRef = useRef(null)
@@ -189,7 +191,7 @@ export default function SurveillanceForm() {
       <div className="ai-head">
         <h1><ShieldCheck size={24} />Surveillance</h1>
         <div className="ai-head-actions">
-          <button type="button" className="u-btn u-btn-outline" onClick={() => navigate('/surveillance')}><ArrowLeft size={15} />Back</button>
+          <button type="button" className="u-btn u-btn-outline" onClick={goBack}><ArrowLeft size={15} />Back</button>
           {isDraft && (
             <button type="button" className="u-btn u-btn-outline" disabled={!!saving} onClick={() => save('draft')}>
               <Save size={15} />{saving === 'draft' ? 'Saving…' : 'Save Draft'}

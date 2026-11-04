@@ -9,12 +9,16 @@ const SIGNATURES = [
   { ext: 'jpg', test: (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff },
   { ext: 'webp', test: (b) => b.subarray(0, 4).toString('latin1') === 'RIFF' && b.subarray(8, 12).toString('latin1') === 'WEBP' },
   { ext: 'pdf', test: (b) => b.subarray(0, 5).toString('latin1') === '%PDF-' },
+  // Video (only where a route allows it explicitly, e.g. training material)
+  { ext: 'mp4', test: (b) => b.subarray(4, 8).toString('latin1') === 'ftyp' },
+  { ext: 'webm', test: (b) => b.subarray(0, 4).equals(Buffer.from([0x1a, 0x45, 0xdf, 0xa3])) },
 ];
+const VIDEO_FILES = { mp4: 'video/mp4', webm: 'video/webm' };
 
 export function sniff(body, allowed = Object.keys(ATTACHMENT_FILES)) {
   if (!Buffer.isBuffer(body) || body.length < 12) return null;
   const hit = SIGNATURES.find((s) => s.test(body));
-  return hit && allowed.includes(hit.ext) ? { ext: hit.ext, mime: ATTACHMENT_FILES[hit.ext] } : null;
+  return hit && allowed.includes(hit.ext) ? { ext: hit.ext, mime: ATTACHMENT_FILES[hit.ext] ?? VIDEO_FILES[hit.ext] } : null;
 }
 
 export const cleanName = (name, fallback) => String(name ?? '').replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '_').trim().slice(0, 150) || fallback;

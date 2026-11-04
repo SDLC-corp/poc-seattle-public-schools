@@ -21,15 +21,29 @@ export const PRIORITIES = ['Low', 'Medium', 'High', 'Urgent'];
 export const STATES = ['pending', 'inProgress', 'completed'];
 export const STATUS_LABELS = { pending: 'Pending', inProgress: 'In Progress', completed: 'Completed', overdue: 'Overdue' };
 
-// Work-practice controls recorded when the work is done
+// Safety & control measures recorded when the work is done
 export const CONTROLS = [
-  { key: 'wetMethods', label: 'Wet methods used' },
-  { key: 'hepaVacuum', label: 'HEPA vacuum / filtration' },
-  { key: 'barriers', label: 'Area isolated, signs posted' },
-  { key: 'ppe', label: 'PPE / respirator worn' },
-  { key: 'wasteBagged', label: 'Waste bagged and labeled' },
+  { key: 'barriers', label: 'Work area access restricted, signs posted' },
+  { key: 'safeProcedures', label: 'Asbestos-safe work procedures followed' },
+  { key: 'ppe', label: 'Required PPE / respirator worn' },
+  { key: 'wetMethods', label: 'Dust control – wet methods used' },
+  { key: 'hepaVacuum', label: 'Dust control – HEPA vacuum / filtration' },
+  { key: 'wasteBagged', label: 'Waste bagged, labeled and disposed' },
   { key: 'areaCleared', label: 'Area cleaned and re-opened' },
 ];
+
+// Activity details
+export const WORK_CATEGORIES = [
+  'Floor Maintenance', 'Ceiling Work', 'Pipe / Boiler Insulation', 'Wall / Plaster', 'Roofing', 'HVAC / Mechanical',
+  'Electrical', 'Plumbing', 'Doors / Windows', 'General Facility',
+];
+export const REASONS = [
+  'Routine maintenance', 'Preventive maintenance', 'Repair of damage', 'Inspection finding', 'Fiber release episode',
+  'Renovation / project work', 'Complaint / request',
+];
+export const YES_NO = ['Yes', 'No'];
+// How the work ended (Completion & Documentation)
+export const OUTCOMES = ['Completed', 'Partially Completed', 'Not Completed'];
 
 export const SOP_CATEGORIES = ['Work Practice', 'Cleaning', 'Fiber Release', 'Waste Handling', 'PPE & Respiratory', 'Labeling', 'General'];
 

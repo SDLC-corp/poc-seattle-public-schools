@@ -21,22 +21,6 @@ function MicrosoftLogo() {
   )
 }
 
-// Faint floor-plan line drawing behind the brand panel (decorative)
-function PlanPattern() {
-  return (
-    <svg className="login-plan" viewBox="0 0 600 600" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-      <g fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="60" y="60" width="480" height="480" rx="4" />
-        <path d="M60 230h200v-170M260 230h120v-170M380 230h160M60 370h480M200 370v170M330 370v170M440 370v80h100" />
-        <path d="M150 230v-30M320 230v-24M470 230v-28M120 370v26M270 370v22M390 370v26" strokeDasharray="2 6" />
-      </g>
-      <g fill="currentColor">
-        <circle cx="160" cy="145" r="5" /><circle cx="320" cy="145" r="5" /><circle cx="460" cy="145" r="5" />
-        <circle cx="130" cy="455" r="5" /><circle cx="265" cy="455" r="5" /><circle cx="490" cy="410" r="5" />
-      </g>
-    </svg>
-  )
-}
 
 const FEATURES = [
   { icon: Layers, title: 'ACM inventory', text: 'Every material mapped to its room on the floor plan.' },
@@ -86,7 +70,6 @@ export default function LoginPage() {
   return (
     <div className="login-page">
       <section className="login-brand">
-        <PlanPattern />
         <div className="login-brand-inner">
           <div className="login-mark">
             <span className="login-logo"><School size={24} /></span>

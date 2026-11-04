@@ -5,9 +5,11 @@ import RowMenu from '../Surveillance/RowMenu'
 import Pager from '../Surveillance/Pager'
 import { fmtDay, shortAcm, floorLink } from '../Surveillance/survMeta'
 import { STATUS_TONE } from './omMeta'
+import DueDate from '../../lib/DueDate'
 
 const COLUMNS = {
   id: { key: 'id', label: 'Activity ID' },
+  inspection: { key: null, label: 'Inspection / Sample ID' },
   type: { key: 'type', label: 'Activity Type' },
   place: { key: 'facility', label: 'Facility / Location' },
   material: { key: 'material', label: 'ACM Material' },
@@ -26,7 +28,9 @@ export default function ActivityTable({ data, columns, sort, onSort, onPage, pag
   const sortKey = sort.key || data?.sort
   const sortDir = sort.dir || data?.dir
   const open = (id) => navigate(`/operations/activities/${id}`)
-  const cols = columns.map((c) => COLUMNS[c])
+  // The activity's inspection (or the latest inspection of its ACM) and that inspection's sample always follow its ID
+  const shown = columns.flatMap((c) => (c === 'id' ? ['id', 'inspection'] : [c]))
+  const cols = shown.map((c) => COLUMNS[c])
 
   return (
     <>
@@ -49,13 +53,29 @@ export default function ActivityTable({ data, columns, sort, onSort, onPage, pag
           <tbody>
             {data?.activities.map((r) => (
               <tr key={r.id}>
-                {columns.map((c) => {
+                {shown.map((c) => {
                   switch (c) {
                     case 'id': return <td key={c} className="u-nowrap"><Link to={`/operations/activities/${r.id}`} className="sv-id">{r.id}</Link></td>
+                    // The inspection (its O&M Tasks), and the sample — opened at the lab once it's been sent
+                    case 'inspection': return (
+                      <td key={c} className="u-nowrap om-insp">
+                        {r.inspectionId
+                          ? <Link to={`/inspections/records/${r.inspectionId}${r.relatedInspection ? '' : '?tab=om'}`} className="sv-id"
+                            title={r.relatedInspection ? 'Latest inspection of this ACM' : 'Created from this inspection'}>{r.inspectionId}</Link>
+                          : <span className="u-muted" title="This ACM hasn’t been inspected">Not inspected</span>}
+                        {r.sampleId && (
+                          <small>
+                            {r.sampleLink ? <Link to={r.sampleLink} className="a-mono">{r.sampleId}</Link> : <span className="a-mono" title="Not sent to the lab yet">{r.sampleId}</span>}
+                            {r.labSampleId && <span className="u-muted" title="Laboratory sample ID"> · {r.labSampleId}</span>}
+                          </small>
+                        )}
+                        {r.inspectionId && !r.sampleId && <small className="u-muted">No sample taken</small>}
+                      </td>
+                    )
                     case 'type': return <td key={c} className="ai-material"><strong>{r.type}</strong><small title={r.description}>{r.description}</small></td>
                     case 'place': return <td key={c} className="ai-room om-loc"><strong>{r.schoolName}</strong><small>{r.buildingName} / {r.floorName} / {r.roomNumber} {r.roomName}</small></td>
                     case 'material': return <td key={c} className="ai-room"><strong>{r.materialName}</strong><small title={r.materialId}>{shortAcm(r.materialId, r.schoolId)}</small></td>
-                    case 'dueDate': return <td key={c} className="u-nowrap">{fmtDay(r.dueDate)}</td>
+                    case 'dueDate': return <td key={c} className="u-nowrap"><DueDate date={r.dueDate} done={r.status === 'completed'} soonDays={7}>{fmtDay(r.dueDate)}</DueDate></td>
                     case 'assignee': return <td key={c} className="u-nowrap">{r.assignedToName ?? <span className="u-muted">Unassigned</span>}</td>
                     case 'completedAt': return <td key={c} className="u-nowrap">{r.completedAt ? fmtDay(r.completedAt.slice(0, 10)) : '—'}</td>
                     default: return (

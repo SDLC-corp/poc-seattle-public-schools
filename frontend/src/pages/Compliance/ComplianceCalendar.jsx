@@ -7,7 +7,7 @@ const WEEKDAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 const DOT_ORDER = ['overdue', 'dueSoon', 'scheduled', 'completed']
 const STATUS_TEXT = { overdue: 'Overdue', dueSoon: 'Upcoming', scheduled: 'Scheduled', completed: 'Completed' }
 
-// Month calendar of inspections. Clicking a day lists its events; clicking an event opens it.
+// Month calendar of inspections (grid beside the day's events). Clicking a day lists its events; clicking an event opens it.
 export default function ComplianceCalendar({ refreshKey, selectedInspectionId, onSelectInspection }) {
   const [today] = useState(() => isoDay(new Date()))
   const [month, setMonth] = useState(() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1) })
@@ -66,6 +66,8 @@ export default function ComplianceCalendar({ refreshKey, selectedInspectionId, o
         <li><i className="c-dot c-dot-overdue" />Overdue</li>
       </ul>
 
+      {/* Month grid beside the selected day's events */}
+      <div className="c-cal-body">
       <div className="c-grid" role="grid" aria-label="Inspection calendar">
         {WEEKDAYS.map((w, i) => <span key={w} className={`c-wd${i === 0 ? ' sun' : ''}`}>{w}</span>)}
         {cells.map((iso, i) => {
@@ -107,6 +109,7 @@ export default function ComplianceCalendar({ refreshKey, selectedInspectionId, o
             </li>
           ))}
         </ul>
+      </div>
       </div>
     </section>
   )
