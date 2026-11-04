@@ -1,14 +1,13 @@
-import { existsSync, readFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { unlink } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { uploadDir } from './paths.js';
 import { ROOM_ACM_RANK } from './acmMeta.js';
 import { writeJson } from './atomicWrite.js';
 
 const ROOMS_FILE = new URL('../../data/rooms.json', import.meta.url);
 const MATERIALS_FILE = new URL('../../data/acmMaterials.json', import.meta.url);
-export const FILE_DIR = fileURLToPath(new URL('../../uploads/acm/', import.meta.url));
-mkdirSync(FILE_DIR, { recursive: true });
+export const FILE_DIR = uploadDir('acm');
 
 const load = (file, key) => (existsSync(file) ? JSON.parse(readFileSync(file, 'utf8'))[key] : []);
 let rooms = load(ROOMS_FILE, 'rooms');

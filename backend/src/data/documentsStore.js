@@ -1,12 +1,11 @@
-import { existsSync, mkdirSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { unlink } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { uploadDir } from './paths.js';
 import { writeJson } from './atomicWrite.js';
 
 const DOCS_FILE = new URL('../../data/documents.json', import.meta.url);
-export const UPLOAD_DIR = fileURLToPath(new URL('../../uploads/', import.meta.url));
-mkdirSync(UPLOAD_DIR, { recursive: true });
+export const UPLOAD_DIR = uploadDir();
 
 export const DOC_TYPES = [
   'Management Plan', 'Inspection Report', 'Lab Report', 'Floor Plan', 'Training Record', 'Notification',

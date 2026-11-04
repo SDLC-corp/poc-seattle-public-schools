@@ -7,9 +7,11 @@ import { getDocuments } from './documentsStore.js';
 import { getInspections } from './complianceStore.js';
 import { getRoles } from './rolesStore.js';
 import { writeJson } from './atomicWrite.js';
+import { IS_VERCEL } from './paths.js';
 
 const FILE = new URL('../../data/integrations.json', import.meta.url);
-const KEY_FILE = new URL('../../data/.integrations.key', import.meta.url);
+// Vercel's app folder is read-only: without INTEGRATIONS_KEY the key file goes to /tmp (a new key per instance)
+const KEY_FILE = IS_VERCEL ? '/tmp/.integrations.key' : new URL('../../data/.integrations.key', import.meta.url);
 const HISTORY = 8;
 const DAY = 86400000;
 
@@ -72,7 +74,7 @@ function seed() {
 let state = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')).integrations : null;
 if (!state) {
   state = seed();
-  writeFileSync(FILE, JSON.stringify({ note: 'Integration settings. Secrets are AES-256-GCM encrypted.', integrations: state }, null, 2));
+  if (!IS_VERCEL) writeFileSync(FILE, JSON.stringify({ note: 'Integration settings. Secrets are AES-256-GCM encrypted.', integrations: state }, null, 2));
 }
 let writing = Promise.resolve();
 const persist = () => {

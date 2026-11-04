@@ -1,17 +1,17 @@
-import { existsSync, readFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { unlink } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { uploadDir } from './paths.js';
 import { buildings, updateBuilding } from './store.js';
 import { floorLayout } from './floorLayout.js';
 import { floorName } from './buildingGeometry.js';
 import { writeJson } from './atomicWrite.js';
 
 const FILE = new URL('../../data/floors.json', import.meta.url);
-export const PLAN_DIR = fileURLToPath(new URL('../../uploads/floorplans/', import.meta.url));
+export const PLAN_DIR = uploadDir('floorplans');
 // Seeded sample plans (Ground / First / Second floor drawings), shared by many floors – never deleted
 const SAMPLE_PLAN_DIR = fileURLToPath(new URL('../../data/floors/', import.meta.url));
-mkdirSync(PLAN_DIR, { recursive: true });
 
 const doc = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')) : { floors: [] };
 let floors = doc.floors;

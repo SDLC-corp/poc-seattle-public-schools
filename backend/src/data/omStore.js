@@ -1,13 +1,12 @@
-import { existsSync, readFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { unlink } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { uploadDir } from './paths.js';
 import { writeJson } from './atomicWrite.js';
 
 // Operations & Maintenance: activities (work orders), O&M plans and procedures (SOPs)
 const FILE = new URL('../../data/om.json', import.meta.url);
-export const FILE_DIR = fileURLToPath(new URL('../../uploads/om/', import.meta.url));
-mkdirSync(FILE_DIR, { recursive: true });
+export const FILE_DIR = uploadDir('om');
 
 const empty = { activities: [], plans: [], procedures: [] };
 let db = existsSync(FILE) ? { ...empty, ...JSON.parse(readFileSync(FILE, 'utf8')) } : empty;

@@ -1,14 +1,13 @@
-import { existsSync, readFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { unlink } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { uploadDir } from './paths.js';
 import { writeJson } from './atomicWrite.js';
 
 // Detailed per-ACM inspection records (inspection form). Separate from data/inspections.json,
 // which holds the building-level inspection *schedule* used by Compliance.
 const FILE = new URL('../../data/inspectionRecords.json', import.meta.url);
-export const FILE_DIR = fileURLToPath(new URL('../../uploads/inspections/', import.meta.url));
-mkdirSync(FILE_DIR, { recursive: true });
+export const FILE_DIR = uploadDir('inspections');
 
 let records = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')).records : [];
 let writing = Promise.resolve();

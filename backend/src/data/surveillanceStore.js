@@ -1,13 +1,12 @@
-import { existsSync, readFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { unlink } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { uploadDir } from './paths.js';
 import { writeJson } from './atomicWrite.js';
 
 // Periodic surveillance of known/assumed ACM (AHERA 40 CFR 763.92(b)): one record per material per visit
 const FILE = new URL('../../data/surveillance.json', import.meta.url);
-export const FILE_DIR = fileURLToPath(new URL('../../uploads/surveillance/', import.meta.url));
-mkdirSync(FILE_DIR, { recursive: true });
+export const FILE_DIR = uploadDir('surveillance');
 
 export const INTERVAL_DAYS = 182; // at least once every six months
 export const CONDITIONS = ['Good', 'Damaged', 'Significantly Damaged'];
