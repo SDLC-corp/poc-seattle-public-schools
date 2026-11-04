@@ -7,6 +7,9 @@
 .ai-head-actions { display: flex; gap: 8px; }
 .ai-tabs .u-tab { text-decoration: none; white-space: nowrap; }
 
+
+
+
 /* Filters: one row on wide screens */
 .ai-filters {
   display: grid;
