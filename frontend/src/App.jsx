@@ -35,6 +35,7 @@ import Microsoft365 from './pages/Microsoft365/Microsoft365'
 import RequireAuth from './auth/RequireAuth'
 import { applyBrandColors } from './theme'
 import { API_BASE } from './lib/api'
+import TestPage from './pages/Test/TestPage'
 
 const APP_NAME = 'Seattle Public Schools – Asbestos Compliance'
 
@@ -99,6 +100,7 @@ function App() {
       <DocumentTitle />
       <Routes>
         <Route path="login" element={<LoginPage />} />
+        <Route path="test" element={<TestPage />} />
         <Route element={<RequireAuth><AppLayout /></RequireAuth>}>
           <Route index element={<LandingRedirect landingPath={landingPath} />} />
           <Route path="dashboard" element={<Dashboard />} />

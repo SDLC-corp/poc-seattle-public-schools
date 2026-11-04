@@ -21,6 +21,7 @@ import surveillanceRoutes from './surveillance.js';
 import inspectionRecordsRoutes from './inspectionRecords.js';
 import omRoutes from './om.js';
 import managementPlansRoutes from './managementPlans.js';
+import testRoutes from './test.js';
 
 const router = Router();
 
@@ -46,6 +47,7 @@ router.use('/surveillance', surveillanceRoutes);
 router.use('/inspection-records', inspectionRecordsRoutes);
 router.use('/om', omRoutes);
 router.use('/management-plans', managementPlansRoutes);
+router.use('/test', testRoutes);
 
 router.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
