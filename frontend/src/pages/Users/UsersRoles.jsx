@@ -11,6 +11,7 @@ import UserForm from './UserForm'
 import { request } from './api'
 import { FACILITIES_STAFF, readFilters, filterQuery } from './filters'
 import './users.css'
+import { API_BASE } from '../../lib/api'
 
 const TABS = [
   { id: 'users', label: 'Users' },
@@ -139,7 +140,7 @@ export default function UsersRoles() {
             </button>
             {menuOpen && (
               <div className="u-menu" role="menu">
-                <a role="menuitem" href="/api/users/export.csv" download onClick={() => setMenuOpen(false)}>
+                <a role="menuitem" href={`${API_BASE}/users/export.csv`} download onClick={() => setMenuOpen(false)}>
                   <Download size={14} />Export all users (CSV)
                 </a>
               </div>

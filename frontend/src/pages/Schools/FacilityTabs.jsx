@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { ExternalLink, FolderOpen } from 'lucide-react'
 import { InspectionStatusBadge } from '../Compliance/complianceMeta'
-import { request, fmtDate } from '../../lib/api'
+import { request, fmtDate, API_BASE } from '../../lib/api'
 
 // Shared by the school page and the building page
 const fmtDay = (iso) => (iso ? new Date(`${iso}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—')
@@ -67,7 +67,7 @@ export function DocumentsCard({ filter, emptyText = 'No documents yet.', showBui
                 {showBuilding && <td className="b-col-floor">{d.buildingName ?? '—'}</td>}
                 <td className="u-nowrap">{fmtDate(d.uploadedAt)}</td>
                 <td>{d.access}</td>
-                <td><a className="u-row-btn" href={`/api/documents/${d.id}/file`} target="_blank" rel="noopener noreferrer" title="Open" aria-label={`Open ${d.name}`}><ExternalLink size={13} /></a></td>
+                <td><a className="u-row-btn" href={`${API_BASE}/documents/${d.id}/file`} target="_blank" rel="noopener noreferrer" title="Open" aria-label={`Open ${d.name}`}><ExternalLink size={13} /></a></td>
               </tr>
             ))}
             {data && !data.documents.length && <tr><td colSpan={cols} className="u-empty">{emptyText}</td></tr>}

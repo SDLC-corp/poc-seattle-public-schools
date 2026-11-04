@@ -2,10 +2,14 @@ import { Router } from 'express';
 import { schools, buildings, getSchoolBuildings, addBuilding, updateBuilding } from '../data/store.js';
 import { MAX_FLOORS, ACM_STATUSES, PRESUMED_ACM_BEFORE } from '../data/buildingGeometry.js';
 import { logAudit, diff } from '../data/auditStore.js';
-import { seedFloors } from '../data/floorsStore.js';
+import { seedFloors, getFloors } from '../data/floorsStore.js';
+import { getMaterials, allRooms } from '../data/roomsStore.js';
+import { getRecords as getInspectionRecords } from '../data/inspectionRecordsStore.js';
+import { getRecords as getSurveillanceRecords } from '../data/surveillanceStore.js';
 import { syncFloorRooms } from '../data/floorRoomsSync.js';
 
-const schoolById = new Map(schools.map((s) => [s.id, s]));
+// Looked up live so schools added in the app are found
+const schoolById = { get: (id) => schools.find((s) => s.id === id), has: (id) => schools.some((s) => s.id === id) };
 const CONSTRUCTION = ['Concrete', 'Masonry', 'Steel Frame', 'Wood Frame', 'Modular'];
 const THIS_YEAR = new Date().getFullYear();
 
@@ -77,6 +81,47 @@ router.get('/:id', (req, res) => {
   const building = buildings.find((b) => b.id === req.params.id);
   if (!building) return res.status(404).json({ error: 'Building not found' });
   res.json(building);
+});
+
+// Summary for the map's building popup / side panel: counts, ACM condition, inspections, surveillance
+router.get('/:id/overview', (req, res) => {
+  const b = buildings.find((x) => x.id === req.params.id);
+  if (!b) return res.status(404).json({ error: 'Building not found' });
+  const school = schoolById.get(b.schoolId);
+  const today = new Date().toISOString().slice(0, 10);
+  const addYears = (iso, n) => (iso ? `${Number(iso.slice(0, 4)) + n}${iso.slice(4, 10)}` : null);
+  const maxIso = (list) => list.filter(Boolean).sort().at(-1) ?? null;
+
+  const floors = getFloors(b.id);
+  const rooms = allRooms().filter((r) => r.buildingId === b.id);
+  const acm = getMaterials({ buildingId: b.id }).filter((m) => m.acmStatus === 'ACM Present' || m.acmStatus === 'Assumed ACM');
+  const condition = (c) => acm.filter((m) => (m.condition || 'Not Assessed') === c).length;
+
+  const insp = getInspectionRecords().filter((r) => r.buildingId === b.id);
+  const inspDone = insp.filter((r) => ['approved', 'submitted'].includes(r.state));
+  const lastInspection = maxIso([...inspDone.map((r) => r.date), ...acm.map((m) => m.assessmentDate)]);
+
+  const surv = getSurveillanceRecords().filter((r) => r.buildingId === b.id && r.state !== 'draft');
+  const lastSurv = new Map();
+  for (const r of surv) if (!lastSurv.has(r.materialId) || r.date > lastSurv.get(r.materialId).date) lastSurv.set(r.materialId, r);
+  const survDue = acm.filter((m) => { const l = lastSurv.get(m.id); return !l || l.nextDue <= today; }).length;
+  const followUps = surv.flatMap((r) => r.actionItems ?? []).filter((a) => a.status !== 'Closed').length;
+
+  res.json({
+    id: b.id, name: b.name, code: b.code, status: 'Active',
+    school: { id: b.schoolId, name: b.schoolName ?? school?.name, facilityId: `SCH-${String(schools.indexOf(school) + 1).padStart(3, '0')}`, type: school?.type ?? null },
+    counts: { floors: floors.length || b.floors, rooms: rooms.length || b.rooms, acmRecords: acm.length, acmRooms: new Set(acm.map((m) => m.roomId)).size },
+    info: {
+      yearBuilt: b.yearBuilt, usage: school?.type ? `Educational (${school.type})` : 'Educational', address: school?.address?.full ?? null,
+      areaSqFt: b.areaSqFt, construction: b.construction ?? null, presumedAcm: b.presumedAcm,
+    },
+    condition: { good: condition('Good'), damaged: condition('Damaged'), significantlyDamaged: condition('Significantly Damaged'), notAssessed: condition('Not Assessed') },
+    inspections: {
+      last: lastInspection, nextDue: addYears(lastInspection, 3),
+      completed: inspDone.length, pending: insp.filter((r) => ['scheduled', 'draft', 'returned'].includes(r.state)).length,
+    },
+    surveillance: { last: maxIso(surv.map((r) => r.date)), completed: surv.length, pending: survDue, followUps },
+  });
 });
 
 // POST /api/buildings  { schoolId, name, code, yearBuilt, floors (1–3), areaSqFt, construction, rooms, roomsWithAcm, acmStatus }

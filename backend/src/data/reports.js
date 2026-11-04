@@ -17,7 +17,8 @@ const todayMs = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.g
 const dayMs = (iso) => Date.parse(`${iso}T00:00:00`);
 const addYears = (iso, n) => `${Number(iso.slice(0, 4)) + n}${iso.slice(4, 10)}`;
 
-const schoolName = new Map(schools.map((s) => [s.id, s.name]));
+// Looked up live so schools added in the app are found
+const schoolName = { get: (id) => schools.find((s) => s.id === id)?.name };
 const buildingName = new Map(buildings.map((b) => [b.id, b.name]));
 const floorById = () => new Map(getAllFloors().map((f) => [f.id, f]));
 

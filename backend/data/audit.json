@@ -1,6 +1,886 @@
 {
   "entries": [
     {
+      "id": "AUD-000067",
+      "at": "2026-11-03T12:02:44.083Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00091",
+      "summary": "Reassigned inspection INS-2026-00091",
+      "changes": [
+        {
+          "field": "Scheduled Date",
+          "from": "2026-11-03",
+          "to": "2026-11-11"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00091",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000066",
+      "at": "2026-11-03T11:47:02.374Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00126",
+      "summary": "Assigned 1 3-year reinspection to Logan Crane for 2026-11-10",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "3-Year Reinspection"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Logan Crane"
+        },
+        {
+          "field": "Scheduled Date",
+          "to": "2026-11-10"
+        },
+        {
+          "field": "Inspections",
+          "to": "1"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00126",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000065",
+      "at": "2026-11-03T09:38:34.395Z",
+      "action": "create",
+      "module": "ACM Inventory",
+      "recordId": "ACM-mw0hwhi4hoim",
+      "summary": "Added ACM material Ceiling Tile (ACM Present) – room 701 lab chemistr, Seventh Floor, Main Building",
+      "changes": [
+        {
+          "field": "Name",
+          "to": "Ceiling Tile"
+        },
+        {
+          "field": "Type",
+          "to": "Ceiling Tile"
+        },
+        {
+          "field": "Location",
+          "to": "Floor (entire room)"
+        },
+        {
+          "field": "Quantity",
+          "to": "500 Sq ft"
+        },
+        {
+          "field": "Friability",
+          "to": "Friable"
+        },
+        {
+          "field": "Classification",
+          "to": "Confirmed"
+        },
+        {
+          "field": "Condition",
+          "to": "Good"
+        },
+        {
+          "field": "Risk Ranking",
+          "to": "Medium"
+        },
+        {
+          "field": "Assessment Date",
+          "to": "2026-11-03"
+        },
+        {
+          "field": "ACM Status",
+          "to": "ACM Present"
+        },
+        {
+          "field": "Scope",
+          "to": "floor"
+        },
+        {
+          "field": "Notes",
+          "to": "—"
+        },
+        {
+          "field": "Related Tracking",
+          "to": "—"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-fmw0hscs5?room=RM-mw0hsga7f3pg",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000064",
+      "at": "2026-11-03T09:36:25.889Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "RM-mw0hsga7f3pg",
+      "summary": "Updated room 701 lab chemistr",
+      "changes": [
+        {
+          "field": "Name",
+          "from": "Room 1",
+          "to": "lab chemistr"
+        },
+        {
+          "field": "Type",
+          "from": "Other",
+          "to": "Science Lab"
+        },
+        {
+          "field": "Description",
+          "from": "—",
+          "to": "lab"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-fmw0hscs5?room=RM-mw0hsga7f3pg",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000063",
+      "at": "2026-11-03T09:36:11.221Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "RM-mw0hsga7f3pg",
+      "summary": "Added photo to room 701 Room 1",
+      "changes": [
+        {
+          "field": "Photo",
+          "to": "Bright Modern Chemistry Laboratory.png"
+        }
+      ],
+      "related": null,
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-fmw0hscs5?room=RM-mw0hsga7f3pg",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000062",
+      "at": "2026-11-03T09:35:52.321Z",
+      "action": "delete",
+      "module": "Schools & Facilities",
+      "recordId": "RM-mw0hswx8g32l",
+      "summary": "Deleted room 717 Room 717",
+      "changes": [
+        {
+          "field": "Room",
+          "from": "717 Room 717",
+          "to": "(deleted)"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-fmw0hscs5",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000061",
+      "at": "2026-11-03T09:35:47.582Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "RM-mw0hswx8g32l",
+      "summary": "Added room 717 Room 717 – Seventh Floor, Main Building",
+      "changes": [
+        {
+          "field": "Name",
+          "to": "Room 717"
+        },
+        {
+          "field": "Number",
+          "to": "717"
+        },
+        {
+          "field": "Type",
+          "to": "Other"
+        },
+        {
+          "field": "Description",
+          "to": "—"
+        },
+        {
+          "field": "Max Occupancy",
+          "to": "—"
+        },
+        {
+          "field": "Status",
+          "to": "Active"
+        },
+        {
+          "field": "Outline",
+          "to": "On plan"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-fmw0hscs5?room=RM-mw0hswx8g32l",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000060",
+      "at": "2026-11-03T09:35:26.170Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmw0hscs5",
+      "summary": "Updated Seventh Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "16"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000059",
+      "at": "2026-11-03T09:35:21.628Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmw0hscs5",
+      "summary": "Uploaded floor plan – Seventh Floor, Main Building",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "(none)",
+          "to": "School_First_Floor_Plan_UPDATE (page 1).png"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000058",
+      "at": "2026-11-03T09:35:21.349Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-fmw0hscs5",
+      "summary": "Added Seventh Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Floor No.",
+          "to": "7"
+        },
+        {
+          "field": "Name",
+          "to": "Seventh Floor"
+        },
+        {
+          "field": "Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Status",
+          "to": "Not Assessed"
+        },
+        {
+          "field": "Detected Room Shapes",
+          "to": "0"
+        },
+        {
+          "field": "Detected Tables",
+          "to": "0"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000057",
+      "at": "2026-11-03T08:28:46.126Z",
+      "action": "delete",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-f1-r9",
+      "summary": "Deleted room G09 Classroom G09 and 1 ACM material record(s)",
+      "changes": [
+        {
+          "field": "Room",
+          "from": "G09 Classroom G09",
+          "to": "(deleted)"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-f1",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000056",
+      "at": "2026-11-03T08:28:43.985Z",
+      "action": "delete",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-f1-r4",
+      "summary": "Deleted room G04 Classroom G04 and 2 ACM material record(s)",
+      "changes": [
+        {
+          "field": "Room",
+          "from": "G04 Classroom G04",
+          "to": "(deleted)"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-f1",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000055",
+      "at": "2026-11-03T08:28:41.505Z",
+      "action": "delete",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-f1-r1",
+      "summary": "Deleted room G01 Main Office and 1 ACM material record(s)",
+      "changes": [
+        {
+          "field": "Room",
+          "from": "G01 Main Office",
+          "to": "(deleted)"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-f1",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000054",
+      "at": "2026-11-03T08:28:38.903Z",
+      "action": "delete",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-f1-r10",
+      "summary": "Deleted room G10 Classroom G10 and 2 ACM material record(s)",
+      "changes": [
+        {
+          "field": "Room",
+          "from": "G10 Classroom G10",
+          "to": "(deleted)"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-f1",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000053",
+      "at": "2026-11-03T08:28:27.684Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b1-f1",
+      "summary": "Updated Ground Floor – Main Building, Adams Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "15"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000052",
+      "at": "2026-11-03T08:08:25.603Z",
+      "action": "create",
+      "module": "Document",
+      "recordId": "DOC-000005",
+      "summary": "Uploaded document – Garfield HS - Annual AHERA Notification Letter 2026.pdf",
+      "changes": [
+        {
+          "field": "File",
+          "to": "Garfield HS - Annual AHERA Notification Letter 2026.pdf"
+        },
+        {
+          "field": "Type",
+          "to": "Management Plan"
+        },
+        {
+          "field": "Access",
+          "to": "Public"
+        },
+        {
+          "field": "Size",
+          "to": "2 KB"
+        }
+      ],
+      "related": {
+        "school": "Garfield High School",
+        "building": null
+      },
+      "link": "/documents",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000051",
+      "at": "2026-11-03T08:08:25.576Z",
+      "action": "create",
+      "module": "Document",
+      "recordId": "DOC-000004",
+      "summary": "Uploaded document – Garfield HS - Plan Review and Approval Record 2026.pdf",
+      "changes": [
+        {
+          "field": "File",
+          "to": "Garfield HS - Plan Review and Approval Record 2026.pdf"
+        },
+        {
+          "field": "Type",
+          "to": "Management Plan"
+        },
+        {
+          "field": "Access",
+          "to": "Restricted"
+        },
+        {
+          "field": "Size",
+          "to": "2 KB"
+        }
+      ],
+      "related": {
+        "school": "Garfield High School",
+        "building": null
+      },
+      "link": "/documents",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000050",
+      "at": "2026-11-03T08:08:25.539Z",
+      "action": "create",
+      "module": "Document",
+      "recordId": "DOC-000003",
+      "summary": "Uploaded document – Garfield HS - Asbestos Management Plan v1.0.pdf",
+      "changes": [
+        {
+          "field": "File",
+          "to": "Garfield HS - Asbestos Management Plan v1.0.pdf"
+        },
+        {
+          "field": "Type",
+          "to": "Management Plan"
+        },
+        {
+          "field": "Access",
+          "to": "Internal"
+        },
+        {
+          "field": "Size",
+          "to": "2 KB"
+        }
+      ],
+      "related": {
+        "school": "Garfield High School",
+        "building": null
+      },
+      "link": "/documents",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000049",
+      "at": "2026-11-03T08:08:25.445Z",
+      "action": "create",
+      "module": "Document",
+      "recordId": "DOC-000002",
+      "summary": "Uploaded document – Garfield HS - Asbestos Management Plan v1.1.pdf",
+      "changes": [
+        {
+          "field": "File",
+          "to": "Garfield HS - Asbestos Management Plan v1.1.pdf"
+        },
+        {
+          "field": "Type",
+          "to": "Management Plan"
+        },
+        {
+          "field": "Access",
+          "to": "Internal"
+        },
+        {
+          "field": "Size",
+          "to": "2 KB"
+        }
+      ],
+      "related": {
+        "school": "Garfield High School",
+        "building": null
+      },
+      "link": "/documents",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000048",
+      "at": "2026-11-03T08:08:25.285Z",
+      "action": "create",
+      "module": "Document",
+      "recordId": "DOC-000001",
+      "summary": "Uploaded document – Garfield HS - Asbestos Management Plan v1.2 (Signed).pdf",
+      "changes": [
+        {
+          "field": "File",
+          "to": "Garfield HS - Asbestos Management Plan v1.2 (Signed).pdf"
+        },
+        {
+          "field": "Type",
+          "to": "Management Plan"
+        },
+        {
+          "field": "Access",
+          "to": "Internal"
+        },
+        {
+          "field": "Size",
+          "to": "3 KB"
+        }
+      ],
+      "related": {
+        "school": "Garfield High School",
+        "building": null
+      },
+      "link": "/documents",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000047",
+      "at": "2026-11-03T07:01:11.642Z",
+      "action": "update",
+      "module": "Management Plans",
+      "recordId": "garfieldhs",
+      "summary": "Reset the management plan workflow for Garfield High School to the standard cycle",
+      "changes": [],
+      "related": null,
+      "link": "/management-plans/workflow",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000046",
+      "at": "2026-11-03T07:01:11.554Z",
+      "action": "update",
+      "module": "Management Plans",
+      "recordId": "garfieldhs",
+      "summary": "Updated the management plan workflow for Garfield High School (27 steps, 30 connections)",
+      "changes": [],
+      "related": null,
+      "link": "/management-plans/workflow",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000045",
+      "at": "2026-11-03T06:25:28.189Z",
+      "action": "update",
+      "module": "Management Plans",
+      "recordId": "garfieldhs",
+      "summary": "Reset the management plan workflow for Garfield High School to the standard cycle",
+      "changes": [],
+      "related": null,
+      "link": "/management-plans/workflow",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000044",
+      "at": "2026-11-03T06:25:28.041Z",
+      "action": "update",
+      "module": "Management Plans",
+      "recordId": "garfieldhs",
+      "summary": "Updated the management plan workflow for Garfield High School (2 steps, 1 connections)",
+      "changes": [],
+      "related": null,
+      "link": "/management-plans/workflow",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000043",
+      "at": "2026-11-03T04:39:59.169Z",
+      "action": "delete",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0271",
+      "summary": "Deleted O&M activity OM-2026-0271",
+      "changes": [
+        {
+          "field": "Type",
+          "from": "Minor Repair"
+        },
+        {
+          "field": "Assigned To",
+          "from": "Ada Ellison"
+        }
+      ],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000042",
+      "at": "2026-11-03T04:39:59.111Z",
+      "action": "update",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0271",
+      "summary": "Updated O&M activity OM-2026-0271",
+      "changes": [
+        {
+          "field": "Priority",
+          "from": "Low",
+          "to": "High"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0271",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000041",
+      "at": "2026-11-03T04:39:59.077Z",
+      "action": "create",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0271",
+      "summary": "Created minor repair OM-2026-0271",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Minor Repair"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Ada Ellison"
+        },
+        {
+          "field": "Due Date",
+          "to": "2026-11-13"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0271",
+      "user": {
+        "id": "demo",
+        "name": "John Doe",
+        "email": "john.doe@seattleschools.org",
+        "role": "EHS Manager"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
       "id": "AUD-000040",
       "at": "2026-11-02T12:37:57.817Z",
       "action": "delete",

@@ -1,6 +1,9 @@
+// Backend base URL, e.g. https://api.example.org/api. Unset: same-origin /api (Vite proxies it in dev).
+export const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '')
+
 // Shared fetch + formatting helpers. Errors carry the server's per-field messages in `fields`.
 export async function request(path, options = {}) {
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(`${API_BASE}${path}`, {
     headers: { 'Content-Type': 'application/json' },
     ...options,
     body: options.body ? JSON.stringify(options.body) : undefined,
@@ -18,12 +21,13 @@ export async function request(path, options = {}) {
 // Raw file upload (body = the file) with metadata in the query string; same error shape as request()
 export async function uploadFile(path, file, params = {}) {
   const qs = new URLSearchParams({ name: file.name, ...params }).toString()
-  const res = await fetch(`/api${path}?${qs}`, {
+  const res = await fetch(`${API_BASE}${path}?${qs}`, {
     method: 'POST', headers: { 'Content-Type': file.type || 'application/octet-stream' }, body: file,
   })
   const body = await res.json().catch(() => ({}))
   if (!res.ok) {
     const err = new Error(body.error || `HTTP ${res.status}`)
+    err.fields = body.fields
     err.status = res.status
     throw err
   }

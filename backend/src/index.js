@@ -6,7 +6,11 @@ import apiRoutes from './routes/index.js';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }));
+// CLIENT_URL: the frontend's URL(s), comma-separated. Only the origin counts (a path like /login is ignored),
+// and the local Vite dev server is always allowed.
+const toOrigin = (u) => { try { return new URL(u.trim()).origin; } catch { return null; } };
+const allowedOrigins = new Set(['http://localhost:5173', ...(process.env.CLIENT_URL ?? '').split(',').map(toOrigin).filter(Boolean)]);
+app.use(cors({ origin: (origin, done) => done(null, !origin || allowedOrigins.has(origin)) }));
 app.use(express.json({ limit: '3mb' })); // settings can carry an uploaded logo (≤2 MB)
 
 app.use('/api', apiRoutes);

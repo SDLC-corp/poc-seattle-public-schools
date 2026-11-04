@@ -9,7 +9,7 @@ import { useConfirm } from '../../components/ui/useConfirm'
 import Badge from '../AcmInventory/Badge'
 import SignaturePad from './SignaturePad'
 import { TABS, CONDITION_TONE, STATUS, ACTION_TONE, fmtDay, isoToday, addDays, shortAcm, floorLink } from './survMeta'
-import { request, uploadFile } from '../../lib/api'
+import { request, uploadFile, API_BASE } from '../../lib/api'
 import '../Users/users.css'
 import '../Audit/audit.css'
 import '../AcmInventory/acmInventory.css'
@@ -378,9 +378,9 @@ export default function SurveillanceForm() {
                 {record.attachments.map((f) => (
                   <li key={f.id}>
                     <FileText size={16} />
-                    <a href={`/api/surveillance/records/${record.id}/attachments/${f.id}`} target="_blank" rel="noreferrer">{f.name}</a>
+                    <a href={`${API_BASE}/surveillance/records/${record.id}/attachments/${f.id}`} target="_blank" rel="noreferrer">{f.name}</a>
                     <small className="u-muted">{(f.size / 1024).toFixed(0)} KB</small>
-                    <a className="u-row-btn" href={`/api/surveillance/records/${record.id}/attachments/${f.id}?download=1`} aria-label={`Download ${f.name}`}><Download size={14} /></a>
+                    <a className="u-row-btn" href={`${API_BASE}/surveillance/records/${record.id}/attachments/${f.id}?download=1`} aria-label={`Download ${f.name}`}><Download size={14} /></a>
                     <button type="button" className="u-row-btn" onClick={() => removeDoc(f)} aria-label={`Remove ${f.name}`}><Trash2 size={14} /></button>
                   </li>
                 ))}

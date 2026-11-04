@@ -5,6 +5,10 @@ import AppLayout from './components/layout/AppLayout'
 import { findNav, pathForId } from './components/layout/navItems'
 import Dashboard from './pages/Dashboard/Dashboard'
 import Settings from './pages/Settings/Settings'
+import IntegrationsPage from './pages/Settings/IntegrationsPage'
+import Operations from './pages/Operations/Operations'
+import ActivityForm from './pages/Operations/ActivityForm'
+import ManagementPlan from './pages/ManagementPlans/ManagementPlan'
 import UsersRoles from './pages/Users/UsersRoles'
 import AuditLogs from './pages/Audit/AuditLogs'
 import Documents from './pages/Documents/Documents'
@@ -30,6 +34,7 @@ import LoginPage from './pages/Login/LoginPage'
 import Microsoft365 from './pages/Microsoft365/Microsoft365'
 import RequireAuth from './auth/RequireAuth'
 import { applyBrandColors } from './theme'
+import { API_BASE } from './lib/api'
 
 const APP_NAME = 'Seattle Public Schools – Asbestos Compliance'
 
@@ -80,7 +85,7 @@ function App() {
 
   // Apply saved brand colours and resolve the configured landing page
   useEffect(() => {
-    fetch('/api/settings')
+    fetch(`${API_BASE}/settings`)
       .then((r) => (r.ok ? r.json() : null))
       .then((s) => {
         if (s) applyBrandColors(s.theme)
@@ -99,6 +104,11 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="users/:tab?" element={<UsersRoles />} />
           <Route path="settings/:tab?" element={<Settings />} />
+          <Route path="integrations" element={<IntegrationsPage />} />
+          <Route path="management-plans/:tab?" element={<ManagementPlan />} />
+          <Route path="operations/activities/new" element={<ActivityForm />} />
+          <Route path="operations/activities/:id" element={<ActivityForm />} />
+          <Route path="operations/:tab?" element={<Operations />} />
           <Route path="audit/:tab?" element={<AuditLogs />} />
           <Route path="documents/:category?" element={<Documents />} />
           <Route path="notifications/:tab?" element={<Notifications />} />
@@ -122,6 +132,7 @@ function App() {
           <Route path="schools/list" element={<Schools />} />
           <Route path="schools/buildings" element={<Buildings />} />
           <Route path="schools/floors" element={<RoomsFloorPlans view="floors" />} />
+          {/* Reached from the Floors page tabs (no longer in the sidebar) */}
           <Route path="schools/rooms" element={<RoomsFloorPlans view="rooms" />} />
           <Route path="schools/acm-materials" element={<RoomsFloorPlans view="acm" />} />
           <Route path="schools/:schoolId/:tab?" element={<SchoolDetail />} />

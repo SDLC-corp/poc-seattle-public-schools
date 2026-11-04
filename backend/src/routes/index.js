@@ -19,6 +19,8 @@ import reportsRoutes from './reports.js';
 import acmInventoryRoutes from './acmInventory.js';
 import surveillanceRoutes from './surveillance.js';
 import inspectionRecordsRoutes from './inspectionRecords.js';
+import omRoutes from './om.js';
+import managementPlansRoutes from './managementPlans.js';
 
 const router = Router();
 
@@ -42,6 +44,8 @@ router.use('/reports', reportsRoutes);
 router.use('/acm-inventory', acmInventoryRoutes);
 router.use('/surveillance', surveillanceRoutes);
 router.use('/inspection-records', inspectionRecordsRoutes);
+router.use('/om', omRoutes);
+router.use('/management-plans', managementPlansRoutes);
 
 router.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });

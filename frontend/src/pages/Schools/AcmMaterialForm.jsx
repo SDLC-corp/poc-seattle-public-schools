@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { Plus, Trash2, Paperclip, FileText, Image as ImageIcon, Eye, Download, Save, X, TriangleAlert } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
-import { request, uploadFile, fmtDate } from '../../lib/api'
+import { request, uploadFile, fmtDate, API_BASE } from '../../lib/api'
 
 const FILE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'application/pdf']
 const LOCATIONS = ['Ceiling (entire room)', 'Floor (entire room)', 'Walls', 'Above ceiling – pipe runs', 'HVAC duct in ceiling plenum', 'Exterior windows', 'Mechanical room wall', 'Corridor door']
@@ -210,8 +210,8 @@ export default function AcmMaterialForm({ room, meta, editing, onSaved, onCancel
                           <td><span className="fr-file">{f.mime === 'application/pdf' ? <FileText size={14} /> : <ImageIcon size={14} />}{f.name}</span></td>
                           <td>{f.type}</td><td>{f.description || '—'}</td><td className="u-nowrap">{fmtDate(f.uploadedAt)}</td>
                           <td className="b-col-actions"><span className="b-actions">
-                            <a className="u-row-btn" href={`/api/acm-materials/${editing.id}/attachments/${f.id}`} target="_blank" rel="noopener noreferrer" aria-label={`View ${f.name}`}><Eye size={13} /></a>
-                            <a className="u-row-btn" href={`/api/acm-materials/${editing.id}/attachments/${f.id}?download=1`} aria-label={`Download ${f.name}`}><Download size={13} /></a>
+                            <a className="u-row-btn" href={`${API_BASE}/acm-materials/${editing.id}/attachments/${f.id}`} target="_blank" rel="noopener noreferrer" aria-label={`View ${f.name}`}><Eye size={13} /></a>
+                            <a className="u-row-btn" href={`${API_BASE}/acm-materials/${editing.id}/attachments/${f.id}?download=1`} aria-label={`Download ${f.name}`}><Download size={13} /></a>
                             <button type="button" className="u-row-btn danger" onClick={() => removeAttachment(f)} aria-label={`Delete ${f.name}`}><Trash2 size={13} /></button>
                           </span></td>
                         </tr>

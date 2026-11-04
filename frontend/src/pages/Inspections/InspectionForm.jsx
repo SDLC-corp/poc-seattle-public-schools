@@ -9,8 +9,8 @@ import { useConfirm } from '../../components/ui/useConfirm'
 import Badge from '../AcmInventory/Badge'
 import SignaturePad from '../Surveillance/SignaturePad'
 import { fmtDay, isoToday, addDays, shortAcm, floorLink } from '../Surveillance/survMeta'
-import { STATE_TONE, CONDITION_TONE, CHANGE_TONE, SECTIONS, conditionChange } from './inspMeta'
-import { request, uploadFile } from '../../lib/api'
+import { STATE_TONE, CONDITION_TONE, CHANGE_TONE, SECTIONS, conditionChange, fmtTime } from './inspMeta'
+import { request, uploadFile, API_BASE } from '../../lib/api'
 import '../Users/users.css'
 import '../Audit/audit.css'
 import '../AcmInventory/acmInventory.css'
@@ -296,7 +296,7 @@ export default function InspectionForm() {
         <div className="in-banner info">
           <Info size={16} />
           <div>
-            <strong>Assigned to {record.inspectorName}{record.scheduledDate ? ` for ${fmtDay(record.scheduledDate)}` : ''}{record.assignment?.assignedBy ? ` by ${record.assignment.assignedBy.name}` : ''}</strong>
+            <strong>Assigned to {record.inspectorName}{record.scheduledDate ? ` for ${fmtDay(record.scheduledDate)}${record.scheduledTime ? ` at ${fmtTime(record.scheduledTime)}` : ''}` : ''}{record.assignment?.assignedBy ? ` by ${record.assignment.assignedBy.name}` : ''}</strong>
             <span>{record.assignment?.notes || 'Fill in the form on site. Save Draft to start the inspection; Submit for Review when it’s complete.'}</span>
           </div>
         </div>
@@ -548,10 +548,10 @@ export default function InspectionForm() {
                 {record.attachments.map((f) => (
                   <li key={f.id}>
                     {f.mime === 'application/pdf' ? <FileText size={16} /> : <ImageIcon size={16} />}
-                    <a href={`/api/inspection-records/records/${record.id}/attachments/${f.id}`} target="_blank" rel="noreferrer">{f.name}</a>
+                    <a href={`${API_BASE}/inspection-records/records/${record.id}/attachments/${f.id}`} target="_blank" rel="noreferrer">{f.name}</a>
                     <Badge tone="neutral">{f.category}</Badge>
                     <small className="u-muted">{(f.size / 1024).toFixed(0)} KB</small>
-                    <a className="u-row-btn" href={`/api/inspection-records/records/${record.id}/attachments/${f.id}?download=1`} aria-label={`Download ${f.name}`}><Download size={14} /></a>
+                    <a className="u-row-btn" href={`${API_BASE}/inspection-records/records/${record.id}/attachments/${f.id}?download=1`} aria-label={`Download ${f.name}`}><Download size={14} /></a>
                     {record.state !== 'approved' && <button type="button" className="u-row-btn" onClick={() => removeDoc(f)} aria-label={`Remove ${f.name}`}><Trash2 size={14} /></button>}
                   </li>
                 ))}

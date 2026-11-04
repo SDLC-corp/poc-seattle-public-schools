@@ -82,7 +82,7 @@ export default function Sidebar({ collapsed, mobileOpen, onNavigate, onExpand })
 
   const renderList = (items) => (
     <ul className="nav-list">
-      {items.map((item) => (
+      {items.filter((item) => !item.hidden).map((item) => (
         <NavItem
           key={item.id}
           item={item}

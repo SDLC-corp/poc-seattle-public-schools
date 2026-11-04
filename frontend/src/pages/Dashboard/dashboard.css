@@ -81,8 +81,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 56px;
-  padding: 0 12px;
+  min-height: 56px; /* grows for a second line (e.g. "485 present · 250 assumed") instead of spilling out */
+  padding: 8px 12px;
   border: 1px solid var(--tone-ring);
   border-radius: 8px;
   background: var(--tone-bg);

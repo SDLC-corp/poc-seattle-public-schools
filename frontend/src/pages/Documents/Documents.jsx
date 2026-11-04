@@ -9,7 +9,7 @@ import UploadDialog from './UploadDialog'
 import DocumentPreview from './DocumentPreview'
 import { FileBadge, SourceLabel } from './docUtils'
 import { CATEGORY_TABS } from './docMeta'
-import { request, fmtDateTime } from '../../lib/api'
+import { request, fmtDateTime, API_BASE } from '../../lib/api'
 import '../Users/users.css'
 import './documents.css'
 
@@ -54,7 +54,7 @@ function RowMenu({ doc, onPreview, onDelete }) {
         <div className="u-menu" role="menu" onClick={(e) => e.stopPropagation()}>
           <button type="button" role="menuitem" onClick={() => { setOpen(false); onPreview() }}><Eye size={14} />Preview</button>
           {doc.source === 'upload' && !doc.sample
-            ? <a role="menuitem" href={`/api/documents/${doc.id}/file?download=1`} onClick={() => setOpen(false)}><Download size={14} />Download</a>
+            ? <a role="menuitem" href={`${API_BASE}/documents/${doc.id}/file?download=1`} onClick={() => setOpen(false)}><Download size={14} />Download</a>
             : <button type="button" role="menuitem" disabled title="No file stored for this sample record"><Download size={14} />Download</button>}
           <button type="button" role="menuitem" className="danger" onClick={() => { setOpen(false); onDelete() }}><Trash2 size={14} />Delete</button>
         </div>
@@ -210,7 +210,7 @@ export default function Documents() {
           <button type="button" className="u-btn u-btn-outline" disabled title="Folders aren't available yet">
             <FolderPlus size={15} />New Folder
           </button>
-          <Link className="u-btn u-btn-outline" to="/settings/integrations" title="SharePoint integration settings">
+          <Link className="u-btn u-btn-outline" to="/integrations" title="SharePoint integration settings">
             <Cloud size={15} />SharePoint
           </Link>
         </div>
@@ -247,7 +247,7 @@ export default function Documents() {
           <div className="u-card d-sp">
             <span className="d-sp-status"><CloudOff size={16} />SharePoint {sp?.status === 'error' ? 'connection error' : 'not connected'}</span>
             <small>Connect it under Settings › Integrations</small>
-            <Link className="u-btn u-btn-outline u-btn-sm" to="/settings/integrations">Connect</Link>
+            <Link className="u-btn u-btn-outline u-btn-sm" to="/integrations">Connect</Link>
           </div>
         )}
       </div>

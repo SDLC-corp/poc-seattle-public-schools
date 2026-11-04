@@ -20,7 +20,8 @@ const SIGNERS = ['inspector', 'ehs-manager', 'facilities-manager'];
 const MAX_SIGNATURE_CHARS = 300_000; // PNG data URL from the signature pad
 const DUE_SOON_DAYS = 30;
 
-const schoolName = new Map(schools.map((s) => [s.id, s.name]));
+// Looked up live so schools added in the app are found
+const schoolName = { get: (id) => schools.find((s) => s.id === id)?.name };
 const buildingName = new Map(buildings.map((b) => [b.id, b.name]));
 const todayMs = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); };
 const dayMs = (iso) => Date.parse(`${iso}T00:00:00`);

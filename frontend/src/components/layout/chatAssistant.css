@@ -1,0 +1,88 @@
+/* Floating sample assistant (bottom-right on every page) */
+/* Room at the end of every page so the floating button never covers the last row of content */
+.app-main::after { content: ''; display: block; height: 72px; }
+.ca-fab {
+  position: fixed; right: 24px; bottom: 24px; z-index: 900;
+  display: inline-flex; align-items: center; gap: 8px; height: 56px; padding: 0 20px 0 16px;
+  border: 0; border-radius: 28px; background: linear-gradient(135deg, #0f4c8a, #1f86b5 60%, #6a4fc9); color: #fff;
+  font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+  box-shadow: 0 10px 28px rgba(15, 58, 102, 0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.ca-fab:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(15, 58, 102, 0.42); }
+.ca-fab:focus-visible { outline: 3px solid #9ec9ec; outline-offset: 3px; }
+.ca-fab.open { width: 56px; padding: 0; justify-content: center; }
+.ca-fab::after { content: ''; position: absolute; inset: -4px; border-radius: inherit; border: 2px solid rgba(31, 134, 181, 0.45); animation: ca-pulse 2.4s ease-out infinite; pointer-events: none; }
+.ca-fab.open::after { display: none; }
+@keyframes ca-pulse { 0% { opacity: 0.9; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.18); } }
+
+.ca-panel {
+  position: fixed; right: 24px; bottom: 92px; z-index: 901;
+  display: flex; flex-direction: column; width: min(400px, calc(100vw - 32px)); height: min(620px, calc(100vh - 130px));
+  border: 1px solid var(--border); border-radius: 16px; background: var(--surface); overflow: hidden;
+  box-shadow: 0 20px 50px rgba(4, 43, 68, 0.28);
+  animation: ca-in 0.18s ease-out;
+}
+@keyframes ca-in { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+.ca-head { display: flex; align-items: center; gap: 10px; padding: 14px 14px 14px 16px; background: linear-gradient(135deg, #0f3a66, #164f86); color: #fff; }
+.ca-head > div { flex: 1; min-width: 0; }
+.ca-head strong { display: block; font-size: 15px; }
+.ca-head small { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #cfe2f3; }
+.ca-dot { width: 7px; height: 7px; border-radius: 50%; background: #5ee0a0; }
+.ca-avatar { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.16); }
+.ca-icon-btn { display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: #fff; cursor: pointer; }
+.ca-icon-btn:hover { background: rgba(255, 255, 255, 0.16); }
+
+.ca-body { flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 16px 14px; overflow-y: auto; background: #f6f9fc; }
+.ca-msg { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; }
+.ca-msg.user { justify-content: flex-end; }
+.ca-bot-icon { display: grid; place-items: center; flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: #e3ebf6; color: #0f4c8a; }
+.ca-bubble { max-width: 85%; padding: 10px 12px; border-radius: 14px; font-size: 13px; line-height: 1.5; color: var(--ink-1); overflow-wrap: anywhere; }
+.ca-msg.bot .ca-bubble { border: 1px solid var(--grid); border-bottom-left-radius: 4px; background: #fff; }
+.ca-msg.user .ca-bubble { border-bottom-right-radius: 4px; background: #0f4c8a; color: #fff; }
+.ca-bubble p { margin: 0; }
+.ca-bubble p + p, .ca-bubble ul + p { margin-top: 6px; }
+.ca-bubble ul { display: grid; gap: 4px; margin: 6px 0 0; padding-left: 18px; }
+.ca-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.ca-links a { padding: 4px 10px; border: 1px solid #c8dcf3; border-radius: 14px; background: #eef5fc; color: var(--primary); font-size: 12px; font-weight: 600; text-decoration: none; }
+.ca-links a:hover { background: #e0edf9; }
+
+.ca-suggest, .ca-more, .ca-chips { display: flex; flex-direction: column; gap: 6px; }
+.ca-suggest { padding-left: 34px; }
+.ca-suggest > span { font-size: 11.5px; font-weight: 600; color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.4px; }
+.ca-suggest button, .ca-more button, .ca-chips button {
+  display: flex; align-items: center; gap: 7px; padding: 8px 12px; border: 1px solid #c8dcf3; border-radius: 12px; background: #fff;
+  color: #0f4c8a; font: inherit; font-size: 12.5px; font-weight: 500; text-align: left; cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.ca-suggest button svg { flex-shrink: 0; color: #6a4fc9; }
+.ca-suggest button:hover, .ca-more button:hover, .ca-chips button:hover { border-color: var(--primary); background: #eef5fc; }
+.ca-more { align-items: flex-end; }
+.ca-more button { max-width: 85%; border-radius: 16px; font-size: 12px; }
+.ca-chips { margin-top: 10px; }
+
+.ca-typing { display: inline-flex; gap: 4px; align-items: center; padding: 12px 14px; }
+.ca-typing i { width: 7px; height: 7px; border-radius: 50%; background: #8aa3bd; animation: ca-bounce 1s infinite; }
+.ca-typing i:nth-child(2) { animation-delay: 0.15s; }
+.ca-typing i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes ca-bounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+.ca-input { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--grid); background: var(--surface); }
+.ca-input input { flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid var(--border); border-radius: 22px; font: inherit; font-size: 13px; color: var(--ink-1); }
+.ca-input input:focus { outline: 2px solid var(--primary-light); border-color: var(--primary); }
+.ca-input button { display: grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--primary); color: #fff; cursor: pointer; }
+.ca-input button:disabled { background: #b7c7d6; cursor: default; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ca-fab::after, .ca-panel, .ca-typing i { animation: none; }
+}
+@media (max-width: 640px) {
+  .ca-fab { right: 16px; bottom: 16px; height: 52px; }
+  .ca-fab-label { display: none; }
+  .ca-fab { width: 52px; padding: 0; justify-content: center; }
+  .ca-panel { right: 16px; bottom: 80px; height: calc(100vh - 110px); }
+}
+@media print {
+  .ca-fab, .ca-panel { display: none !important; }
+}

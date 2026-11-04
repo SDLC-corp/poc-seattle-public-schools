@@ -8,7 +8,8 @@ import { logAudit, diff } from '../data/auditStore.js';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
-const schoolById = new Map(schools.map((s) => [s.id, s]));
+// Looked up live so schools added in the app are found
+const schoolById = { get: (id) => schools.find((s) => s.id === id), has: (id) => schools.some((s) => s.id === id) };
 
 // kind: Employee | Contractor | Inspector (role filter on the screen)
 function filterPeople({ q, kind, category, status, school }) {

@@ -315,3 +315,30 @@ a.sch-name:hover { color: var(--primary); text-decoration: underline; }
   .fp-grid, .fp-label-edit { grid-template-columns: minmax(0, 1fr); }
   .bd-stat { padding: 0 8px; }
 }
+/* ---------- Add School ---------- */
+.sch-head-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.sch-added { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #cce8d0; border-radius: 10px; background: #eaf6ec; color: #0c5f0c; font-size: 13px; }
+.sch-added span { flex: 1; color: var(--ink-1); }
+.sch-added a { color: var(--primary); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.sch-added a:hover { text-decoration: underline; }
+.sch-add { width: min(640px, 100%); }
+.sch-add .u-modal-head h2 { display: flex; align-items: center; gap: 8px; }
+.sch-add .u-modal-head h2 svg { color: var(--primary); }
+.sch-add-body { display: flex; flex-direction: column; gap: 14px; }
+.sch-add-body fieldset { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; border: 0; }
+.sch-add-body legend { margin-bottom: 8px; font-size: 12px; font-weight: 700; color: #0f3a66; text-transform: uppercase; letter-spacing: 0.3px; }
+.sch-add-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.sch-add-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sch-add-body input { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font: inherit; font-size: 13px; font-weight: 400; color: var(--ink-1); }
+.sch-add-body input:focus { outline: 2px solid var(--primary-light); border-color: var(--primary); }
+.sch-add-body .a-field em { font-style: normal; font-weight: 400; color: var(--status-critical); }
+.sch-add-body .a-field.invalid input { border-color: var(--status-critical); }
+.sch-add-hint { margin-top: -4px; font-size: 12px; color: var(--ink-2); }
+@media (max-width: 600px) {
+  .sch-add-grid, .sch-add-grid.two { grid-template-columns: minmax(0, 1fr); }
+  .sch-head-actions { flex-wrap: wrap; }
+}
+
+/* Add Building from the district list: school picker above the building fields */
+.bf-school { margin-bottom: 14px; }
+

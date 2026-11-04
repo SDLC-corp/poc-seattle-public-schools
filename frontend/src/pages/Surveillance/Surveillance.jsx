@@ -15,7 +15,7 @@ import Pager from './Pager'
 import ScheduleTab from './ScheduleTab'
 import FindingsTab from './FindingsTab'
 import { TABS, CONDITION_TONE, STATUS, fmtDay, shortAcm, floorLink, toQs } from './survMeta'
-import { request } from '../../lib/api'
+import { request, API_BASE } from '../../lib/api'
 import '../Users/users.css'
 import '../Audit/audit.css'
 import '../Reports/reports.css'
@@ -148,7 +148,7 @@ function ListTab({ tree, location, setLocation, onToast }) {
       <section className="u-card ai-records">
         <header className="ai-group-head">
           <h2 className="ai-records-title">Surveillance Records</h2>
-          <ExportMenu csvHref={`/api/surveillance/export.csv?${filterQs}`} title="Surveillance records" />
+          <ExportMenu csvHref={`${API_BASE}/surveillance/export.csv?${filterQs}`} title="Surveillance records" />
         </header>
         {error && <div className="u-banner">Couldn't load surveillance records ({error}).</div>}
         <div className="u-table-wrap">
@@ -207,7 +207,8 @@ export default function Surveillance() {
   const routerLocation = useLocation()
   const tab = TABS.find((t) => t.id === (tabParam ?? 'list'))
   const [tree, setTree] = useState(null)
-  const [location, setLocation] = useState(NO_LOCATION)
+  // A link can open the list on one school / building (state.place, e.g. from the map)
+  const [location, setLocation] = useState(() => ({ ...NO_LOCATION, school: routerLocation.state?.place?.school ?? '', building: routerLocation.state?.place?.building ?? '' }))
   const [toast, setToast] = useState(() => routerLocation.state?.toast ?? null)
 
   useEffect(() => { request('/acm-inventory/tree?status=').then(setTree).catch(() => {}) }, [])

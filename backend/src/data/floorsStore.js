@@ -9,6 +9,8 @@ import { writeJson } from './atomicWrite.js';
 
 const FILE = new URL('../../data/floors.json', import.meta.url);
 export const PLAN_DIR = fileURLToPath(new URL('../../uploads/floorplans/', import.meta.url));
+// Seeded sample plans (Ground / First / Second floor drawings), shared by many floors – never deleted
+const SAMPLE_PLAN_DIR = fileURLToPath(new URL('../../data/floors/', import.meta.url));
 mkdirSync(PLAN_DIR, { recursive: true });
 
 const doc = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')) : { floors: [] };
@@ -31,7 +33,9 @@ export const present = (f) => ({
 export const getFloors = (buildingId) => floors.filter((f) => f.buildingId === buildingId).sort((a, b) => a.number - b.number);
 export const getAllFloors = () => floors;
 export const getFloor = (id) => floors.find((f) => f.id === id) ?? null;
-export const planPath = (f) => (f?.planImage ? path.join(PLAN_DIR, f.planImage.storedName) : null);
+export const planPath = (f) => (f?.planImage ? path.join(f.planImage.sample ? SAMPLE_PLAN_DIR : PLAN_DIR, f.planImage.storedName) : null);
+// Only the floor's own uploaded image file is removed with it
+const removePlanFile = (f) => (f?.planImage && !f.planImage.sample ? unlink(planPath(f)).catch(() => {}) : Promise.resolve());
 
 // Building totals follow its floors: count, rooms, ACM rooms and the "worst" ACM status
 async function syncBuilding(buildingId) {
@@ -92,12 +96,12 @@ export async function removeFloor(id) {
   const f = getFloor(id);
   floors = floors.filter((x) => x.id !== id);
   await persist();
-  if (f.planImage) await unlink(planPath(f)).catch(() => {});
+  await removePlanFile(f);
   return { building: await syncBuilding(f.buildingId) };
 }
 
 export async function setPlanImage(id, planImage) {
   const f = getFloor(id);
-  if (f.planImage && f.planImage.storedName !== planImage?.storedName) await unlink(planPath(f)).catch(() => {});
+  if (f.planImage && f.planImage.storedName !== planImage?.storedName) await removePlanFile(f);
   return updateFloor(id, { planImage });
 }

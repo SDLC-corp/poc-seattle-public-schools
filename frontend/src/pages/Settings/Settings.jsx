@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { Navigate, useParams } from 'react-router'
 import {
-  Settings as SettingsIcon, Plug, Bell, ShieldCheck, FileText, Map as MapIcon, Database, Wrench,
+  Settings as SettingsIcon, Database,
   Building, Palette, Lock, ClipboardCheck, SlidersHorizontal, LifeBuoy, Save, RotateCcw,
   Upload, Trash2, ExternalLink, CircleCheck, CircleAlert, School,
 } from 'lucide-react'
@@ -9,20 +9,8 @@ import SearchSelect from '../../components/ui/SearchSelect'
 import Toggle from '../../components/ui/Toggle'
 import { mainNav } from '../../components/layout/navItems'
 import { applyBrandColors } from '../../theme'
-import Integrations from './Integrations'
 import './settings.css'
-import './integrations.css'
-
-const TABS = [
-  { id: 'general', label: 'General', icon: SettingsIcon },
-  { id: 'integrations', label: 'Integrations', icon: Plug },
-  { id: 'notifications', label: 'Notifications', icon: Bell },
-  { id: 'compliance', label: 'Compliance', icon: ShieldCheck },
-  { id: 'documents', label: 'Document Settings', icon: FileText },
-  { id: 'map', label: 'Map & Floor Plan', icon: MapIcon },
-  { id: 'data', label: 'Data Management', icon: Database },
-  { id: 'system', label: 'System Settings', icon: Wrench },
-]
+import { API_BASE } from '../../lib/api'
 
 const opts = (values, fmt = String) => values.map((v) => ({ value: v, label: fmt(v) }))
 
@@ -76,7 +64,7 @@ function validate(s) {
 }
 
 async function api(path, options) {
-  const res = await fetch(`/api/settings${path}`, {
+  const res = await fetch(`${API_BASE}/settings${path}`, {
     headers: { 'Content-Type': 'application/json' },
     ...options,
   })
@@ -130,10 +118,8 @@ function ColorField({ id, value, onChange, error }) {
 }
 
 export default function Settings() {
-  // Active tab lives in the URL: /settings/:tab (General when omitted)
-  const { tab = 'general' } = useParams()
-  const navigate = useNavigate()
-  const setTab = (id) => navigate(id === 'general' ? '/settings' : `/settings/${id}`)
+  // Settings is General only; old /settings/<tab> links land here (Integrations has its own page)
+  const { tab } = useParams()
   const [saved, setSaved] = useState(null)
   const [draft, setDraft] = useState(null)
   const [loadError, setLoadError] = useState(null)
@@ -161,7 +147,8 @@ export default function Settings() {
     return () => clearTimeout(t)
   }, [confirmReset])
 
-  if (!TABS.some((t) => t.id === tab)) return <Navigate to="/settings" replace />
+  if (tab === 'integrations') return <Navigate to="/integrations" replace />
+  if (tab) return <Navigate to="/settings" replace />
   if (loadError) {
     return <div className="s-banner error">Couldn't load settings ({loadError}). Is the backend running on port 5000?</div>
   }
@@ -253,34 +240,10 @@ export default function Settings() {
     <div className="settings">
       <div className="s-head">
         <h1>Settings</h1>
-        <p>Configure system preferences, integrations, notifications and compliance settings</p>
+        <p>Organization, application, appearance, security and compliance defaults</p>
       </div>
 
-      <nav className="s-tabs" role="tablist" aria-label="Settings sections">
-        {TABS.map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            type="button"
-            role="tab"
-            aria-selected={tab === id}
-            className={`s-tab${tab === id ? ' active' : ''}`}
-            onClick={() => setTab(id)}
-          >
-            <Icon size={16} />{label}
-          </button>
-        ))}
-      </nav>
-
-      {tab === 'integrations' ? (
-        <Integrations onToast={setToast} />
-      ) : tab !== 'general' ? (
-        <div className="s-card s-placeholder">
-          <SettingsIcon size={28} />
-          <strong>{TABS.find((t) => t.id === tab).label}</strong>
-          <span>This section hasn't been built yet. General settings are available now.</span>
-        </div>
-      ) : (
-        <>
+      <>
           <div className="s-grid s-grid-top">
             <Card icon={Building} title="Organization Settings">
               <Row label="District Name" htmlFor="organization-districtName" error={errorFor('organization.districtName')}>
@@ -472,8 +435,7 @@ export default function Settings() {
               )}
             </Card>
           </div>
-        </>
-      )}
+      </>
 
       {toast && (
         <div className={`s-toast ${toast.kind}`} role="status">

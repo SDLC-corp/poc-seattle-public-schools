@@ -2,184 +2,32 @@
   "note": "ACM materials recorded per room (sample + app)",
   "materials": [
     {
-      "id": "ACM-adamses-b1-f1-r10-1",
-      "roomId": "adamses-b1-f1-r10",
-      "floorId": "adamses-b1-f1",
+      "id": "ACM-mw0hwhi4hoim",
+      "attachments": [],
+      "source": "app",
+      "createdAt": "2026-11-03T09:38:34.012Z",
+      "roomId": "RM-mw0hsga7f3pg",
+      "floorId": "adamses-b1-fmw0hscs5",
       "buildingId": "adamses-b1",
       "schoolId": "adamses",
-      "scope": "room",
+      "scope": "floor",
       "name": "Ceiling Tile",
       "materialType": "Ceiling Tile",
-      "location": "Ceiling (entire room)",
-      "quantity": 339,
+      "location": "Floor (entire room)",
+      "quantity": 500,
       "unit": "Sq ft",
-      "friability": "Non-Friable",
-      "classification": "Assumed",
-      "condition": "Damaged",
-      "riskRanking": "Medium",
-      "assessmentDate": "2026-09-05",
-      "acmStatus": "Assumed ACM",
-      "notes": "Not yet sampled; treated as ACM under AHERA until lab results are received.",
-      "relatedTracking": [
-        "Inspection"
-      ],
-      "attachments": [],
-      "createdAt": "2026-09-05T05:08:50.004Z",
-      "createdBy": {
-        "id": null,
-        "name": "Sample data"
-      },
-      "source": "sample"
-    },
-    {
-      "id": "ACM-adamses-b1-f1-r10-2",
-      "roomId": "adamses-b1-f1-r10",
-      "floorId": "adamses-b1-f1",
-      "buildingId": "adamses-b1",
-      "schoolId": "adamses",
-      "scope": "room",
-      "name": "Window Glazing",
-      "materialType": "Window Glazing",
-      "location": "Exterior windows",
-      "quantity": 82,
-      "unit": "Linear ft",
-      "friability": "Non-Friable",
-      "classification": "Assumed",
-      "condition": "Significantly Damaged",
-      "riskRanking": "High",
-      "assessmentDate": "2026-10-05",
-      "acmStatus": "Assumed ACM",
-      "notes": "Not yet sampled; treated as ACM under AHERA until lab results are received.",
-      "relatedTracking": [
-        "Inspection"
-      ],
-      "attachments": [],
-      "createdAt": "2026-10-05T05:08:50.004Z",
-      "createdBy": {
-        "id": null,
-        "name": "Sample data"
-      },
-      "source": "sample"
-    },
-    {
-      "id": "ACM-adamses-b1-f1-r4-1",
-      "roomId": "adamses-b1-f1-r4",
-      "floorId": "adamses-b1-f1",
-      "buildingId": "adamses-b1",
-      "schoolId": "adamses",
-      "scope": "room",
-      "name": "Pipe Insulation",
-      "materialType": "Thermal System Insulation (TSI)",
-      "location": "Above ceiling – pipe runs",
-      "quantity": 32,
-      "unit": "Linear ft",
       "friability": "Friable",
-      "classification": "Presumed (PACM)",
+      "classification": "Confirmed",
       "condition": "Good",
       "riskRanking": "Medium",
-      "assessmentDate": "2025-07-08",
-      "acmStatus": "Assumed ACM",
-      "notes": "Not yet sampled; treated as ACM under AHERA until lab results are received.",
-      "relatedTracking": [
-        "Inspection"
-      ],
-      "attachments": [],
-      "createdAt": "2025-07-08T05:08:50.004Z",
+      "assessmentDate": "2026-11-03",
+      "acmStatus": "ACM Present",
+      "notes": "",
+      "relatedTracking": [],
       "createdBy": {
-        "id": null,
-        "name": "Sample data"
-      },
-      "source": "sample"
-    },
-    {
-      "id": "ACM-adamses-b1-f1-r4-2",
-      "roomId": "adamses-b1-f1-r4",
-      "floorId": "adamses-b1-f1",
-      "buildingId": "adamses-b1",
-      "schoolId": "adamses",
-      "scope": "room",
-      "name": "Wall Plaster / Joint Compound",
-      "materialType": "Joint Compound / Plaster",
-      "location": "Walls",
-      "quantity": 407,
-      "unit": "Sq ft",
-      "friability": "Non-Friable",
-      "classification": "Assumed",
-      "condition": "Good",
-      "riskRanking": "Low",
-      "assessmentDate": "2025-06-28",
-      "acmStatus": "Assumed ACM",
-      "notes": "Not yet sampled; treated as ACM under AHERA until lab results are received.",
-      "relatedTracking": [
-        "Inspection"
-      ],
-      "attachments": [],
-      "createdAt": "2025-06-28T05:08:50.004Z",
-      "createdBy": {
-        "id": null,
-        "name": "Sample data"
-      },
-      "source": "sample"
-    },
-    {
-      "id": "ACM-adamses-b1-f1-r1-1",
-      "roomId": "adamses-b1-f1-r1",
-      "floorId": "adamses-b1-f1",
-      "buildingId": "adamses-b1",
-      "schoolId": "adamses",
-      "scope": "room",
-      "name": "Fire Door Core",
-      "materialType": "Miscellaneous Material",
-      "location": "Corridor door",
-      "quantity": 2,
-      "unit": "Each",
-      "friability": "Non-Friable",
-      "classification": "Assumed",
-      "condition": "Not Assessed",
-      "riskRanking": "Low",
-      "assessmentDate": "2025-10-21",
-      "acmStatus": "Assumed ACM",
-      "notes": "Not yet sampled; treated as ACM under AHERA until lab results are received.",
-      "relatedTracking": [
-        "Inspection"
-      ],
-      "attachments": [],
-      "createdAt": "2025-10-21T05:08:50.004Z",
-      "createdBy": {
-        "id": null,
-        "name": "Sample data"
-      },
-      "source": "sample"
-    },
-    {
-      "id": "ACM-adamses-b1-f1-r9-1",
-      "roomId": "adamses-b1-f1-r9",
-      "floorId": "adamses-b1-f1",
-      "buildingId": "adamses-b1",
-      "schoolId": "adamses",
-      "scope": "room",
-      "name": "Transite Panel",
-      "materialType": "Asbestos Cement (AC)",
-      "location": "Wall panels / counter tops",
-      "quantity": 75,
-      "unit": "Sq ft",
-      "friability": "Non-Friable",
-      "classification": "Negative",
-      "condition": "Good",
-      "riskRanking": "Low",
-      "assessmentDate": "2025-03-30",
-      "acmStatus": "No ACM",
-      "notes": "Bulk sample negative (<1% asbestos).",
-      "relatedTracking": [
-        "Sample Results"
-      ],
-      "attachments": [],
-      "createdAt": "2025-03-30T05:08:50.004Z",
-      "createdBy": {
-        "id": null,
-        "name": "Sample data"
-      },
-      "source": "sample"
+        "id": "demo",
+        "name": "John Doe"
+      }
     },
     {
       "id": "ACM-adamses-b2-f1-r2-1",

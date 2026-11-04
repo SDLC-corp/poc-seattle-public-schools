@@ -13,6 +13,7 @@ import {
   mockComplianceStatus,
 } from './mockData'
 import './dashboard.css'
+import { API_BASE } from '../../lib/api'
 
 const SERIES = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)', 'var(--series-4)', 'var(--series-5)']
 const STATUS_COLOR = {
@@ -93,7 +94,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const getJson = (url) => fetch(url).then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
-    Promise.all([getJson('/api/schools'), getJson('/api/buildings')])
+    Promise.all([getJson(`${API_BASE}/schools`), getJson(`${API_BASE}/buildings`)])
       .then(([schoolData, buildingData]) => {
         // Real status from the inspection schedule (API); placeholder only if the API doesn't provide it
         const statusById = Object.fromEntries(schoolData.schools.map((s) => [s.id, s.complianceStatus ?? mockComplianceStatus(s.id)]))

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { Download, ArrowRight } from 'lucide-react'
-import { request } from '../../lib/api'
+import { request, API_BASE } from '../../lib/api'
 import { TABS, tabForReport, STAT_ICONS } from './reportMeta'
 
 // One card per report: its headline numbers, a link into the report and a full CSV download
@@ -53,7 +53,7 @@ export default function ReportsOverview() {
               <Link className="u-btn u-btn-outline u-btn-sm" to={`/reports/${tabForReport(r.id).id}/${r.id}`}>
                 Open Report<ArrowRight size={14} />
               </Link>
-              <a className="u-btn u-btn-ghost u-btn-sm rp-ov-dl" href={`/api/reports/${r.id}/export.csv`} download>
+              <a className="u-btn u-btn-ghost u-btn-sm rp-ov-dl" href={`${API_BASE}/reports/${r.id}/export.csv`} download>
                 <Download size={14} />CSV
               </a>
             </footer>

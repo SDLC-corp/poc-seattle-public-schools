@@ -22,7 +22,8 @@ const MODULE = 'Inspections';
 const STATUS_LABEL = { scheduled: 'Scheduled', draft: 'In Progress', submitted: 'Pending Review', approved: 'Approved', returned: 'Returned for Changes' };
 const OPEN_STATES = ['scheduled', 'draft', 'returned'];
 
-const schoolName = new Map(schools.map((s) => [s.id, s.name]));
+// Looked up live so schools added in the app are found
+const schoolName = { get: (id) => schools.find((s) => s.id === id)?.name };
 const buildingName = new Map(buildings.map((b) => [b.id, b.name]));
 const todayIso = () => {
   const d = new Date();
@@ -31,6 +32,8 @@ const todayIso = () => {
 const link = (r) => `/inspections/records/${r.id}`;
 const csvCell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
 const validDay = (v) => ISO_DAY.test(v) && !Number.isNaN(Date.parse(`${v}T00:00:00`));
+// Scheduled start time, 24-hour "HH:MM"
+const validTime = (v) => /^([01]\d|2[0-3]):[0-5]\d$/.test(v);
 
 function placeLookup() {
   const floors = new Map(getAllFloors().map((f) => [f.id, f]));
@@ -75,7 +78,7 @@ function rows() {
     const m = mats.get(r.materialId);
     const status = M.statusOf(r);
     return {
-      id: r.id, type: r.type, date: r.date ?? null, scheduledDate: r.scheduledDate ?? null, shownDate: r.date || r.scheduledDate || '',
+      id: r.id, type: r.type, date: r.date ?? null, scheduledDate: r.scheduledDate ?? null, scheduledTime: r.scheduledTime ?? null, shownDate: r.date || r.scheduledDate || '',
       nextDue: nextDueOf(r), state: r.state, statusLabel: STATUS_LABEL[r.state], status, statusText: M.STATUSES[status],
       // Not started by its scheduled date
       overdue: r.state === 'scheduled' && Boolean(r.scheduledDate) && r.scheduledDate < today,
@@ -515,7 +518,7 @@ router.delete('/records/:id/attachments/:fileId', async (req, res, next) => {
  */
 router.post('/assign', async (req, res, next) => {
   try {
-    const { materialIds, type, inspectorId, scheduledDate, notes } = req.body ?? {};
+    const { materialIds, type, inspectorId, scheduledDate, scheduledTime, notes } = req.body ?? {};
     const errors = {};
     const ids = Array.isArray(materialIds) ? [...new Set(materialIds)] : [];
     if (!ids.length) errors.materialIds = 'Choose at least one ACM to inspect';
@@ -527,6 +530,7 @@ router.post('/assign', async (req, res, next) => {
     if (!inspector) errors.inspectorId = 'Choose the accredited inspector';
     if (!validDay(scheduledDate)) errors.scheduledDate = 'Choose the scheduled date';
     else if (scheduledDate < todayIso()) errors.scheduledDate = 'The scheduled date can’t be in the past';
+    if (!validTime(scheduledTime)) errors.scheduledTime = 'Choose the time of the inspection';
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
 
     const open = new Set(getRecords().filter((r) => r.type === type && ['scheduled', 'draft', 'returned', 'submitted'].includes(r.state)).map((r) => r.materialId));
@@ -536,7 +540,7 @@ router.post('/assign', async (req, res, next) => {
     for (const m of mats) {
       if (open.has(m.id)) { skipped.push(m.id); continue; }
       const rec = await addRecord({
-        type, date: null, scheduledDate, materialId: m.id, schoolId: m.schoolId, buildingId: m.buildingId, floorId: m.floorId, roomId: m.roomId,
+        type, date: null, scheduledDate, scheduledTime, materialId: m.id, schoolId: m.schoolId, buildingId: m.buildingId, floorId: m.floorId, roomId: m.roomId,
         locationDescription: '', homogeneousAreaId: '', inspectorId: inspector.id, inspectorName: inspector.name, certification: inspector.certification,
         assessment: {}, checklist: {}, sampling: {}, risk: {}, comments: '', actionItems: [],
         verification: { reviewStatus: 'Not Submitted' },
@@ -549,8 +553,8 @@ router.post('/assign', async (req, res, next) => {
       logAudit(req, {
         action: 'create', module: MODULE, recordId: created.length === 1 ? created[0] : `${created[0]}…${created.at(-1)}`,
         link: created.length === 1 ? `/inspections/records/${created[0]}` : '/inspections',
-        summary: `Assigned ${created.length} ${type.toLowerCase()}${created.length > 1 ? 's' : ''} to ${inspector.name} for ${scheduledDate}`,
-        changes: [{ field: 'Type', to: type }, { field: 'Assigned To', to: inspector.name }, { field: 'Scheduled Date', to: scheduledDate }, { field: 'Inspections', to: String(created.length) }],
+        summary: `Assigned ${created.length} ${type.toLowerCase()}${created.length > 1 ? 's' : ''} to ${inspector.name} for ${scheduledDate} ${scheduledTime}`,
+        changes: [{ field: 'Type', to: type }, { field: 'Assigned To', to: inspector.name }, { field: 'Scheduled Date', to: scheduledDate }, { field: 'Scheduled Time', to: scheduledTime }, { field: 'Inspections', to: String(created.length) }],
       });
     }
     res.status(201).json({ created, skipped });
@@ -559,10 +563,10 @@ router.post('/assign', async (req, res, next) => {
   }
 });
 
-// POST /reassign { ids[], inspectorId?, scheduledDate? } — open inspections only (not yet submitted)
+// POST /reassign { ids[], inspectorId?, scheduledDate?, scheduledTime? } — open inspections only (not yet submitted)
 router.post('/reassign', async (req, res, next) => {
   try {
-    const { ids, inspectorId, scheduledDate } = req.body ?? {};
+    const { ids, inspectorId, scheduledDate, scheduledTime } = req.body ?? {};
     const errors = {};
     const list = (Array.isArray(ids) ? ids : []).map((id) => getRecord(id)).filter(Boolean);
     if (!list.length) errors.ids = 'Select the inspections to change';
@@ -570,20 +574,24 @@ router.post('/reassign', async (req, res, next) => {
     if (inspectorId && !inspector) errors.inspectorId = 'Choose an accredited inspector';
     if (scheduledDate && !validDay(scheduledDate)) errors.scheduledDate = 'Enter a valid date';
     else if (scheduledDate && scheduledDate < todayIso()) errors.scheduledDate = 'The scheduled date can’t be in the past';
-    if (!inspector && !scheduledDate) errors.inspectorId = 'Choose a new inspector or date';
+    if (scheduledTime && !validTime(scheduledTime)) errors.scheduledTime = 'Enter a valid time';
+    if (!inspector && !scheduledDate && !scheduledTime) errors.inspectorId = 'Choose a new inspector, date or time';
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
     const changed = [];
     const locked = [];
     for (const r of list) {
       if (!OPEN_STATES.includes(r.state)) { locked.push(r.id); continue; }
-      const before = { 'Assigned To': r.inspectorName ?? '—', 'Scheduled Date': r.scheduledDate ?? '—' };
+      const before = { 'Assigned To': r.inspectorName ?? '—', 'Scheduled Date': r.scheduledDate ?? '—', 'Scheduled Time': r.scheduledTime ?? '—' };
       await updateRecord(r.id, {
         ...(inspector ? { inspectorId: inspector.id, inspectorName: inspector.name, certification: inspector.certification } : {}),
         ...(scheduledDate ? { scheduledDate } : {}),
+        ...(scheduledTime ? { scheduledTime } : {}),
       });
       logAudit(req, {
         action: 'update', module: MODULE, recordId: r.id, link: link(r), summary: `Reassigned inspection ${r.id}`,
-        changes: diff(before, { 'Assigned To': inspector?.name ?? before['Assigned To'], 'Scheduled Date': scheduledDate ?? before['Scheduled Date'] }),
+        changes: diff(before, {
+          'Assigned To': inspector?.name ?? before['Assigned To'], 'Scheduled Date': scheduledDate ?? before['Scheduled Date'], 'Scheduled Time': scheduledTime ?? before['Scheduled Time'],
+        }),
       });
       changed.push(r.id);
     }
@@ -603,6 +611,70 @@ router.get('/calendar', (req, res) => {
     }))
     .sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
   res.json({ items });
+});
+
+// What is due per ACM: an open inspection is due on its scheduled date; with none open, the 3-year
+// reinspection is due from the last approved inspection (or the inventory assessment date)
+const DUE_REASONS = { notStarted: 'Not started', inProgress: 'In progress', returned: 'Returned for changes', reinspection: '3-year reinspection due' };
+const reasonOf = (state) => (state === 'scheduled' ? 'notStarted' : state === 'draft' ? 'inProgress' : 'returned');
+const dayDiff = (from, to) => Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000);
+
+function dueItems() {
+  const place = placeLookup();
+  const recs = rows();
+  const busy = new Set(recs.filter((r) => OPEN_STATES.includes(r.state) || r.state === 'submitted').map((r) => r.materialId));
+  const last = new Map();
+  for (const r of recs) if (r.state === 'approved' && (!last.has(r.materialId) || r.date > last.get(r.materialId))) last.set(r.materialId, r.date);
+  const open = recs.filter((r) => OPEN_STATES.includes(r.state) && r.scheduledDate).map((r) => ({
+    key: r.id, inspectionId: r.id, type: r.type, dueDate: r.scheduledDate, dueTime: r.scheduledTime, reason: reasonOf(r.state), assignedTo: r.assignedTo,
+    lastInspected: last.get(r.materialId) ?? null, materialId: r.materialId, materialName: r.materialName,
+    schoolId: r.schoolId, buildingId: r.buildingId, floorId: r.floorId, roomId: r.roomId,
+    schoolName: r.schoolName, buildingName: r.buildingName, floorName: r.floorName, roomNumber: r.roomNumber, roomName: r.roomName,
+  }));
+  const reinspections = getMaterials().filter((m) => !busy.has(m.id)).flatMap((m) => {
+    const base = last.get(m.id) ?? m.assessmentDate;
+    if (!base) return [];
+    return [{
+      key: `re-${m.id}`, inspectionId: null, type: '3-Year Reinspection', dueDate: addYears(base, M.REINSPECTION_YEARS), reason: 'reinspection',
+      assignedTo: null, lastInspected: last.get(m.id) ?? null, materialId: m.id, materialName: m.name,
+      schoolId: m.schoolId, buildingId: m.buildingId, floorId: m.floorId, roomId: m.roomId, ...place(m),
+    }];
+  });
+  return [...open, ...reinspections];
+}
+
+// GET /due?view=upcoming|overdue&within=90&school=&building=&floor=&type=&reason=&q=&page=&pageSize=
+router.get('/due', (req, res) => {
+  const { view, school, building, floor, type, reason } = req.query;
+  const overdue = view === 'overdue';
+  const today = todayIso();
+  const within = Math.min(3650, Math.max(1, Number(req.query.within) || 90));
+  const until = new Date(`${today}T00:00:00Z`);
+  until.setUTCDate(until.getUTCDate() + within);
+  const untilIso = until.toISOString().slice(0, 10);
+  const term = req.query.q?.trim().toLowerCase();
+  const inView = dueItems()
+    .filter((x) => (overdue ? x.dueDate < today : x.dueDate >= today && x.dueDate <= untilIso))
+    .filter((x) => (!school || x.schoolId === school) && (!building || x.buildingId === building) && (!floor || x.floorId === floor) && (!type || x.type === type))
+    .filter((x) => !term || [x.inspectionId, x.materialId, x.materialName, x.roomNumber, x.roomName, x.assignedTo, x.schoolName]
+      .some((v) => String(v ?? '').toLowerCase().includes(term)))
+    .map((x) => ({ ...x, reasonText: DUE_REASONS[x.reason], days: dayDiff(today, x.dueDate) }));
+  // Ascending days: longest overdue first / soonest upcoming first
+  const list = (reason ? inView.filter((x) => x.reason === reason) : inView)
+    .sort((a, b) => a.days - b.days || a.key.localeCompare(b.key));
+  const pageSize = Math.min(100, Math.max(1, Number(req.query.pageSize) || 10));
+  const pages = Math.max(1, Math.ceil(list.length / pageSize));
+  const page = Math.min(pages, Math.max(1, Number(req.query.page) || 1));
+  const c = (r) => inView.filter((x) => x.reason === r).length;
+  res.json({
+    total: list.length, page, pageSize, pages, within,
+    stats: {
+      total: inView.length, notStarted: c('notStarted'), inProgress: c('inProgress'), returned: c('returned'), reinspection: c('reinspection'),
+      // Upcoming: how many fall in the next 7 days; overdue: how many are more than 30 days late
+      soon: inView.filter((x) => (overdue ? x.days < -30 : x.days <= 7)).length,
+    },
+    items: list.slice((page - 1) * pageSize, page * pageSize),
+  });
 });
 
 // GET /assignments?inspector= — an inspector's open work, oldest first

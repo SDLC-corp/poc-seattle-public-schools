@@ -7,7 +7,7 @@ import {
 import SearchSelect from '../../components/ui/SearchSelect'
 import AuditDetails from './AuditDetails'
 import { ActionBadge } from './ActionBadge'
-import { request, initials, fmtDateTime } from '../../lib/api'
+import { request, initials, fmtDateTime, API_BASE } from '../../lib/api'
 import './audit.css'
 
 // URL tab → server-side action group
@@ -136,7 +136,7 @@ export default function AuditLogs() {
             <p>Track system activities, data changes, and user actions for compliance and security.</p>
           </div>
           {/* The export is itself audited, so refresh shortly after to show its entry */}
-          <a className="u-btn u-btn-outline" href={`/api/audit/export.csv?${exportParams}`} download
+          <a className="u-btn u-btn-outline" href={`${API_BASE}/audit/export.csv?${exportParams}`} download
             onClick={() => setTimeout(() => setRefreshKey((k) => k + 1), 800)}>
             <Download size={15} />Export
           </a>

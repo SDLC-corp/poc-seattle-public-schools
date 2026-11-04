@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router'
 import {
   School, Search, RotateCcw, ChevronLeft, ChevronRight, X, Phone, Printer, Mail, Globe, ExternalLink,
-  MapPin, Building2, ShieldCheck, CalendarDays, Info, Download,
+  MapPin, Building2, ShieldCheck, CalendarDays, Info, Download, Plus, CircleCheck,
 } from 'lucide-react'
+import AddSchoolDialog from './AddSchoolDialog'
 import SearchSelect from '../../components/ui/SearchSelect'
 import { SchoolStatusBadge, InspectionStatusBadge } from '../Compliance/complianceMeta'
 import { request, fmtDate } from '../../lib/api'
@@ -125,6 +126,8 @@ export default function Schools() {
   const [page, setPage] = useState(1)
   const [selectedId, setSelectedId] = useState(null)
   const [detailsOpen, setDetailsOpen] = useState(() => !window.matchMedia('(max-width: 1100px)').matches)
+  const [adding, setAdding] = useState(false)
+  const [added, setAdded] = useState(null) // just-created school, for the confirmation
 
   useEffect(() => {
     request('/schools').then((d) => setSchools(d.schools)).catch((err) => setError(err.message))
@@ -172,10 +175,20 @@ export default function Schools() {
             <h1><School size={22} />Schools</h1>
             <p>All Seattle Public Schools with contacts, buildings and asbestos compliance status.</p>
           </div>
-          <button type="button" className="u-btn u-btn-outline" onClick={exportCsv} disabled={!schools}><Download size={15} />Export</button>
+          <div className="sch-head-actions">
+            <button type="button" className="u-btn u-btn-outline" onClick={exportCsv} disabled={!schools}><Download size={15} />Export</button>
+            <button type="button" className="u-btn u-btn-primary" onClick={() => setAdding(true)} disabled={!schools}><Plus size={15} />Add School</button>
+          </div>
         </div>
 
         {error && <div className="u-banner">Couldn't load schools ({error}).</div>}
+        {added && (
+          <div className="sch-added" role="status">
+            <CircleCheck size={16} /><span><strong>{added.name}</strong> was added.</span>
+            <Link to={`/schools/${added.id}/buildings`}>Add its buildings →</Link>
+            <button type="button" className="u-row-btn" onClick={() => setAdded(null)} aria-label="Dismiss"><X size={14} /></button>
+          </div>
+        )}
 
         <div className="sch-kpis">
           <Kpi icon={School} value={schools?.length} label="All Schools" tone="primary" active={!filters.type} onClick={() => setFilterExact('type')('')} />
@@ -247,6 +260,17 @@ export default function Schools() {
           <div className="u-drawer-backdrop" onClick={() => setDetailsOpen(false)} />
           <SchoolDetails key={selected.id} school={selected} onClose={() => setDetailsOpen(false)} />
         </>
+      )}
+
+      {adding && (
+        <AddSchoolDialog onClose={() => setAdding(false)} onCreated={(s) => {
+          // New school first in the list, selected, with filters cleared so it's visible
+          setAdding(false)
+          setSchools((list) => [s, ...list])
+          setFilters(DEFAULTS); setQuery(''); setPage(1)
+          setSelectedId(s.id); setDetailsOpen(true)
+          setAdded(s)
+        }} />
       )}
     </div>
   )

@@ -3,6 +3,7 @@ import { X, UploadCloud } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import { FileBadge } from './docUtils'
 import { fmtSize } from './docMeta'
+import { API_BASE } from '../../lib/api'
 
 const ACCESS_HINTS = {
   Public: 'Anyone who can sign in to the platform',
@@ -11,10 +12,10 @@ const ACCESS_HINTS = {
 }
 
 // Upload a file with metadata. Uses XHR (not fetch) to report upload progress.
-export default function UploadDialog({ facets, schools, buildings, defaultType, onClose, onUploaded }) {
+export default function UploadDialog({ facets, schools, buildings, defaultType, defaultSchoolId, onClose, onUploaded }) {
   const [file, setFile] = useState(null)
   const [meta, setMeta] = useState({
-    name: '', type: defaultType ?? '', schoolId: '', buildingId: '', relatedTo: '', access: 'Internal',
+    name: '', type: defaultType ?? '', schoolId: defaultSchoolId ?? '', buildingId: '', relatedTo: '', access: 'Internal',
   })
   const [errors, setErrors] = useState({})
   const [progress, setProgress] = useState(null)
@@ -59,7 +60,7 @@ export default function UploadDialog({ facets, schools, buildings, defaultType, 
     const params = new URLSearchParams({ ...meta, name: meta.name.trim() })
     const xhr = new XMLHttpRequest()
     xhrRef.current = xhr
-    xhr.open('POST', `/api/documents?${params}`)
+    xhr.open('POST', `${API_BASE}/documents?${params}`)
     xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream')
     xhr.upload.onprogress = (ev) => { if (ev.lengthComputable) setProgress(Math.round((ev.loaded / ev.total) * 100)) }
     xhr.onload = () => {

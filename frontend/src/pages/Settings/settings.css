@@ -6,7 +6,7 @@
   margin: 0 auto;
 }
 
-.s-head h1 { margin: 0; font-size: 22px; font-weight: 600; color: var(--ink-1); line-height: 1.2; }
+.s-head h1 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 22px; font-weight: 600; color: var(--ink-1); line-height: 1.2; }
 .s-head p { margin: 2px 0 0; font-size: 13px; color: var(--ink-2); }
 
 /* ---------- Tabs ---------- */

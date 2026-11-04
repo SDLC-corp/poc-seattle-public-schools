@@ -10,7 +10,8 @@ import { logAudit } from '../data/auditStore.js';
 
 const router = Router();
 
-const schoolName = new Map(schools.map((s) => [s.id, s.name]));
+// Looked up live so schools added in the app are found
+const schoolName = { get: (id) => schools.find((s) => s.id === id)?.name };
 const buildingById = new Map(buildings.map((b) => [b.id, b]));
 const addYears = (iso, n) => (iso ? `${Number(iso.slice(0, 4)) + n}${iso.slice(4, 10)}` : '');
 const csvCell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;

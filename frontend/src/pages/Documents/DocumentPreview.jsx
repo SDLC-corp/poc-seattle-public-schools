@@ -3,7 +3,7 @@ import { X, Download, Trash2, FileX2, Info, ArrowLeft } from 'lucide-react'
 import { ActionBadge } from '../Audit/ActionBadge'
 import { FileBadge, SourceLabel } from './docUtils'
 import { fmtSize, isPreviewable } from './docMeta'
-import { fmtDateTime } from '../../lib/api'
+import { fmtDateTime, API_BASE } from '../../lib/api'
 
 const TABS = [{ id: 'details', label: 'Details' }, { id: 'activity', label: 'Activity Log' }]
 
@@ -17,7 +17,7 @@ function Row({ label, children }) {
 }
 
 function Preview({ doc }) {
-  const src = `/api/documents/${doc.id}/file`
+  const src = `${API_BASE}/documents/${doc.id}/file`
   if (!doc.hasFile) {
     return (
       <div className="dp-empty">
@@ -105,7 +105,7 @@ export default function DocumentPreview({ doc, onClose, onDelete }) {
 
       <footer className="dp-actions">
         <a className={`u-btn u-btn-primary u-btn-sm${doc.hasFile ? '' : ' disabled'}`}
-          href={doc.hasFile ? `/api/documents/${doc.id}/file?download=1` : undefined}
+          href={doc.hasFile ? `${API_BASE}/documents/${doc.id}/file?download=1` : undefined}
           aria-disabled={!doc.hasFile} title={doc.hasFile ? undefined : 'No file stored for this record'}>
           <Download size={14} />Download
         </a>

@@ -11,7 +11,7 @@ import ComplianceCalendar from './ComplianceCalendar'
 import ComplianceDetails from './ComplianceDetails'
 import InspectionsTab from './InspectionsTab'
 import { SchoolStatusBadge } from './complianceMeta'
-import { request, fmtDate } from '../../lib/api'
+import { request, fmtDate, API_BASE } from '../../lib/api'
 import { fmtDay } from './complianceUtils'
 import '../Users/users.css'
 import './compliance.css'
@@ -118,7 +118,7 @@ export default function Compliance() {
             <h1><ShieldCheck size={24} />Compliance &amp; Tracking</h1>
             <p>Monitor asbestos compliance status, track inspections, corrective actions, and regulatory deadlines.</p>
           </div>
-          <a className="u-btn u-btn-outline" href={`/api/compliance/schools/export.csv?${new URLSearchParams({ q: debouncedQ, status, type: schoolType })}`} download>
+          <a className="u-btn u-btn-outline" href={`${API_BASE}/compliance/schools/export.csv?${new URLSearchParams({ q: debouncedQ, status, type: schoolType })}`} download>
             <Download size={15} />Export
           </a>
         </div>

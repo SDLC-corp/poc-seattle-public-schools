@@ -10,7 +10,7 @@ import AirTrendChart from './AirTrendChart'
 import AirEventForm from './AirEventForm'
 import AirDetails from './AirDetails'
 import { AirStatusBadge } from './airMeta'
-import { request } from '../../lib/api'
+import { request, API_BASE } from '../../lib/api'
 import '../Users/users.css'
 import '../Compliance/compliance.css'
 import './air.css'
@@ -263,7 +263,7 @@ export default function AirMonitoring() {
                     <input type="search" placeholder="Search by school, building, room or project…" value={query}
                       onChange={(e) => setQuery(e.target.value)} aria-label="Search monitoring events" />
                   </label>
-                  <a className="u-btn u-btn-outline" href={`/api/air-monitoring/export.csv?${baseParams}`} download><Download size={15} />Export</a>
+                  <a className="u-btn u-btn-outline" href={`${API_BASE}/air-monitoring/export.csv?${baseParams}`} download><Download size={15} />Export</a>
                 </div>
               </header>
               <div className="u-table-wrap">

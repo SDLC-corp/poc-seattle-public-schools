@@ -19,7 +19,9 @@
     "generate:air": "node scripts/generate-air-monitoring.js",
     "generate:personnel": "node scripts/generate-personnel.js",
     "generate:surveillance": "node scripts/generate-surveillance.js",
-    "generate:inspection-records": "node scripts/generate-inspection-records.js"
+    "generate:inspection-records": "node scripts/generate-inspection-records.js",
+    "generate:om": "node scripts/generate-om.js",
+    "seed:floor-plans": "node scripts/seed-floor-plans.js"
   },
   "dependencies": {
     "cors": "^2.8.6",

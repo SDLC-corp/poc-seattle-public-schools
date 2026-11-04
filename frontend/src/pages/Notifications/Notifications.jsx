@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, Navigate, useNavigate, useParams } from 'react-router'
+import { Navigate, useNavigate, useParams } from 'react-router'
 import {
-  Bell, CalendarCheck, ShieldAlert, Layers, ShieldCheck, Inbox, CheckCheck, Settings2, Search, Ellipsis,
+  Bell, CalendarCheck, ShieldAlert, Layers, ShieldCheck, Inbox, CheckCheck, Search, Ellipsis,
   ChevronLeft, ChevronRight, RotateCcw, Check, MailOpen, Eye, Trash2, X, CircleCheck, CircleAlert,
 } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
@@ -235,9 +235,7 @@ export default function Notifications() {
           <div className="n-tab-actions">
             <button type="button" className="n-link" onClick={markAllRead} disabled={!data?.counts.unread}>
               <CheckCheck size={15} />Mark All as Read
-            </button>
-            <Link className="n-link" to="/settings/notifications"><Settings2 size={15} />Notification Preferences</Link>
-          </div>
+            </button>          </div>
         </div>
 
         <section className="u-card">

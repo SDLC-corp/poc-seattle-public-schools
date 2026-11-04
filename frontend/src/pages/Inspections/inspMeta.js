@@ -7,7 +7,14 @@ export const PRIORITY_TONE = { Low: 'good', Medium: 'warning', High: 'critical',
 export const CHANGE_TONE = { Improved: 'good', Unchanged: 'neutral', Deteriorated: 'critical', 'First Assessment': 'primary' }
 export const ACTION_TONE = { Pending: 'warning', 'In Progress': 'primary', Completed: 'good' }
 
-const RANK = { Good: 0, Damaged: 1, 'Significantly Damaged': 2 }
+// "13:30" → "1:30 PM"
+export const fmtTime = (hhmm) => {
+  if (!hhmm) return ''
+  const [h, m] = hhmm.split(':').map(Number)
+  return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`
+}
+
+const RANK ={ Good: 0, Damaged: 1, 'Significantly Damaged': 2 }
 // Same rule as the server (backend/src/data/inspectionMeta.js)
 export const conditionChange = (previous, current) => {
   if (!previous || !current || RANK[previous] === undefined) return 'First Assessment'

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { DoorOpen, Upload, X, Save, RotateCcw, ImageOff } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
-import { request, uploadFile } from '../../lib/api'
+import { request, uploadFile, API_BASE } from '../../lib/api'
 import { AcmBadge } from './BuildingParts'
 
 const PHOTO_TYPES = ['image/png', 'image/jpeg', 'image/webp']
@@ -110,8 +110,8 @@ export default function RoomInfoCard({ room, place, meta, focusKey, onSaved, onT
         <div className="fr-photos">
           {(room.photos ?? []).map((p) => (
             <figure key={p.id} className="fr-photo">
-              <a href={`/api/rooms/${room.id}/photos/${p.id}`} target="_blank" rel="noopener noreferrer" title={p.name}>
-                <img src={`/api/rooms/${room.id}/photos/${p.id}`} alt={p.name} />
+              <a href={`${API_BASE}/rooms/${room.id}/photos/${p.id}`} target="_blank" rel="noopener noreferrer" title={p.name}>
+                <img src={`${API_BASE}/rooms/${room.id}/photos/${p.id}`} alt={p.name} />
               </a>
               <button type="button" onClick={() => removePhoto(p)} aria-label={`Remove ${p.name}`}><X size={12} /></button>
             </figure>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Building2, Search, RotateCcw, ChevronLeft, ChevronRight, CircleCheck, CircleAlert } from 'lucide-react'
+import { Building2, Search, RotateCcw, ChevronLeft, ChevronRight, CircleCheck, CircleAlert, Plus } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import { request } from '../../lib/api'
 import { BuildingKpis, BuildingsTable, BuildingDetails } from './BuildingParts'
@@ -21,10 +21,13 @@ export default function Buildings() {
   const [page, setPage] = useState(1)
   const [selectedId, setSelectedId] = useState(null)
   const [editing, setEditing] = useState(null)
+  const [adding, setAdding] = useState(false)
+  const [schools, setSchools] = useState(null) // for the Add Building school picker (includes schools without buildings)
   const [toast, setToast] = useState(null)
 
   useEffect(() => {
     request('/buildings').then((d) => setBuildings(d.buildings)).catch((err) => setError(err.message))
+    request('/schools').then((d) => setSchools([...d.schools].sort((a, b) => a.name.localeCompare(b.name)))).catch(() => setSchools([]))
   }, [])
 
   useEffect(() => {
@@ -35,6 +38,7 @@ export default function Buildings() {
 
   const setFilter = (k) => (v) => { setFilters((f) => ({ ...f, [k]: v })); setPage(1) }
   const closeForm = useCallback(() => setEditing(null), [])
+  const closeAdd = useCallback(() => setAdding(false), [])
 
   const schoolOptions = useMemo(() => {
     const names = new Map((buildings ?? []).map((b) => [b.schoolId, b.schoolName]))
@@ -66,6 +70,14 @@ export default function Buildings() {
     setEditing(null)
     setToast({ kind: 'success', text: `Saved ${saved.name}` })
   }
+  // New building: first in the list (filters cleared so it shows) and opened in the details panel
+  const onAdded = (saved) => {
+    setBuildings((list) => [saved, ...list])
+    setAdding(false)
+    setFilters(DEFAULTS); setQuery(''); setPage(1)
+    setSelectedId(saved.id)
+    setToast({ kind: 'success', text: `Added ${saved.name} – ${saved.schoolName}` })
+  }
 
   return (
     <div className={`schools-page${selected ? ' details-open' : ''}`}>
@@ -73,8 +85,9 @@ export default function Buildings() {
         <div className="c-head">
           <div>
             <h1><Building2 size={22} />Buildings</h1>
-            <p>Every school building with floors, rooms and asbestos (ACM) status. Open a school to add buildings.</p>
+            <p>Every school building with floors, rooms and asbestos (ACM) status.</p>
           </div>
+          <button type="button" className="u-btn u-btn-primary" onClick={() => setAdding(true)} disabled={!buildings || !schools}><Plus size={15} />Add Building</button>
         </div>
 
         {error && <div className="u-banner">Couldn't load buildings ({error}).</div>}
@@ -121,6 +134,9 @@ export default function Buildings() {
       {editing && (
         <BuildingForm school={{ id: editing.schoolId, name: editing.schoolName }} building={editing}
           existing={buildings.filter((b) => b.schoolId === editing.schoolId)} onClose={closeForm} onSaved={onSaved} />
+      )}
+      {adding && (
+        <BuildingForm schools={schools} allBuildings={buildings} defaultSchoolId={filters.school} onClose={closeAdd} onSaved={onAdded} />
       )}
       {toast && (
         <div className={`u-toast ${toast.kind}`} role="status">

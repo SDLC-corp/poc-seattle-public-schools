@@ -15,11 +15,15 @@ function suggestCode(school, existing) {
 }
 
 // Add / edit a building. Floors are limited to 1–3.
-export default function BuildingForm({ school, building, existing, onClose, onSaved }) {
+// Without `school` (district Buildings page) the form starts with a school picker: pass `schools` (to choose
+// from), `allBuildings` (to suggest a free code) and optionally `defaultSchoolId`.
+export default function BuildingForm({ school: fixedSchool, building, existing, schools, allBuildings, defaultSchoolId, onClose, onSaved }) {
   const isNew = !building
+  const [school, setSchool] = useState(() => fixedSchool ?? schools?.find((s) => s.id === defaultSchoolId) ?? null)
+  const existingFor = (s) => existing ?? (allBuildings ?? []).filter((b) => b.schoolId === s.id)
   const [form, setForm] = useState(() => ({
     name: building?.name ?? '',
-    code: building?.code ?? suggestCode(school, existing),
+    code: building?.code ?? (school ? suggestCode(school, existingFor(school)) : ''),
     yearBuilt: String(building?.yearBuilt ?? ''),
     floors: building?.floors ?? 1,
     areaSqFt: String(building?.areaSqFt ?? ''),
@@ -38,12 +42,20 @@ export default function BuildingForm({ school, building, existing, onClose, onSa
   }, [onClose])
 
   const set = (k) => (v) => setForm((f) => ({ ...f, [k]: v }))
+  // Choosing a school suggests its next free code, unless a code was typed in by hand
+  const pickSchool = (id) => {
+    const next = schools.find((s) => s.id === id) ?? null
+    setForm((f) => ({ ...f, code: !f.code || (school && f.code === suggestCode(school, existingFor(school))) ? (next ? suggestCode(next, existingFor(next)) : '') : f.code }))
+    setSchool(next)
+    setErrors((e) => ({ ...e, schoolId: undefined }))
+  }
   const year = Number(form.yearBuilt)
   const preAhera = form.yearBuilt.length === 4 && year < PRESUMED_ACM_BEFORE
   const noAcm = form.acmStatus === 'No ACM'
 
   const submit = async (e) => {
     e.preventDefault()
+    if (!school) { setErrors({ schoolId: 'Choose the school this building belongs to' }); return }
     setSaving(true)
     setErrors({})
     const body = { ...form, roomsWithAcm: noAcm ? 0 : form.roomsWithAcm, schoolId: school.id }
@@ -66,12 +78,20 @@ export default function BuildingForm({ school, building, existing, onClose, onSa
     <div className="u-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose() }}>
       <form className="u-modal" role="dialog" aria-modal="true" aria-labelledby="bf-title" onSubmit={submit} noValidate>
         <header className="u-modal-head">
-          <h2 id="bf-title">{isNew ? `Add Building – ${school.name}` : `Edit ${building.name}`}</h2>
+          <h2 id="bf-title">{isNew ? (fixedSchool ? `Add Building – ${fixedSchool.name}` : 'Add Building') : `Edit ${building.name}`}</h2>
           <button type="button" className="u-row-btn" onClick={onClose} aria-label="Close"><X size={16} /></button>
         </header>
         <div className="u-modal-body">
+          {!fixedSchool && schools && (
+            <div className={`uf-field bf-school${errors.schoolId ? ' invalid' : ''}`}>
+              <span>School *</span>
+              <SearchSelect variant="field" label="School" value={school?.id ?? ''} onChange={pickSchool} searchPlaceholder="Search schools…"
+                options={[{ value: '', label: 'Select a school' }, ...schools.map((s) => ({ value: s.id, label: s.name }))]} />
+              {err('schoolId')}
+            </div>
+          )}
           <div className="uf-grid">
-            <label className="uf-field"><span>Building Name *</span><input {...input('name')} autoFocus placeholder="e.g. North Wing" />{err('name')}</label>
+            <label className="uf-field"><span>Building Name *</span><input {...input('name')} autoFocus={Boolean(fixedSchool) || !isNew} placeholder="e.g. North Wing" />{err('name')}</label>
             <label className="uf-field"><span>Building Code *</span><input {...input('code')} />{err('code')}</label>
             <label className="uf-field"><span>Year Built *</span><input {...input('yearBuilt', { inputMode: 'numeric', maxLength: 4, placeholder: 'YYYY' })} />{err('yearBuilt')}</label>
             {isNew ? (

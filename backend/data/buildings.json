@@ -10,16 +10,16 @@
       "code": "ADAMSES-A",
       "name": "Main Building",
       "yearBuilt": 1951,
-      "floors": 6,
+      "floors": 8,
       "areaSqFt": 170034,
       "construction": "Wood Frame",
       "presumedAcm": true,
-      "rooms": 268,
-      "roomsWithAcm": 59,
-      "acmStatus": "Assumed ACM",
-      "heightM": 25,
-      "widthM": 64.9,
-      "depthM": 40.6,
+      "rooms": 289,
+      "roomsWithAcm": 75,
+      "acmStatus": "ACM Present",
+      "heightM": 33,
+      "widthM": 56.2,
+      "depthM": 35.1,
       "location": {
         "lat": 47.673097,
         "lng": -122.392893
@@ -29,24 +29,24 @@
         "coordinates": [
           [
             [
-              -122.3933259,
-              47.6729146
+              -122.3932679,
+              47.6729393
             ],
             [
-              -122.3924601,
-              47.6729146
+              -122.3925181,
+              47.6729393
             ],
             [
-              -122.3924601,
-              47.6732794
+              -122.3925181,
+              47.6732547
             ],
             [
-              -122.3933259,
-              47.6732794
+              -122.3932679,
+              47.6732547
             ],
             [
-              -122.3933259,
-              47.6729146
+              -122.3932679,
+              47.6729393
             ]
           ]
         ]

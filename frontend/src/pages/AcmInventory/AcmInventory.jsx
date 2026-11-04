@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Navigate, Link, useNavigate, useParams } from 'react-router'
+import { Navigate, Link, useLocation, useNavigate, useParams } from 'react-router'
 import { Layers, Plus, Search, CircleCheck, TriangleAlert, OctagonAlert, School, RotateCcw } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import ExportMenu from '../Reports/ExportMenu'
@@ -9,7 +9,7 @@ import GroupTab from './GroupTab'
 import HistoryTab from './HistoryTab'
 import AddAcmDialog from './AddAcmDialog'
 import { TABS, EMPTY_FILTERS } from './acmInventoryMeta'
-import { request } from '../../lib/api'
+import { request, API_BASE } from '../../lib/api'
 import '../Users/users.css'
 import '../Audit/audit.css'
 import '../Reports/reports.css'
@@ -24,7 +24,7 @@ function Kpi({ icon: Icon, value, label, sub, tone, active, onClick }) {
       <span className="kpi-text">
         <strong>{value?.toLocaleString('en-US') ?? '—'}</strong>
         <span className="kpi-label">{label}</span>
-        {sub && <small>{sub}</small>}
+        {sub && <small title={sub}>{sub}</small>}
       </span>
     </button>
   )
@@ -41,7 +41,9 @@ export default function AcmInventory() {
   const navigate = useNavigate()
   const tab = TABS.find((t) => t.id === (tabParam ?? 'inventory'))
 
-  const [filters, setFilters] = useState(EMPTY_FILTERS)
+  // A link can open the inventory on one school / building (state.place, e.g. from the map)
+  const startAt = useLocation().state?.place
+  const [filters, setFilters] = useState(() => ({ ...EMPTY_FILTERS, school: startAt?.school ?? '', building: startAt?.building ?? '' }))
   const [debouncedQ, setDebouncedQ] = useState('')
   const [sort, setSort] = useState({ key: '', dir: '' })
   const [page, setPage] = useState(1)
@@ -123,7 +125,7 @@ export default function AcmInventory() {
         <h1><Layers size={24} />ACM Inventory</h1>
         <div className="ai-head-actions">
           <button type="button" className="u-btn u-btn-primary" onClick={() => setAdding(true)}><Plus size={15} />Add ACM</button>
-          <ExportMenu csvHref={`/api/acm-inventory/export.csv?${filterQs}&${toQs({ sort: sort.key, dir: sort.dir })}`} title="ACM inventory" />
+          <ExportMenu csvHref={`${API_BASE}/acm-inventory/export.csv?${filterQs}&${toQs({ sort: sort.key, dir: sort.dir })}`} title="ACM inventory" />
         </div>
       </div>
 

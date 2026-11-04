@@ -1,0 +1,70 @@
+/* Building overview on the dashboard map: popup and fullscreen side panel */
+.bo-popup .maplibregl-popup-content { padding: 0; border-radius: 12px; box-shadow: 0 12px 32px rgba(4, 43, 68, 0.25); }
+.bo-popup .maplibregl-popup-close-button { top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 6px; font-size: 18px; color: var(--ink-2); }
+.bo-popup .maplibregl-popup-close-button:hover { background: #eef2f6; }
+
+.bo { display: flex; flex-direction: column; gap: 12px; color: var(--ink-1); font-size: 12.5px; }
+.bo-popup .bo { width: 380px; max-width: calc(100vw - 48px); max-height: var(--bo-max, min(560px, 70vh)); padding: 14px; overflow-y: auto; gap: 10px; }
+.bo-loading { flex-direction: row; align-items: center; gap: 8px; padding: 16px; color: var(--ink-2); }
+.bo-spin { animation: bo-spin 0.9s linear infinite; }
+@keyframes bo-spin { to { transform: rotate(360deg); } }
+
+.bo-head { display: flex; align-items: flex-start; gap: 10px; padding-right: 26px; }
+.bo-panel .bo-head { padding-right: 0; }
+.bo-icon { display: grid; place-items: center; flex-shrink: 0; width: 38px; height: 38px; border-radius: 10px; background: #e6f0fb; color: #2a6fc0; }
+.bo-title { flex: 1; min-width: 0; }
+.bo-title > div { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bo-title strong { font-size: 15px; font-weight: 700; }
+.bo-title small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--ink-2); }
+.bo-status { padding: 1px 8px; border-radius: 10px; background: #eaf6ec; color: #0c7f0c; font-size: 11px; font-weight: 600; }
+.bo-close { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border: 0; border-radius: 8px; background: none; color: var(--ink-2); cursor: pointer; }
+.bo-close:hover { background: #eef2f6; color: var(--ink-1); }
+
+.bo-counts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.bo-counts span { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 8px 4px; border: 1px solid var(--grid); border-radius: 8px; background: #f8fafc; font-size: 10.5px; line-height: 1.2; color: var(--ink-2); text-align: center; }
+.bo-counts strong { font-size: 18px; font-weight: 700; color: var(--ink-1); }
+.bo-counts span.warn strong { color: #b06f00; }
+
+.bo-section { display: flex; flex-direction: column; gap: 6px; }
+.bo-section h4 { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 12px; font-weight: 700; color: #0f3a66; text-transform: uppercase; letter-spacing: 0.3px; }
+.bo-section h4 svg { color: var(--primary); }
+.bo-dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; margin: 0; }
+.bo-dl dt { color: var(--ink-2); }
+.bo-dl dd { margin: 0; font-weight: 600; text-align: right; overflow-wrap: anywhere; }
+.bo-two .bo-dl dd { white-space: nowrap; overflow-wrap: normal; }
+.bo-two .bo-dl { column-gap: 8px; }
+.bo-dl dd em { font-style: normal; font-weight: 400; color: var(--ink-2); }
+.bo-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.bo-two .bo-dl { font-size: 12px; }
+
+.bo-cond { display: flex; gap: 6px; }
+.bo-cond span { display: flex; flex: 1; flex-direction: column; align-items: center; padding: 6px 4px; border-radius: 8px; font-size: 10.5px; line-height: 1.2; text-align: center; background: var(--c-bg); color: var(--c); }
+.bo-cond strong { font-size: 17px; }
+.bo-cond .good { --c: #0c7f0c; --c-bg: #eaf6ec; }
+.bo-cond .fair { --c: #9a6200; --c-bg: #fdf3e2; }
+.bo-cond .poor { --c: #c03030; --c-bg: #fcecec; }
+.bo-cond .na { --c: var(--ink-2); --c-bg: #eef1f5; }
+
+.bo-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.bo-actions a { display: flex; align-items: center; gap: 6px; padding: 7px 9px; border: 1px solid #c8dcf3; border-radius: 8px; background: #fff; color: var(--primary); font-size: 12px; font-weight: 600; text-decoration: none; }
+.bo-actions a:hover { background: #eef5fc; border-color: var(--primary); }
+.bo-actions a svg { flex-shrink: 0; }
+
+/* Fullscreen: sections in a panel on the right */
+.map-side {
+  position: absolute; top: 12px; right: 12px; bottom: 12px; z-index: 5; width: min(400px, calc(100% - 24px));
+  border: 1px solid var(--border); border-radius: 14px; background: var(--surface); overflow-y: auto;
+  box-shadow: 0 16px 40px rgba(4, 43, 68, 0.25); animation: bo-slide 0.2s ease-out;
+}
+@keyframes bo-slide { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+/* Filters and legend move left of the open panel */
+.school-map.has-side .map-fs-filters, .school-map.has-side .map-legend { right: calc(min(400px, 100% - 24px) + 24px); }
+.bo-panel { gap: 16px; padding: 18px; font-size: 13px; }
+.bo-panel .bo-title strong { font-size: 17px; }
+.bo-panel .bo-section { padding-top: 14px; border-top: 1px solid var(--grid); }
+.bo-panel .bo-counts strong { font-size: 22px; }
+.bo-panel .bo-actions { grid-template-columns: minmax(0, 1fr); }
+.bo-panel .bo-actions a { padding: 9px 12px; font-size: 13px; }
+.bo-go { margin-left: auto; }
+.bo-foot { display: flex; align-items: center; gap: 5px; margin: 0; font-size: 11.5px; color: var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { .map-side, .bo-spin { animation: none; } }

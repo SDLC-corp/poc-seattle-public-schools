@@ -1,6 +1,116 @@
 {
   "documents": [
     {
+      "id": "DOC-000005",
+      "name": "Garfield HS - Annual AHERA Notification Letter 2026.pdf",
+      "type": "Management Plan",
+      "ext": "pdf",
+      "mime": "application/pdf",
+      "size": 1951,
+      "schoolId": "garfieldhs",
+      "schoolName": "Garfield High School",
+      "buildingId": null,
+      "buildingName": null,
+      "relatedTo": "Annual notification",
+      "access": "Public",
+      "source": "upload",
+      "storedName": "DOC-000005.pdf",
+      "uploadedAt": "2026-11-03T08:08:25.597Z",
+      "uploadedBy": {
+        "id": "demo",
+        "name": "John Doe"
+      },
+      "sample": false
+    },
+    {
+      "id": "DOC-000004",
+      "name": "Garfield HS - Plan Review and Approval Record 2026.pdf",
+      "type": "Management Plan",
+      "ext": "pdf",
+      "mime": "application/pdf",
+      "size": 1869,
+      "schoolId": "garfieldhs",
+      "schoolName": "Garfield High School",
+      "buildingId": null,
+      "buildingName": null,
+      "relatedTo": "Annual review 2026",
+      "access": "Restricted",
+      "source": "upload",
+      "storedName": "DOC-000004.pdf",
+      "uploadedAt": "2026-11-03T08:08:25.565Z",
+      "uploadedBy": {
+        "id": "demo",
+        "name": "John Doe"
+      },
+      "sample": false
+    },
+    {
+      "id": "DOC-000003",
+      "name": "Garfield HS - Asbestos Management Plan v1.0.pdf",
+      "type": "Management Plan",
+      "ext": "pdf",
+      "mime": "application/pdf",
+      "size": 2528,
+      "schoolId": "garfieldhs",
+      "schoolName": "Garfield High School",
+      "buildingId": null,
+      "buildingName": null,
+      "relatedTo": "Plan v1.0 (superseded)",
+      "access": "Internal",
+      "source": "upload",
+      "storedName": "DOC-000003.pdf",
+      "uploadedAt": "2026-11-03T08:08:25.529Z",
+      "uploadedBy": {
+        "id": "demo",
+        "name": "John Doe"
+      },
+      "sample": false
+    },
+    {
+      "id": "DOC-000002",
+      "name": "Garfield HS - Asbestos Management Plan v1.1.pdf",
+      "type": "Management Plan",
+      "ext": "pdf",
+      "mime": "application/pdf",
+      "size": 2530,
+      "schoolId": "garfieldhs",
+      "schoolName": "Garfield High School",
+      "buildingId": null,
+      "buildingName": null,
+      "relatedTo": "Plan v1.1 (superseded)",
+      "access": "Internal",
+      "source": "upload",
+      "storedName": "DOC-000002.pdf",
+      "uploadedAt": "2026-11-03T08:08:25.348Z",
+      "uploadedBy": {
+        "id": "demo",
+        "name": "John Doe"
+      },
+      "sample": false
+    },
+    {
+      "id": "DOC-000001",
+      "name": "Garfield HS - Asbestos Management Plan v1.2 (Signed).pdf",
+      "type": "Management Plan",
+      "ext": "pdf",
+      "mime": "application/pdf",
+      "size": 2624,
+      "schoolId": "garfieldhs",
+      "schoolName": "Garfield High School",
+      "buildingId": null,
+      "buildingName": null,
+      "relatedTo": "Plan v1.2 (current)",
+      "access": "Internal",
+      "source": "upload",
+      "storedName": "DOC-000001.pdf",
+      "uploadedAt": "2026-11-03T08:08:25.258Z",
+      "uploadedBy": {
+        "id": "demo",
+        "name": "John Doe"
+      },
+      "sample": false
+    },
+    {
       "id": "SAMPLE-DOC-0001",
       "name": "Management Plan 2022 – Alki Elementary.pdf",
       "type": "Management Plan",

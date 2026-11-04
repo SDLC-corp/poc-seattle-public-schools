@@ -7,7 +7,8 @@ import { logAudit, diff, CURRENT_USER } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
 
 const DAY = 86400000;
-const schoolById = new Map(schools.map((s) => [s.id, s]));
+// Looked up live so schools added in the app are found
+const schoolById = { get: (id) => schools.find((s) => s.id === id), has: (id) => schools.some((s) => s.id === id) };
 // Looked up live so buildings added in the app are found
 const buildingById = { get: (id) => buildings.find((b) => b.id === id) };
 

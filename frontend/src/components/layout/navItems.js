@@ -1,7 +1,7 @@
 import {
   House, School, Layers, ClipboardCheck, FileText, FlaskConical, ScanEye,
   TriangleAlert, Wrench, Wind, GraduationCap, ListChecks, Bell, FolderOpen,
-  ChartLine, UsersRound, History, Settings, LifeBuoy,
+  ChartLine, UsersRound, History, Settings, LifeBuoy, Plug,
 } from 'lucide-react'
 
 // Every item has a route `path`. Child items are placeholders until the real pages are defined.
@@ -13,13 +13,12 @@ export const mainNav = [
       { id: 'schools-list', label: 'Schools', path: '/schools/list' },
       { id: 'buildings', label: 'Buildings', path: '/schools/buildings' },
       { id: 'floors', label: 'Floors', path: '/schools/floors' },
-      { id: 'rooms', label: 'Rooms & Floor Plans', path: '/schools/rooms' },
-      { id: 'acm-materials', label: 'ACM Materials', path: '/schools/acm-materials' },
     ],
   },
   { id: 'acm', label: 'ACM Inventory', icon: Layers, path: '/acm' },
   { id: 'inspections', label: 'Inspections', icon: ClipboardCheck, path: '/inspections' },
-  { id: 'management-plans', label: 'Management Plans', icon: FileText, path: '/management-plans' },
+  // hidden: kept for routing and page titles, not shown in the sidebar
+  { id: 'management-plans', label: 'Management Plans', icon: FileText, path: '/management-plans', hidden: true },
   { id: 'sampling', label: 'Sampling & Lab Results', icon: FlaskConical, path: '/sampling' },
   { id: 'surveillance', label: 'Surveillance', icon: ScanEye, path: '/surveillance' },
   { id: 'response-actions', label: 'Response Actions', icon: TriangleAlert, path: '/response-actions' },
@@ -36,6 +35,7 @@ export const mainNav = [
 export const adminNav = [
   { id: 'users', label: 'User & Role Management', icon: UsersRound, path: '/users' },
   { id: 'audit', label: 'Audit Logs', icon: History, path: '/audit' },
+  { id: 'integrations', label: 'Integrations', icon: Plug, path: '/integrations' },
   { id: 'help', label: 'Help & Learning', icon: LifeBuoy, path: '/help' },
   { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
 ]

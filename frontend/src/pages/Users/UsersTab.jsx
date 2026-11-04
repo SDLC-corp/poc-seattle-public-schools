@@ -5,6 +5,7 @@ import SearchSelect from '../../components/ui/SearchSelect'
 import UserDetails from './UserDetails'
 import { request, initials, fmtDate, fmtDateTime, accessSummary } from './api'
 import { FACILITIES_STAFF, readFilters, filterQuery } from './filters'
+import { API_BASE } from '../../lib/api'
 
 const PAGE_SIZES = [10, 25, 50]
 
@@ -129,7 +130,7 @@ export default function UsersTab({ roles, permissions, schools, refreshKey, onEd
       <section className="u-card u-list">
         <header className="u-card-head">
           <h2>Users {data && <span>({data.total})</span>}</h2>
-          <a className="u-btn u-btn-outline u-btn-sm" href={`/api/users/export.csv?${exportParams}`} download>
+          <a className="u-btn u-btn-outline u-btn-sm" href={`${API_BASE}/users/export.csv?${exportParams}`} download>
             <Download size={14} />Export
           </a>
         </header>

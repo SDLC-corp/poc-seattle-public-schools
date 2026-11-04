@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router'
 import {
-  Map as MapIcon, Layers, DoorOpen, TriangleAlert, CircleDashed, ShieldAlert, Search, RotateCcw, ChevronLeft, ChevronRight, Info, ClipboardList,
+  Map as MapIcon, Layers, DoorOpen, TriangleAlert, CircleDashed, ShieldAlert, Search, RotateCcw, ChevronLeft, ChevronRight, Info, ClipboardList, Plus,
 } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import { request } from '../../lib/api'
 import { AcmBadge } from './BuildingParts'
+import FloorPanel from './FloorPanel'
 import { fmtNum } from './buildingUtils'
 import '../Users/users.css'
 import '../Compliance/compliance.css'
@@ -47,6 +48,8 @@ export default function RoomsFloorPlans({ view = 'rooms' }) {
   const [condition, setCondition] = useState('')
   const [risk, setRisk] = useState('')
   const [page, setPage] = useState(1)
+  const [adding, setAdding] = useState(false) // false | 'loading' | true
+  const [lists, setLists] = useState(null) // { schools, buildings } for Add Floor
 
   // Changing view resets the view-specific filters, or applies ones handed over by a KPI card (render-time, no effect needed)
   const location = useLocation()
@@ -114,14 +117,38 @@ export default function RoomsFloorPlans({ view = 'rooms' }) {
   const V = VIEWS[view]
   const noun = { floors: 'floors', rooms: 'rooms', acm: 'materials' }[view]
 
+  // Add Floor: school + building pickers (lists loaded on first use), then the floor plan screen
+  const openAdd = async () => {
+    if (lists) { setAdding(true); return }
+    setAdding('loading')
+    try {
+      const [s, b] = await Promise.all([request('/schools'), request('/buildings')])
+      setLists({ schools: [...s.schools].sort((x, y) => x.name.localeCompare(y.name)), buildings: b.buildings })
+      setAdding(true)
+    } catch (err) {
+      setError(err.message)
+      setAdding(false)
+    }
+  }
+  const onFloorAdded = (floor, _building, _isNew, warning, { detect = false } = {}) => {
+    setAdding(false)
+    navigate(`/schools/${floor.schoolId}/buildings/${floor.buildingId}/floors/${floor.id}`, {
+      state: { detect, toast: warning ? { kind: 'error', text: warning } : { kind: 'success', text: `Added ${floor.name}` } },
+    })
+  }
+  const firstBuildingOf = (sid) => lists?.buildings.find((b) => b.schoolId === sid)?.id ?? ''
+
   return (
-    <div className="schools-page">
+    <div className={`schools-page${adding === true && lists ? ' details-open fp-open' : ''}`}>
       <div className="sch-main">
         <div className="c-head">
           <div>
             <h1><V.icon size={22} />{V.title}</h1>
             <p>{V.blurb}</p>
           </div>
+          {view === 'floors' && (
+            <button type="button" className="u-btn u-btn-primary" onClick={openAdd} disabled={adding === 'loading'}><Plus size={15} />Add Floor</button>
+          )}
         </div>
 
         {error && <div className="u-banner">Couldn't load data ({error}).</div>}
@@ -235,6 +262,14 @@ export default function RoomsFloorPlans({ view = 'rooms' }) {
           <p className="ad-sample"><Info size={13} />Click a row to open the floor plan, where rooms are detected or drawn and ACM details are added. Room and material records here are sample data unless added in the app.</p>
         </section>
       </div>
+
+      {adding === true && lists && (
+        <>
+          <div className="u-drawer-backdrop" onClick={() => setAdding(false)} />
+          <FloorPanel mode="add" schools={lists.schools} buildings={lists.buildings} defaultSchoolId={school}
+            buildingId={firstBuildingOf(school)} onClose={() => setAdding(false)} onSaved={onFloorAdded} />
+        </>
+      )}
     </div>
   )
 }

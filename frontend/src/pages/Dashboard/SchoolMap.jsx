@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { createPortal } from 'react-dom'
 import { STATUS } from './mockData'
+import BuildingOverview from './BuildingOverview'
+import { request } from '../../lib/api'
+import './buildingOverview.css'
 
 // MapLibre locates its worker relative to its own module URL, which breaks once Vite
 // pre-bundles or bundles it. Point it at the (self-contained) worker file explicitly.
@@ -296,6 +300,12 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
   const [is3d, setIs3d] = useState(true)
   const [zoom, setZoom] = useState(10.3)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  // Clicked building and its overview (GET /buildings/:id/overview)
+  const [picked, setPicked] = useState(null) // { id, lngLat }
+  const [overview, setOverview] = useState(null) // { id, loading } | { id, data } | { id, error }
+  const [popupBox] = useState(() => document.createElement('div'))
+  const buildingPopupRef = useRef(null)
+  const closingRef = useRef(false) // popup removed by us (not the user) – keep the selection
 
   useEffect(() => {
     const onChange = () => setIsFullscreen(document.fullscreenElement === wrapperRef.current)
@@ -334,23 +344,21 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
         status: p.status,
       })).addTo(map)
     })
+    // Buildings: overview popup (or the side panel when fullscreen) – see the effects below
     map.on('click', 'school-buildings-3d', (e) => {
-      const p = e.features[0].properties
-      popup.setLngLat(e.lngLat).setDOMContent(popupCard({
-        title: p.name,
-        subtitle: `${p.schoolName} · ${p.code}`,
-        rows: [
-          ['Built', p.yearBuilt],
-          ['Floors', p.floors],
-          ['Height', p.heightM ? `${p.heightM} m` : null],
-          ['Area', `${Number(p.areaSqFt).toLocaleString('en-US')} sq ft`],
-          ['ACM status', p.acmStatus || 'Not assessed'],
-          ['Rooms with ACM', p.rooms ? `${p.roomsWithAcm ?? 0} of ${p.rooms}` : null],
-          ['Asbestos', p.presumedAcm ? 'Presumed (pre-1981)' : 'Not presumed'],
-        ],
-        status: p.status,
-      })).addTo(map)
+      popup.remove()
+      setPicked({ id: e.features[0].properties.id, lngLat: e.lngLat })
     })
+    // Closed by its X, or by clicking somewhere that isn't a building (not on every map click, which would
+    // race the click that picks another building)
+    map.on('click', (e) => {
+      if (!map.getLayer('school-buildings-3d')) return
+      if (!map.queryRenderedFeatures(e.point, { layers: ['school-buildings-3d'] }).length) setPicked(null)
+    })
+    const buildingPopup = new maplibregl.Popup({ offset: 14, maxWidth: '400px', className: 'bo-popup', focusAfterOpen: false, closeOnClick: false })
+    buildingPopup.setDOMContent(popupBox)
+    buildingPopup.on('close', () => { if (!closingRef.current) setPicked(null) })
+    buildingPopupRef.current = buildingPopup
 
     let hoveredId = null
     const clearHover = () => {
@@ -376,7 +384,38 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
 
     mapRef.current = map
     return () => map.remove()
+    // the popup box is created once with the component
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Load the clicked building's overview
+  useEffect(() => {
+    if (!picked) return
+    let live = true
+    setOverview({ id: picked.id, loading: true })
+    request(`/buildings/${picked.id}/overview`)
+      .then((data) => { if (live) setOverview({ id: picked.id, data }) })
+      .catch((err) => { if (live) setOverview({ id: picked.id, error: err.message }) })
+    return () => { live = false }
+  }, [picked])
+
+  // Popup on the map normally; when fullscreen the side panel shows it instead
+  useEffect(() => {
+    const p = buildingPopupRef.current
+    if (!p) return
+    if (picked && !isFullscreen) {
+      const map = mapRef.current
+      // Bring the building low in the view so the popup above it fits, and cap the popup to the map height
+      const h = map.getContainer().clientHeight
+      popupBox.style.setProperty('--bo-max', `${Math.max(240, Math.round(h * 0.78) - 40)}px`)
+      map.easeTo({ center: picked.lngLat, offset: [0, Math.round(h * 0.32)], duration: 450 })
+      p.setLngLat(picked.lngLat).addTo(map)
+    } else {
+      closingRef.current = true
+      p.remove()
+      closingRef.current = false
+    }
+  }, [picked, isFullscreen, popupBox])
 
   // Switch basemap; the style.load handler re-adds our layers afterwards
   const loadedBasemapRef = useRef(basemapId)
@@ -463,7 +502,7 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
   }, [selectedId, styleVersion, is3d])
 
   return (
-    <div ref={wrapperRef} className="school-map">
+    <div ref={wrapperRef} className={`school-map${picked && isFullscreen ? ' has-side' : ''}`}>
       <div ref={containerRef} className="school-map-canvas" />
 
       <div className="map-toolbar">
@@ -483,6 +522,13 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
 
       {isFullscreen && fullscreenControls && (
         <div className="map-fs-filters">{fullscreenControls}</div>
+      )}
+
+      {picked && !isFullscreen && createPortal(<BuildingOverview state={overview} variant="popup" />, popupBox)}
+      {picked && isFullscreen && (
+        <aside className="map-side" aria-label="Building details">
+          <BuildingOverview state={overview} variant="panel" onClose={() => setPicked(null)} />
+        </aside>
       )}
 
       {is3d && zoom < BUILDINGS_MIN_ZOOM && (

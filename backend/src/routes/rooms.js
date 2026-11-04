@@ -98,7 +98,9 @@ router.put('/:id', async (req, res, next) => {
     if (!existing) return res.status(404).json({ error: 'Room not found' });
     const { r, errors } = validateRoom(req.body ?? {}, existing);
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Invalid room', fields: errors });
-    const updated = await updateRoom(existing.id, r);
+    // A redrawn outline belongs to the plan now, not the generated sample layout
+    const redrawn = req.body?.polygon !== undefined && JSON.stringify(r.polygon) !== JSON.stringify(existing.polygon);
+    const updated = await updateRoom(existing.id, redrawn ? { ...r, layoutRoomId: null } : r);
     const changes = diff(view(existing), view(updated));
     if (changes.length) {
       logAudit(req, {

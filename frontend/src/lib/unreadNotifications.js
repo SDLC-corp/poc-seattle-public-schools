@@ -1,4 +1,5 @@
 import { useEffect, useSyncExternalStore } from 'react'
+import { API_BASE } from './api'
 
 // Shared unread-notification count for the top-bar bell and the sidebar badge.
 // The Notifications page pushes fresh counts after every change; otherwise it's polled.
@@ -16,7 +17,7 @@ export function setUnreadCount(n) {
 }
 
 export function refreshUnreadCount() {
-  return fetch('/api/notifications/summary')
+  return fetch(`${API_BASE}/notifications/summary`)
     .then((r) => (r.ok ? r.json() : null))
     .then((s) => { if (s) setUnreadCount(s.counts.unread) })
     .catch(() => { /* backend down: keep the last known count */ })

@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Outlet, useLocation } from 'react-router'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
+import ChatAssistant from './ChatAssistant'
 import './layout.css'
 
 const STORAGE_KEY = 'sidebar-collapsed'
 const MOBILE_QUERY = '(max-width: 768px)'
-// Wide working screens that start with the sidebar collapsed (Floor Plan & ACM Mapping)
-const WIDE_ROUTES = [/^\/schools\/[^/]+\/buildings\/[^/]+\/floors\/[^/]+/]
+// Wide working screens that start with the sidebar collapsed (Floor Plan & ACM Mapping, Management Plan)
+const WIDE_ROUTES = [/^\/schools\/[^/]+\/buildings\/[^/]+\/floors\/[^/]+/, /^\/management-plans(\/|$)/]
 
 function readCollapsed() {
   try {
@@ -73,6 +74,7 @@ export default function AppLayout() {
           <Outlet />
         </main>
       </div>
+      <ChatAssistant />
     </div>
   )
 }

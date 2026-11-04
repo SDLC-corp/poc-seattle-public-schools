@@ -5,7 +5,9 @@ import { writeJson } from './atomicWrite.js';
 const dataFile = (file) => new URL(`../../data/${file}`, import.meta.url);
 const load = (file) => JSON.parse(readFileSync(dataFile(file), 'utf8'));
 
-export const { schools } = load('schools.json');
+const schoolsDoc = load('schools.json');
+// Mutated in place so every importer sees schools added in the app
+export const { schools } = schoolsDoc;
 const buildingsDoc = load('buildings.json');
 // Mutated in place so every importer sees buildings added or edited in the app
 export const { buildings } = buildingsDoc;
@@ -19,6 +21,29 @@ const persist = () => {
   }));
   return writing;
 };
+
+let writingSchools = Promise.resolve();
+
+/** fields: { name, type, category, address: { street, city, state, zip }, phone, website, principal, principalEmail, boardDistrict, location } */
+export async function addSchool(fields) {
+  // id from the name, like the district's own ids ("adamses"), kept unique
+  const base = fields.name.toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 24) || 'school';
+  let id = base;
+  for (let n = 2; schools.some((s) => s.id === id); n += 1) id = `${base}${n}`;
+  const a = fields.address;
+  const school = {
+    id, name: fields.name, type: fields.type, category: fields.category,
+    address: { ...a, full: `${a.street}, ${a.city}, ${a.state} ${a.zip}` },
+    website: fields.website || null, profileUrl: null, phone: fields.phone || null, fax: null,
+    principal: fields.principal ? `Principal: ${fields.principal}` : null, principalTitle: fields.principal ? 'Principal' : null,
+    principalEmail: fields.principalEmail || null, boardDistrict: fields.boardDistrict ?? null, boardDistrictUrl: null,
+    location: fields.location ?? null, source: 'app',
+  };
+  schools.push(school);
+  writingSchools = writingSchools.then(() => writeJson(dataFile('schools.json'), { ...schoolsDoc, count: schools.length, schools }));
+  await writingSchools;
+  return school;
+}
 
 const placeAt = (b, center) => ({
   ...b,

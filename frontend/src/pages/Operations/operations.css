@@ -1,0 +1,123 @@
+/* Operations & Maintenance. Page shell/tables reuse acmInventory.css (.ai-*), form blocks surveillance.css (.sv-*)
+   and inspections.css (.in-*), controls users.css. */
+
+.om-sub { margin: 4px 0 0; font-size: 13px; color: var(--ink-2); }
+.ai-head h1 .ai-badge { margin-left: 4px; font-size: 13px; }
+.om-filters { grid-template-columns: repeat(5, minmax(120px, 1fr)) minmax(240px, 1.6fr); }
+.om-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 14px; align-items: start; }
+.om-main { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.om-side { position: sticky; top: 0; display: flex; flex-direction: column; gap: 12px; }
+.om-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.om-table td { vertical-align: middle; }
+.om-table th, .om-table td { padding-left: 8px; padding-right: 8px; }
+.om-table .ai-material small { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+.om-loc { min-width: 150px; }
+.om-col-actions { width: 84px; white-space: nowrap; text-align: right; }
+.om-col-actions .u-row-btn { margin-right: 4px; vertical-align: middle; }
+.om-clip { display: inline-flex; align-items: center; gap: 2px; margin-left: 6px; font-size: 11px; color: var(--ink-3); }
+.om-head-note { font-size: 12.5px; }
+.om-head-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+/* Side panel */
+.om-side-btn { width: 100%; justify-content: center; margin-top: 10px; text-decoration: none; }
+.om-quick { display: grid; margin: 0 -6px; padding: 0; list-style: none; }
+.om-quick button, .om-quick a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--grid);
+  background: none;
+  color: var(--ink-1);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.om-quick li:last-child button, .om-quick li:last-child a { border-bottom: 0; }
+.om-quick button:hover, .om-quick a:hover { background: #f6f9fc; color: var(--primary); }
+.om-quick svg:first-child { color: var(--primary); }
+.om-quick svg:last-child { margin-left: auto; color: var(--ink-3); }
+.om-recent { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; font-size: 13px; }
+.om-recent li { display: flex; gap: 10px; align-items: flex-start; }
+.om-recent li > span:last-child { display: flex; flex-direction: column; gap: 1px; color: var(--ink-1); }
+.om-recent small { font-size: 11.5px; color: var(--ink-2); }
+.om-recent-dot { display: grid; place-items: center; flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: #e3f0f8; color: var(--primary); }
+.om-recent-dot.ok { background: #e3f4e5; color: #0c7f0c; }
+.om-recent-dot.warn { background: #fdf3e2; color: #b06f00; }
+
+/* Split create button */
+.om-split { display: inline-flex; }
+.om-split > .u-btn:first-child { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.om-split-more { padding: 0 10px; border-top-left-radius: 0; border-bottom-left-radius: 0; border-left: 1px solid rgba(255, 255, 255, 0.35); }
+
+/* Plans */
+.om-district { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1.2fr) auto; gap: 16px; align-items: center; }
+.om-district-icon { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; background: var(--primary-light); color: var(--primary); }
+.om-district-text h2 { margin: 0; font-size: 17px; font-weight: 600; color: var(--ink-1); }
+.om-district-text p { margin: 3px 0 0; font-size: 13px; color: var(--ink-2); }
+.om-district-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 16px; margin: 0; font-size: 13px; }
+.om-district-facts dt { color: var(--ink-2); font-size: 12px; }
+.om-district-facts dd { margin: 0; color: var(--ink-1); }
+.om-plan-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+.om-plan-pills button { padding: 4px 10px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); color: var(--ink-1); font: inherit; font-size: 12px; cursor: pointer; }
+.om-plan-pills button.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary); font-weight: 600; }
+.om-plan-search { width: 240px; }
+.om-plan-files { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--grid); }
+.om-plan-files-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; color: var(--ink-1); }
+
+/* Procedures */
+.om-sop-cat { width: 180px; }
+.om-sops { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.om-sop { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; }
+.om-sop-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: #fdeeee; color: #c03030; }
+.om-sop-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 13px; }
+.om-sop-body strong { font-size: 14px; font-weight: 600; color: var(--ink-1); }
+.om-sop-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+.om-sop-top .ai-id { max-width: none; }
+.om-sop-actions { display: flex; align-items: center; gap: 6px; }
+.om-sop-actions a { text-decoration: none; }
+.om-file-pick input[type='file'] { font-size: 13px; }
+
+/* Activity form */
+.om-form .ai-head h1 { flex-wrap: wrap; }
+.om-ok { display: inline-flex; align-items: center; gap: 4px; color: #0c7f0c !important; }
+.sv-hint.sv-late { display: inline-flex; align-items: center; gap: 4px; }
+.om-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; padding: 4px 0; }
+.om-controls label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-1); cursor: pointer; }
+.om-controls input { width: 16px; height: 16px; accent-color: var(--primary); }
+.om-train { display: flex; gap: 8px; margin: 0; padding: 10px 12px; border-radius: 8px; font-size: 12.5px; line-height: 1.5; }
+.om-train svg { flex-shrink: 0; margin-top: 2px; }
+.om-train.ok { background: #eaf6ec; color: #0c5a0c; }
+.om-train.bad { background: #fdeeee; color: #842029; }
+.om-timeline { display: grid; gap: 10px; margin: 0; padding: 0 0 0 14px; border-left: 2px solid var(--grid); list-style: none; font-size: 13px; }
+.om-timeline li { position: relative; display: flex; flex-direction: column; gap: 1px; color: var(--ink-1); }
+.om-timeline li::before { content: ''; position: absolute; left: -20px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--surface); border: 2px solid var(--primary); }
+.om-timeline small { font-size: 11.5px; color: var(--ink-2); }
+.om-meta-line { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 12.5px; color: var(--ink-2); }
+
+@media (max-width: 1500px) {
+  .om-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .om-filters .ai-search-field { grid-column: span 3; }
+}
+/* Below 1700px the table needs the full width: the plan / quick actions / recent cards sit in a row under it */
+@media (max-width: 1700px) {
+  .om-layout { grid-template-columns: minmax(0, 1fr); }
+  .om-side { position: static; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+}
+@media (max-width: 1000px) {
+  .om-side { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 1250px) {
+  .om-district { grid-template-columns: auto minmax(0, 1fr); }
+  .om-district-facts, .om-district > .u-btn { grid-column: 1 / -1; }
+}
+@media (max-width: 700px) {
+  .om-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .om-controls { grid-template-columns: minmax(0, 1fr); }
+  .om-sop { grid-template-columns: minmax(0, 1fr); }
+  .om-sop-icon { display: none; }
+}

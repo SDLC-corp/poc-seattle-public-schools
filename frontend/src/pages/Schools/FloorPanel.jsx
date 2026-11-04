@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link } from 'react-router'
 import { X, Info, Upload, ImageOff, LoaderCircle, FileUp } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
-import { request } from '../../lib/api'
+import { request, API_BASE } from '../../lib/api'
 import { floorName } from './buildingUtils'
 
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
@@ -9,7 +10,7 @@ const MAX_PLAN_BYTES = 5 * 1024 * 1024 // server limit for the stored plan image
 const MAX_PDF_BYTES = 25 * 1024 * 1024
 
 async function uploadPlan(floorId, file) {
-  const res = await fetch(`/api/floors/${floorId}/plan?name=${encodeURIComponent(file.name)}`, {
+  const res = await fetch(`${API_BASE}/floors/${floorId}/plan?name=${encodeURIComponent(file.name)}`, {
     method: 'POST', headers: { 'Content-Type': file.type }, body: file,
   })
   const body = await res.json().catch(() => ({}))
@@ -21,9 +22,14 @@ async function uploadPlan(floorId, file) {
  * Right-hand panel to add or edit a floor: building, floor number (0 = ground) and name, plus the floor plan
  * (PDF or image). Rooms are detected (OpenCV) on the floor plan screen; room and ACM counts come from those rooms.
  * mode: 'add' | 'edit'
+ * From the district Floors screen pass `schools` (+ all `buildings`, optional `defaultSchoolId`): the panel then
+ * starts with a school picker and lists that school's buildings.
  */
-export default function FloorPanel({ mode, floor, buildingId: initialBuildingId, buildings, floors: initialFloors, onClose, onSaved }) {
+export default function FloorPanel({ mode, floor, buildingId: initialBuildingId, buildings: allBuildings, floors: initialFloors, schools, defaultSchoolId, onClose, onSaved }) {
   const isNew = mode === 'add'
+  const pickSchool = Boolean(schools) && isNew
+  const [schoolId, setSchoolId] = useState(() => allBuildings.find((b) => b.id === initialBuildingId)?.schoolId ?? defaultSchoolId ?? '')
+  const buildings = pickSchool ? allBuildings.filter((b) => b.schoolId === schoolId) : allBuildings
   const [form, setForm] = useState(() => ({
     buildingId: floor?.buildingId ?? initialBuildingId,
     number: floor ? String(floor.number) : null, // null = use the next free number
@@ -37,7 +43,8 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
   const [removeImage, setRemoveImage] = useState(false)
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(false)
-  const [siblings, setSiblings] = useState({ buildingId: initialBuildingId, floors: initialFloors })
+  // Floors of the chosen building; loaded below unless the caller passed them
+  const [siblings, setSiblings] = useState({ buildingId: initialFloors ? initialBuildingId : null, floors: initialFloors })
   const fileRef = useRef(null)
 
   useEffect(() => {
@@ -48,7 +55,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
 
   // Floors already in the chosen building (used floor numbers + the next free one)
   useEffect(() => {
-    if (siblings.buildingId === form.buildingId) return undefined
+    if (!form.buildingId || siblings.buildingId === form.buildingId) return undefined
     let cancelled = false
     request(`/floors?buildingId=${encodeURIComponent(form.buildingId)}`)
       .then((d) => { if (!cancelled) setSiblings({ buildingId: form.buildingId, floors: d.floors }) })
@@ -103,6 +110,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
 
   const submit = async (e) => {
     e.preventDefault()
+    if (!form.buildingId) { setErrors({ buildingId: pickSchool && !schoolId ? 'Choose a school, then its building' : 'Choose a building' }); return }
     if (numberError) { setErrors({ number: numberError }); return }
     setSaving(true)
     setErrors({})
@@ -141,13 +149,30 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
 
         <h3 className="fp-h">Floor Information</h3>
         <div className="fp-grid">
+          {pickSchool && (
+            <div className="uf-field fp-wide">
+              <span>School *</span>
+              <SearchSelect variant="field" label="School" value={schoolId} searchPlaceholder="Search schools…"
+                onChange={(v) => {
+                  // the school's first building is picked straight away
+                  setSchoolId(v)
+                  setForm((f) => ({ ...f, buildingId: allBuildings.find((b) => b.schoolId === v)?.id ?? '', number: null }))
+                  setErrors((x) => ({ ...x, buildingId: undefined }))
+                }}
+                options={[{ value: '', label: 'Select a school' }, ...schools.map((s) => ({ value: s.id, label: s.name }))]} />
+            </div>
+          )}
           <div className="uf-field fp-wide">
             <span>Building *</span>
             {isNew ? (
-              <SearchSelect variant="field" label="Building" value={form.buildingId} searchable={buildings.length > 6}
-                onChange={(v) => setForm((f) => ({ ...f, buildingId: v, number: null }))}
-                options={buildings.map((b) => ({ value: b.id, label: `${b.name} (${b.code})`, meta: `${b.floors} floor${b.floors === 1 ? '' : 's'}` }))} />
+              pickSchool && schoolId && !buildings.length
+                ? <p className="u-muted u-small fp-nobld">This school has no buildings yet. <Link to="/schools/buildings">Add a building</Link> first.</p>
+                : <SearchSelect variant="field" label="Building" value={form.buildingId ?? ''} searchable={buildings.length > 6}
+                  onChange={(v) => { setForm((f) => ({ ...f, buildingId: v, number: null })); setErrors((x) => ({ ...x, buildingId: undefined })) }}
+                  options={[...(form.buildingId ? [] : [{ value: '', label: pickSchool && !schoolId ? 'Choose a school first' : 'Select a building' }]),
+                    ...buildings.map((b) => ({ value: b.id, label: `${b.name} (${b.code})`, meta: `${b.floors} floor${b.floors === 1 ? '' : 's'}` }))]} />
             ) : <input className="u-input" value={`${building?.name} (${building?.code})`} disabled />}
+            {errors.buildingId && <em>{errors.buildingId}</em>}
           </div>
           <label className="uf-field">
             <span>Floor Number * <small className="bf-max">0 = ground</small></span>
@@ -201,7 +226,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
         {errors.form && <p className="uf-error">{errors.form}</p>}
         <footer className="fp-foot">
           <button type="button" className="u-btn u-btn-outline" onClick={onClose}>Cancel</button>
-          <button type="submit" className="u-btn u-btn-primary" disabled={saving || converting || !siblingFloors}>
+          <button type="submit" className="u-btn u-btn-primary" disabled={saving || converting || (form.buildingId && !siblingFloors)}>
             {saving ? 'Saving…' : 'Save & Map Rooms'}
           </button>
         </footer>

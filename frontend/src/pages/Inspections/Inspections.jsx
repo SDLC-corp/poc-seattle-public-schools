@@ -15,11 +15,12 @@ import Pager from '../Surveillance/Pager'
 import AssignTab from './AssignTab'
 import AssignmentsTab from './AssignmentsTab'
 import CalendarTab from './CalendarTab'
+import DueTab from './DueTab'
 import FindingsTab from './FindingsTab'
 import ReassignDialog from './ReassignDialog'
 import { fmtDay, floorLink, toQs } from '../Surveillance/survMeta'
-import { STATUS_TONE } from './inspMeta'
-import { request } from '../../lib/api'
+import { STATUS_TONE, fmtTime } from './inspMeta'
+import { request, API_BASE } from '../../lib/api'
 import '../Users/users.css'
 import '../Audit/audit.css'
 import '../Reports/reports.css'
@@ -29,6 +30,8 @@ import './inspections.css'
 
 const TABS = [
   { id: 'list', label: 'Inspection List', path: '/inspections' },
+  { id: 'upcoming', label: 'Upcoming', path: '/inspections/upcoming' },
+  { id: 'overdue', label: 'Overdue', path: '/inspections/overdue' },
   { id: 'assign', label: 'Assign Inspection', path: '/inspections/assign' },
   { id: 'my-assignments', label: 'My Assignments', path: '/inspections/my-assignments' },
   { id: 'calendar', label: 'Inspection Calendar', path: '/inspections/calendar' },
@@ -63,7 +66,9 @@ function ListTab({ meta, selected, setSelected, reload, onToast, onReassign }) {
   const navigate = useNavigate()
   const [confirm, confirmDialog] = useConfirm()
   const [tree, setTree] = useState(null)
-  const [location, setLocation] = useState(NO_LOCATION)
+  // A link can open the list on one school / building (state.place, e.g. from the map)
+  const place = useLocation().state?.place
+  const [location, setLocation] = useState(() => ({ ...NO_LOCATION, school: place?.school ?? '', building: place?.building ?? '' }))
   const [filters, setFilters] = useState(NO_FILTERS)
   const [debouncedQ, setDebouncedQ] = useState('')
   const [sort, setSort] = useState({ key: '', dir: '' })
@@ -179,7 +184,7 @@ function ListTab({ meta, selected, setSelected, reload, onToast, onReassign }) {
                 <button type="button" className="sv-link-btn" onClick={() => setSelected(new Set())}>Clear</button>
               </>
             )}
-            <ExportMenu csvHref={`/api/inspection-records/export.csv?${filterQs}`} title="Inspections" />
+            <ExportMenu csvHref={`${API_BASE}/inspection-records/export.csv?${filterQs}`} title="Inspections" />
           </div>
         </header>
         {error && <div className="u-banner">Couldn't load inspections ({error}).</div>}
@@ -220,7 +225,7 @@ function ListTab({ meta, selected, setSelected, reload, onToast, onReassign }) {
                     <td className="ai-room"><strong>{r.roomNumber ? `${r.roomNumber} – ${r.roomName}` : r.roomName}</strong><small>{r.materialName}</small></td>
                     <td className="u-nowrap">{r.assignedTo ?? <span className="u-muted">Unassigned</span>}</td>
                     <td className="ai-room">
-                      {r.date ? <strong className="in-plain">{fmtDay(r.date)}</strong> : <><strong className="in-plain">{fmtDay(r.scheduledDate)}</strong><small className={r.overdue ? 'sv-late' : undefined}>{r.overdue ? 'Not started — overdue' : 'Scheduled'}</small></>}
+                      {r.date ? <strong className="in-plain">{fmtDay(r.date)}</strong> : <><strong className="in-plain">{fmtDay(r.scheduledDate)}{r.scheduledTime && ` · ${fmtTime(r.scheduledTime)}`}</strong><small className={r.overdue ? 'sv-late' : undefined}>{r.overdue ? 'Not started — overdue' : 'Scheduled'}</small></>}
                     </td>
                     <td className="u-nowrap">{fmtDay(r.nextDue)}</td>
                     <td>
@@ -233,7 +238,7 @@ function ListTab({ meta, selected, setSelected, reload, onToast, onReassign }) {
                         r.state === 'scheduled' && { icon: Play, label: 'Start inspection', onClick: () => open(r.id) },
                         (r.state === 'draft' || r.state === 'returned') && { icon: ClipboardCheck, label: 'Continue inspection', onClick: () => open(r.id) },
                         r.state === 'submitted' && { icon: ClipboardCheck, label: 'Review inspection', onClick: () => open(r.id) },
-                        canPick && { icon: Users, label: 'Reassign / reschedule', onClick: () => { setSelected(new Set([r.id])); onReassign() } },
+                        canPick && { icon: Users, label: 'Reassign / reschedule', onClick: () => { setSelected(new Set([r.id])); onReassign([r.id]) } },
                         { icon: Plus, label: 'New inspection of this ACM', onClick: () => navigate(`/inspections/new?material=${encodeURIComponent(r.materialId)}`) },
                         { icon: MapPin, label: 'Open room on floor plan', onClick: () => navigate(floorLink(r)) },
                         r.state === 'scheduled' && { icon: Trash2, label: 'Cancel assignment', danger: true, onClick: () => remove(r) },
@@ -292,7 +297,10 @@ export default function Inspections() {
   const tab = TABS.find((t) => t.id === (tabParam ?? 'list'))
   const [meta, setMeta] = useState(null)
   const [selected, setSelected] = useState(() => new Set())
-  const [reassigning, setReassigning] = useState(false)
+  // Inspection ids being reassigned: the list's selection, or one row from Upcoming / Overdue
+  const [reassigning, setReassigning] = useState(null)
+  const [scheduleMode, setScheduleMode] = useState(false)
+  const openReassign = (ids, scheduling = false) => { setScheduleMode(scheduling); setReassigning(ids) }
   const [reload, setReload] = useState(0)
   const [toast, setToast] = useState(() => routerLocation.state?.toast ?? null)
 
@@ -310,15 +318,15 @@ export default function Inspections() {
       <div className="ai-head">
         <h1><ClipboardCheck size={24} />Inspections</h1>
         <div className="ai-head-actions">
-          <button type="button" className="u-btn u-btn-primary" onClick={() => navigate('/inspections/new')}><Plus size={15} />Add Inspection</button>
-          <AssignMenu selectedCount={selected.size} onAssign={() => navigate('/inspections/assign')} onReassign={() => setReassigning(true)} />
+          <AssignMenu selectedCount={selected.size} onAssign={() => navigate('/inspections/assign')} onReassign={() => openReassign([...selected])} />
         </div>
       </div>
       <nav className="u-tabs ai-tabs" aria-label="Inspection views">
         {TABS.map((t) => <Link key={t.id} to={t.path} className={`u-tab${t.id === tab.id ? ' active' : ''}`} aria-current={t.id === tab.id ? 'page' : undefined}>{t.label}</Link>)}
       </nav>
 
-      {tab.id === 'list' && <ListTab meta={meta} selected={selected} setSelected={setSelected} reload={reload} onToast={setToast} onReassign={() => setReassigning(true)} />}
+      {tab.id === 'list' && <ListTab meta={meta} selected={selected} setSelected={setSelected} reload={reload} onToast={setToast} onReassign={(ids) => openReassign(ids ?? [...selected])} />}
+      {(tab.id === 'upcoming' || tab.id === 'overdue') && <DueTab key={tab.id} view={tab.id} meta={meta} reload={reload} onSchedule={(ids) => openReassign(ids, true)} />}
       {tab.id === 'assign' && <AssignTab meta={meta} onToast={setToast} onDone={(text) => { setToast({ kind: 'success', text }); navigate('/inspections') }} />}
       {tab.id === 'my-assignments' && <AssignmentsTab meta={meta} />}
       {tab.id === 'calendar' && <CalendarTab />}
@@ -326,9 +334,9 @@ export default function Inspections() {
       {tab.id === 'findings' && <FindingsTab onToast={setToast} />}
 
       {reassigning && (
-        <ReassignDialog ids={[...selected]} meta={meta} onClose={() => setReassigning(false)}
+        <ReassignDialog ids={reassigning} meta={meta} mode={scheduleMode ? 'schedule' : undefined} onClose={() => setReassigning(null)}
           onDone={(res) => {
-            setReassigning(false)
+            setReassigning(null)
             setSelected(new Set())
             setReload((n) => n + 1)
             setToast({ kind: 'success', text: `Updated ${res.changed.length} inspection${res.changed.length === 1 ? '' : 's'}${res.locked.length ? ` (${res.locked.length} already submitted, left as is)` : ''}.` })

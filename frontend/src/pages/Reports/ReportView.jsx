@@ -5,7 +5,7 @@ import {
 import SearchSelect from '../../components/ui/SearchSelect'
 import ExportMenu from './ExportMenu'
 import { STAT_ICONS, COMMON_FILTERS, REPORT_LABELS as SUBTAB_LABELS, fmtDay } from './reportMeta'
-import { request } from '../../lib/api'
+import { request, API_BASE } from '../../lib/api'
 
 const EMPTY = { school: '', building: '', floor: '', inspector: '', status: '', from: '', to: '' }
 const DEFAULT_LABELS = { school: 'Facility', building: 'Building', floor: 'Floor', inspector: 'Inspector' }
@@ -136,7 +136,7 @@ export default function ReportView({ tab, reportId, onSelectReport }) {
     <>
       <div className="rp-section-head">
         <h2><ClipboardList size={22} />{tab.title}</h2>
-        <ExportMenu csvHref={`/api/reports/${reportId}/export.csv?${exportParams}`} title={data?.title ?? 'Report'} />
+        <ExportMenu csvHref={`${API_BASE}/reports/${reportId}/export.csv?${exportParams}`} title={data?.title ?? 'Report'} />
       </div>
 
       {multi && (
@@ -276,7 +276,7 @@ export default function ReportView({ tab, reportId, onSelectReport }) {
                   <button type="button" className="rp-side-open" onClick={() => onSelectReport(id)}>
                     <FileText size={15} />{SUBTAB_LABELS[id]} Report
                   </button>
-                  <a className="u-row-btn" href={`/api/reports/${id}/export.csv?${siblingParams}`} download
+                  <a className="u-row-btn" href={`${API_BASE}/reports/${id}/export.csv?${siblingParams}`} download
                     aria-label={`Download ${SUBTAB_LABELS[id]} report (CSV)`} title="Download CSV">
                     <Download size={15} />
                   </a>

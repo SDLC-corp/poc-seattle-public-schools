@@ -7,7 +7,7 @@ import {
 } from 'lucide-react'
 import { detectRooms } from '../../lib/roomDetection'
 import { useConfirm } from '../../components/ui/useConfirm'
-import { request, fmtDate } from '../../lib/api'
+import { request, fmtDate, API_BASE } from '../../lib/api'
 import PlanCanvas from './PlanCanvas'
 import { ROOM_COLORS } from './roomColors'
 import RoomInfoCard from './RoomInfoCard'
@@ -54,7 +54,7 @@ function MaterialCard({ m, roomId, onEdit, onDelete }) {
             {m.relatedTracking?.length > 0 && <div className="fr-wide"><dt>Tracking</dt><dd>{m.relatedTracking.join(', ')}</dd></div>}
             {m.attachments.length > 0 && (
               <div className="fr-wide"><dt>Files</dt><dd className="fr-mat-files">
-                {m.attachments.map((f) => <a key={f.id} href={`/api/acm-materials/${m.id}/attachments/${f.id}`} target="_blank" rel="noopener noreferrer">{f.name}</a>)}
+                {m.attachments.map((f) => <a key={f.id} href={`${API_BASE}/acm-materials/${m.id}/attachments/${f.id}`} target="_blank" rel="noopener noreferrer">{f.name}</a>)}
               </dd></div>
             )}
           </>
@@ -183,7 +183,11 @@ export default function FloorRooms() {
   }
   const building = school?.buildings.find((b) => b.id === buildingId)
   const term = query.trim().toLowerCase()
-  const listed = useMemo(() => (rooms ?? []).filter((r) => !term || [`rm-${r.number}`, r.number, r.name, r.type, r.acmStatus].some((v) => v?.toLowerCase().includes(term))), [rooms, term])
+  // On a seeded sample plan drawing, outlines from the generated layout don't match the drawing: leave
+  // them off the plan until the room is outlined on it (Draw / Detect Rooms)
+  const samplePlan = Boolean(floor?.planImage?.sample)
+  const planRooms = useMemo(() => (samplePlan && rooms ? rooms.map((r) => (r.layoutRoomId ? { ...r, polygon: null } : r)) : rooms), [samplePlan, rooms])
+  const listed = useMemo(() => (planRooms ?? []).filter((r) => !term || [`rm-${r.number}`, r.number, r.name, r.type, r.acmStatus].some((v) => v?.toLowerCase().includes(term))), [planRooms, term])
 
   // Keep the list in step with a saved room (status/material count come back from the server)
   const applyRoom = (r) => setRooms((list) => list.map((x) => (x.id === r.id ? { ...x, ...r } : x)))
@@ -211,7 +215,7 @@ export default function FloorRooms() {
   }, [floorId, rooms, floor, select])
 
   const changePolygon = useCallback(async (id, polygon) => {
-    setRooms((list) => list.map((r) => (r.id === id ? { ...r, polygon } : r)))
+    setRooms((list) => list.map((r) => (r.id === id ? { ...r, polygon, layoutRoomId: null } : r)))
     try {
       await request(`/rooms/${id}`, { method: 'PUT', body: { polygon } })
     } catch (err) {
@@ -274,7 +278,7 @@ export default function FloorRooms() {
   const floorsUrl = `/schools/${schoolId}/buildings/${buildingId}/floors`
   const activeTool = TOOLS.find((t) => t.id === tool)
   const counts = Object.fromEntries(Object.keys(ROOM_COLORS).map((s) => [s, (rooms ?? []).filter((r) => r.acmStatus === s).length]))
-  const unplaced = (rooms ?? []).filter((r) => !r.polygon).length
+  const unplaced = (planRooms ?? []).filter((r) => !r.polygon).length
 
   return (
     <div className="fr-page">
@@ -351,14 +355,14 @@ export default function FloorRooms() {
 
               {floor && rooms ? (
                 <div className="fr-plan-wrap">
-                <PlanCanvas layout={floor.layout} imageUrl={floor.planUrl} rooms={rooms} tables={floor.tables} selectedId={selectedId} mode={tool} height={640}
+                <PlanCanvas layout={floor.layout} imageUrl={floor.planUrl} rooms={planRooms} tables={floor.tables} selectedId={selectedId} mode={tool} height={640}
                   onSelect={select} onDelete={deleteRoom} onCreate={createRoom} onChangePolygon={changePolygon} />
                 {detectState === 'running' && <div className="fr-detecting"><LoaderCircle size={22} className="fp-spin" /><strong>Detecting rooms…</strong><span>OpenCV is tracing the walls on the plan</span></div>}
                 </div>
               ) : <div className="fr-loading fr-plan-wrap">Loading floor plan…</div>}
             </div>
             {detectState && detectState !== 'running' && <p className={`fr-detect-msg ${detectState.ok ? 'ok' : 'warn'}`}>{detectState.text}</p>}
-            {floor?.planUrl && rooms && !rooms.some((r) => r.polygon) && !detectState && <p className="fr-detect-msg">No rooms on this plan yet — click <b>Detect Rooms</b>, or outline them with <b>Draw</b>.</p>}
+            {floor?.planUrl && planRooms && !planRooms.some((r) => r.polygon) && !detectState && <p className="fr-detect-msg">{rooms.length ? `${rooms.length} room${rooms.length === 1 ? '' : 's'} aren’t outlined on this plan yet — select one and use ` : 'No rooms on this plan yet — click '}<b>{rooms.length ? 'Draw' : 'Detect Rooms'}</b>{rooms.length ? ' to place it.' : ', or outline them with '}{!rooms.length && <b>Draw</b>}{!rooms.length && '.'}</p>}
             <p className="fr-tool-hint">{activeTool.hint}{tool === 'edit' && !room?.polygon ? ' — select a room first' : ''}</p>
             <div className="fr-legend">
               {Object.entries(ROOM_COLORS).map(([s, c]) => (

@@ -4,7 +4,7 @@ import { CalendarDays, Clock3, Undo2, OctagonAlert, Hourglass, CircleCheck, Play
 import SearchSelect from '../../components/ui/SearchSelect'
 import Badge from '../AcmInventory/Badge'
 import { fmtDay, isoToday, floorLink } from '../Surveillance/survMeta'
-import { STATUS_TONE } from './inspMeta'
+import { STATUS_TONE, fmtTime } from './inspMeta'
 import { request } from '../../lib/api'
 
 function Tile({ icon: Icon, value, label, tone }) {
@@ -70,7 +70,9 @@ export default function AssignmentsTab({ meta }) {
               <li key={r.id} className={`in-card${r.state === 'returned' ? ' returned' : r.overdue ? ' late' : ''}`}>
                 <div className="in-card-when">
                   <strong>{fmtDay(r.scheduledDate ?? r.shownDate)}</strong>
-                  <small className={d < 0 && r.state === 'scheduled' ? 'sv-late' : undefined}>{r.state === 'scheduled' ? when(d) : r.state === 'returned' ? 'Returned' : 'Started'}</small>
+                  <small className={d < 0 && r.state === 'scheduled' ? 'sv-late' : undefined}>
+                    {r.state === 'scheduled' ? when(d) : r.state === 'returned' ? 'Returned' : 'Started'}{r.scheduledTime && ` · ${fmtTime(r.scheduledTime)}`}
+                  </small>
                 </div>
                 <div className="in-card-body">
                   <div className="in-card-top">

@@ -101,7 +101,7 @@ router.post('/:id/connect', async (req, res, next) => {
     const view = await saveConnection(def.id, { config, secrets }, { id: CURRENT_USER.id, name: CURRENT_USER.name });
     const changed = def.fields.filter((f) => f.type !== 'secret' && JSON.stringify(stored.config[f.key]) !== JSON.stringify(config[f.key]));
     logAudit(req, {
-      action: wasConnected ? 'update' : 'create', module: 'Settings', recordId: `integration:${def.id}`, link: '/settings/integrations',
+      action: wasConnected ? 'update' : 'create', module: 'Settings', recordId: `integration:${def.id}`, link: '/integrations',
       summary: wasConnected ? `Updated ${def.name} connection` : `Connected ${def.name}`,
       // Secrets are recorded only as "changed", never their values
       changes: [
@@ -111,7 +111,7 @@ router.post('/:id/connect', async (req, res, next) => {
     });
     if (!wasConnected) {
       notify({
-        type: 'system', priority: 'low', title: `${def.name} Connected`, link: '/settings/integrations', linkLabel: 'View Integrations',
+        type: 'system', priority: 'low', title: `${def.name} Connected`, link: '/integrations', linkLabel: 'View Integrations',
         message: `${def.name} was connected by ${CURRENT_USER.name}.`,
       });
     }
@@ -129,7 +129,7 @@ router.post('/:id/sync', async (req, res, next) => {
     if (s.status === 'disconnected' || !Object.keys(s.secrets).length) return res.status(409).json({ error: `Connect ${def.name} before syncing` });
     const view = await runSync(def.id, { id: CURRENT_USER.id, name: CURRENT_USER.name });
     logAudit(req, {
-      action: 'update', module: 'Settings', recordId: `integration:${def.id}`, link: '/settings/integrations',
+      action: 'update', module: 'Settings', recordId: `integration:${def.id}`, link: '/integrations',
       summary: `Ran ${def.name} sync – ${view.lastSync.message}`,
     });
     res.json(view);
@@ -145,12 +145,12 @@ router.post('/:id/disconnect', async (req, res, next) => {
     if (getState(def.id).status === 'disconnected') return res.json(publicView(def.id));
     const view = await disconnect(def.id);
     logAudit(req, {
-      action: 'update', module: 'Settings', recordId: `integration:${def.id}`, link: '/settings/integrations',
+      action: 'update', module: 'Settings', recordId: `integration:${def.id}`, link: '/integrations',
       summary: `Disconnected ${def.name}`,
       changes: [{ field: 'Status', from: 'Connected', to: 'Disconnected' }, { field: 'Stored secrets', from: '(hidden)', to: '(deleted)' }],
     });
     notify({
-      type: 'system', priority: 'medium', title: `${def.name} Disconnected`, link: '/settings/integrations', linkLabel: 'View Integrations',
+      type: 'system', priority: 'medium', title: `${def.name} Disconnected`, link: '/integrations', linkLabel: 'View Integrations',
       message: `${def.name} was disconnected by ${CURRENT_USER.name}. Its stored credentials were deleted.`,
     });
     res.json(view);
