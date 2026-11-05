@@ -5,15 +5,15 @@ import {
   getDocuments, getDocument, addDocument, removeDocument, storedFilePath, nextId,
   DOC_TYPES, CATEGORIES, ACCESS_LEVELS, FILE_TYPES, MAX_UPLOAD_BYTES, UPLOAD_DIR,
 } from '../data/documentsStore.js';
-import { schools, buildings } from '../data/store.js';
+import { schools, buildings, findSchool, findBuilding } from '../data/store.js';
 import { logAudit, getEntries, currentUser } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
 import { publicView } from '../data/integrationsStore.js';
 
 // Looked up live so schools added in the app are found
-const schoolById = { get: (id) => schools.find((s) => s.id === id), has: (id) => schools.some((s) => s.id === id) };
+const schoolById = { get: (id) => findSchool(id), has: (id) => Boolean(findSchool(id)) };
 // Looked up live so buildings added in the app are found
-const buildingById = { get: (id) => buildings.find((b) => b.id === id) };
+const buildingById = { get: (id) => findBuilding(id) };
 
 function filterDocs({ q, category, school, building, type, year, source }) {
   const term = q?.trim().toLowerCase();

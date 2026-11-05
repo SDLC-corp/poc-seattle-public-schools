@@ -2,7 +2,7 @@
 // so the same image pipeline (upload + OpenCV room detection) works for PDFs.
 const TARGET_LONG_SIDE = 2200 // px — enough detail for walls and room labels
 
-export async function pdfToPlanImage(file, pageNumber = 1) {
+export async function pdfToPlanImage(file, pageNumber = 1, longSide = TARGET_LONG_SIDE) {
   const [pdfjs, { default: workerUrl }] = await Promise.all([
     import('pdfjs-dist'),
     import('pdfjs-dist/build/pdf.worker.min.mjs?url'),
@@ -12,7 +12,7 @@ export async function pdfToPlanImage(file, pageNumber = 1) {
   try {
     const page = await doc.getPage(Math.min(pageNumber, doc.numPages))
     const base = page.getViewport({ scale: 1 })
-    const viewport = page.getViewport({ scale: TARGET_LONG_SIDE / Math.max(base.width, base.height) })
+    const viewport = page.getViewport({ scale: longSide / Math.max(base.width, base.height) })
     const canvas = document.createElement('canvas')
     canvas.width = Math.round(viewport.width)
     canvas.height = Math.round(viewport.height)

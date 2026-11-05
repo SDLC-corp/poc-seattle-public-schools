@@ -1,5 +1,6 @@
+import { naturalCompare } from '../data/naturalSort.js';
 import express, { Router } from 'express';
-import { schools, buildings } from '../data/store.js';
+import { schools, buildings, findSchool, findBuilding } from '../data/store.js';
 import { getAllFloors } from '../data/floorsStore.js';
 import { getMaterials, getMaterial, updateMaterial, allRooms } from '../data/roomsStore.js';
 import {
@@ -21,8 +22,9 @@ const MAX_SIGNATURE_CHARS = 300_000; // PNG data URL from the signature pad
 const DUE_SOON_DAYS = 30;
 
 // Looked up live so schools added in the app are found
-const schoolName = { get: (id) => schools.find((s) => s.id === id)?.name };
-const buildingName = new Map(buildings.map((b) => [b.id, b.name]));
+const schoolName = { get: (id) => findSchool(id)?.name };
+// Looked up live so buildings added in the app are found
+const buildingName = { get: (id) => findBuilding(id)?.name };
 const todayMs = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); };
 const dayMs = (iso) => Date.parse(`${iso}T00:00:00`);
 const isoDay = (t) => {
@@ -120,7 +122,7 @@ function sortRows(list, sort, dir) {
     key, dir: d === 1 ? 'asc' : 'desc',
     rows: [...list].sort((a, b) => {
       const x = get(a); const y = get(b);
-      return d * (typeof x === 'number' ? x - y : String(x).localeCompare(String(y), 'en', { numeric: true })) || b.id.localeCompare(a.id, 'en', { numeric: true });
+      return d * (typeof x === 'number' ? x - y : naturalCompare(String(x), String(y))) || naturalCompare(b.id, a.id);
     }),
   };
 }
@@ -141,7 +143,7 @@ router.get('/materials', (req, res) => {
   res.json(getMaterials().filter((m) => SURVEYED.includes(m.acmStatus)).map((m) => {
     const p = place(m);
     return { id: m.id, name: m.name, acmStatus: m.acmStatus, place: `${p.schoolName} / ${p.buildingName} / ${p.floorName} / ${p.roomNumber} ${p.roomName}`.trim() };
-  }).sort((a, b) => a.place.localeCompare(b.place, 'en', { numeric: true })));
+  }).sort((a, b) => naturalCompare(a.place, b.place)));
 });
 
 // Everything the form's side panel needs about one material

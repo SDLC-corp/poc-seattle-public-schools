@@ -1,9 +1,27 @@
 import { Link } from 'react-router'
 import {
   Building2, Layers, DoorOpen, TriangleAlert, ShieldCheck, ShieldQuestion, CircleCheck, CircleDashed, Eye, Pencil, X,
-  CalendarDays, FolderOpen, Info,
+  CalendarDays, FolderOpen, Info, Trash2,
 } from 'lucide-react'
 import { buildingTotals, fmtNum, PRESUMED_ACM_BEFORE } from './buildingUtils'
+import { request } from '../../lib/api'
+
+/**
+ * Ask, then delete a building with its floors, rooms and ACM records. Resolves true when deleted, false when
+ * cancelled; throws the server's reason (e.g. it has inspections, which must be kept). confirm comes from useConfirm().
+ */
+export async function confirmDeleteBuilding(b, confirm) {
+  const ok = await confirm({
+    title: `Delete ${b.name}?`,
+    message: `This removes ${b.name} (${b.code}) at ${b.schoolName} with its ${b.floors} floor${b.floors === 1 ? '' : 's'}, rooms, floor plans and ACM records. This can't be undone.`,
+    detail: 'A building with inspections, surveillance records or O&M work can’t be deleted — those asbestos records must be kept.',
+    confirmLabel: 'Delete Building',
+    tone: 'danger',
+  })
+  if (!ok) return false
+  await request(`/buildings/${b.id}`, { method: 'DELETE' })
+  return true
+}
 
 const ACM_BADGE = {
   'ACM Present': { cls: 'present', icon: TriangleAlert },
@@ -34,7 +52,11 @@ function Kpi({ icon: Icon, value, label, tone, active, onClick }) {
 }
 
 // Buildings · Total Floors · Total Rooms · Rooms with ACM · Rooms No ACM. `filter` is an ACM_FILTERS key.
-export function BuildingKpis({ buildings, filter, onFilter }) {
+/**
+ * live (optional, a school page): { acmLocations, acmRooms } counted from the ACM inventory records, shown instead of
+ * the buildings' stored room totals so the tiles match the ACM Summary.
+ */
+export function BuildingKpis({ buildings, filter, onFilter, live }) {
   const t = buildings ? buildingTotals(buildings) : {}
   const pick = (key) => () => onFilter(filter === key ? '' : key)
   return (
@@ -42,13 +64,22 @@ export function BuildingKpis({ buildings, filter, onFilter }) {
       <Kpi icon={Building2} value={t.buildings} label="Buildings" tone="primary" active={!filter} onClick={() => onFilter('')} />
       <Kpi icon={Layers} value={t.floors} label="Total Floors" tone="violet" />
       <Kpi icon={DoorOpen} value={t.rooms} label="Total Rooms" tone="teal" />
-      <Kpi icon={TriangleAlert} value={t.withAcm} label="Rooms with ACM" tone="warning" active={filter === 'acm'} onClick={pick('acm')} />
-      <Kpi icon={ShieldCheck} value={t.noAcm} label="Rooms No ACM" tone="good" active={filter === 'No ACM'} onClick={pick('No ACM')} />
+      {live ? (
+        <>
+          <Kpi icon={TriangleAlert} value={live.acmLocations} label="ACM Locations" tone="warning" active={filter === 'acm'} onClick={pick('acm')} />
+          <Kpi icon={ShieldCheck} value={live.acmRooms} label="Rooms with ACM" tone="critical" active={filter === 'acm'} onClick={pick('acm')} />
+        </>
+      ) : (
+        <>
+          <Kpi icon={TriangleAlert} value={t.withAcm} label="Rooms with ACM" tone="warning" active={filter === 'acm'} onClick={pick('acm')} />
+          <Kpi icon={ShieldCheck} value={t.noAcm} label="Rooms No ACM" tone="good" active={filter === 'No ACM'} onClick={pick('No ACM')} />
+        </>
+      )}
     </div>
   )
 }
 
-export function BuildingsTable({ buildings, selectedId, onView, onEdit, showSchool = false, emptyText = 'No buildings match.' }) {
+export function BuildingsTable({ buildings, selectedId, onView, onEdit, onDelete, showSchool = false, emptyText = 'No buildings match.' }) {
   return (
     <div className="u-table-wrap">
       <table className="u-table c-table b-table">
@@ -85,6 +116,7 @@ export function BuildingsTable({ buildings, selectedId, onView, onEdit, showScho
                 <span className="b-actions">
                   <button type="button" className="u-row-btn" title="View" aria-label={`View ${b.name}`} onClick={(e) => { e.stopPropagation(); onView(b) }}><Eye size={14} /></button>
                   {onEdit && <button type="button" className="u-row-btn" title="Edit" aria-label={`Edit ${b.name}`} onClick={(e) => { e.stopPropagation(); onEdit(b) }}><Pencil size={14} /></button>}
+                  {onDelete && <button type="button" className="u-row-btn danger" title="Delete" aria-label={`Delete ${b.name}`} onClick={(e) => { e.stopPropagation(); onDelete(b) }}><Trash2 size={14} /></button>}
                 </span>
               </td>
             </tr>

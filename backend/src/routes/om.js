@@ -1,5 +1,6 @@
+import { naturalCompare } from '../data/naturalSort.js';
 import express, { Router } from 'express';
-import { schools, buildings } from '../data/store.js';
+import { schools, buildings, findSchool, findBuilding } from '../data/store.js';
 import { getAllFloors } from '../data/floorsStore.js';
 import { getMaterials, getMaterial, allRooms } from '../data/roomsStore.js';
 import { getPeople, recordStatus } from '../data/personnelStore.js';
@@ -27,8 +28,9 @@ const link = (a) => `/operations/activities/${a.id}`;
 const SURVEYED = ['ACM Present', 'Assumed ACM'];
 
 // Looked up live so schools added in the app are found
-const schoolName = { get: (id) => schools.find((s) => s.id === id)?.name };
-const buildingName = new Map(buildings.map((b) => [b.id, b.name]));
+const schoolName = { get: (id) => findSchool(id)?.name };
+// Looked up live so buildings added in the app are found
+const buildingName = { get: (id) => findBuilding(id)?.name };
 function placeLookup() {
   const floors = new Map(getAllFloors().map((f) => [f.id, f]));
   const rooms = new Map(allRooms().map((r) => [r.id, r]));
@@ -192,7 +194,7 @@ router.get('/materials', (req, res) => {
   res.json(getMaterials().filter((m) => (only ? only.has(m.id) : SURVEYED.includes(m.acmStatus))).map((m) => {
     const p = place(m);
     return { id: m.id, name: m.name, acmStatus: m.acmStatus, place: `${p.schoolName} / ${p.buildingName} / ${p.floorName} / ${p.roomNumber} ${p.roomName}`.trim() };
-  }).sort((a, b) => a.place.localeCompare(b.place, 'en', { numeric: true })));
+  }).sort((a, b) => naturalCompare(a.place, b.place)));
 });
 
 // Inspections that can be attached to an activity: those of the ACM's school, the ACM's own first, newest first
@@ -216,7 +218,7 @@ router.get('/activities', (req, res) => {
   const get = SORTS[key];
   const sorted = [...filtered].sort((a, b) => {
     const x = get(a); const y = get(b);
-    return d * (typeof x === 'number' ? x - y : String(x).localeCompare(String(y), 'en', { numeric: true })) || b.id.localeCompare(a.id);
+    return d * (typeof x === 'number' ? x - y : naturalCompare(String(x), String(y))) || b.id.localeCompare(a.id);
   });
   // Tiles show the full breakdown for the other filters
   const scoped = req.query.status ? filterRows(all, { ...req.query, status: '' }) : filtered;

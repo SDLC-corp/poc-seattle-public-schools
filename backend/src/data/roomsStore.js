@@ -25,11 +25,28 @@ const persist = () => {
 export const filePath = (storedName) => path.join(FILE_DIR, storedName);
 const removeFiles = (list) => Promise.all(list.map((f) => unlink(filePath(f.storedName)).catch(() => {})));
 
+// Lookup tables over the materials, rebuilt only when the list changes (every change replaces the array), so
+// listing thousands of rooms doesn't scan every material for each room
+let indexCache = null;
+function materialIndex() {
+  if (indexCache?.src === materials) return indexCache;
+  const add = (map, key, m) => { if (!map.has(key)) map.set(key, []); map.get(key).push(m); };
+  const byRoom = new Map(); const byFloor = new Map(); const byBuilding = new Map();
+  for (const m of materials) {
+    add(byRoom, m.roomId, m);
+    if (m.scope === 'floor') add(byFloor, m.floorId, m);
+    else if (m.scope === 'building') add(byBuilding, m.buildingId, m);
+  }
+  indexCache = { src: materials, byRoom, byFloor, byBuilding };
+  return indexCache;
+}
+
 // Materials that apply to a room: its own, plus floor-level ones on its floor and building-level ones in its building
 export function materialsForRoom(room) {
-  return materials.filter((m) => m.roomId === room.id
-    || (m.scope === 'floor' && m.floorId === room.floorId)
-    || (m.scope === 'building' && m.buildingId === room.buildingId));
+  const ix = materialIndex();
+  const own = ix.byRoom.get(room.id) ?? [];
+  const shared = [...(ix.byFloor.get(room.floorId) ?? []), ...(ix.byBuilding.get(room.buildingId) ?? [])].filter((m) => m.roomId !== room.id);
+  return shared.length ? [...own, ...shared] : own;
 }
 
 export function roomAcmStatus(list) {
@@ -46,10 +63,12 @@ export const describeRoom = (r) => {
   return { ...r, acmStatus: roomAcmStatus(list), materialCount: list.length };
 };
 
+// One shared collator: localeCompare with options builds a new one per comparison (seconds for thousands of rooms)
+const byNumber = new Intl.Collator(undefined, { numeric: true });
 export const getRooms = (filter = {}) => rooms
   .filter((r) => Object.entries(filter).every(([k, v]) => !v || r[k] === v))
   .map(describeRoom)
-  .sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
+  .sort((a, b) => byNumber.compare(a.number, b.number));
 export const getRoom = (id) => {
   const r = rooms.find((x) => x.id === id);
   return r ? describeRoom(r) : null;
@@ -58,9 +77,14 @@ export const rawRoom = (id) => rooms.find((x) => x.id === id) ?? null;
 // Read-only list of every room, for bulk lookups (build a Map instead of calling rawRoom per record)
 export const allRooms = () => rooms;
 
-export const getMaterials = (filter = {}) => materials
-  .filter((m) => Object.entries(filter).every(([k, v]) => !v || m[k] === v))
-  .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+// Newest first. The sorted list is cached until the materials change (every change replaces the array); callers
+// get their own copy, so sorting or filtering it can't disturb the cache
+let sortedCache = null;
+export const getMaterials = (filter = {}) => {
+  if (sortedCache?.src !== materials) sortedCache = { src: materials, list: [...materials].sort((a, b) => b.createdAt.localeCompare(a.createdAt)) };
+  const keys = Object.entries(filter).filter(([, v]) => v);
+  return keys.length ? sortedCache.list.filter((m) => keys.every(([k, v]) => m[k] === v)) : sortedCache.list.slice();
+};
 export const getMaterial = (id) => materials.find((m) => m.id === id) ?? null;
 
 const newId = (prefix) => `${prefix}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
@@ -99,6 +123,17 @@ export async function removeFloorRooms(floorId) {
   materials = materials.filter((m) => !gone.includes(m));
   await persist();
   await removeFiles(files);
+}
+
+// Building deleted: its rooms and every material recorded in it (room-, floor- or building-level) go too
+export async function removeBuildingRooms(buildingId) {
+  const gone = rooms.filter((r) => r.buildingId === buildingId);
+  const goneMaterials = materials.filter((m) => m.buildingId === buildingId);
+  rooms = rooms.filter((r) => r.buildingId !== buildingId);
+  materials = materials.filter((m) => m.buildingId !== buildingId);
+  await persist();
+  await removeFiles([...gone.flatMap((r) => r.photos ?? []), ...goneMaterials.flatMap((m) => m.attachments ?? [])]);
+  return { rooms: gone.length, materials: goneMaterials.length };
 }
 
 export async function addMaterial(m) {

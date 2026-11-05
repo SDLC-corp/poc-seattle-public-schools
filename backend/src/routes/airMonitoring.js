@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {
   getEvents, getEvent, addEvent, updateEvent, nextId, statusOf, limitFor, SAMPLE_TYPES, METHODS,
 } from '../data/airStore.js';
-import { schools, buildings } from '../data/store.js';
+import { schools, buildings, findSchool, findBuilding } from '../data/store.js';
 import { logAudit, diff, currentUser } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
 import { inspectionAirEvents } from '../data/inspectionSamples.js';
@@ -12,9 +12,9 @@ import { getRecords } from '../data/inspectionRecordsStore.js';
 
 const DAY = 86400000;
 // Looked up live so schools added in the app are found
-const schoolById = { get: (id) => schools.find((s) => s.id === id), has: (id) => schools.some((s) => s.id === id) };
+const schoolById = { get: (id) => findSchool(id), has: (id) => Boolean(findSchool(id)) };
 // Looked up live so buildings added in the app are found
-const buildingById = { get: (id) => buildings.find((b) => b.id === id) };
+const buildingById = { get: (id) => findBuilding(id) };
 
 /**
  * A logged event's sample ID (its own, or AS-… from the event id) and the inspection it relates to: the latest

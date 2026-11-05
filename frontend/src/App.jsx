@@ -1,44 +1,46 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, useParams, Link } from 'react-router'
 import { Construction, SearchX } from 'lucide-react'
 import AppLayout from './components/layout/AppLayout'
 import { findNav, pathForId } from './components/layout/navItems'
-import Dashboard from './pages/Dashboard/Dashboard'
-import Settings from './pages/Settings/Settings'
-import IntegrationsPage from './pages/Settings/IntegrationsPage'
-import Operations from './pages/Operations/Operations'
-import ActivityForm from './pages/Operations/ActivityForm'
-import ManagementPlan from './pages/ManagementPlans/ManagementPlan'
-import UsersRoles from './pages/Users/UsersRoles'
-import AuditLogs from './pages/Audit/AuditLogs'
-import Notifications from './pages/Notifications/Notifications'
-import Compliance from './pages/Compliance/Compliance'
-import AirMonitoring from './pages/AirMonitoring/AirMonitoring'
-import AirEventPage from './pages/AirMonitoring/AirEventPage'
-import Personnel from './pages/Personnel/Personnel'
-import HelpPage from './pages/Help/HelpPage'
-import Schools from './pages/Schools/Schools'
-import SchoolDetail from './pages/Schools/SchoolDetail'
-import Buildings from './pages/Schools/Buildings'
-import BuildingDetail from './pages/Schools/BuildingDetail'
-import RoomsFloorPlans from './pages/Schools/RoomsFloorPlans'
-import FloorRooms from './pages/Schools/FloorRooms'
-import LabSamples from './pages/LabSamples/LabSamples'
-import SamplePage from './pages/LabSamples/SamplePage'
-import Trends from './pages/Trends/Trends'
-import CostForecasting from './pages/Cost/CostForecasting'
-import InvoiceAnalysis from './pages/Cost/InvoiceAnalysis'
-import InvoiceDetail from './pages/Cost/InvoiceDetail'
-import CostReports from './pages/Cost/CostReports'
-import Reports from './pages/Reports/Reports'
-import AcmInventory from './pages/AcmInventory/AcmInventory'
-import Surveillance from './pages/Surveillance/Surveillance'
-import SurveillanceForm from './pages/Surveillance/SurveillanceForm'
-import Inspections from './pages/Inspections/Inspections'
-import InspectionForm from './pages/Inspections/InspectionForm'
-import LoginPage from './pages/Login/LoginPage'
-import Microsoft365 from './pages/Microsoft365/Microsoft365'
 import RequireAuth from './auth/RequireAuth'
+
+// Pages load on demand: each page's code is downloaded the first time it's opened (keeps the first load small)
+const Dashboard = lazy(() => import('./pages/Dashboard/Dashboard'))
+const Settings = lazy(() => import('./pages/Settings/Settings'))
+const IntegrationsPage = lazy(() => import('./pages/Settings/IntegrationsPage'))
+const Operations = lazy(() => import('./pages/Operations/Operations'))
+const ActivityForm = lazy(() => import('./pages/Operations/ActivityForm'))
+const ManagementPlan = lazy(() => import('./pages/ManagementPlans/ManagementPlan'))
+const UsersRoles = lazy(() => import('./pages/Users/UsersRoles'))
+const AuditLogs = lazy(() => import('./pages/Audit/AuditLogs'))
+const Notifications = lazy(() => import('./pages/Notifications/Notifications'))
+const Compliance = lazy(() => import('./pages/Compliance/Compliance'))
+const AirMonitoring = lazy(() => import('./pages/AirMonitoring/AirMonitoring'))
+const AirEventPage = lazy(() => import('./pages/AirMonitoring/AirEventPage'))
+const Personnel = lazy(() => import('./pages/Personnel/Personnel'))
+const HelpPage = lazy(() => import('./pages/Help/HelpPage'))
+const Schools = lazy(() => import('./pages/Schools/Schools'))
+const SchoolDetail = lazy(() => import('./pages/Schools/SchoolDetail'))
+const Buildings = lazy(() => import('./pages/Schools/Buildings'))
+const BuildingDetail = lazy(() => import('./pages/Schools/BuildingDetail'))
+const RoomsFloorPlans = lazy(() => import('./pages/Schools/RoomsFloorPlans'))
+const FloorRooms = lazy(() => import('./pages/Schools/FloorRooms'))
+const LabSamples = lazy(() => import('./pages/LabSamples/LabSamples'))
+const SamplePage = lazy(() => import('./pages/LabSamples/SamplePage'))
+const Trends = lazy(() => import('./pages/Trends/Trends'))
+const CostForecasting = lazy(() => import('./pages/Cost/CostForecasting'))
+const InvoiceAnalysis = lazy(() => import('./pages/Cost/InvoiceAnalysis'))
+const InvoiceDetail = lazy(() => import('./pages/Cost/InvoiceDetail'))
+const CostReports = lazy(() => import('./pages/Cost/CostReports'))
+const Reports = lazy(() => import('./pages/Reports/Reports'))
+const AcmInventory = lazy(() => import('./pages/AcmInventory/AcmInventory'))
+const Surveillance = lazy(() => import('./pages/Surveillance/Surveillance'))
+const SurveillanceForm = lazy(() => import('./pages/Surveillance/SurveillanceForm'))
+const Inspections = lazy(() => import('./pages/Inspections/Inspections'))
+const InspectionForm = lazy(() => import('./pages/Inspections/InspectionForm'))
+const LoginPage = lazy(() => import('./pages/Login/LoginPage'))
+const Microsoft365 = lazy(() => import('./pages/Microsoft365/Microsoft365'))
 import { applyBrandColors } from './theme'
 import { API_BASE } from './lib/api'
 const APP_NAME = 'Seattle Public Schools – Asbestos Compliance'
@@ -108,6 +110,8 @@ function App() {
   return (
     <>
       <DocumentTitle />
+      {/* Outer boundary for pages outside the layout (sign-in); pages inside it show the layout's own loader */}
+      <Suspense fallback={null}>
       <Routes>
         <Route path="login" element={<LoginPage />} />        <Route element={<RequireAuth><AppLayout /></RequireAuth>}>
           <Route index element={<LandingRedirect landingPath={landingPath} />} />
@@ -164,6 +168,7 @@ function App() {
           <Route path="*" element={<PlaceholderPage />} />
         </Route>
       </Routes>
+      </Suspense>
     </>
   )
 }

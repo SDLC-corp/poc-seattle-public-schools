@@ -1,15 +1,16 @@
 import { Router } from 'express';
-import { schools, buildings, getSchoolBuildings, addBuilding, updateBuilding } from '../data/store.js';
+import { schools, buildings, getSchoolBuildings, addBuilding, updateBuilding, removeBuilding, findSchool } from '../data/store.js';
+import { historyAt } from '../data/facilityHistory.js';
 import { MAX_FLOORS, ACM_STATUSES, PRESUMED_ACM_BEFORE } from '../data/buildingGeometry.js';
 import { logAudit, diff } from '../data/auditStore.js';
-import { seedFloors, getFloors } from '../data/floorsStore.js';
-import { getMaterials, allRooms } from '../data/roomsStore.js';
+import { seedFloors, getFloors, removeBuildingFloors } from '../data/floorsStore.js';
+import { getMaterials, allRooms, removeBuildingRooms } from '../data/roomsStore.js';
 import { getRecords as getInspectionRecords } from '../data/inspectionRecordsStore.js';
 import { getRecords as getSurveillanceRecords } from '../data/surveillanceStore.js';
 import { syncFloorRooms } from '../data/floorRoomsSync.js';
 
 // Looked up live so schools added in the app are found
-const schoolById = { get: (id) => schools.find((s) => s.id === id), has: (id) => schools.some((s) => s.id === id) };
+const schoolById = { get: (id) => findSchool(id), has: (id) => Boolean(findSchool(id)) };
 const CONSTRUCTION = ['Concrete', 'Masonry', 'Steel Frame', 'Wood Frame', 'Modular'];
 const BOUNDS = { lat: [47.4, 47.8], lng: [-122.5, -122.2] }; // Seattle area, same as schools
 const THIS_YEAR = new Date().getFullYear();
@@ -191,6 +192,33 @@ router.put('/:id', async (req, res, next) => {
       });
     }
     res.json(updated);
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * DELETE /api/buildings/:id — remove a building with its floors, rooms, ACM records and their files. Refused while
+ * inspections, surveillance or O&M work refer to it (asbestos records must be kept).
+ */
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const b = buildings.find((x) => x.id === req.params.id);
+    if (!b) return res.status(404).json({ error: 'Building not found' });
+    const history = historyAt({ buildingId: b.id });
+    if (history.total) {
+      return res.status(409).json({ error: `${b.name} can't be deleted: it has ${history.text}, which must be kept as asbestos records.` });
+    }
+    const removedFloors = await removeBuildingFloors(b.id);
+    const removed = await removeBuildingRooms(b.id);
+    await removeBuilding(b.id);
+    logAudit(req, {
+      action: 'delete', module: 'Schools & Facilities', recordId: b.id, link: `/schools/${b.schoolId}/buildings`,
+      summary: `Deleted building ${b.name} – ${b.schoolName} (${removedFloors} floor${removedFloors === 1 ? '' : 's'}, ${removed.rooms} room${removed.rooms === 1 ? '' : 's'}, ${removed.materials} ACM record${removed.materials === 1 ? '' : 's'})`,
+      changes: [{ field: 'Building', from: `${b.name} (${b.code})`, to: '(deleted)' }],
+      related: { school: b.schoolName, building: b.name },
+    });
+    res.json({ deleted: b.id, floors: removedFloors, ...removed });
   } catch (err) {
     next(err);
   }

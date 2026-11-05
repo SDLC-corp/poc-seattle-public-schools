@@ -54,7 +54,7 @@ router.get('/schools', (req, res) => {
 router.get('/schools/export.csv', (req, res) => {
   const rows = filterSchools(req.query);
   logAudit(req, { action: 'export', module: 'Compliance', recordId: 'compliance.csv', summary: `Exported compliance status for ${rows.length} schools` });
-  const header = ['School', 'Type', 'Buildings', 'ACM Locations (sample)', 'Last Inspection', 'Next Due', 'Compliance Status'];
+  const header = ['School', 'Type', 'Buildings', 'ACM Locations', 'Last Inspection', 'Next Due', 'Compliance Status'];
   const lines = rows.map((s) => [s.name, s.type, s.buildings, s.acmLocations, s.lastInspection?.slice(0, 10), s.nextDue, STATUS_LABEL[s.status]]);
   res.type('text/csv').attachment('compliance-status.csv')
     .send([header, ...lines].map((r) => r.map(csvCell).join(',')).join('\r\n'));

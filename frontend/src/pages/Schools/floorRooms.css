@@ -270,3 +270,9 @@
 @media (max-width: 700px) {
   .fr-grid-2, .fr-grid-3, .fr-grid-4, .fr-grid-name { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Floor panel: PDF page picker and the stored original PDF */
+.fp-page { margin-bottom: 8px; }
+.fp-source { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 12.5px; color: var(--primary); text-decoration: none; }
+.fp-source:hover { text-decoration: underline; }
+.fr-detect-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }

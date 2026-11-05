@@ -1,3 +1,4 @@
+import { naturalCompare } from '../data/naturalSort.js';
 import { Router } from 'express';
 import { getLabData, RESULT_CLASSES } from '../data/labSamplesStore.js';
 import { inspectionSamples } from '../data/inspectionSamples.js';
@@ -25,7 +26,7 @@ router.get('/', (req, res) => {
   let filtered = result ? scoped.filter((s) => s.resultClass === result) : scoped;
   if (sort === 'asc' || sort === 'desc') {
     const dir = sort === 'asc' ? 1 : -1;
-    filtered = [...filtered].sort((a, b) => dir * a.sampleNo.localeCompare(b.sampleNo, 'en', { numeric: true }));
+    filtered = [...filtered].sort((a, b) => dir * naturalCompare(a.sampleNo, b.sampleNo));
   }
 
   const pageSize = Math.min(100, Math.max(1, Number(req.query.pageSize) || 10));
@@ -55,7 +56,7 @@ router.get('/', (req, res) => {
 const tally = (values) => {
   const m = new Map();
   for (const v of values) if (v) m.set(v, (m.get(v) ?? 0) + 1);
-  return [...m].map(([name, n]) => ({ name, count: n })).sort((a, b) => a.name.localeCompare(b.name, 'en', { numeric: true }));
+  return [...m].map(([name, n]) => ({ name, count: n })).sort((a, b) => naturalCompare(a.name, b.name));
 };
 
 router.get('/facets', (req, res) => {
