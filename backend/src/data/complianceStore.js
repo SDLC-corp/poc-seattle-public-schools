@@ -1,6 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { schools, getSchoolBuildings } from './store.js';
-import { getMaterials } from './roomsStore.js';
 import { writeJson, readPath } from './atomicWrite.js';
 
 const FILE = new URL('../../data/inspections.json', import.meta.url);
@@ -47,13 +46,11 @@ export const getInspection = (id) => {
   return i ? withStatus(i) : null;
 };
 
-// ACM locations per school from the live ACM inventory (known or assumed asbestos, not "No ACM" findings)
-function acmCounts() {
-  const n = new Map();
-  for (const m of getMaterials()) {
-    if (m.acmStatus === 'ACM Present' || m.acmStatus === 'Assumed ACM') n.set(m.schoolId, (n.get(m.schoolId) ?? 0) + 1);
-  }
-  return n;
+// Stable sample ACM location count per school (until an ACM inventory exists)
+function sampleAcmCount(schoolId) {
+  let h = 7;
+  for (const ch of schoolId) h = (h * 33 + ch.charCodeAt(0)) >>> 0;
+  return 12 + (h % 70);
 }
 
 // compliant | dueSoon | overdue (= Non-Compliant)
@@ -75,14 +72,13 @@ export function schoolCompliance(schoolId) {
 }
 
 export function schoolRows() {
-  const acm = acmCounts();
   return schools.map((s) => ({
     id: s.id,
     name: s.name,
     type: s.type,
     location: s.location,
     buildings: getSchoolBuildings(s.id).length,
-    acmLocations: acm.get(s.id) ?? 0,
+    acmLocations: sampleAcmCount(s.id),
     ...schoolCompliance(s.id),
   }));
 }

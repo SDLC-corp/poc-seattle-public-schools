@@ -6,7 +6,7 @@ import {
 } from 'lucide-react'
 import { request } from '../../lib/api'
 import { useConfirm } from '../../components/ui/useConfirm'
-import { AcmBadge, confirmDeleteBuilding } from './BuildingParts'
+import { AcmBadge } from './BuildingParts'
 import BuildingForm from './BuildingForm'
 import FloorPanel from './FloorPanel'
 import { InspectionTable, DocumentsCard } from './FacilityTabs'
@@ -186,15 +186,6 @@ export default function BuildingDetail() {
       },
     })
   }
-  // Back to the school's buildings once it's gone (the server refuses if inspections etc. refer to it)
-  const deleteBuilding = async () => {
-    try {
-      if (!(await confirmDeleteBuilding({ ...b, schoolName: s?.name ?? b.schoolName }, confirm))) return
-      navigate(buildingsUrl, { replace: true, state: { toast: { kind: 'success', text: `Deleted ${b.name}` } } })
-    } catch (err) {
-      setToast({ kind: 'error', text: err.message })
-    }
-  }
   const deleteFloor = async (floor) => {
     const n = floor.roomStats?.mapped ?? 0
     const ok = await confirm({
@@ -258,10 +249,7 @@ export default function BuildingDetail() {
               <Stat label="ACM Rooms" value={fmtNum(b.roomsWithAcm)} tone={b.roomsWithAcm ? 'critical' : undefined} />
               <Stat label="Mapped Rooms" value={fmtNum(mappedRooms)} />
             </div>
-            <div className="bd-card-actions">
-              <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={() => setEditBuilding(true)}><Pencil size={13} />Edit Building</button>
-              <button type="button" className="u-btn u-btn-outline u-btn-sm bd-delete" onClick={deleteBuilding}><Trash2 size={13} />Delete Building</button>
-            </div>
+            <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={() => setEditBuilding(true)}><Pencil size={13} />Edit Building</button>
           </section>
         )}
 

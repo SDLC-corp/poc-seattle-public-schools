@@ -1,6 +1,5 @@
-import { naturalCompare } from '../data/naturalSort.js';
 import express, { Router } from 'express';
-import { schools, buildings, findSchool, findBuilding } from '../data/store.js';
+import { schools, buildings } from '../data/store.js';
 import { getAllFloors } from '../data/floorsStore.js';
 import { getMaterials, getMaterial, updateMaterial, allRooms } from '../data/roomsStore.js';
 import { getPeople } from '../data/personnelStore.js';
@@ -31,9 +30,8 @@ const STATUS_LABEL = { scheduled: 'Scheduled', draft: 'In Progress', submitted: 
 const OPEN_STATES = ['scheduled', 'draft', 'returned'];
 
 // Looked up live so schools added in the app are found
-const schoolName = { get: (id) => findSchool(id)?.name };
-// Looked up live so buildings added in the app are found
-const buildingName = { get: (id) => findBuilding(id)?.name };
+const schoolName = { get: (id) => schools.find((s) => s.id === id)?.name };
+const buildingName = new Map(buildings.map((b) => [b.id, b.name]));
 const todayIso = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -167,7 +165,7 @@ router.get('/materials', (req, res) => {
       place: `${p.schoolName} / ${p.buildingName} / ${p.floorName} / ${p.roomNumber} ${p.roomName}`.trim(),
       lastInspected, reinspectionDue: base ? addYears(base, M.REINSPECTION_YEARS) : null, openInspection: open.get(m.id) ?? null,
     };
-  }).sort((a, b) => naturalCompare(a.place, b.place)));
+  }).sort((a, b) => a.place.localeCompare(b.place, 'en', { numeric: true })));
 });
 
 function materialContext(materialId, excludeId = null) {
@@ -207,7 +205,7 @@ router.get('/', (req, res) => {
   const get = SORTS[key];
   const sorted = [...filtered].sort((a, b) => {
     const x = get(a); const y = get(b);
-    return d * (typeof x === 'number' ? x - y : naturalCompare(String(x), String(y)))
+    return d * (typeof x === 'number' ? x - y : String(x).localeCompare(String(y), 'en', { numeric: true }))
       || String(b.shownDate).localeCompare(String(a.shownDate)) || b.id.localeCompare(a.id);
   });
   const pageSize = Math.min(100, Math.max(1, Number(req.query.pageSize) || 10));

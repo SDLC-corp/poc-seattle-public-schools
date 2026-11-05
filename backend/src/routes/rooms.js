@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { buildings, schools } from '../data/store.js';
-import { getFloor, getAllFloors } from '../data/floorsStore.js';
+import { getFloor } from '../data/floorsStore.js';
 import {
   getRooms, getRoom, rawRoom, addRooms, updateRoom, removeRoom, materialsForRoom, addFile, removeFile, filePath, FILE_DIR,
 } from '../data/roomsStore.js';
@@ -15,18 +15,11 @@ const link = (r) => `/schools/${r.schoolId}/buildings/${r.buildingId}/floors/${r
 const int = (v) => (v === '' || v === null || v === undefined ? null : Number(v));
 
 // Location names for lists and the details screen
-// For long lists, pass lookup maps made once per request (placeMaps) instead of searching the arrays per room
-function withPlace(r, maps) {
-  const b = maps ? maps.buildings.get(r.buildingId) : buildingOf(r.buildingId);
-  const f = maps ? maps.floors.get(r.floorId) : getFloor(r.floorId);
-  const school = maps ? maps.schools.get(r.schoolId) ?? null : schoolName(r.schoolId);
-  return { ...r, schoolName: school, buildingName: b?.name ?? null, buildingCode: b?.code ?? null, floorName: f?.name ?? null, floorNumber: f?.number ?? null };
+function withPlace(r) {
+  const b = buildingOf(r.buildingId);
+  const f = getFloor(r.floorId);
+  return { ...r, schoolName: schoolName(r.schoolId), buildingName: b?.name ?? null, buildingCode: b?.code ?? null, floorName: f?.name ?? null, floorNumber: f?.number ?? null };
 }
-const placeMaps = () => ({
-  buildings: new Map(buildings.map((b) => [b.id, b])),
-  floors: new Map(getAllFloors().map((f) => [f.id, f])),
-  schools: new Map(schools.map((s) => [s.id, s.name])),
-});
 
 export function validPolygon(p) {
   return Array.isArray(p) && p.length >= 6 && p.length <= 400 && p.length % 2 === 0 && p.every((v) => typeof v === 'number' && v >= 0 && v <= 1);
@@ -70,9 +63,8 @@ router.get('/', (req, res) => {
   const { floorId, buildingId, schoolId, q, acmStatus } = req.query;
   const term = q?.trim().toLowerCase();
   const list = getRooms({ floorId, buildingId, schoolId })
-    .filter((r) => (!acmStatus || r.acmStatus === acmStatus) && (!term || [r.name, r.number, r.type].some((v) => v?.toLowerCase().includes(term))));
-  const maps = placeMaps();
-  list.forEach((r, i) => { list[i] = withPlace(r, maps); });
+    .filter((r) => (!acmStatus || r.acmStatus === acmStatus) && (!term || [r.name, r.number, r.type].some((v) => v?.toLowerCase().includes(term))))
+    .map(withPlace);
   res.json({ count: list.length, rooms: list });
 });
 

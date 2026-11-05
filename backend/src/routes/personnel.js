@@ -5,7 +5,7 @@ import { PROGRAMS, CATEGORIES, programById } from '../data/trainingPrograms.js';
 import {
   getPeople, getPerson, addPerson, updatePerson, addRecord, updateRecord, nextId, recordStatus, DUE_SOON_DAYS, CERT_DIR, certPath,
 } from '../data/personnelStore.js';
-import { schools, findSchool } from '../data/store.js';
+import { schools } from '../data/store.js';
 import { logAudit, diff, currentUser } from '../data/auditStore.js';
 import { MAX_ATTACHMENT_BYTES } from '../data/acmMeta.js';
 import {
@@ -16,7 +16,7 @@ import { sniff, storeUpload, sendStored } from './uploadCheck.js';
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
 // Looked up live so schools added in the app are found
-const schoolById = { get: (id) => findSchool(id), has: (id) => Boolean(findSchool(id)) };
+const schoolById = { get: (id) => schools.find((s) => s.id === id), has: (id) => schools.some((s) => s.id === id) };
 
 // Certified (all required training current) / not certified (a required course never taken) / overdue (lapsed)
 const certStatus = (p) => (p.required.some((r) => r.status === 'missing') ? 'notCertified'

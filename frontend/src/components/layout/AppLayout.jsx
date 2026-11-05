@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Outlet, useLocation } from 'react-router'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
@@ -6,7 +6,6 @@ import ChatAssistant from './ChatAssistant'
 import NavTrail from './NavTrail'
 import { useAuth } from '../../auth/authContext'
 import { request } from '../../lib/api'
-import { prefetchPath, prefetchCommonPages } from '../../lib/prefetchPages'
 import './layout.css'
 
 const STORAGE_KEY = 'sidebar-collapsed'
@@ -56,22 +55,6 @@ export default function AppLayout() {
     }
   }, [collapsed])
 
-  // Page switching feels instant: a link's page code starts loading when the pointer rests on it (or keyboard focus
-  // reaches it), and the most used pages load quietly once the app is idle
-  useEffect(() => {
-    const onIntent = (e) => {
-      const a = e.target instanceof Element ? e.target.closest('a[href]') : null
-      if (a) prefetchPath(a.getAttribute('href'))
-    }
-    document.addEventListener('pointerover', onIntent, { passive: true })
-    document.addEventListener('focusin', onIntent)
-    prefetchCommonPages()
-    return () => {
-      document.removeEventListener('pointerover', onIntent)
-      document.removeEventListener('focusin', onIntent)
-    }
-  }, [])
-
   // New page starts at the top (the content area scrolls, not the window)
   useEffect(() => {
     mainRef.current?.scrollTo(0, 0)
@@ -100,10 +83,7 @@ export default function AppLayout() {
         {mobileOpen && <div className="sidebar-backdrop" onClick={() => setMobileOpen(false)} />}
         <main ref={mainRef} className="app-main">
           <NavTrail />
-          {/* A page's code loads the first time it's opened (App.jsx lazy routes) */}
-          <Suspense fallback={<div className="page-loading" role="status"><span className="page-loading-spinner" />Loading…</div>}>
-            <Outlet />
-          </Suspense>
+          <Outlet />
         </main>
       </div>
       <ChatAssistant />

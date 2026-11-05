@@ -1,11 +1,8 @@
 import { useState } from 'react'
 import { ChevronRight, Folder, FolderOpen, Building2, Layers } from 'lucide-react'
 
-// Facility → building → floor; picking a node sets the location filters. Counts are ACM (present or assumed) and
-// follow the other filters; the tooltip adds every material recorded there, "No ACM" findings included.
-const countTitle = (x, filtered) => (filtered ? `Matching records: ${x.count}` : `ACM (present or assumed): ${x.count} · materials recorded: ${x.records ?? x.count}`)
+// Facility → building → floor; picking a node sets the location filters. Counts follow the other filters.
 export default function FacilityTree({ tree, filters, onPick }) {
-  const filtered = Boolean(filters.status)
   const [open, setOpen] = useState(() => new Set([filters.school, filters.building].filter(Boolean)))
   const [query, setQuery] = useState('')
   // Whatever is selected from elsewhere (filters, a summary row) is always expanded
@@ -30,7 +27,7 @@ export default function FacilityTree({ tree, filters, onPick }) {
           <button type="button" className={`ai-node lvl-0${allSelected ? ' selected' : ''}`} onClick={() => onPick({})}>
             <span className="ai-caret" />
             <Layers size={15} /><span className="ai-node-name">All Facilities</span>
-            <span className="ai-count" title={tree ? countTitle({ count: tree.reduce((n, s) => n + s.count, 0), records: tree.reduce((n, s) => n + (s.records ?? s.count), 0) }, filtered) : undefined}>{tree?.reduce((n, s) => n + s.count, 0) ?? ''}</span>
+            <span className="ai-count">{tree?.reduce((n, s) => n + s.count, 0) ?? ''}</span>
           </button>
         </li>
         {shown.map((s) => {
@@ -45,7 +42,7 @@ export default function FacilityTree({ tree, filters, onPick }) {
                 <button type="button" className="ai-node-pick" onClick={() => { onPick({ school: s.id }); if (!sOpen) toggle(s.id) }}>
                   {sOpen ? <FolderOpen size={15} /> : <Folder size={15} />}
                   <span className="ai-node-name" title={s.name}>{s.name}</span>
-                  <span className="ai-count" title={countTitle(s, filtered)}>{s.count}</span>
+                  <span className="ai-count">{s.count}</span>
                 </button>
               </div>
               {sOpen && (
@@ -62,7 +59,7 @@ export default function FacilityTree({ tree, filters, onPick }) {
                           <button type="button" className="ai-node-pick" onClick={() => { onPick({ school: s.id, building: b.id }); if (!bOpen) toggle(b.id) }}>
                             <Building2 size={15} />
                             <span className="ai-node-name" title={b.name}>{b.name}</span>
-                            <span className="ai-count" title={countTitle(b, filtered)}>{b.count}</span>
+                            <span className="ai-count">{b.count}</span>
                           </button>
                         </div>
                         {bOpen && (
@@ -75,7 +72,7 @@ export default function FacilityTree({ tree, filters, onPick }) {
                                     onClick={() => onPick({ school: s.id, building: b.id, floor: f.id })}>
                                     <Layers size={14} />
                                     <span className="ai-node-name" title={f.name}>{f.name}</span>
-                                    <span className="ai-count" title={countTitle(f, filtered)}>{f.count}</span>
+                                    <span className="ai-count">{f.count}</span>
                                   </button>
                                 </li>
                               )

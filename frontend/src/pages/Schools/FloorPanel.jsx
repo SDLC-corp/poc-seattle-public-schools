@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router'
-import { X, Info, Upload, ImageOff, LoaderCircle, FileUp, FileText, ExternalLink } from 'lucide-react'
+import { X, Info, Upload, ImageOff, LoaderCircle, FileUp } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import { request, API_BASE, authHeaders } from '../../lib/api'
 import { floorName } from './buildingUtils'
@@ -8,25 +8,6 @@ import { floorName } from './buildingUtils'
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
 const MAX_PLAN_BYTES = 5 * 1024 * 1024 // server limit for the stored plan image
 const MAX_PDF_BYTES = 25 * 1024 * 1024
-
-// The original PDF, stored on the server (uploads/floorplans) next to the plan image rendered from it
-async function uploadPlanSource(floorId, pdf) {
-  const qs = new URLSearchParams({ name: pdf.file.name, page: pdf.page, pages: pdf.pages })
-  const res = await fetch(`${API_BASE}/floors/${floorId}/plan/source?${qs}`, {
-    method: 'POST', headers: { 'Content-Type': 'application/pdf', ...(await authHeaders()) }, body: pdf.file,
-  })
-  const body = await res.json().catch(() => ({}))
-  if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`)
-  return body
-}
-
-// A PDF page as the plan image: sharp enough for room detection, within the 5 MB limit (falls back to less detail)
-async function renderPdfPage(file, page) {
-  const { pdfToPlanImage } = await import('../../lib/pdfPlan')
-  let out = await pdfToPlanImage(file, page, 3000)
-  if (out.file.size > MAX_PLAN_BYTES) out = await pdfToPlanImage(file, page, 2000)
-  return out
-}
 
 async function uploadPlan(floorId, file) {
   const res = await fetch(`${API_BASE}/floors/${floorId}/plan?name=${encodeURIComponent(file.name)}`, {
@@ -59,7 +40,6 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
   const [dragOver, setDragOver] = useState(false)
   const [planFile, setPlanFile] = useState(null)
   const [planSource, setPlanSource] = useState(null) // original file name when converted from PDF
-  const [planPdf, setPlanPdf] = useState(null) // { file, page, pages } — the PDF itself, uploaded with the plan
   const [removeImage, setRemoveImage] = useState(false)
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(false)
@@ -106,13 +86,12 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
     if (file.size > (isPdf ? MAX_PDF_BYTES : MAX_PLAN_BYTES)) { setErrors((er) => ({ ...er, plan: `The file must be ${isPdf ? 25 : 5} MB or smaller` })); return }
     setErrors((er) => ({ ...er, plan: undefined }))
     let source = null
-    let pdf = null
     if (isPdf) {
       setConverting(true)
       try {
-        const out = await renderPdfPage(file, 1)
+        const { pdfToPlanImage } = await import('../../lib/pdfPlan')
+        const out = await pdfToPlanImage(file)
         source = out.pages > 1 ? `${file.name} — page 1 of ${out.pages}` : file.name
-        pdf = { file, page: 1, pages: out.pages }
         file = out.file
       } catch (err) {
         setErrors((er) => ({ ...er, plan: `Couldn't read the PDF (${err.message})` }))
@@ -123,30 +102,11 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
       if (file.size > MAX_PLAN_BYTES) { setErrors((er) => ({ ...er, plan: 'The rendered plan is larger than 5 MB; try a simpler PDF or export it as an image' })); return }
     }
     setPlanSource(source)
-    setPlanPdf(pdf)
     setPlanFile(file)
     setRemoveImage(false)
   }
 
-  // Multi-page PDF: render another page as the plan
-  const pickPage = async (page) => {
-    if (!planPdf || page === planPdf.page) return
-    setConverting(true)
-    try {
-      const out = await renderPdfPage(planPdf.file, page)
-      if (out.file.size > MAX_PLAN_BYTES) { setErrors((er) => ({ ...er, plan: 'That page renders larger than 5 MB; export it as an image instead' })); return }
-      setPlanPdf({ ...planPdf, page })
-      setPlanSource(`${planPdf.file.name} — page ${page} of ${planPdf.pages}`)
-      setPlanFile(out.file)
-      setErrors((er) => ({ ...er, plan: undefined }))
-    } catch (err) {
-      setErrors((er) => ({ ...er, plan: `Couldn't render page ${page} (${err.message})` }))
-    } finally {
-      setConverting(false)
-    }
-  }
-
-  const removePlan = () => { setPlanFile(null); setPlanSource(null); setPlanPdf(null); setRemoveImage(true) }
+  const removePlan = () => { setPlanFile(null); setPlanSource(null); setRemoveImage(true) }
 
   const submit = async (e) => {
     e.preventDefault()
@@ -163,11 +123,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
       let saved = res.floor
       let warning = null
       try {
-        if (planFile) {
-          saved = await uploadPlan(saved.id, planFile)
-          // The PDF it came from is kept too (viewable / downloadable from the floor plan)
-          if (planPdf) saved = await uploadPlanSource(saved.id, planPdf)
-        }
+        if (planFile) saved = await uploadPlan(saved.id, planFile)
         else if (removeImage && saved.planUrl) saved = await request(`/floors/${saved.id}/plan`, { method: 'DELETE' })
       } catch (err) {
         warning = `Floor saved, but the plan image wasn't (${err.message})`
@@ -244,7 +200,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
             <FileUp size={28} />
             <strong>Upload the floor plan</strong>
             <span>Drop a <b>PDF</b> here or click to browse — PNG, JPEG and WebP also work</span>
-            <small>The PDF is stored with the floor; for a multi-page PDF, choose the page after uploading. Rooms are detected on the floor plan after you save.</small>
+            <small>PDF: page 1 is used. Rooms are detected on the floor plan after you save.</small>
           </button>
         )}
         <input ref={fileRef} type="file" accept=".pdf,application/pdf,image/png,image/jpeg,image/webp" hidden
@@ -259,19 +215,6 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
                 <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={removePlan}><ImageOff size={13} />Remove Plan</button>
               </span>
             </div>
-            {/* PDF: which page is the plan (multi-page drawings), and the stored original */}
-            {planPdf && planPdf.pages > 1 && (
-              <label className="uf-field fp-page">
-                <span>PDF page used as the plan</span>
-                <SearchSelect variant="field" label="PDF page" value={String(planPdf.page)} searchable={planPdf.pages > 8} onChange={(v) => pickPage(Number(v))}
-                  options={Array.from({ length: planPdf.pages }, (_, i) => ({ value: String(i + 1), label: `Page ${i + 1} of ${planPdf.pages}` }))} />
-              </label>
-            )}
-            {!planFile && !removeImage && floor?.planSourceUrl && (
-              <a className="fp-source" href={`${API_BASE.replace(/\/api$/, '')}${floor.planSourceUrl}`} target="_blank" rel="noopener noreferrer">
-                <FileText size={14} />Original PDF: {floor.planSource.name}{floor.planSource.pages > 1 ? ` (page ${floor.planSource.page} of ${floor.planSource.pages})` : ''}<ExternalLink size={12} />
-              </a>
-            )}
             <a className="fp-thumb" href={imageUrl} target="_blank" rel="noopener noreferrer" title="Open the plan in a new tab">
               <img src={imageUrl} alt="Uploaded floor plan" />
             </a>

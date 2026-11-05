@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router'
+import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import {
   School, ChevronRight, ArrowLeft, Plus, Search, MapPin, Phone, Mail, Globe, ExternalLink, ShieldCheck,
   CalendarDays, CircleCheck, CircleAlert, Info, SearchX,
@@ -7,12 +7,9 @@ import {
 import SearchSelect from '../../components/ui/SearchSelect'
 import { SchoolStatusBadge, InspectionStatusBadge } from '../Compliance/complianceMeta'
 import { request, fmtDate } from '../../lib/api'
-import { AcmBadge, BuildingKpis, BuildingsTable, BuildingDetails, confirmDeleteBuilding } from './BuildingParts'
-import { useConfirm } from '../../components/ui/useConfirm'
+import { AcmBadge, BuildingKpis, BuildingsTable, BuildingDetails } from './BuildingParts'
 import BuildingForm from './BuildingForm'
 import { InspectionTable, DocumentsCard } from './FacilityTabs'
-import SchoolInspections from './SchoolInspections'
-import { useSchoolLive, LiveSnapshot, SchoolAcmSummary, SchoolSurveillance, LiveChecks } from './SchoolLive'
 import { ACM_FILTERS, buildingTotals, fmtNum, PRESUMED_ACM_BEFORE } from './buildingUtils'
 import '../Users/users.css'
 import '../Compliance/compliance.css'
@@ -32,15 +29,8 @@ const SURVEILLANCE = '6-Month Surveillance'
 const cleanPrincipal = (p) => (p ? p.replace(/^(interim\s+)?principal\s*:?\s*/i, '').trim() : '')
 const fmtDay = (iso) => (iso ? new Date(`${iso}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—')
 
-function Overview({ school: s, buildings, compliance, nextOpen, live }) {
-  // Latest of the AHERA schedule and the inspection records; next = the sooner of the two
-  const lastLive = live.lastInspection?.date ?? null
-  const last = [compliance?.lastInspection?.slice(0, 10), lastLive].filter(Boolean).sort().at(-1) ?? null
-  const nextLive = live.nextInspection
-  const next = nextLive && (!nextOpen || nextLive.scheduledDate < nextOpen.scheduledDate)
-    ? { date: nextLive.scheduledDate, type: `Inspection ${nextLive.id} · ${nextLive.type}`, badge: nextLive.overdue ? 'overdue' : null }
-    : nextOpen ? { date: nextOpen.scheduledDate, type: nextOpen.type, badge: nextOpen.status } : null
-  const acm = live.acm?.stats
+function Overview({ school: s, buildings, compliance, nextOpen }) {
+  const t = buildingTotals(buildings)
   return (
     <div className="sd-grid">
       <section className="u-card">
@@ -63,11 +53,11 @@ function Overview({ school: s, buildings, compliance, nextOpen, live }) {
         <header className="u-card-head"><h2><ShieldCheck size={16} /> Compliance Snapshot</h2>{compliance && <SchoolStatusBadge status={compliance.status} />}</header>
         {!compliance ? <p className="u-muted u-small">Loading…</p> : (
           <dl className="cd-facts sd-facts">
-            <div className="cd-row"><dt>Last Inspection</dt><dd>{last ? fmtDay(last) : '—'}</dd></div>
-            <div className="cd-row"><dt>Next Due</dt><dd>{next ? <>{fmtDay(next.date)} {next.badge && <InspectionStatusBadge status={next.badge} />}</> : '—'}</dd></div>
-            <div className="cd-row"><dt>Next Inspection</dt><dd>{next?.type ?? '—'}</dd></div>
+            <div className="cd-row"><dt>Last Inspection</dt><dd>{fmtDate(compliance.lastInspection)}</dd></div>
+            <div className="cd-row"><dt>Next Due</dt><dd>{nextOpen ? <>{fmtDay(nextOpen.scheduledDate)} <InspectionStatusBadge status={nextOpen.status} /></> : '—'}</dd></div>
+            <div className="cd-row"><dt>Next Inspection</dt><dd>{nextOpen?.type ?? '—'}</dd></div>
             <div className="cd-row"><dt>Pre-{PRESUMED_ACM_BEFORE} Buildings</dt><dd>{buildings.filter((b) => b.presumedAcm).length} of {buildings.length}</dd></div>
-            <div className="cd-row"><dt>ACM Locations</dt><dd>{acm ? <>{fmtNum(acm.acmPresent + acm.assumed)} <small className="u-muted">({fmtNum(acm.acmPresent)} present · {fmtNum(acm.assumed)} assumed)</small></> : '—'}</dd></div>
+            <div className="cd-row"><dt>Rooms with ACM</dt><dd>{fmtNum(t.withAcm)} of {fmtNum(t.rooms)}</dd></div>
           </dl>
         )}
         <div className="sch-links">
@@ -78,6 +68,47 @@ function Overview({ school: s, buildings, compliance, nextOpen, live }) {
     </div>
   )
 }
+
+function AcmSummary({ buildings }) {
+  const t = buildingTotals(buildings)
+  const count = (s) => buildings.filter((b) => b.acmStatus === s).length
+  return (
+    <section className="u-card">
+      <header className="u-card-head">
+        <h2>ACM by Building</h2>
+        <span className="u-muted u-small">{count('ACM Present')} ACM present · {count('Assumed ACM')} assumed · {count('No ACM')} no ACM</span>
+      </header>
+      <div className="u-table-wrap">
+        <table className="u-table c-table">
+          <thead><tr><th>Building</th><th className="c-num">Year Built</th><th>ACM Status</th><th className="c-num">Rooms</th><th className="c-num">Rooms with ACM</th><th className="sd-share-col">Share of Rooms</th></tr></thead>
+          <tbody>
+            {buildings.map((b) => {
+              const pct = b.rooms ? Math.round((b.roomsWithAcm / b.rooms) * 100) : 0
+              return (
+                <tr key={b.id}>
+                  <td><strong>{b.name}</strong><small className="p-sub">{b.code}</small></td>
+                  <td className="c-num">{b.yearBuilt}</td>
+                  <td><AcmBadge status={b.acmStatus} /></td>
+                  <td className="c-num">{fmtNum(b.rooms)}</td>
+                  <td className="c-num">{fmtNum(b.roomsWithAcm)}</td>
+                  <td className="sd-share-col">
+                    <span className="sd-share"><span className="b-bar"><span className="b-bar-acm" style={{ width: `${pct}%` }} /><span className="b-bar-none" /></span><b>{pct}%</b></span>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+          <tfoot>
+            <tr><td>Total</td><td /><td /><td className="c-num">{fmtNum(t.rooms)}</td><td className="c-num">{fmtNum(t.withAcm)}</td>
+              <td className="sd-share-col">{t.rooms ? Math.round((t.withAcm / t.rooms) * 100) : 0}% of rooms</td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <p className="ad-sample"><Info size={13} />“Assumed ACM” means suspect material in a pre-{PRESUMED_ACM_BEFORE} building that hasn't been sampled yet; AHERA treats it as ACM until lab results show otherwise.</p>
+    </section>
+  )
+}
+
 
 export default function SchoolDetail() {
   const { schoolId, tab: tabSlug = '' } = useParams()
@@ -91,11 +122,7 @@ export default function SchoolDetail() {
   const [acmFilter, setAcmFilter] = useState('')
   const [selectedId, setSelectedId] = useState(null)
   const [form, setForm] = useState(null) // {} = add, { building } = edit
-  // A message handed over by the page we came from (e.g. a deleted building)
-  const routerLocation = useLocation()
-  const [toast, setToast] = useState(() => routerLocation.state?.toast ?? null)
-  const [confirm, confirmDialog] = useConfirm()
-  const live = useSchoolLive(schoolId) // inspections, surveillance, O&M and ACM recorded for this school
+  const [toast, setToast] = useState(null)
 
   useEffect(() => {
     let cancelled = false
@@ -147,16 +174,6 @@ export default function SchoolDetail() {
     setSelectedId(saved.id)
     setToast({ kind: 'success', text: isNew ? `Added ${saved.name}` : `Saved ${saved.name}` })
   }
-  const onDelete = async (b) => {
-    try {
-      if (!(await confirmDeleteBuilding(b, confirm))) return
-      setData((d) => ({ ...d, buildings: d.buildings.filter((x) => x.id !== b.id) }))
-      if (selectedId === b.id) setSelectedId(null)
-      setToast({ kind: 'success', text: `Deleted ${b.name}` })
-    } catch (err) {
-      setToast({ kind: 'error', text: err.message })
-    }
-  }
   const onAcmFilter = (key) => { setAcmFilter(key); if (tabSlug !== 'buildings') navigate(`/schools/${schoolId}/buildings`) }
 
   return (
@@ -190,11 +207,9 @@ export default function SchoolDetail() {
           ))}
         </nav>
 
-        <BuildingKpis buildings={current ? buildings : null} filter={tabSlug === 'buildings' ? acmFilter : null} onFilter={onAcmFilter}
-          live={live.acm && live.groups ? { acmLocations: live.acm.stats.acmPresent + live.acm.stats.assumed, acmRooms: live.groups.rows.reduce((n, g) => n + (g.acmRooms ?? 0), 0) } : { acmLocations: null, acmRooms: null }} />
+        <BuildingKpis buildings={current ? buildings : null} filter={tabSlug === 'buildings' ? acmFilter : null} onFilter={onAcmFilter} />
 
-        {s && tabSlug === '' && <Overview school={s} buildings={buildings} compliance={comp} nextOpen={nextOpen} live={live} />}
-        {s && tabSlug === '' && <LiveSnapshot live={live} schoolId={schoolId} />}
+        {s && tabSlug === '' && <Overview school={s} buildings={buildings} compliance={comp} nextOpen={nextOpen} />}
 
         {s && tabSlug === 'buildings' && (
           <section className="u-card">
@@ -209,20 +224,17 @@ export default function SchoolDetail() {
                 <button type="button" className="u-btn u-btn-primary" onClick={() => setForm({})}><Plus size={16} />Add Building</button>
               </div>
             </header>
-            <BuildingsTable buildings={filtered} selectedId={selected?.id} onView={(b) => setSelectedId(b.id)} onEdit={(b) => setForm({ building: b })} onDelete={onDelete}
+            <BuildingsTable buildings={filtered} selectedId={selected?.id} onView={(b) => setSelectedId(b.id)} onEdit={(b) => setForm({ building: b })}
               emptyText={buildings.length ? 'No buildings match this search.' : 'No buildings yet — add the first one.'} />
           </section>
         )}
 
-        {s && tabSlug === 'acm' && <SchoolAcmSummary buildings={buildings} live={live} schoolId={schoolId} />}
-        {s && tabSlug === 'surveillance' && <SchoolSurveillance live={live} schoolId={schoolId} />}
+        {s && tabSlug === 'acm' && <AcmSummary buildings={buildings} />}
 
-        {/* The school's inspection records at every stage; the AHERA schedule (if any) below */}
-        {s && tabSlug === 'inspections' && <SchoolInspections schoolId={schoolId} />}
-        {s && (tabSlug === 'surveillance' || (tabSlug === 'inspections' && inspections.some((i) => i.type !== SURVEILLANCE))) && (
+        {s && (tabSlug === 'inspections' || tabSlug === 'surveillance') && (
           <section className="u-card">
             <header className="u-card-head">
-              <h2>{tabSlug === 'surveillance' ? 'School Surveillance Schedule (AHERA, every 6 months)' : 'AHERA Inspection Schedule (every 3 years)'}</h2>
+              <h2>{tabSlug === 'surveillance' ? 'Periodic Surveillance (every 6 months)' : 'Inspections & Reinspections (every 3 years)'}</h2>
               <Link className="u-btn u-btn-outline u-btn-sm" to="/compliance"><CalendarDays size={13} />Compliance Calendar</Link>
             </header>
             {!comp ? <p className="u-muted u-small">Loading…</p> : (
@@ -241,12 +253,10 @@ export default function SchoolDetail() {
                 <dl className="cd-facts sd-facts">
                   <div className="cd-row"><dt>Last Inspection</dt><dd>{fmtDate(comp.lastInspection)}</dd></div>
                   <div className="cd-row"><dt>Next Due</dt><dd>{nextOpen ? <>{fmtDay(nextOpen.scheduledDate)} · {nextOpen.type} <InspectionStatusBadge status={nextOpen.status} /></> : '—'}</dd></div>
-                  <div className="cd-row"><dt>Open on the AHERA Schedule</dt><dd>{inspections.filter((i) => !i.completedAt).length}</dd></div>
-                  <div className="cd-row"><dt>Overdue on the Schedule</dt><dd>{inspections.filter((i) => i.status === 'overdue').length}</dd></div>
-                  <div className="cd-row"><dt>Completed on the Schedule</dt><dd>{inspections.filter((i) => i.completedAt).length}</dd></div>
+                  <div className="cd-row"><dt>Open Inspections</dt><dd>{inspections.filter((i) => !i.completedAt).length}</dd></div>
+                  <div className="cd-row"><dt>Overdue</dt><dd>{inspections.filter((i) => i.status === 'overdue').length}</dd></div>
+                  <div className="cd-row"><dt>Completed</dt><dd>{inspections.filter((i) => i.completedAt).length}</dd></div>
                 </dl>
-                <h3 className="sl-checks-title">Checked against what's recorded</h3>
-                <LiveChecks live={live} />
                 <p className="ad-sample"><Info size={13} />AHERA requires periodic surveillance every 6 months and a reinspection every 3 years. A school is Non-Compliant when either is overdue, and Due Soon within 30 days.</p>
               </>
             )}
@@ -266,7 +276,6 @@ export default function SchoolDetail() {
       {form && s && (
         <BuildingForm school={s} building={form.building} existing={buildings} onClose={closeForm} onSaved={onSaved} />
       )}
-      {confirmDialog}
       {toast && (
         <div className={`u-toast ${toast.kind}`} role="status">
           {toast.kind === 'success' ? <CircleCheck size={16} /> : <CircleAlert size={16} />}

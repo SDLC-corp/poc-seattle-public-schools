@@ -14,10 +14,6 @@
 .ca-fab.open { width: 56px; padding: 0; justify-content: center; }
 .ca-fab::after { content: ''; position: absolute; inset: -4px; border-radius: inherit; border: 2px solid rgba(31, 134, 181, 0.45); animation: ca-pulse 2.4s ease-out infinite; pointer-events: none; }
 .ca-fab.open::after { display: none; }
-/* Movable: drag to place it (position comes from the inline style); touch drags move it instead of scrolling */
-.ca-fab { touch-action: none; user-select: none; }
-.ca-fab.dragging { cursor: grabbing; transition: none; transform: scale(1.04); box-shadow: 0 18px 40px rgba(15, 58, 102, 0.45); }
-.ca-fab.dragging::after { display: none; }
 @keyframes ca-pulse { 0% { opacity: 0.9; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.18); } }
 
 .ca-panel {

@@ -2,8 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Building2, Search, RotateCcw, ChevronLeft, ChevronRight, CircleCheck, CircleAlert, Plus } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import { request } from '../../lib/api'
-import { BuildingKpis, BuildingsTable, BuildingDetails, confirmDeleteBuilding } from './BuildingParts'
-import { useConfirm } from '../../components/ui/useConfirm'
+import { BuildingKpis, BuildingsTable, BuildingDetails } from './BuildingParts'
 import BuildingForm from './BuildingForm'
 import { ACM_FILTERS } from './buildingUtils'
 import '../Users/users.css'
@@ -25,7 +24,6 @@ export default function Buildings() {
   const [adding, setAdding] = useState(false)
   const [schools, setSchools] = useState(null) // for the Add Building school picker (includes schools without buildings)
   const [toast, setToast] = useState(null)
-  const [confirm, confirmDialog] = useConfirm()
 
   useEffect(() => {
     request('/buildings').then((d) => setBuildings(d.buildings)).catch((err) => setError(err.message))
@@ -81,17 +79,6 @@ export default function Buildings() {
     setToast({ kind: 'success', text: `Added ${saved.name} – ${saved.schoolName}` })
   }
 
-  const onDelete = async (b) => {
-    try {
-      if (!(await confirmDeleteBuilding(b, confirm))) return
-      setBuildings((list) => list.filter((x) => x.id !== b.id))
-      if (selectedId === b.id) setSelectedId(null)
-      setToast({ kind: 'success', text: `Deleted ${b.name} – ${b.schoolName}` })
-    } catch (err) {
-      setToast({ kind: 'error', text: err.message })
-    }
-  }
-
   return (
     <div className={`schools-page${selected ? ' details-open' : ''}`}>
       <div className="sch-main">
@@ -124,7 +111,7 @@ export default function Buildings() {
             </button>
           </div>
 
-          <BuildingsTable buildings={visible} showSchool selectedId={selected?.id} onView={(b) => setSelectedId(b.id)} onEdit={setEditing} onDelete={onDelete}
+          <BuildingsTable buildings={visible} showSchool selectedId={selected?.id} onView={(b) => setSelectedId(b.id)} onEdit={setEditing}
             emptyText={buildings ? 'No buildings match these filters.' : 'Loading…'} />
 
           <footer className="u-pager">
@@ -151,7 +138,6 @@ export default function Buildings() {
       {adding && (
         <BuildingForm schools={schools} allBuildings={buildings} defaultSchoolId={filters.school} onClose={closeAdd} onSaved={onAdded} />
       )}
-      {confirmDialog}
       {toast && (
         <div className={`u-toast ${toast.kind}`} role="status">
           {toast.kind === 'success' ? <CircleCheck size={16} /> : <CircleAlert size={16} />}

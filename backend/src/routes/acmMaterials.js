@@ -1,8 +1,8 @@
 import express, { Router } from 'express';
 import { buildings, schools } from '../data/store.js';
-import { getFloor, getAllFloors } from '../data/floorsStore.js';
+import { getFloor } from '../data/floorsStore.js';
 import {
-  getRoom, rawRoom, allRooms, getMaterials, getMaterial, addMaterial, updateMaterial, removeMaterial, materialsForRoom,
+  getRoom, rawRoom, getMaterials, getMaterial, addMaterial, updateMaterial, removeMaterial, materialsForRoom,
   addFile, removeFile, filePath, FILE_DIR,
 } from '../data/roomsStore.js';
 import * as META from '../data/acmMeta.js';
@@ -16,23 +16,15 @@ const schoolName = (id) => schools.find((s) => s.id === id)?.name ?? null;
 const link = (m) => `/schools/${m.schoolId}/buildings/${m.buildingId}/floors/${m.floorId}?room=${m.roomId}`;
 const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
 
-// For long lists, pass lookup maps made once per request (placeMaps) instead of searching the arrays per material
-function withPlace(m, maps) {
-  const room = maps ? maps.rooms.get(m.roomId) : rawRoom(m.roomId);
-  const b = maps ? maps.buildings.get(m.buildingId) : buildingOf(m.buildingId);
-  const f = maps ? maps.floors.get(m.floorId) : getFloor(m.floorId);
+function withPlace(m) {
+  const room = rawRoom(m.roomId);
+  const b = buildingOf(m.buildingId);
   return {
     ...m,
     roomNumber: room?.number ?? null, roomName: room?.name ?? null,
-    floorName: f?.name ?? null, buildingName: b?.name ?? null, schoolName: maps ? maps.schools.get(m.schoolId) ?? null : schoolName(m.schoolId),
+    floorName: getFloor(m.floorId)?.name ?? null, buildingName: b?.name ?? null, schoolName: schoolName(m.schoolId),
   };
 }
-const placeMaps = () => ({
-  rooms: new Map(allRooms().map((r) => [r.id, r])),
-  buildings: new Map(buildings.map((b) => [b.id, b])),
-  floors: new Map(getAllFloors().map((f) => [f.id, f])),
-  schools: new Map(schools.map((s) => [s.id, s.name])),
-});
 
 function validateMaterial(body, existing) {
   const errors = {};
@@ -100,9 +92,8 @@ router.get('/', (req, res) => {
   if (roomId && !room) return res.status(404).json({ error: 'Room not found' });
   const term = q?.trim().toLowerCase();
   const list = (room ? materialsForRoom(room) : getMaterials({ floorId, buildingId, schoolId }))
-    .filter((m) => (!acmStatus || m.acmStatus === acmStatus) && (!term || [m.name, m.materialType, m.location, m.notes].some((v) => v?.toLowerCase().includes(term))));
-  const maps = placeMaps();
-  list.forEach((m, i) => { list[i] = withPlace(m, maps); });
+    .filter((m) => (!acmStatus || m.acmStatus === acmStatus) && (!term || [m.name, m.materialType, m.location, m.notes].some((v) => v?.toLowerCase().includes(term))))
+    .map(withPlace);
   res.json({ count: list.length, materials: list });
 });
 

@@ -159,93 +159,8 @@ function useOverlayOpen() {
   return overlay
 }
 
-// The Ask AI button can be dragged anywhere on screen; its spot (distance from the right / bottom edge) is remembered
-const FAB_KEY = 'ask-ai-position'
-const FAB_H = 56
-const DEFAULT_POS = { right: 24, bottom: 24 }
-const readPos = () => {
-  try {
-    const p = JSON.parse(localStorage.getItem(FAB_KEY))
-    if (Number.isFinite(p?.right) && Number.isFinite(p?.bottom)) return p
-  } catch { /* storage unavailable or bad value */ }
-  return DEFAULT_POS
-}
-
-function useMovableFab() {
-  const [pos, setPos] = useState(readPos)
-  const [viewport, setViewport] = useState(() => ({ w: window.innerWidth, h: window.innerHeight }))
-  const [dragging, setDragging] = useState(false)
-  const fabRef = useRef(null)
-  const drag = useRef(null) // { x, y, start } while the pointer is down
-  const moved = useRef(false) // the press became a drag, so its click doesn't open the assistant
-
-  useEffect(() => {
-    const onResize = () => setViewport({ w: window.innerWidth, h: window.innerHeight })
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
-
-  // Always fully on screen (the button is narrower when open, and the window can shrink)
-  const width = fabRef.current?.offsetWidth ?? 130
-  const clamp = (p) => ({
-    right: Math.round(Math.min(Math.max(8, p.right), viewport.w - width - 8)),
-    bottom: Math.round(Math.min(Math.max(8, p.bottom), viewport.h - FAB_H - 8)),
-  })
-  const shown = clamp(pos)
-
-  const handlers = {
-    onPointerDown: (e) => {
-      if (e.button !== 0) return
-      drag.current = { x: e.clientX, y: e.clientY, start: shown }
-      moved.current = false
-      e.currentTarget.setPointerCapture(e.pointerId)
-    },
-    onPointerMove: (e) => {
-      const d = drag.current
-      if (!d) return
-      const dx = e.clientX - d.x
-      const dy = e.clientY - d.y
-      if (!moved.current && Math.hypot(dx, dy) < 5) return // a click, not a drag
-      moved.current = true
-      setDragging(true)
-      setPos(clamp({ right: d.start.right - dx, bottom: d.start.bottom - dy }))
-    },
-    onPointerUp: () => {
-      if (drag.current && moved.current) {
-        setPos((p) => { try { localStorage.setItem(FAB_KEY, JSON.stringify(p)) } catch { /* not saved */ } return p })
-      }
-      drag.current = null
-      setDragging(false)
-    },
-    onPointerCancel: () => { drag.current = null; setDragging(false) },
-  }
-  // Swallow the click that ends a drag
-  const wasDragged = () => { const m = moved.current; moved.current = false; return m }
-
-  // The chat panel opens next to the button without covering it: above it, else below it, else to its side
-  // (left, else right), always on screen
-  const panelW = Math.min(400, viewport.w - 32)
-  const panelH = Math.min(620, viewport.h - 130)
-  const fabTop = viewport.h - shown.bottom - FAB_H
-  const fabLeft = viewport.w - shown.right - width
-  const right = Math.min(Math.max(8, shown.right), viewport.w - panelW - 8)
-  const clampTop = (t) => Math.min(Math.max(8, t), viewport.h - panelH - 8)
-  let panelStyle
-  if (fabTop - 12 - 8 >= panelH) panelStyle = { right, bottom: shown.bottom + FAB_H + 12 }
-  else if (viewport.h - (fabTop + FAB_H + 12) - 8 >= panelH) panelStyle = { right, top: fabTop + FAB_H + 12, bottom: 'auto' }
-  else {
-    const top = clampTop(fabTop + FAB_H / 2 - panelH / 2)
-    panelStyle = fabLeft - 12 - panelW >= 8
-      ? { right: viewport.w - fabLeft + 12, top, bottom: 'auto' }
-      : { left: Math.min(fabLeft + width + 12, viewport.w - panelW - 8), right: 'auto', top, bottom: 'auto' }
-  }
-
-  return { fabRef, fabStyle: { right: shown.right, bottom: shown.bottom }, panelStyle, handlers, dragging, wasDragged }
-}
-
 export default function ChatAssistant() {
   const [open, setOpen] = useState(false)
-  const fab = useMovableFab()
   const overlay = useOverlayOpen()
   const [messages, setMessages] = useState([]) // { from: 'user' | 'bot', text?, answer?, shown? }
   const [typing, setTyping] = useState(false)
@@ -304,7 +219,7 @@ export default function ChatAssistant() {
   return (
     <>
       {open && (
-        <section className="ca-panel" role="dialog" aria-label="Asbestos assistant" style={fab.panelStyle}>
+        <section className="ca-panel" role="dialog" aria-label="Asbestos assistant">
           <header className="ca-head">
             <span className="ca-avatar"><Sparkles size={18} /></span>
             <div><strong>Asbestos Assistant</strong><small><span className="ca-dot" />Online</small></div>
@@ -351,9 +266,7 @@ export default function ChatAssistant() {
       )}
       {/* Hidden while a popup or side panel is open (it would cover their buttons) */}
       {(open || !overlay) && (
-        <button type="button" ref={fab.fabRef} className={`ca-fab${open ? ' open' : ''}${fab.dragging ? ' dragging' : ''}`} style={fab.fabStyle} {...fab.handlers}
-          onClick={() => { if (!fab.wasDragged()) setOpen((o) => !o) }} aria-expanded={open}
-          aria-label={open ? 'Close assistant' : 'Open asbestos assistant'} title="Drag to move">
+        <button type="button" className={`ca-fab${open ? ' open' : ''}`} onClick={() => setOpen((o) => !o)} aria-label={open ? 'Close assistant' : 'Open asbestos assistant'} aria-expanded={open}>
           {open ? <X size={24} /> : <Sparkles size={24} />}
           {!open && <span className="ca-fab-label">Ask AI</span>}
         </button>

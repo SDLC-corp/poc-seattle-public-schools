@@ -1,18 +1,15 @@
 import express, { Router } from 'express';
-import { existsSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { buildings } from '../data/store.js';
 import {
-  getFloors, getAllFloors, getFloor, addFloor, updateFloor, removeFloor, setPlanImage, setPlanSource, present, planPath, planSourcePath, planSourceUrl, PLAN_DIR,
+  getFloors, getAllFloors, getFloor, addFloor, updateFloor, removeFloor, setPlanImage, present, planPath, PLAN_DIR,
 } from '../data/floorsStore.js';
 import { getRooms, removeFloorRooms } from '../data/roomsStore.js';
-import { historyAt } from '../data/facilityHistory.js';
 import { syncFloorRooms } from '../data/floorRoomsSync.js';
 import { logAudit, diff } from '../data/auditStore.js';
 
 const MAX_PLAN_BYTES = 5 * 1024 * 1024;
-const MAX_PDF_BYTES = 25 * 1024 * 1024; // the original floor plan PDF
 const MAX_SHAPES = 200;
 // Plan images are checked by their first bytes, not just the declared type
 const IMAGE_TYPES = [
@@ -114,7 +111,6 @@ router.get('/', (req, res) => {
         buildingCode: b?.code ?? null,
         schoolName: b?.schoolName ?? null,
         planUrl: f.planImage ? `/api/floors/${f.id}/plan?v=${encodeURIComponent(f.planImage.uploadedAt)}` : null,
-        planSourceUrl: planSourceUrl(f),
         roomStats: roomStats(roomsByFloor.get(f.id) ?? []),
       };
     })
@@ -175,10 +171,7 @@ router.delete('/:id', async (req, res, next) => {
     const f = getFloor(req.params.id);
     if (!f) return res.status(404).json({ error: 'Floor not found' });
     const building = buildingOf(f.buildingId);
-    if (getFloors(f.buildingId).length <= 1) return res.status(409).json({ error: 'A building needs at least one floor — delete the building instead' });
-    // Its ACM records would go with it: refuse while inspections, surveillance or O&M work refer to them
-    const history = historyAt({ floorId: f.id });
-    if (history.total) return res.status(409).json({ error: `${f.name} can't be deleted: its asbestos records are referenced by ${history.text}, which must be kept.` });
+    if (getFloors(f.buildingId).length <= 1) return res.status(409).json({ error: 'A building needs at least one floor' });
     const { building: updated } = await removeFloor(f.id);
     await removeFloorRooms(f.id);
     logAudit(req, {
@@ -217,41 +210,6 @@ router.post('/:id/plan', express.raw({ type: () => true, limit: MAX_PLAN_BYTES }
   } catch (err) {
     next(err);
   }
-});
-
-/**
- * POST /floors/:id/plan/source?name=&page=&pages= — the original PDF the current plan image was rendered from
- * (raw body, max 25 MB). Kept in uploads/floorplans and served below; replaced or removed with the plan image.
- */
-router.post('/:id/plan/source', express.raw({ type: () => true, limit: MAX_PDF_BYTES }), async (req, res, next) => {
-  try {
-    const f = getFloor(req.params.id);
-    if (!f) return res.status(404).json({ error: 'Floor not found' });
-    if (!f.planImage) return res.status(409).json({ error: 'Upload the plan image first' });
-    const body = Buffer.isBuffer(req.body) ? req.body : Buffer.alloc(0);
-    if (body.length < 5 || body.subarray(0, 5).toString('latin1') !== '%PDF-') {
-      return res.status(400).json({ error: 'Upload a PDF file', fields: { plan: 'Upload a PDF file' } });
-    }
-    const storedName = `${f.id}-${Date.now()}.pdf`;
-    await writeFile(path.join(PLAN_DIR, storedName), body);
-    const name = String(req.query.name ?? '').replace(/[\\/:*?"<>|]+/g, '_').slice(0, 120) || storedName;
-    const int = (v, d) => (Number.isInteger(Number(v)) && Number(v) > 0 ? Number(v) : d);
-    const pages = int(req.query.pages, 1);
-    await setPlanSource(f.id, { storedName, name, size: body.length, page: Math.min(int(req.query.page, 1), pages), pages, uploadedAt: new Date().toISOString() });
-    res.json(withRooms(getFloor(f.id)));
-  } catch (err) {
-    next(err);
-  }
-});
-
-// GET /floors/:id/plan/source — the plan's original PDF, inline (?download=1 to save it)
-router.get('/:id/plan/source', (req, res) => {
-  const f = getFloor(req.params.id);
-  const file = planSourcePath(f);
-  if (!file || !existsSync(file)) return res.status(404).json({ error: 'No PDF for this floor plan' });
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Content-Disposition', `${req.query.download === '1' ? 'attachment' : 'inline'}; filename*=UTF-8''${encodeURIComponent(f.planSource.name)}`);
-  res.type('application/pdf').sendFile(file);
 });
 
 router.get('/:id/plan', (req, res) => {

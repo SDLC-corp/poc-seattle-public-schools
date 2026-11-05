@@ -23,27 +23,19 @@ const persist = () => {
 
 const ACM_RANK = { 'ACM Present': 2, 'Assumed ACM': 1, 'No ACM': 0 };
 
-// API shape: adds the sample layout, the plan image URL (cache-busted) and, when the plan came from a PDF, the
-// original PDF's URL
-export const planSourceUrl = (f) => (f.planSource ? `/api/floors/${f.id}/plan/source?v=${encodeURIComponent(f.planSource.uploadedAt)}` : null);
+// API shape: adds the sample layout and the plan image URL (cache-busted)
 export const present = (f) => ({
   ...f,
   layout: f.derivedCounts ? null : floorLayout(f), // app-added floors have no sample layout
   planUrl: f.planImage ? `/api/floors/${f.id}/plan?v=${encodeURIComponent(f.planImage.uploadedAt)}` : null,
-  planSourceUrl: planSourceUrl(f),
 });
 
 export const getFloors = (buildingId) => floors.filter((f) => f.buildingId === buildingId).sort((a, b) => a.number - b.number);
 export const getAllFloors = () => floors;
 export const getFloor = (id) => floors.find((f) => f.id === id) ?? null;
 export const planPath = (f) => (f?.planImage ? path.join(f.planImage.sample ? SAMPLE_PLAN_DIR : PLAN_DIR, f.planImage.storedName) : null);
-// The original PDF a plan image was rendered from (uploads/floorplans/<floor>-<time>.pdf)
-export const planSourcePath = (f) => (f?.planSource ? path.join(PLAN_DIR, path.basename(f.planSource.storedName)) : null);
-// Only the floor's own uploaded files (plan image and its PDF) are removed with it
-const removePlanFile = (f) => Promise.all([
-  f?.planImage && !f.planImage.sample ? unlink(planPath(f)).catch(() => {}) : null,
-  f?.planSource ? unlink(planSourcePath(f)).catch(() => {}) : null,
-]);
+// Only the floor's own uploaded image file is removed with it
+const removePlanFile = (f) => (f?.planImage && !f.planImage.sample ? unlink(planPath(f)).catch(() => {}) : Promise.resolve());
 
 // Building totals follow its floors: count, rooms, ACM rooms and the "worst" ACM status
 async function syncBuilding(buildingId) {
@@ -108,25 +100,8 @@ export async function removeFloor(id) {
   return { building: await syncBuilding(f.buildingId) };
 }
 
-// Building deleted: all its floors (and their uploaded plan images) go too
-export async function removeBuildingFloors(buildingId) {
-  const gone = floors.filter((f) => f.buildingId === buildingId);
-  floors = floors.filter((f) => f.buildingId !== buildingId);
-  await persist();
-  await Promise.all(gone.map(removePlanFile));
-  return gone.length;
-}
-
-// A new (or removed) plan image replaces the old one and its PDF; the new PDF, if any, follows with setPlanSource
 export async function setPlanImage(id, planImage) {
   const f = getFloor(id);
   if (f.planImage && f.planImage.storedName !== planImage?.storedName) await removePlanFile(f);
-  return updateFloor(id, { planImage, planSource: null });
-}
-
-// The original PDF of the current plan image: { storedName, name, size, page, pages, uploadedAt }
-export async function setPlanSource(id, planSource) {
-  const f = getFloor(id);
-  if (f.planSource && f.planSource.storedName !== planSource?.storedName) await unlink(planSourcePath(f)).catch(() => {});
-  return updateFloor(id, { planSource });
+  return updateFloor(id, { planImage });
 }

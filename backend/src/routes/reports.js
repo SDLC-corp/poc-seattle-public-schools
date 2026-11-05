@@ -1,4 +1,3 @@
-import { naturalCompare } from '../data/naturalSort.js';
 import { Router } from 'express';
 import { REPORTS, filterRows } from '../data/reports.js';
 import { logAudit } from '../data/auditStore.js';
@@ -31,7 +30,7 @@ function query(report, q) {
       const y = b[key] ?? '';
       // Blank values always sort last
       if (x === '' || y === '') return (x === '') - (y === '');
-      return dir * (typeof x === 'number' && typeof y === 'number' ? x - y : naturalCompare(String(x), String(y)));
+      return dir * (typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y), 'en', { numeric: true }));
     });
   }
   return { scoped, rows, sort: key, dir: dir === 1 ? 'asc' : 'desc' };
