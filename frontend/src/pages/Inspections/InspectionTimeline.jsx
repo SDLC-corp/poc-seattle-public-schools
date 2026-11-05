@@ -152,9 +152,9 @@ export default function InspectionTimeline({ timeline, record, followUps = [] })
       </section>
 
       <aside className="u-card in-tl2-side">
-        <header className="in-tl2-head"><h2><FileText size={18} />Reports &amp; Documents</h2><span className="u-muted">{files.length}</span></header>
-        {!files.length && <p className="u-muted in-tl2-none">No reports or photos attached yet.</p>}
-        {reports.length > 0 && <h3 className="in-tl2-sub">Reports (PDF)</h3>}
+        <header className="in-tl2-head"><h2><Paperclip size={18} />Attachments</h2><span className="u-muted">{files.length}</span></header>
+        {!files.length && <p className="u-muted in-tl2-none">No attachments yet.</p>}
+        {reports.length > 0 && <h3 className="in-tl2-sub">Documents (PDF)</h3>}
         <ul className="in-tl2-files">
           {reports.map((f) => <FileRow key={f.id} f={f} href={docHref(f.href)} onView={() => setViewing(f)} />)}
         </ul>

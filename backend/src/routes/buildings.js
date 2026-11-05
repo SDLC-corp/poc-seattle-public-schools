@@ -85,7 +85,19 @@ router.get('/', (req, res) => {
       b.name.toLowerCase().includes(term) || b.schoolName.toLowerCase().includes(term) || b.code.toLowerCase().includes(term));
   }
 
-  res.json({ count: result.length, buildings: result });
+  // A building whose ACM (known or assumed) has never been assessed: shown grey on the map ("Not Assessed")
+  const assessed = new Map();
+  for (const m of getMaterials()) {
+    if (m.acmStatus !== 'ACM Present' && m.acmStatus !== 'Assumed ACM' && m.acmStatus !== 'Not Yet Assessed') continue;
+    const x = assessed.get(m.buildingId) ?? { acm: 0, done: 0 };
+    x.acm += 1;
+    if (m.condition && m.condition !== 'Not Assessed') x.done += 1;
+    assessed.set(m.buildingId, x);
+  }
+  res.json({
+    count: result.length,
+    buildings: result.map((b) => { const x = assessed.get(b.id); return { ...b, notAssessed: Boolean(x && x.acm && !x.done) }; }),
+  });
 });
 
 router.get('/meta', (req, res) => res.json({ maxFloors: MAX_FLOORS, acmStatuses: ACM_STATUSES, construction: CONSTRUCTION, presumedAcmBefore: PRESUMED_ACM_BEFORE }));

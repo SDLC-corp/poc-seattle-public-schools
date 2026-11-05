@@ -72,7 +72,7 @@ export default function BuildingOverview({ state, variant = 'popup', onClose }) 
           <span className="good"><strong>{c.good}</strong>Good</span>
           <span className="fair"><strong>{c.damaged}</strong>Damaged</span>
           <span className="poor"><strong>{c.significantlyDamaged}</strong>Significantly damaged</span>
-          {c.notAssessed > 0 && <span className="na"><strong>{c.notAssessed}</strong>Not assessed</span>}
+          <span className="na"><strong>{c.notAssessed ?? 0}</strong>Not assessed</span>
         </div>
       </Section>
 

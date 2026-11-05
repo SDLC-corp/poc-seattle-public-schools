@@ -210,7 +210,7 @@ export default function AssignTab({ meta, onToast, onDone }) {
         <button type="button" className="u-btn u-btn-primary in-assign-btn" disabled={saving || !targets.length || !form.scheduledTime} onClick={assign}>
           <CalendarClock size={15} />{saving ? 'Assigning…' : `Assign Inspection${targets.length ? ` (${targets.length} ACM${targets.length === 1 ? '' : 's'})` : ''}`}
         </button>
-        <p className="sv-hint">All the chosen ACMs go into one inspection record (one per school if they span several), assigned and scheduled. It opens once assigned and is listed under Upcoming.</p>
+        <p className="sv-hint">All the chosen ACMs go into one inspection record (one per school if they span several), assigned and scheduled. Once assigned you're taken back to the Inspection List, where it's at the top.</p>
       </aside>
     </div>
   )

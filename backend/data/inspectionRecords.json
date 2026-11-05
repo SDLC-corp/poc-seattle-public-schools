@@ -18307,6 +18307,286 @@
         },
         "invited": "Shashank Jaiswal <shashank@sdlccorp.com>"
       }
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-alkies-b3-f2-r2-1",
+      "schoolId": "alkies",
+      "buildingId": "alkies-b3",
+      "floorId": "alkies-b3-f2",
+      "roomId": "alkies-b3-f2-r2",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "extra": [
+        {
+          "materialId": "ACM-alkies-b3-f2-r2-2",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b3",
+          "floorId": "alkies-b3-f2",
+          "roomId": "alkies-b3-f2-r2",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b3-f1-r3-1",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b3",
+          "floorId": "alkies-b3-f1",
+          "roomId": "alkies-b3-f1-r3",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b3-f1-r8-2",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b3",
+          "floorId": "alkies-b3-f1",
+          "roomId": "alkies-b3-f1-r8",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b3-f1-r8-1",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b3",
+          "floorId": "alkies-b3-f1",
+          "roomId": "alkies-b3-f1-r8",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b2-f1-r7-1",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b2",
+          "floorId": "alkies-b2-f1",
+          "roomId": "alkies-b2-f1-r7",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b2-f1-r9-2",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b2",
+          "floorId": "alkies-b2-f1",
+          "roomId": "alkies-b2-f1-r9",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b2-f1-r9-1",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b2",
+          "floorId": "alkies-b2-f1",
+          "roomId": "alkies-b2-f1-r9",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b2-f1-r10-1",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b2",
+          "floorId": "alkies-b2-f1",
+          "roomId": "alkies-b2-f1-r10",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b1-f2-r1-1",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b1",
+          "floorId": "alkies-b1-f2",
+          "roomId": "alkies-b1-f2-r1",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b1-f2-r8-1",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b1",
+          "floorId": "alkies-b1-f2",
+          "roomId": "alkies-b1-f2-r8",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b1-f1-r1-1",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b1",
+          "floorId": "alkies-b1-f1",
+          "roomId": "alkies-b1-f1-r1",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b1-f1-r4-1",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b1",
+          "floorId": "alkies-b1-f1",
+          "roomId": "alkies-b1-f1-r4",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b1-f1-r4-2",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b1",
+          "floorId": "alkies-b1-f1",
+          "roomId": "alkies-b1-f1-r4",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b1-f1-r7-1",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b1",
+          "floorId": "alkies-b1-f1",
+          "roomId": "alkies-b1-f1-r7",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b1-f3-r8-1",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b1",
+          "floorId": "alkies-b1-f3",
+          "roomId": "alkies-b1-f3-r8",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-alkies-b1-f3-r8-2",
+          "schoolId": "alkies",
+          "buildingId": "alkies-b1",
+          "floorId": "alkies-b1-f3",
+          "roomId": "alkies-b1-f3-r8",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        }
+      ],
+      "inspectorId": "u130",
+      "inspectorName": "Shashank Jaiswal",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-90001",
+        "expiresOn": "2027-11-05"
+      },
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T11:41:17.910Z",
+        "notes": ""
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T11:41:17.910Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00166",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Shashank Jaiswal",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T11:41:18.974Z",
+      "outlook": {
+        "eventId": "AAMkADQ5NmU4NzZhLTRjOWItNDE0ZC1iNmM2LWMxNjIwNWNkMmQ3ZABGAAAAAADPgUQwZsQuQYv2SWUEmZrgBwCRPFtTIS83RozljoR260a2AAAAAAENAACRPFtTIS83RozljoR260a2AAA6NWvwAAA=",
+        "webLink": "https://outlook.office365.com/owa/?itemid=AAMkADQ5NmU4NzZhLTRjOWItNDE0ZC1iNmM2LWMxNjIwNWNkMmQ3ZABGAAAAAADPgUQwZsQuQYv2SWUEmZrgBwCRPFtTIS83RozljoR260a2AAAAAAENAACRPFtTIS83RozljoR260a2AAA6NWvwAAA%3D&exvsurl=1&path=/calendar/item",
+        "addedAt": "2026-11-05T11:41:18.974Z",
+        "addedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "invited": "Shashank Jaiswal <shashank@sdlccorp.com>"
+      }
     }
   ]
 }

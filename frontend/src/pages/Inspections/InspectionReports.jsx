@@ -165,12 +165,12 @@ export default function InspectionReports({ record, ctx, materials, followUps = 
       </section>
 
       <aside className="u-card in-tl2-side">
-        <header className="in-tl2-head"><h2><Paperclip size={18} />Attached Reports</h2><span className="u-muted">{fileCount}</span></header>
-        {!fileCount && <p className="u-muted in-tl2-none">No lab reports, photos or other documents attached yet. They appear here when added to the inspection, its follow-ups or their lab results.</p>}
+        <header className="in-tl2-head"><h2><Paperclip size={18} />Attachments</h2><span className="u-muted">{fileCount}</span></header>
+        {!fileCount && <p className="u-muted in-tl2-none">No attachments yet. Lab documents, photos and other files appear here when added to the inspection, its follow-ups or their lab results.</p>}
         {groups.filter((g) => g.files.length).map((g) => (
           <div key={g.r.id} className="in-rep-group">
             {(followUps.length > 0) && <h3 className="in-rep-group-title">{g.r.parentId ? 'Follow-up' : 'Inspection'} {g.r.id}<span>{g.files.length}</span></h3>}
-            {g.reports.length > 0 && <h4 className="in-tl2-sub">Reports (PDF)</h4>}
+            {g.reports.length > 0 && <h4 className="in-tl2-sub">Documents (PDF)</h4>}
             <ul className="in-tl2-files">{g.reports.map((f) => <FileRow key={f.id} f={f} href={`${API_BASE}${f.href}`} onView={() => setViewing(f)} />)}</ul>
             {g.photos.length > 0 && <h4 className="in-tl2-sub">Photos</h4>}
             <ul className="in-tl2-files">{g.photos.map((f) => <FileRow key={f.id} f={f} href={`${API_BASE}${f.href}`} onView={() => setViewing(f)} />)}</ul>

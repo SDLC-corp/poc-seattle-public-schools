@@ -692,3 +692,13 @@
   .in-tl2-card { grid-column: 2; }
   .in-tl2-item::before { left: 16px; }
 }
+
+/* Success popup after assigning inspections */
+.u-modal.in-created { width: min(460px, calc(100vw - 32px)); }
+.in-created-body { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 28px 24px 12px; text-align: center; }
+.in-created-icon { display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%; background: #e3f4e5; color: #0c7f0c; box-shadow: 0 0 0 8px #f1faf2; margin-bottom: 6px; }
+.in-created-body h2 { margin: 0; font-size: 18px; font-weight: 600; color: var(--ink-1); }
+.in-created-body p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.in-created-ids { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 6px 0 0; padding: 0; list-style: none; }
+.in-created-ids .sv-id { border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; background: var(--surface); cursor: pointer; font: inherit; font-size: 12px; }
+.in-created .u-modal-foot { justify-content: center; }

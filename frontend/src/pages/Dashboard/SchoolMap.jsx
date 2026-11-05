@@ -3,7 +3,7 @@ import * as maplibregl from 'maplibre-gl'
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { createPortal } from 'react-dom'
-import { STATUS } from './mockData'
+import { STATUS, NOT_ASSESSED } from './mockData'
 import BuildingOverview from './BuildingOverview'
 import { request } from '../../lib/api'
 import './buildingOverview.css'
@@ -46,7 +46,9 @@ const MAP_STATUS = {
   compliant: { color: '#6e9475', hover: '#86ab8c' },
   dueSoon: { color: '#b59668', hover: '#c9ad82' },
   overdue: { color: '#3b6aa0', hover: '#5585bd' },
+  notAssessed: { color: '#9aa3ad', hover: '#b3bac2' }, // buildings whose ACM hasn't been assessed
 }
+const statusLabel = (status) => (STATUS[status] ?? (status === NOT_ASSESSED.key ? NOT_ASSESSED : STATUS.overdue)).label
 
 const SEATTLE = [-122.335, 47.61]
 const PITCH_3D = 55
@@ -58,12 +60,14 @@ const statusColor = () => [
   'match', ['get', 'status'],
   'compliant', MAP_STATUS.compliant.color,
   'dueSoon', MAP_STATUS.dueSoon.color,
+  'notAssessed', MAP_STATUS.notAssessed.color,
   MAP_STATUS.overdue.color,
 ]
 const buildingColor = (hover) => [
   'match', ['get', 'status'],
   'compliant', hover ? MAP_STATUS.compliant.hover : MAP_STATUS.compliant.color,
   'dueSoon', hover ? MAP_STATUS.dueSoon.hover : MAP_STATUS.dueSoon.color,
+  'notAssessed', hover ? MAP_STATUS.notAssessed.hover : MAP_STATUS.notAssessed.color,
   hover ? MAP_STATUS.overdue.hover : MAP_STATUS.overdue.color,
 ]
 
@@ -158,7 +162,7 @@ function popupCard({ title, subtitle, rows, status }) {
   })
   const badge = document.createElement('span')
   badge.className = 'map-popup-status'
-  badge.textContent = STATUS[status].label
+  badge.textContent = statusLabel(status)
   el.append(head, dl, badge)
   return el
 }
@@ -536,7 +540,7 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
       )}
 
       <ul className="map-legend">
-        {Object.entries(STATUS).map(([key, s]) => (
+        {[...Object.entries(STATUS), [NOT_ASSESSED.key, NOT_ASSESSED]].map(([key, s]) => (
           <li key={key}><span className="map-legend-dot" style={{ background: MAP_STATUS[key].color }} />{s.label}</li>
         ))}
       </ul>

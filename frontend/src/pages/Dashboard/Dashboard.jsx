@@ -139,7 +139,8 @@ export default function Dashboard() {
         const statusById = Object.fromEntries(schoolData.schools.map((s) => [s.id, s.complianceStatus ?? mockComplianceStatus(s.id)]))
         setSchools(schoolData.schools.map((s) => ({ ...s, status: statusById[s.id] })))
         // Buildings take their school's compliance status so the 3D map colours match the pins
-        setBuildings(buildingData.buildings.map((b) => ({ ...b, status: statusById[b.schoolId] ?? mockComplianceStatus(b.schoolId) })))
+        // …except a building whose ACM has never been assessed, which is grey ("Not Assessed")
+        setBuildings(buildingData.buildings.map((b) => ({ ...b, status: b.notAssessed ? 'notAssessed' : statusById[b.schoolId] ?? mockComplianceStatus(b.schoolId) })))
         setBuildingsLoaded(true)
       })
       .catch((err) => setError(err.message))

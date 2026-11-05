@@ -56,6 +56,38 @@ function Kpi({ icon: Icon, value, label, sub, tone, active, onClick }) {
   )
 }
 
+/** Success popup after inspections are assigned: what was scheduled, with links to the new inspections. */
+function CreatedDialog({ created, onClose }) {
+  const navigate = useNavigate()
+  const { text, ids } = created
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose])
+  const open = (id) => { onClose(); navigate(`/inspections/records/${id}`) }
+  return (
+    <div className="u-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose() }}>
+      <div className="u-modal in-created" role="alertdialog" aria-modal="true" aria-labelledby="in-created-title" aria-describedby="in-created-text">
+        <div className="in-created-body">
+          <span className="in-created-icon"><CircleCheck size={30} /></span>
+          <h2 id="in-created-title">{ids.length > 1 ? `${ids.length} Inspections Scheduled` : 'Inspection Scheduled Successfully'}</h2>
+          <p id="in-created-text">{text}</p>
+          {ids.length > 0 && (
+            <ul className="in-created-ids">
+              {ids.map((id) => <li key={id}><button type="button" className="sv-id" onClick={() => open(id)}>{id}</button></li>)}
+            </ul>
+          )}
+        </div>
+        <footer className="u-modal-foot">
+          {ids.length === 1 && <button type="button" className="u-btn u-btn-outline" onClick={() => open(ids[0])}><Eye size={15} />View Inspection</button>}
+          <button type="button" className="u-btn u-btn-primary" onClick={onClose} autoFocus>Done</button>
+        </footer>
+      </div>
+    </div>
+  )
+}
+
 const COLUMNS = [
   { key: 'id', label: 'Inspection ID' }, { key: 'type', label: 'Inspection Type' }, { key: 'facility', label: 'Facility' },
   { label: 'Building' }, { label: 'Floor' }, { label: 'Room / Location' }, { key: 'assignedTo', label: 'Assigned To' },
@@ -305,6 +337,7 @@ export default function Inspections() {
   const openReassign = (ids, scheduling = false) => { setScheduleMode(scheduling); setReassigning(ids) }
   const [reload, setReload] = useState(0)
   const [toast, setToast] = useState(() => routerLocation.state?.toast ?? null)
+  const [created, setCreated] = useState(null) // { text, ids } — success popup after assigning
 
   useEffect(() => { request('/inspection-records/meta').then(setMeta).catch(() => {}) }, [])
   useEffect(() => {
@@ -331,12 +364,11 @@ export default function Inspections() {
       {(tab.id === 'upcoming' || tab.id === 'overdue') && <DueTab key={tab.id} view={tab.id} meta={meta} reload={reload} onSchedule={(ids) => openReassign(ids, true)} />}
       {tab.id === 'review' && <ReviewTab meta={meta} />}
       {tab.id === 'completed' && <CompletedTab meta={meta} />}
-      {/* After assigning: open the new inspection (or, for several schools, the Upcoming list where they're scheduled) */}
+      {/* After assigning: back to the Inspection List (newest first) with a success popup */}
       {tab.id === 'assign' && <AssignTab meta={meta} onToast={setToast} onDone={(text, res) => {
-        const toastState = { state: { toast: { kind: 'success', text } } }
-        if (res?.created.length === 1) navigate(`/inspections/records/${res.created[0]}`, toastState)
-        else if (res?.created.length > 1) { setToast({ kind: 'success', text }); navigate('/inspections/upcoming') }
-        else { setToast({ kind: 'success', text }); navigate('/inspections') }
+        setReload((n) => n + 1)
+        setCreated({ text, ids: res?.created ?? [] })
+        navigate('/inspections', { replace: true }) // the finished form isn't kept in history (Back doesn't reopen it)
       }} />}
       {tab.id === 'calendar' && <CalendarTab />}
 
@@ -349,6 +381,7 @@ export default function Inspections() {
             setToast({ kind: 'success', text: `Updated ${res.changed.length} inspection${res.changed.length === 1 ? '' : 's'}${res.locked.length ? ` (${res.locked.length} already submitted, left as is)` : ''}.` })
           }} />
       )}
+      {created && <CreatedDialog created={created} onClose={() => setCreated(null)} />}
       {toast && (
         <div className={`u-toast ${toast.kind}`} role="status">
           {toast.kind === 'success' ? <CircleCheck size={16} /> : <CircleAlert size={16} />}

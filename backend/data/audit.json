@@ -1,6 +1,67 @@
 {
   "entries": [
     {
+      "id": "AUD-000137",
+      "at": "2026-11-05T11:41:19.017Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00166",
+      "summary": "Added inspection INS-2026-00166 to the Outlook calendar (invited Shashank Jaiswal <shashank@sdlccorp.com>)",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000136",
+      "at": "2026-11-05T11:41:17.987Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00166",
+      "summary": "Assigned 3-year reinspection INS-2026-00166 of 17 ACMs to Shashank Jaiswal for 2026-11-12 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "3-Year Reinspection"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Shashank Jaiswal"
+        },
+        {
+          "field": "Scheduled Date",
+          "to": "2026-11-12"
+        },
+        {
+          "field": "Scheduled Time",
+          "to": "09:00"
+        },
+        {
+          "field": "ACMs",
+          "to": "17"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00166",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
       "id": "AUD-000135",
       "at": "2026-11-05T11:25:52.126Z",
       "action": "create",

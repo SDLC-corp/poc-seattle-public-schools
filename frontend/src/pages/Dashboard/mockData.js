@@ -7,6 +7,9 @@ export const STATUS = {
   overdue: { label: 'Out of Compliance', color: 'var(--status-critical)' },
 }
 
+// Buildings only (map): ACM never assessed — grey, whatever the school's compliance status
+export const NOT_ASSESSED = { key: 'notAssessed', label: 'Not Assessed' }
+
 // Deterministic fake compliance status per school (~68% / 17% / 15%) so the map,
 // the donut and the filters stay consistent across reloads.
 export function mockComplianceStatus(schoolId) {

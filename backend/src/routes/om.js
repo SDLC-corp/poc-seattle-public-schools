@@ -126,6 +126,7 @@ function rows() {
   const records = new Map(getRecords().map((r) => [r.id, r]));
   const byAcm = inspectionsByAcm();
   const today = todayIso();
+  const nowIso = new Date().toISOString();
   return S.all('activities').map((a) => {
     const m = mats.get(a.materialId);
     const status = statusOf(a, today);
@@ -135,6 +136,8 @@ function rows() {
       completedAt: a.completedAt, materialId: a.materialId, materialName: m?.name ?? '(deleted material)', materialType: m?.materialType ?? '',
       schoolId: a.schoolId, buildingId: a.buildingId, floorId: a.floorId, roomId: a.roomId, ...place(a),
       attachments: a.attachments?.length ?? 0, createdAt: a.createdAt,
+      // Latest real activity (created, or its last history event); seeded demo dates in the future don't count
+      lastActivity: [a.createdAt, ...(a.history ?? []).map((h) => h.at)].filter((t) => t && t <= nowIso).sort().at(-1) ?? '',
       workCategory: a.workCategory || null, contractorName: a.contractorName || null,
       ...inspectionLinks(a, records, byAcm),
     };
@@ -151,6 +154,7 @@ function filterRows(list, { school, building, floor, type, status, assignee, q }
 }
 
 const SORTS = {
+  recent: (r) => r.lastActivity,
   id: (r) => r.id, type: (r) => r.type, facility: (r) => `${r.schoolName} ${r.buildingName}`, material: (r) => r.materialName,
   dueDate: (r) => r.dueDate, assignee: (r) => r.assignedToName ?? '', status: (r) => ['overdue', 'inProgress', 'pending', 'completed'].indexOf(r.status),
   completedAt: (r) => r.completedAt ?? '',
@@ -206,8 +210,9 @@ router.get('/inspections', (req, res) => {
 router.get('/activities', (req, res) => {
   const all = rows();
   const filtered = filterRows(all, req.query);
-  const key = SORTS[req.query.sort] ? req.query.sort : 'dueDate';
-  const d = (req.query.dir ?? (key === 'dueDate' || key === 'completedAt' ? 'desc' : 'asc')) === 'asc' ? 1 : -1;
+  // Default: most recent first, so a newly added (or just updated) task is at the top
+  const key = SORTS[req.query.sort] ? req.query.sort : 'recent';
+  const d = (req.query.dir ?? (['recent', 'dueDate', 'completedAt'].includes(key) ? 'desc' : 'asc')) === 'asc' ? 1 : -1;
   const get = SORTS[key];
   const sorted = [...filtered].sort((a, b) => {
     const x = get(a); const y = get(b);
