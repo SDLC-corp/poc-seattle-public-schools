@@ -7,7 +7,7 @@ import { logAudit, diff, currentUser } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
 import { inspectionAirEvents } from '../data/inspectionSamples.js';
 import { getPeople } from '../data/personnelStore.js';
-import { listUsers } from './users.js';
+import { listUsers, listOrder } from './users.js';
 import { getRecords } from '../data/inspectionRecordsStore.js';
 
 const DAY = 86400000;
@@ -59,7 +59,7 @@ function filterEvents({ q, school, building, type, method, status, from, to }) {
 
 // Who can be recorded on an event: accredited inspectors (app users) and contractors (personnel)
 const inspectorsList = () => listUsers().filter((u) => u.roleId === 'inspector' && u.status === 'active')
-  .map((u) => ({ id: u.id, name: u.name })).sort((a, b) => a.name.localeCompare(b.name));
+  .map((u) => ({ id: u.id, name: u.name })).sort(listOrder);
 const contractorsList = () => getPeople().filter((p) => p.kind === 'Contractor' && p.status === 'active')
   .map((p) => ({ id: p.id, name: p.name, category: p.categoryLabel })).sort((a, b) => a.name.localeCompare(b.name));
 

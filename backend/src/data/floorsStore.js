@@ -6,14 +6,14 @@ import { uploadDir } from './paths.js';
 import { buildings, updateBuilding } from './store.js';
 import { floorLayout } from './floorLayout.js';
 import { floorName } from './buildingGeometry.js';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 const FILE = new URL('../../data/floors.json', import.meta.url);
 export const PLAN_DIR = uploadDir('floorplans');
 // Seeded sample plans (Ground / First / Second floor drawings), shared by many floors – never deleted
 const SAMPLE_PLAN_DIR = fileURLToPath(new URL('../../data/floors/', import.meta.url));
 
-const doc = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')) : { floors: [] };
+const doc = existsSync(readPath(FILE)) ? JSON.parse(readFileSync(readPath(FILE), 'utf8')) : { floors: [] };
 let floors = doc.floors;
 let writing = Promise.resolve();
 const persist = () => {

@@ -1,11 +1,11 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 // Management plan emergency procedures per school: response steps and which contacts are listed.
 // A school without an entry uses the standard steps and contacts from its Roles & Responsibilities.
 const FILE = new URL('../../data/planEmergency.json', import.meta.url);
 
-let db = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')) : { plans: {} };
+let db = existsSync(readPath(FILE)) ? JSON.parse(readFileSync(readPath(FILE), 'utf8')) : { plans: {} };
 db.plans ??= {};
 let writing = Promise.resolve();
 const persist = () => {

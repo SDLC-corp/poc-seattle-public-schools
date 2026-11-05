@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 // Management plan monitoring schedule per school:
 // - schedules: extra activities added to the plan
@@ -7,7 +7,7 @@ import { writeJson } from './atomicWrite.js';
 //   otherwise come from live records
 const FILE = new URL('../../data/planSchedules.json', import.meta.url);
 
-let db = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')) : {};
+let db = existsSync(readPath(FILE)) ? JSON.parse(readFileSync(readPath(FILE), 'utf8')) : {};
 db.schedules ??= {};
 db.overrides ??= {};
 let writing = Promise.resolve();

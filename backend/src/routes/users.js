@@ -4,7 +4,7 @@ import { getRoles, getRole, roleExists } from '../data/rolesStore.js';
 import { schools } from '../data/store.js';
 import { logAudit, diff, snapshot } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
-import { writeJson } from '../data/atomicWrite.js';
+import { writeJson, readPath } from '../data/atomicWrite.js';
 
 const USER_FIELDS = ['name', 'email', 'phone', 'department', 'jobTitle', 'roleId', 'status'];
 // Audit-friendly view of a user: role name and school access as readable values
@@ -20,7 +20,7 @@ const SCOPES = ['all', 'schools', 'assigned', 'lab'];
 const STATUSES = ['active', 'inactive'];
 const schoolIds = new Set(schools.map((s) => s.id));
 
-const fileData = JSON.parse(readFileSync(USERS_FILE, 'utf8'));
+const fileData = JSON.parse(readFileSync(readPath(USERS_FILE), 'utf8'));
 let users = fileData.users;
 
 const persist = () => writeJson(USERS_FILE, { ...fileData, users });
@@ -29,6 +29,10 @@ const persist = () => writeJson(USERS_FILE, { ...fileData, users });
 export const countUsersWithRole = (roleId) => users.filter((u) => u.roleId === roleId).length;
 // Current user list (read-only use, e.g. people who can sign a surveillance)
 export const listUsers = () => users;
+// Order for people pickers: users flagged `listFirst` (e.g. the lead inspector) on top, then by name.
+// Works on any { id, name } list whose ids are user ids.
+const pinned = (x) => (users.find((u) => u.id === x.id)?.listFirst ? 1 : 0);
+export const listOrder = (a, b) => pinned(b) - pinned(a) || a.name.localeCompare(b.name);
 
 // `role` may be a comma-separated list, e.g. "facilities-manager,inspector"
 function filterUsers({ q, role, school, status }) {

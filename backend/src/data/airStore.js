@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 const FILE = new URL('../../data/airMonitoring.json', import.meta.url);
 
@@ -30,7 +30,7 @@ export function statusOf(e) {
 
 export const withDerived = (e) => ({ ...e, limit: limitFor(e.type, e.method), status: statusOf(e) });
 
-let events = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')).events : [];
+let events = existsSync(readPath(FILE)) ? JSON.parse(readFileSync(readPath(FILE), 'utf8')).events : [];
 let writing = Promise.resolve();
 const persist = () => {
   writing = writing.then(() => writeJson(FILE, { events }));

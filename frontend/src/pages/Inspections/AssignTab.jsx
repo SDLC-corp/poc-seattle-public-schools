@@ -7,6 +7,7 @@ import LocationFilters from '../Surveillance/LocationFilters'
 import { fmtDay, isoToday, addDays, shortAcm } from '../Surveillance/survMeta'
 import { CONDITION_TONE, fmtTime } from './inspMeta'
 import { request } from '../../lib/api'
+import { useOutlookCalendar, outlookNote } from '../../lib/outlookCalendar'
 
 const STATUS_TONE = { 'ACM Present': 'critical', 'Assumed ACM': 'warning', 'No ACM': 'good', 'Not Yet Assessed': 'neutral' }
 // Targeted inspections pick specific materials (with search); the other types cover every ACM in a place
@@ -27,6 +28,7 @@ export default function AssignTab({ meta, onToast, onDone }) {
   const [form, setForm] = useState({ type: '3-Year Reinspection', inspectorId: '', scheduledDate: addDays(isoToday(), 7), scheduledTime: '09:00', notes: '' })
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(false)
+  const outlook = useOutlookCalendar()
 
   useEffect(() => {
     request('/inspection-records/materials').then(setMaterials).catch((e) => onToast({ kind: 'error', text: e.message }))
@@ -70,10 +72,12 @@ export default function AssignTab({ meta, onToast, onDone }) {
     try {
       const res = await request('/inspection-records/assign', { method: 'POST', body: { ...form, materialIds: targets } })
       const inspector = meta?.inspectors.find((u) => u.id === form.inspectorId)?.name
+      // New inspections go on the Outlook calendar too (when signed in with Outlook connected)
+      const cal = await outlook.addInspections(res.created)
       const what = res.created.length === 1
         ? `Inspection ${res.created[0]} covering ${res.acms} ACM${res.acms === 1 ? '' : 's'}`
         : `${res.created.length} inspections (one per school) covering ${res.acms} ACMs`
-      onDone(`${what} assigned to ${inspector} for ${fmtDay(form.scheduledDate)} at ${fmtTime(form.scheduledTime)}${res.skipped.length ? ` (${res.skipped.length} skipped: already open)` : ''}.`, res)
+      onDone(`${what} assigned to ${inspector} for ${fmtDay(form.scheduledDate)} at ${fmtTime(form.scheduledTime)}${res.skipped.length ? ` (${res.skipped.length} skipped: already open)` : ''}.${outlookNote(cal)}`, res)
     } catch (e) {
       setErrors(e.fields ?? {})
       onToast({ kind: 'error', text: e.message })

@@ -483,10 +483,10 @@ export default function SurveillanceForm() {
       {requesting && record && (
         <RequestInspectionDialog record={record} material={ctx?.material} location={ctx?.location}
           onClose={() => setRequesting(false)}
-          onDone={(ins) => {
+          onDone={(ins, calendarNote = '') => {
             setRequesting(false)
             setRequested(ins)
-            setToast({ kind: 'success', text: `Damage inspection ${ins.id} requested with ${ins.inspectorName ?? 'the inspector'} for ${fmtDay(ins.scheduledDate)}.` })
+            setToast({ kind: 'success', text: `Damage inspection ${ins.id} requested with ${ins.inspectorName ?? 'the inspector'} for ${fmtDay(ins.scheduledDate)}.${calendarNote}` })
           }} />
       )}
       {toast && (

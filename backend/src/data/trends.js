@@ -6,7 +6,7 @@ import { getRecords as surveillanceRecords } from './surveillanceStore.js';
 import { getRecords as inspectionRecords } from './inspectionRecordsStore.js';
 import * as OM from './omStore.js';
 import { CONDITION_RANK } from './inspectionMeta.js';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 /**
  * Trend Analysis (material deterioration). Everything here is computed from recorded condition assessments —
@@ -196,7 +196,7 @@ const DEFAULT_RULES = [
   { id: 'recent', name: 'Deterioration recorded in the last N days', kind: 'recentDeterioration', days: 90, enabled: true },
   { id: 'school-count', name: 'School with N or more deteriorating ACMs', kind: 'schoolCount', threshold: 3, enabled: true },
 ];
-let rules = existsSync(ALERT_FILE) ? JSON.parse(readFileSync(ALERT_FILE, 'utf8')).rules : DEFAULT_RULES;
+let rules = existsSync(readPath(ALERT_FILE)) ? JSON.parse(readFileSync(readPath(ALERT_FILE), 'utf8')).rules : DEFAULT_RULES;
 export const getRules = () => rules;
 export async function saveRules(next) {
   rules = next;

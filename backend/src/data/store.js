@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { GAP_M, PRESUMED_ACM_BEFORE, offset, rectangle, shape } from './buildingGeometry.js';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 const dataFile = (file) => new URL(`../../data/${file}`, import.meta.url);
-const load = (file) => JSON.parse(readFileSync(dataFile(file), 'utf8'));
+const load = (file) => JSON.parse(readFileSync(readPath(dataFile(file)), 'utf8'));
 
 const schoolsDoc = load('schools.json');
 // Mutated in place so every importer sees schools added in the app

@@ -3,7 +3,7 @@ import {
   getInspections, getInspection, schoolRows, schoolCompliance, completeInspection, rescheduleInspection, bookInspection,
 } from '../data/complianceStore.js';
 import { logAudit, currentUser } from '../data/auditStore.js';
-import { listUsers } from './users.js';
+import { listUsers, listOrder } from './users.js';
 import { notify } from '../data/notificationsStore.js';
 
 const STATUS_LABEL = { compliant: 'Compliant', dueSoon: 'Due Soon', overdue: 'Non-Compliant' };
@@ -145,7 +145,7 @@ router.post('/inspections/:id/reschedule', async (req, res, next) => {
 
 // Accredited inspectors who can be booked (active app users with the inspector role)
 const inspectors = () => listUsers().filter((u) => u.roleId === 'inspector' && u.status === 'active')
-  .map((u) => ({ id: u.id, name: u.name })).sort((a, b) => a.name.localeCompare(b.name));
+  .map((u) => ({ id: u.id, name: u.name })).sort(listOrder);
 
 router.get('/meta', (req, res) => res.json({ inspectors: inspectors() }));
 

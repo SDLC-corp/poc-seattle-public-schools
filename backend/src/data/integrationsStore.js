@@ -6,7 +6,7 @@ import { getAllFloors } from './floorsStore.js';
 import { getDocuments } from './documentsStore.js';
 import { getInspections } from './complianceStore.js';
 import { getRoles } from './rolesStore.js';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 import { IS_VERCEL } from './paths.js';
 
 const FILE = new URL('../../data/integrations.json', import.meta.url);
@@ -71,7 +71,7 @@ function seed() {
   };
 }
 
-let state = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')).integrations : null;
+let state = existsSync(readPath(FILE)) ? JSON.parse(readFileSync(readPath(FILE), 'utf8')).integrations : null;
 if (!state) {
   state = seed();
   if (!IS_VERCEL) writeFileSync(FILE, JSON.stringify({ note: 'Integration settings. Secrets are AES-256-GCM encrypted.', integrations: state }, null, 2));

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { unlink } from 'node:fs/promises';
 import path from 'node:path';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 import { uploadDir } from './paths.js';
 import { PROGRAMS } from './trainingPrograms.js';
 
@@ -59,6 +59,12 @@ const SAMPLE_LINKS = [
   { programId: 'respirator', title: 'OSHA – Respiratory Protection', url: 'https://www.osha.gov/respiratory-protection', description: 'Respirator selection, medical evaluation and annual fit-testing requirements.' },
 ];
 
+// The sample course-outline PDF of a program (generated, so it can be recreated wherever it's missing)
+const sampleOutline = (p) => simplePdf(`${p.name} – Course Outline`, [
+  `Duration: ${p.hours} hour${p.hours === 1 ? '' : 's'}   Renewal: ${p.renewalMonths ? `every ${p.renewalMonths} months` : 'none'}`,
+  `Basis: ${p.basis}`, '', ...OUTLINE_TOPICS, '', 'SAMPLE MATERIAL - replace with your district course content.',
+]);
+
 function seedSamples(programs) {
   const now = new Date().toISOString();
   const by = { id: 'system', name: 'System (sample)' };
@@ -67,10 +73,7 @@ function seedSamples(programs) {
   const id = () => `TM-${String(++n).padStart(4, '0')}`;
   for (const p of programs) {
     const storedName = `sample-${p.id}-outline.pdf`;
-    const body = simplePdf(`${p.name} – Course Outline`, [
-      `Duration: ${p.hours} hour${p.hours === 1 ? '' : 's'}   Renewal: ${p.renewalMonths ? `every ${p.renewalMonths} months` : 'none'}`,
-      `Basis: ${p.basis}`, '', ...OUTLINE_TOPICS, '', 'SAMPLE MATERIAL - replace with your district course content.',
-    ]);
+    const body = sampleOutline(p);
     writeFileSync(materialPath(storedName), body);
     list.push({
       id: id(), programId: p.id, title: `${p.name} – Course Outline`, description: `Sample course outline: modules, duration and the requirement it meets.`,
@@ -82,8 +85,16 @@ function seedSamples(programs) {
   return list;
 }
 
-let materials = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')).materials : seedSamples(PROGRAMS);
-if (!existsSync(FILE)) persist();
+let materials = existsSync(readPath(FILE)) ? JSON.parse(readFileSync(readPath(FILE), 'utf8')).materials : seedSamples(PROGRAMS);
+if (!existsSync(readPath(FILE))) persist();
+// Uploaded files aren't deployed (uploads/ is git-ignored; on Vercel they live in /tmp): recreate any missing
+// sample outline so its download works everywhere
+for (const m of materials) {
+  const p = m.sample && m.file?.storedName?.startsWith('sample-') && PROGRAMS.find((x) => x.id === m.programId);
+  if (p && !existsSync(materialPath(m.file.storedName))) {
+    try { writeFileSync(materialPath(m.file.storedName), sampleOutline(p)); } catch { /* read-only: download shows not found */ }
+  }
+}
 
 export const getMaterials = () => materials;
 export const getMaterial = (id) => materials.find((m) => m.id === id) ?? null;

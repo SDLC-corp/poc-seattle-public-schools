@@ -2,14 +2,14 @@ import { existsSync, readFileSync } from 'node:fs';
 import { unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { uploadDir } from './paths.js';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 // Operations & Maintenance: activities (work orders), O&M plans and procedures (SOPs)
 const FILE = new URL('../../data/om.json', import.meta.url);
 export const FILE_DIR = uploadDir('om');
 
 const empty = { activities: [], plans: [], procedures: [] };
-let db = existsSync(FILE) ? { ...empty, ...JSON.parse(readFileSync(FILE, 'utf8')) } : empty;
+let db = existsSync(readPath(FILE)) ? { ...empty, ...JSON.parse(readFileSync(readPath(FILE), 'utf8')) } : empty;
 let writing = Promise.resolve();
 const persist = () => {
   writing = writing.then(() => writeJson(FILE, { note: 'Operations & Maintenance (sample + app)', activities: db.activities, plans: db.plans, procedures: db.procedures }));

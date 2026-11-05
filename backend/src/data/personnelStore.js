@@ -1,14 +1,14 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { CATEGORIES, programById } from './trainingPrograms.js';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 import { uploadDir } from './paths.js';
 
 const FILE = new URL('../../data/personnel.json', import.meta.url);
 export const DUE_SOON_DAYS = 60;
 const DAY = 86400000;
 
-let people = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')).people : [];
+let people = existsSync(readPath(FILE)) ? JSON.parse(readFileSync(readPath(FILE), 'utf8')).people : [];
 let writing = Promise.resolve();
 const persist = () => {
   writing = writing.then(() => writeJson(FILE, { people }));

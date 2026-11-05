@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { settingsDefaults } from '../data/settingsDefaults.js';
 import { logAudit, diff } from '../data/auditStore.js';
 import { notify } from '../data/notificationsStore.js';
-import { writeJson } from '../data/atomicWrite.js';
+import { writeJson, readPath } from '../data/atomicWrite.js';
 
 const SETTINGS_FILE = new URL('../../data/settings.json', import.meta.url);
 const MAX_LOGO_CHARS = 2.8 * 1024 * 1024; // ~2 MB image once base64-encoded
@@ -51,8 +51,8 @@ function validate(s) {
   return errors;
 }
 
-let current = existsSync(SETTINGS_FILE)
-  ? sanitize(JSON.parse(readFileSync(SETTINGS_FILE, 'utf8')))
+let current = existsSync(readPath(SETTINGS_FILE))
+  ? sanitize(JSON.parse(readFileSync(readPath(SETTINGS_FILE), 'utf8')))
   : clone(settingsDefaults);
 
 const save = async (settings) => {

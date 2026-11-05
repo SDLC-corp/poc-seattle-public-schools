@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { REPORTS, filterRows } from '../data/reports.js';
 import { logAudit } from '../data/auditStore.js';
+import { listUsers } from './users.js';
 
 const router = Router();
 
@@ -85,7 +86,8 @@ router.get('/:id/facets', (req, res) => {
     schools: uniq(all, 'schoolId', 'school'),
     buildings: school ? uniq(inSchool, 'buildingId', 'building') : [],
     floors: building ? uniq(inBuilding, 'floor') : [],
-    inspectors: uniq(inSchool, 'inspector'),
+    // Users flagged listFirst (the lead inspector) head the list
+    inspectors: (() => { const top = new Set(listUsers().filter((u) => u.listFirst).map((u) => u.name)); return uniq(inSchool, 'inspector').sort((a, b) => top.has(b.value) - top.has(a.value)); })(),
   });
 });
 

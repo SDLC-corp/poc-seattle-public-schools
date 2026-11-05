@@ -3,13 +3,13 @@ import { unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { uploadDir } from './paths.js';
 import { ROOM_ACM_RANK } from './acmMeta.js';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 const ROOMS_FILE = new URL('../../data/rooms.json', import.meta.url);
 const MATERIALS_FILE = new URL('../../data/acmMaterials.json', import.meta.url);
 export const FILE_DIR = uploadDir('acm');
 
-const load = (file, key) => (existsSync(file) ? JSON.parse(readFileSync(file, 'utf8'))[key] : []);
+const load = (file, key) => (existsSync(readPath(file)) ? JSON.parse(readFileSync(readPath(file), 'utf8'))[key] : []);
 let rooms = load(ROOMS_FILE, 'rooms');
 let materials = load(MATERIALS_FILE, 'materials');
 

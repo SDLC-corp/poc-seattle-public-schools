@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'reac
 import {
   ClipboardCheck, ArrowLeft, Send, Plus, Trash2, Upload, Download, FileText, Image as ImageIcon, MapPin, History, Info,
   CircleCheck, CircleAlert, Eraser, BadgeCheck, Undo2, Circle, TriangleAlert, ListChecks, Paperclip, Layers, X, FlaskConical, Wrench,
-  CornerUpLeft, CalendarPlus,
+  CornerUpLeft, CalendarPlus, CalendarCheck,
 } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import { useConfirm } from '../../components/ui/useConfirm'
@@ -18,6 +18,7 @@ import FollowUpDialog from './FollowUpDialog'
 import { FollowUpsPanel, LabPanel, OmPanel } from './ParentTabs'
 import { request, uploadFile, API_BASE } from '../../lib/api'
 import { useGoBack } from '../../lib/useGoBack'
+import { useOutlookCalendar, outlookNote } from '../../lib/outlookCalendar'
 import '../Users/users.css'
 import '../Audit/audit.css'
 import '../AcmInventory/acmInventory.css'
@@ -225,6 +226,8 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
   const setTab = (t) => setView({ tab: t === 'inspection' ? null : t })
   const setOpenFollowUp = (fid) => setView({ fu: fid })
   const goBack = useGoBack('/inspections')
+  const outlook = useOutlookCalendar()
+  const [addingToOutlook, setAddingToOutlook] = useState(false)
   const [form, setForm] = useState(() => blankForm(params.get('material')))
   const [allErrors, setErrors] = useState({})
   const [saving, setSaving] = useState(null)
@@ -448,8 +451,11 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
       const text = state !== 'submitted' ? `Inspection ${res.record.id} saved – in progress.`
         : samples ? `Inspection ${res.record.id} submitted for review – the reviewer sends the ${samples === 1 ? 'sample' : `${samples} samples`} to the laboratory.`
           : `Inspection ${res.record.id} submitted for review.`
-      if (!record) navigate(`/inspections/records/${res.record.id}`, { replace: true, state: { toast: { kind: 'success', text } } })
-      else { setRecord(res.record); setToast({ kind: 'success', text }) }
+      if (!record) {
+        // A new inspection goes on the Outlook calendar too
+        const cal = await outlook.addInspections([res.record.id])
+        navigate(`/inspections/records/${res.record.id}`, { replace: true, state: { toast: { kind: 'success', text: text + outlookNote(cal) } } })
+      } else { setRecord(res.record); setToast({ kind: 'success', text }) }
     } catch (e) {
       setErrors(e.fields ?? {})
       setToast({ kind: 'error', text: e.fields ? `${e.message} (${Object.keys(e.fields).length})` : e.message })
@@ -458,6 +464,18 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
     } finally {
       setSaving(null)
     }
+  }
+
+  // Button click, so Microsoft's consent popup may open the first time
+  const addToOutlook = async () => {
+    setAddingToOutlook(true)
+    const res = await outlook.addInspections([record.id], { interactive: true })
+    setAddingToOutlook(false)
+    const done = res.added[0]
+    if (done) {
+      setRecord((r) => ({ ...r, outlook: done }))
+      setToast({ kind: 'success', text: `Inspection ${record.id} added to your Outlook calendar${done.invited ? ` and ${done.invited.replace(/ <.*>$/, '')} invited` : ''}.` })
+    } else setToast({ kind: 'error', text: `Couldn't add it to Outlook (${res.error ?? 'permission not granted'}).` })
   }
 
   const decide = async (decision) => {
@@ -641,6 +659,11 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
           : <h1><ClipboardCheck size={24} />Asbestos Inspection – Detailed Form</h1>}
         <div className="ai-head-actions">
           {!embedded && <button type="button" className="u-btn u-btn-outline" onClick={goBack}><ArrowLeft size={15} />Back</button>}
+          {/* Its Outlook calendar event (signed in with Microsoft): open it, or add it */}
+          {record && !embedded && outlook.available && (record.outlook
+            ? <a className="u-btn u-btn-outline" href={record.outlook.webLink} target="_blank" rel="noreferrer"
+              title={`Added by ${record.outlook.addedBy?.name ?? '—'}${record.outlook.invited ? ` · invited ${record.outlook.invited}` : ''}`}><CalendarCheck size={15} />In Outlook Calendar</a>
+            : <button type="button" className="u-btn u-btn-outline" disabled={addingToOutlook} onClick={addToOutlook}><CalendarPlus size={15} />{addingToOutlook ? 'Adding…' : 'Add to Outlook'}</button>)}
           {/* A follow-up inspection's lab results and O&M work continue on its parent */}
           {isChild && !embedded && (
             <Link className="u-btn u-btn-primary" to={`/inspections/records/${record.parentId}?tab=followUp`}><CornerUpLeft size={15} />Open Parent {record.parentId}</Link>
@@ -1390,11 +1413,12 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
       {confirmDialog}
       {schedulingFollowUp && record && (
         <FollowUpDialog record={record} meta={meta} onClose={() => setSchedulingFollowUp(false)}
-          onDone={(child) => {
+          onDone={async (child) => {
             setSchedulingFollowUp(false)
             setOpenFollowUp(child.id)
             setRecord((r) => ({ ...r })) // reload the follow-ups
-            setToast({ kind: 'success', text: `Follow-up inspection ${child.id} scheduled with ${child.inspectorName} for ${fmtDay(child.scheduledDate)} at ${fmtTime(child.scheduledTime)}.` })
+            const cal = await outlook.addInspections([child.id])
+            setToast({ kind: 'success', text: `Follow-up inspection ${child.id} scheduled with ${child.inspectorName} for ${fmtDay(child.scheduledDate)} at ${fmtTime(child.scheduledTime)}.${outlookNote(cal)}` })
           }} />
       )}
       {labOm && record && (

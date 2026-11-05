@@ -7,7 +7,7 @@ import {
   nextId, statusOf, INTERVAL_DAYS, CONDITIONS, ACTION_STATUSES, TEAMS,
 } from '../data/surveillanceStore.js';
 import { MAX_ATTACHMENT_BYTES } from '../data/acmMeta.js';
-import { listUsers } from './users.js';
+import { listUsers, listOrder } from './users.js';
 import { logAudit, diff, currentUser } from '../data/auditStore.js';
 import { sniff, storeUpload, sendStored } from './uploadCheck.js';
 
@@ -132,7 +132,7 @@ router.get('/meta', (req, res) => res.json({
   intervalDays: INTERVAL_DAYS,
   nextId: nextId(),
   inspectors: listUsers().filter((u) => SIGNERS.includes(u.roleId) && u.status === 'active')
-    .map((u) => ({ id: u.id, name: u.name, title: u.jobTitle })).sort((a, b) => a.name.localeCompare(b.name)),
+    .map((u) => ({ id: u.id, name: u.name, title: u.jobTitle })).sort(listOrder),
 }));
 
 // Materials that can be surveyed, for the "Associated ACM" picker

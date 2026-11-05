@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { uploadDir } from './paths.js';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 // Periodic surveillance of known/assumed ACM (AHERA 40 CFR 763.92(b)): one record per material per visit
 const FILE = new URL('../../data/surveillance.json', import.meta.url);
@@ -13,7 +13,7 @@ export const CONDITIONS = ['Good', 'Damaged', 'Significantly Damaged'];
 export const ACTION_STATUSES = ['Open', 'In Progress', 'Closed'];
 export const TEAMS = ['EHS – Asbestos Program', 'Facilities – Asbestos Team', 'O&M – Custodial', 'O&M – Maintenance', 'Abatement Contractor', 'Building Administrator'];
 
-let records = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')).records : [];
+let records = existsSync(readPath(FILE)) ? JSON.parse(readFileSync(readPath(FILE), 'utf8')).records : [];
 let writing = Promise.resolve();
 const persist = () => {
   writing = writing.then(() => writeJson(FILE, { note: 'ACM periodic surveillance records (sample + app)', records }));

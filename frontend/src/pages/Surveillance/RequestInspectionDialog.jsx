@@ -3,6 +3,7 @@ import { ClipboardPlus, X, Layers, ShieldCheck } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
 import Badge from '../AcmInventory/Badge'
 import { request } from '../../lib/api'
+import { useOutlookCalendar, outlookNote } from '../../lib/outlookCalendar'
 import { CONDITION_TONE, fmtDay, isoToday, addDays } from './survMeta'
 
 /**
@@ -18,6 +19,7 @@ export default function RequestInspectionDialog({ record, material, location, on
   })
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(false)
+  const outlook = useOutlookCalendar()
 
   useEffect(() => {
     request('/inspection-records/meta').then((m) => setInspectors(m.inspectors ?? [])).catch(() => {})
@@ -33,7 +35,9 @@ export default function RequestInspectionDialog({ record, material, location, on
     setSaving(true)
     try {
       const res = await request('/inspection-records/from-surveillance', { method: 'POST', body: { surveillanceId: record.id, ...plan } })
-      onDone(res.record)
+      // The new inspection goes on the Outlook calendar too
+      const cal = await outlook.addInspections([res.record.id])
+      onDone(res.record, outlookNote(cal))
     } catch (e) {
       setErrors(e.fields ?? { form: e.message })
     } finally {

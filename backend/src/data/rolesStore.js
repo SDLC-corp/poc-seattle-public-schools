@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 import {
   defaultRoles, permissions, TONES, ACCESS_SCOPES, SYSTEM_ROLE_ID, SYSTEM_ROLE_REQUIRED,
 } from './roleDefaults.js';
@@ -8,8 +8,8 @@ const ROLES_FILE = new URL('../../data/roles.json', import.meta.url);
 const permissionIds = new Set(permissions.map((p) => p.id));
 
 // Seeded from the defaults the first time; afterwards data/roles.json is the source of truth
-let roles = existsSync(ROLES_FILE)
-  ? JSON.parse(readFileSync(ROLES_FILE, 'utf8')).roles
+let roles = existsSync(readPath(ROLES_FILE))
+  ? JSON.parse(readFileSync(readPath(ROLES_FILE), 'utf8')).roles
   : structuredClone(defaultRoles);
 
 const persist = () => writeJson(ROLES_FILE, { roles });

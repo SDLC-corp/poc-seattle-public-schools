@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 const AUDIT_FILE = new URL('../../data/audit.json', import.meta.url);
 
@@ -14,7 +14,7 @@ export const currentUser = () => requestUser.getStore() ?? DEMO_USER;
 
 export const ACTIONS = ['create', 'update', 'delete', 'login', 'logout', 'login_failed', 'export'];
 
-let entries = existsSync(AUDIT_FILE) ? JSON.parse(readFileSync(AUDIT_FILE, 'utf8')).entries : [];
+let entries = existsSync(readPath(AUDIT_FILE)) ? JSON.parse(readFileSync(readPath(AUDIT_FILE), 'utf8')).entries : [];
 
 // Serialise writes so concurrent requests can't interleave file writes
 let writing = Promise.resolve();

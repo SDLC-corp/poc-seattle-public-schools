@@ -5,6 +5,7 @@ import { useGraph } from '../../auth/useGraph'
 import { graphTime } from '../../auth/graph'
 import { request, fmtDate } from '../../lib/api'
 import ConnectGate from './ConnectGate'
+import { useOutlookCalendar } from '../../lib/outlookCalendar'
 
 const TZ = Intl.DateTimeFormat().resolvedOptions().timeZone
 const pad = (n) => String(n).padStart(2, '0')
@@ -25,7 +26,8 @@ export default function CalendarTab({ onToast }) {
   const [formErr, setFormErr] = useState({})
   const [saving, setSaving] = useState(false)
   const [inspections, setInspections] = useState(null)
-  const [added, setAdded] = useState(() => new Set())
+  const [added, setAdded] = useState(() => new Map()) // inspection id → Outlook link, added on this page
+  const outlook = useOutlookCalendar()
 
   useEffect(() => {
     if (g.status !== 'connected') return undefined
@@ -73,26 +75,15 @@ export default function CalendarTab({ onToast }) {
     }
   }
 
-  // A scheduled inspection becomes a 2-hour event; transactionId stops a double click creating it twice
+  // A scheduled inspection becomes a 2-hour event with its details (shared with the automatic adding on create),
+  // recorded on the inspection so it isn't added twice
   const addInspection = async (r) => {
-    try {
-      await create({
-        subject: `Asbestos ${r.type} – ${r.schoolName}`,
-        start: { dateTime: `${r.scheduledDate}T09:00:00`, timeZone: TZ },
-        end: { dateTime: `${r.scheduledDate}T11:00:00`, timeZone: TZ },
-        location: { displayName: `${r.schoolName}, ${r.buildingName}, ${r.floorName}, Room ${r.roomNumber}` },
-        body: {
-          contentType: 'Text',
-          content: `${r.type} of ${r.materialName} (${r.id}).\nAssigned to: ${r.assignedTo ?? '—'}\nOpen the inspection: ${window.location.origin}/inspections/records/${r.id}`,
-        },
-        categories: ['Asbestos Inspection'],
-      }, `sps-inspection-${r.id}`)
-      setAdded((s) => new Set(s).add(r.id))
-      onToast({ kind: 'success', text: `${r.id} added to your Outlook calendar` })
+    const res = await outlook.addInspections([r.id], { interactive: true })
+    if (res.added[0]) {
+      setAdded((s) => new Map(s).set(r.id, res.added[0].webLink))
+      onToast({ kind: 'success', text: `${r.id} added to your Outlook calendar${res.added[0].invited ? ` and ${res.added[0].invited.replace(/ <.*>$/, '')} invited` : ''}` })
       setReload((n) => n + 1)
-    } catch (e) {
-      onToast({ kind: 'error', text: e.message })
-    }
+    } else onToast({ kind: 'error', text: res.error ?? 'Outlook permission not granted' })
   }
 
   const set = (k) => (e) => { setForm((f) => ({ ...f, [k]: e.target.value })); setFormErr((x) => ({ ...x, [k]: undefined })) }
@@ -151,8 +142,8 @@ export default function CalendarTab({ onToast }) {
                     <strong>{fmtDate(`${r.scheduledDate}T00:00:00`)} · {r.type}</strong>
                     <small>{r.schoolName} · {r.roomNumber} {r.roomName}{r.assignedTo ? ` · ${r.assignedTo}` : ''}</small>
                   </div>
-                  {added.has(r.id)
-                    ? <span className="m365-added"><Check size={13} />Added</span>
+                  {added.get(r.id) || r.outlookLink
+                    ? <a className="m365-added" href={added.get(r.id) || r.outlookLink} target="_blank" rel="noreferrer"><Check size={13} />In Outlook</a>
                     : <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={() => addInspection(r)}><CalendarPlus size={13} />Add to Outlook</button>}
                 </li>
               ))}

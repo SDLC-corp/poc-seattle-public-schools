@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { schools, getSchoolBuildings } from './store.js';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 const FILE = new URL('../../data/inspections.json', import.meta.url);
 const DAY = 86400000;
@@ -10,7 +10,7 @@ export const DUE_SOON_DAYS = 30; // school is "due soon" if an inspection is due
 const INSPECTION_DUE_SOON_DAYS = 14; // an individual inspection shows "Due Soon" in the calendar
 export const SURVEILLANCE_INTERVAL_DAYS = 182; // periodic surveillance every 6 months
 
-let inspections = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')).inspections : [];
+let inspections = existsSync(readPath(FILE)) ? JSON.parse(readFileSync(readPath(FILE), 'utf8')).inspections : [];
 let writing = Promise.resolve();
 const persist = () => {
   writing = writing.then(() => writeJson(FILE, { inspections }));

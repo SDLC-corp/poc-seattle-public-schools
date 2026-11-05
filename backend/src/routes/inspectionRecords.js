@@ -14,7 +14,7 @@ import { notify } from '../data/notificationsStore.js';
 import { getRecord as getSurveillance } from '../data/surveillanceStore.js';
 import * as OMM from '../data/omMeta.js';
 import { MAX_ATTACHMENT_BYTES } from '../data/acmMeta.js';
-import { listUsers } from './users.js';
+import { listUsers, listOrder } from './users.js';
 import { logAudit, diff, currentUser } from '../data/auditStore.js';
 import { sniff, storeUpload, sendStored } from './uploadCheck.js';
 
@@ -61,7 +61,7 @@ const certificationOf = (userId) => {
   return rec ? { name: 'AHERA Building Inspector', number: rec.certificateNo, expiresOn: rec.expiresOn } : null;
 };
 const inspectors = () => listUsers().filter((u) => u.roleId === 'inspector' && u.status === 'active')
-  .map((u) => ({ id: u.id, name: u.name, title: u.jobTitle, certification: certificationOf(u.id) })).sort((a, b) => a.name.localeCompare(b.name));
+  .map((u) => ({ id: u.id, name: u.name, title: u.jobTitle, certification: certificationOf(u.id) })).sort(listOrder);
 const reviewers = () => listUsers().filter((u) => u.roleId === 'ehs-manager' && u.status === 'active')
   .map((u) => ({ id: u.id, name: u.name, title: u.jobTitle })).sort((a, b) => a.name.localeCompare(b.name));
 
@@ -105,6 +105,7 @@ function rows() {
       completionDate: r.verification?.completionDate || null,
       parentId: r.parentId ?? null, // a follow-up inspection carried out under another one
       surveillanceId: r.surveillanceId ?? null, // a damage inspection requested from a surveillance record
+      outlookLink: r.outlook?.webLink ?? null, // its Outlook calendar event, once added
       // Latest real activity (last change, assignment or creation); seeded demo dates in the future don't count
       lastActivity: [r.updatedAt, r.assignment?.assignedAt, r.createdAt].filter((t) => t && t <= nowIso).sort().at(-1) ?? '',
     };
@@ -1504,6 +1505,53 @@ router.get('/calendar', (req, res) => {
     }))
     .sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
   res.json({ items });
+});
+
+/**
+ * GET /records/:id/calendar-event — what the Outlook calendar event for an inspection shows: when, where, the ACMs,
+ * the inspector (with email, for the invitation) and who scheduled it; plus the event already added, if any.
+ */
+router.get('/records/:id/calendar-event', (req, res) => {
+  const r = getRecord(req.params.id);
+  if (!r) return res.status(404).json({ error: 'Inspection record not found' });
+  const place = placeLookup();
+  const mats = new Map(getMaterials().map((m) => [m.id, m]));
+  const inspector = listUsers().find((u) => u.id === r.inspectorId);
+  res.json({
+    id: r.id, type: r.type, scheduledDate: r.scheduledDate ?? r.date ?? null, scheduledTime: r.scheduledTime ?? null,
+    ...place(r),
+    acms: M.acmsOf(r).map((a) => {
+      const m = mats.get(a.materialId);
+      const p = place(a.schoolId ? a : r);
+      return { id: a.materialId, name: m?.name ?? a.materialId, location: [p.buildingName, p.floorName, p.roomNumber && `Room ${p.roomNumber} ${p.roomName}`.trim()].filter(Boolean).join(' · ') };
+    }),
+    inspector: inspector ? { name: inspector.name, email: inspector.email } : (r.inspectorName ? { name: r.inspectorName, email: null } : null),
+    scheduledBy: r.assignment?.assignedBy?.name ?? r.createdBy?.name ?? null,
+    notes: r.assignment?.notes ?? '',
+    parentId: r.parentId ?? null,
+    surveillanceId: r.surveillanceId ?? null,
+    outlook: r.outlook ?? null,
+  });
+});
+
+// POST /records/:id/outlook { eventId, webLink } — the Outlook calendar event created for this inspection
+router.post('/records/:id/outlook', async (req, res, next) => {
+  try {
+    const r = getRecord(req.params.id);
+    if (!r) return res.status(404).json({ error: 'Inspection record not found' });
+    const eventId = String(req.body?.eventId ?? '').slice(0, 512);
+    const webLink = String(req.body?.webLink ?? '');
+    if (!eventId || !/^https:\/\/[^/]*(outlook\.office(365)?\.com|outlook\.live\.com)\//i.test(webLink)) {
+      return res.status(400).json({ error: 'An Outlook event id and link are required' });
+    }
+    const me = currentUser();
+    const outlook = { eventId, webLink, addedAt: new Date().toISOString(), addedBy: { id: me.id, name: me.name }, invited: req.body?.invited ? String(req.body.invited).slice(0, 200) : null };
+    await updateRecord(r.id, { outlook });
+    logAudit(req, { action: 'update', module: 'Inspections', recordId: r.id, summary: `Added inspection ${r.id} to the Outlook calendar${outlook.invited ? ` (invited ${outlook.invited})` : ''}` });
+    res.json({ outlook });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // What is due per ACM: an open inspection is due on its scheduled date; with none open, the 3-year

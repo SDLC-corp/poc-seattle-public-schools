@@ -3250,6 +3250,27 @@
         }
       ],
       "sample": true
+    },
+    {
+      "id": "P-0125",
+      "name": "Shashank Jaiswal",
+      "category": "inspector",
+      "organization": "SDLC Corp",
+      "email": "shashank@sdlccorp.com",
+      "phone": "",
+      "schoolId": null,
+      "schoolName": null,
+      "userId": "u130",
+      "status": "active",
+      "records": [
+        {
+          "programId": "inspector",
+          "completedOn": "2026-11-05",
+          "expiresOn": "2027-11-05",
+          "certificateNo": "WA-INS-90001",
+          "provider": "Accredited Training Provider A"
+        }
+      ]
     }
   ]
 }

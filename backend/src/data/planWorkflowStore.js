@@ -1,11 +1,11 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { writeJson } from './atomicWrite.js';
+import { writeJson, readPath } from './atomicWrite.js';
 
 // Per-school management plan workflow diagrams edited in the plan's Workflow & Approvals tab.
 // A school without an entry uses the standard plan cycle drawn by the frontend.
 const FILE = new URL('../../data/planWorkflows.json', import.meta.url);
 
-let db = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')) : { workflows: {} };
+let db = existsSync(readPath(FILE)) ? JSON.parse(readFileSync(readPath(FILE), 'utf8')) : { workflows: {} };
 db.workflows ??= {};
 let writing = Promise.resolve();
 const persist = () => {
