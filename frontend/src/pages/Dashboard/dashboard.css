@@ -241,6 +241,24 @@
 .map-seg button.active { background: var(--primary); color: #fff; }
 .map-seg button:focus-visible { outline: 2px solid var(--secondary); outline-offset: 1px; }
 
+.map-error {
+  position: absolute;
+  inset: 50% 24px auto;
+  transform: translateY(-50%);
+  z-index: 3;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #f0c9c9;
+  box-shadow: 0 6px 20px rgba(4, 43, 68, 0.15);
+  color: #8a1f1f;
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: center;
+}
+
 .map-hint {
   position: absolute;
   left: 50%;

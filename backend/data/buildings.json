@@ -1,7 +1,7 @@
 {
   "note": "MOCK DATA — generated from schools.json by scripts/generate-buildings.js",
   "generatedAt": "2026-11-02T04:59:06.912Z",
-  "count": 316,
+  "count": 317,
   "buildings": [
     {
       "id": "adamses-b1",
@@ -15395,6 +15395,56 @@
             [
               -122.3930007,
               47.6737247
+            ]
+          ]
+        ]
+      },
+      "source": "app"
+    },
+    {
+      "id": "sugiyamahs-b4",
+      "schoolId": "sugiyamahs",
+      "schoolName": "Alan T. Sugiyama High School",
+      "name": "test",
+      "code": "SUGIYAMAHS-D",
+      "yearBuilt": 2026,
+      "floors": 2,
+      "areaSqFt": 200,
+      "construction": "Masonry",
+      "rooms": 25,
+      "roomsWithAcm": 7,
+      "acmStatus": "Assumed ACM",
+      "presumedAcm": false,
+      "heightM": 9,
+      "widthM": 3.9,
+      "depthM": 2.4,
+      "location": {
+        "lat": 47.526447,
+        "lng": -122.269294
+      },
+      "footprint": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.2693199,
+              47.5264362
+            ],
+            [
+              -122.2692681,
+              47.5264362
+            ],
+            [
+              -122.2692681,
+              47.5264578
+            ],
+            [
+              -122.2693199,
+              47.5264578
+            ],
+            [
+              -122.2693199,
+              47.5264362
             ]
           ]
         ]

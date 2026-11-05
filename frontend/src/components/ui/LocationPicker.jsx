@@ -1,12 +1,8 @@
-import { useEffect, useRef } from 'react'
-import * as maplibregl from 'maplibre-gl'
-import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
+import { useEffect, useRef, useState } from 'react'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { maplibregl, STYLE_URLS, mapSupport, mapPixelRatio, withStyleFallback } from '../../lib/mapSetup'
 import './location-picker.css'
 
-maplibregl.setWorkerUrl(maplibreWorkerUrl)
-
-const STYLE = 'https://tiles.openfreemap.org/styles/liberty'
 const SEATTLE = { lat: 47.61, lng: -122.335 }
 
 /**
@@ -20,13 +16,22 @@ export default function LocationPicker({ value, center, footprints = [], onChang
   const marker = useRef(null)
   const onChangeRef = useRef(onChange)
   onChangeRef.current = onChange
+  const [error, setError] = useState(() => (mapSupport().webgl ? null : "This browser can't draw maps (WebGL is off or blocked) — type the latitude and longitude instead."))
 
   useEffect(() => {
+    if (!mapSupport().webgl) return undefined
     const start = value ?? center ?? SEATTLE
-    const m = new maplibregl.Map({
-      container: box.current, style: STYLE, center: [start.lng, start.lat], zoom: value || center ? 17 : 11,
-      attributionControl: { compact: true }, dragRotate: false, pitchWithRotate: false,
-    })
+    let m
+    try {
+      m = new maplibregl.Map({
+        container: box.current, style: STYLE_URLS.streets[0], center: [start.lng, start.lat], zoom: value || center ? 17 : 11,
+        attributionControl: { compact: true }, dragRotate: false, pitchWithRotate: false, pixelRatio: mapPixelRatio(), fadeDuration: 0,
+      })
+    } catch (err) {
+      setError(`The map could not start in this browser (${err.message}) — type the latitude and longitude instead.`)
+      return undefined
+    }
+    withStyleFallback(m, STYLE_URLS.streets, () => setError('The map could not be loaded — type the latitude and longitude instead.'))
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
     m.getCanvas().style.cursor = 'crosshair'
     m.on('click', (e) => onChangeRef.current({ lat: +e.lngLat.lat.toFixed(6), lng: +e.lngLat.lng.toFixed(6) }))
@@ -73,5 +78,9 @@ export default function LocationPicker({ value, center, footprints = [], onChang
     return undefined
   }, [footprints])
 
-  return <div ref={box} className="lp-map" role="application" aria-label={label} />
+  return (
+    <div ref={box} className="lp-map" role="application" aria-label={label}>
+      {error && <div className="lp-error" role="alert">{error}</div>}
+    </div>
+  )
 }

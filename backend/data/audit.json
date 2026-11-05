@@ -1,6 +1,180 @@
 {
   "entries": [
     {
+      "id": "AUD-000167",
+      "at": "2026-11-05T17:59:44.026Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "sugiyamahs-b4-fmw3uol52",
+      "summary": "Updated First Floor – test, Alan T. Sugiyama High School",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "15"
+        }
+      ],
+      "related": {
+        "school": "Alan T. Sugiyama High School",
+        "building": "test"
+      },
+      "link": "/schools/sugiyamahs/buildings/sugiyamahs-b4/floors",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000166",
+      "at": "2026-11-05T17:59:39.171Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "sugiyamahs-b4-fmw3uol52",
+      "summary": "Set floor plan – First Floor, test (School Ground Floor Plan UPDATE)",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "(none)",
+          "to": "School_Ground_Floor_Plan_UPDATE.pdf"
+        }
+      ],
+      "related": {
+        "school": "Alan T. Sugiyama High School",
+        "building": "test"
+      },
+      "link": "/schools/sugiyamahs/buildings/sugiyamahs-b4/floors",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000165",
+      "at": "2026-11-05T17:59:39.045Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "sugiyamahs-b4-fmw3uol52",
+      "summary": "Added First Floor – test, Alan T. Sugiyama High School",
+      "changes": [
+        {
+          "field": "Floor No.",
+          "to": "1"
+        },
+        {
+          "field": "Name",
+          "to": "First Floor"
+        },
+        {
+          "field": "Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Rooms",
+          "to": "0"
+        },
+        {
+          "field": "ACM Status",
+          "to": "Not Assessed"
+        },
+        {
+          "field": "Detected Room Shapes",
+          "to": "0"
+        },
+        {
+          "field": "Detected Tables",
+          "to": "0"
+        }
+      ],
+      "related": {
+        "school": "Alan T. Sugiyama High School",
+        "building": "test"
+      },
+      "link": "/schools/sugiyamahs/buildings/sugiyamahs-b4/floors",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000164",
+      "at": "2026-11-05T17:59:22.539Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "sugiyamahs-b4",
+      "summary": "Added building test – Alan T. Sugiyama High School",
+      "changes": [
+        {
+          "field": "Name",
+          "to": "test"
+        },
+        {
+          "field": "Code",
+          "to": "SUGIYAMAHS-D"
+        },
+        {
+          "field": "Year Built",
+          "to": "2026"
+        },
+        {
+          "field": "Floors",
+          "to": "1"
+        },
+        {
+          "field": "Area (sq ft)",
+          "to": "200"
+        },
+        {
+          "field": "Construction",
+          "to": "Masonry"
+        },
+        {
+          "field": "Rooms",
+          "to": "10"
+        },
+        {
+          "field": "Rooms with ACM",
+          "to": "7"
+        },
+        {
+          "field": "ACM Status",
+          "to": "Assumed ACM"
+        },
+        {
+          "field": "Map location",
+          "to": "47.526447, -122.269294"
+        }
+      ],
+      "related": {
+        "school": "Alan T. Sugiyama High School",
+        "building": "test"
+      },
+      "link": "/schools/sugiyamahs/buildings",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
       "id": "AUD-000163",
       "at": "2026-11-05T17:08:54.318Z",
       "action": "update",

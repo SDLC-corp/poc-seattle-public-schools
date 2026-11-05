@@ -10183,6 +10183,300 @@
       "planImage": null,
       "labels": [],
       "source": "app"
+    },
+    {
+      "id": "sugiyamahs-b4-f1",
+      "buildingId": "sugiyamahs-b4",
+      "schoolId": "sugiyamahs",
+      "number": 0,
+      "name": "Ground Floor",
+      "rooms": 10,
+      "acmRooms": 7,
+      "acmStatus": "Assumed ACM",
+      "planImage": null,
+      "labels": [],
+      "source": "app"
+    },
+    {
+      "id": "sugiyamahs-b4-fmw3uol52",
+      "buildingId": "sugiyamahs-b4",
+      "schoolId": "sugiyamahs",
+      "number": 1,
+      "name": "First Floor",
+      "shapes": [
+        {
+          "id": "Dmw3uooun-1",
+          "name": "Room 1",
+          "points": [
+            0.1329,
+            0.1505,
+            0.4314,
+            0.1505,
+            0.4314,
+            0.3404,
+            0.1329,
+            0.3404
+          ],
+          "area": 0.051734
+        },
+        {
+          "id": "Dmw3uooun-2",
+          "name": "Room 2",
+          "points": [
+            0.1336,
+            0.3444,
+            0.3036,
+            0.3444,
+            0.3036,
+            0.5101,
+            0.1336,
+            0.5101
+          ],
+          "area": 0.02731
+        },
+        {
+          "id": "Dmw3uooun-3",
+          "name": "Room 3",
+          "points": [
+            0.3129,
+            0.5182,
+            0.3129,
+            0.3747,
+            0.3479,
+            0.3747,
+            0.3479,
+            0.5182
+          ],
+          "area": 0.004715
+        },
+        {
+          "id": "Dmw3uooun-4",
+          "name": "Room 4",
+          "points": [
+            0.3614,
+            0.3414,
+            0.3993,
+            0.3414,
+            0.3993,
+            0.4747,
+            0.3614,
+            0.4747
+          ],
+          "area": 0.004406
+        },
+        {
+          "id": "Dmw3uooun-5",
+          "name": "Room 5",
+          "points": [
+            0.4771,
+            0.3414,
+            0.515,
+            0.3414,
+            0.515,
+            0.4697,
+            0.4771,
+            0.4697
+          ],
+          "area": 0.004255
+        },
+        {
+          "id": "Dmw3uooun-6",
+          "name": "Room 6",
+          "points": [
+            0.5293,
+            0.5172,
+            0.5293,
+            0.3758,
+            0.5643,
+            0.3758,
+            0.5643,
+            0.5172
+          ],
+          "area": 0.004635
+        },
+        {
+          "id": "Dmw3uooun-7",
+          "name": "Room 7",
+          "points": [
+            0.5736,
+            0.5101,
+            0.5736,
+            0.3444,
+            0.7379,
+            0.3444,
+            0.7379,
+            0.5101
+          ],
+          "area": 0.02643
+        },
+        {
+          "id": "Dmw3uooun-8",
+          "name": "Room 8",
+          "points": [
+            0.1336,
+            0.6646,
+            0.1336,
+            0.5242,
+            0.2879,
+            0.5242,
+            0.2879,
+            0.6646
+          ],
+          "area": 0.02082
+        },
+        {
+          "id": "Dmw3uooun-9",
+          "name": "Room 9",
+          "points": [
+            0.3014,
+            0.5263,
+            0.2914,
+            0.5434,
+            0.2971,
+            0.6505,
+            0.3114,
+            0.6646,
+            0.3407,
+            0.6596,
+            0.3493,
+            0.6444,
+            0.3429,
+            0.6232,
+            0.3479,
+            0.5687,
+            0.3336,
+            0.5535,
+            0.3264,
+            0.5273
+          ],
+          "area": 0.006486
+        },
+        {
+          "id": "Dmw3uooun-10",
+          "name": "Room 10",
+          "points": [
+            0.5764,
+            0.5253,
+            0.5486,
+            0.5283,
+            0.5436,
+            0.5556,
+            0.5314,
+            0.5727,
+            0.5364,
+            0.6232,
+            0.53,
+            0.6455,
+            0.5521,
+            0.6687,
+            0.575,
+            0.6616,
+            0.5836,
+            0.6465,
+            0.5886,
+            0.5444
+          ],
+          "area": 0.00675
+        },
+        {
+          "id": "Dmw3uooun-11",
+          "name": "Room 11",
+          "points": [
+            0.5921,
+            0.5242,
+            0.7371,
+            0.5242,
+            0.7371,
+            0.6646,
+            0.5921,
+            0.6646
+          ],
+          "area": 0.019494
+        },
+        {
+          "id": "Dmw3uooun-12",
+          "name": "Room 12",
+          "points": [
+            0.3557,
+            0.6626,
+            0.3571,
+            0.6051,
+            0.5264,
+            0.6121,
+            0.525,
+            0.6707
+          ],
+          "area": 0.008599
+        },
+        {
+          "id": "Dmw3uooun-13",
+          "name": "Room 13",
+          "points": [
+            0.1329,
+            0.8212,
+            0.1336,
+            0.6768,
+            0.3236,
+            0.6778,
+            0.3229,
+            0.8222
+          ],
+          "area": 0.026475
+        },
+        {
+          "id": "Dmw3uooun-14",
+          "name": "Room 14",
+          "points": [
+            0.3329,
+            0.6788,
+            0.5279,
+            0.6788,
+            0.5279,
+            0.8242,
+            0.3329,
+            0.8242
+          ],
+          "area": 0.02675
+        },
+        {
+          "id": "Dmw3uooun-15",
+          "name": "Room 15",
+          "points": [
+            0.5364,
+            0.6788,
+            0.7379,
+            0.6788,
+            0.7379,
+            0.8212,
+            0.5364,
+            0.8212
+          ],
+          "area": 0.027605
+        }
+      ],
+      "tables": [],
+      "derivedCounts": true,
+      "rooms": 15,
+      "acmRooms": 0,
+      "acmStatus": "Not Assessed",
+      "planImage": {
+        "storedName": "School_Ground_Floor_Plan_UPDATE.png",
+        "name": "School_Ground_Floor_Plan_UPDATE.pdf",
+        "mime": "image/png",
+        "size": 2519397,
+        "uploadedAt": "2026-11-05T17:59:39.063Z",
+        "sample": true
+      },
+      "source": "app",
+      "planSource": {
+        "storedName": "School_Ground_Floor_Plan_UPDATE.pdf",
+        "name": "School_Ground_Floor_Plan_UPDATE.pdf",
+        "size": 1780485,
+        "page": 1,
+        "pages": 1,
+        "uploadedAt": "2026-11-05T17:59:39.063Z",
+        "sample": true
+      }
     }
   ]
 }

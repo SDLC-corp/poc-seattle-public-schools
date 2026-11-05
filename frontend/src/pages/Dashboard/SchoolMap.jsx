@@ -1,44 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
-import * as maplibregl from 'maplibre-gl'
-import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { createPortal } from 'react-dom'
 import { STATUS, NOT_ASSESSED } from './mockData'
 import BuildingOverview from './BuildingOverview'
 import { request } from '../../lib/api'
+import { maplibregl, STYLE_URLS, mapSupport, mapPixelRatio, withStyleFallback } from '../../lib/mapSetup'
 import './buildingOverview.css'
-
-// MapLibre locates its worker relative to its own module URL, which breaks once Vite
-// pre-bundles or bundles it. Point it at the (self-contained) worker file explicitly.
-maplibregl.setWorkerUrl(maplibreWorkerUrl)
-
-const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
 
 // City buildings without district records: neutral light grey, a little darker as they get taller,
 // so the coloured school buildings stand out
 const CITY_GREY = ['interpolate', ['linear'], ['coalesce', ['get', 'render_height'], 0], 0, '#f1f1ef', 40, '#e2e2e0', 150, '#d0d0ce']
 
-// Basemaps. OpenFreeMap needs no key; satellite needs a MapTiler key in frontend/.env
+// Basemaps (style URLs and their fallbacks in lib/mapSetup); satellite needs the MapTiler key in frontend/.env
 const BASEMAPS = [
-  {
-    id: 'streets', label: 'Streets',
-    url: 'https://tiles.openfreemap.org/styles/liberty',
-    cityBuildings: CITY_GREY,
-    labelColor: '#1c2b40', labelHalo: '#ffffff',
-  },
-  {
-    id: 'light', label: 'Light',
-    url: 'https://tiles.openfreemap.org/styles/positron',
-    cityBuildings: CITY_GREY,
-    labelColor: '#1c2b40', labelHalo: '#ffffff',
-  },
-  ...(MAPTILER_KEY ? [{
-    id: 'satellite', label: 'Satellite',
-    url: `https://api.maptiler.com/maps/hybrid/style.json?key=${MAPTILER_KEY}`,
-    cityBuildings: CITY_GREY,
-    labelColor: '#ffffff', labelHalo: 'rgba(0, 0, 0, 0.75)',
-  }] : []),
-]
+  { id: 'streets', label: 'Streets', urls: STYLE_URLS.streets, cityBuildings: CITY_GREY, labelColor: '#1c2b40', labelHalo: '#ffffff' },
+  { id: 'light', label: 'Light', urls: STYLE_URLS.light, cityBuildings: CITY_GREY, labelColor: '#1c2b40', labelHalo: '#ffffff' },
+  { id: 'satellite', label: 'Satellite', urls: STYLE_URLS.satellite, cityBuildings: CITY_GREY, labelColor: '#ffffff', labelHalo: 'rgba(0, 0, 0, 0.75)' },
+].filter((b) => b.urls.length)
 
 // Map palette for compliance status (pins and 3D school buildings): muted blue / sage / tan,
 // so coloured campuses read clearly against the grey city. `hover` is a lighter tint.
@@ -301,7 +279,11 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
   const mapRef = useRef(null)
   const [styleVersion, setStyleVersion] = useState(0) // bumps after each style (re)load
   const [basemapId, setBasemapId] = useState(readBasemap)
-  const [is3d, setIs3d] = useState(true)
+  // Without graphics acceleration 3D is very slow, so such browsers start in 2D (3D stays one click away)
+  const [is3d, setIs3d] = useState(() => !mapSupport().software)
+  const [mapError, setMapError] = useState(() => (mapSupport().webgl ? null
+    : "This browser can't draw the map: WebGL is turned off or blocked. Turn on hardware acceleration (graphics acceleration) in the browser settings, then reload."))
+  const styleRef = useRef(null)
   const [zoom, setZoom] = useState(10.3)
   const [isFullscreen, setIsFullscreen] = useState(false)
   // Clicked building and its overview (GET /buildings/:id/overview)
@@ -322,13 +304,27 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
 
   // Create the map once
   useEffect(() => {
-    const map = new maplibregl.Map({
-      container: containerRef.current,
-      style: basemapRef.current.url,
-      center: SEATTLE,
-      zoom: 10.3,
-      maxPitch: 70,
-      attributionControl: { compact: true },
+    if (!mapSupport().webgl) return undefined
+    let map
+    try {
+      map = new maplibregl.Map({
+        container: containerRef.current,
+        style: basemapRef.current.urls[0],
+        center: SEATTLE,
+        zoom: 10.3,
+        maxPitch: 70,
+        pixelRatio: mapPixelRatio(),
+        fadeDuration: 0, // labels appear at once instead of fading in on every move
+        attributionControl: { compact: true },
+      })
+    } catch (err) {
+      setMapError(`The map could not start in this browser (${err.message}).`)
+      return undefined
+    }
+    // (No raw error text: it would show the map key)
+    styleRef.current = withStyleFallback(map, basemapRef.current.urls, () => {
+      const others = BASEMAPS.filter((b) => b.id !== basemapRef.current.id).map((b) => b.label).join(' or ')
+      setMapError(`The ${basemapRef.current.label} map could not be loaded. Check the connection or whether a browser extension (ad or tracker blocker) blocks map tiles${others ? `, or switch to ${others}` : ''}.`)
     })
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-left')
     map.addControl(new maplibregl.FullscreenControl({ container: wrapperRef.current }), 'top-left')
@@ -387,7 +383,7 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
     map.on('zoomend', () => setZoom(map.getZoom()))
 
     mapRef.current = map
-    return () => map.remove()
+    return () => { map.remove(); mapRef.current = null; styleRef.current = null }
     // the popup box is created once with the component
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -425,10 +421,11 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
   const loadedBasemapRef = useRef(basemapId)
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, basemapId) } catch { /* not persisted */ }
-    if (loadedBasemapRef.current === basemapId) return
+    if (loadedBasemapRef.current === basemapId || !styleRef.current) return
     loadedBasemapRef.current = basemapId
-    mapRef.current.setStyle(basemap.url, { diff: false })
-  }, [basemapId, basemap.url])
+    setMapError(null)
+    styleRef.current.setUrls(basemap.urls)
+  }, [basemapId, basemap.urls])
 
   const ready = styleVersion > 0
 
@@ -508,6 +505,7 @@ export default function SchoolMap({ schools, buildings, selectedId, fullscreenCo
   return (
     <div ref={wrapperRef} className={`school-map${picked && isFullscreen ? ' has-side' : ''}`}>
       <div ref={containerRef} className="school-map-canvas" />
+      {mapError && <div className="map-error" role="alert">{mapError}</div>}
 
       <div className="map-toolbar">
         <div className="map-seg" role="group" aria-label="Basemap">
