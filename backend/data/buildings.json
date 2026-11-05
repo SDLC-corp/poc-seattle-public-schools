@@ -1,7 +1,7 @@
 {
   "note": "MOCK DATA — generated from schools.json by scripts/generate-buildings.js",
   "generatedAt": "2026-11-02T04:59:06.912Z",
-  "count": 315,
+  "count": 316,
   "buildings": [
     {
       "id": "adamses-b1",
@@ -15350,6 +15350,56 @@
           ]
         ]
       }
+    },
+    {
+      "id": "adamses-b4",
+      "schoolId": "adamses",
+      "schoolName": "Adams Elementary",
+      "name": "test",
+      "code": "ADAMSES-D",
+      "yearBuilt": 2026,
+      "floors": 1,
+      "areaSqFt": 200,
+      "construction": "Masonry",
+      "rooms": 12,
+      "roomsWithAcm": 10,
+      "acmStatus": "Assumed ACM",
+      "presumedAcm": false,
+      "heightM": 5,
+      "widthM": 5.5,
+      "depthM": 3.4,
+      "location": {
+        "lat": 47.67374,
+        "lng": -122.392964
+      },
+      "footprint": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.3930007,
+              47.6737247
+            ],
+            [
+              -122.3929273,
+              47.6737247
+            ],
+            [
+              -122.3929273,
+              47.6737553
+            ],
+            [
+              -122.3930007,
+              47.6737553
+            ],
+            [
+              -122.3930007,
+              47.6737247
+            ]
+          ]
+        ]
+      },
+      "source": "app"
     }
   ]
 }

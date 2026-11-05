@@ -59,25 +59,39 @@ function placeNew(b, school) {
   return school.location ? placeAt(b, school.location) : b;
 }
 
-/** fields: { name, code, yearBuilt, floors, areaSqFt, construction, rooms, roomsWithAcm, acmStatus } */
+/**
+ * fields: { name, code, yearBuilt, floors, areaSqFt, construction, rooms, roomsWithAcm, acmStatus, location? }
+ * With a location (lat/lng picked when adding) the footprint is drawn there; otherwise beside the school's other
+ * buildings (or at the school). A school without a map position takes its first placed building's.
+ */
 export async function addBuilding(school, fields) {
   const mine = getSchoolBuildings(school.id);
   const n = mine.reduce((m, b) => Math.max(m, Number(b.id.split('-b').at(-1)) || 0), 0) + 1;
   const isPortable = fields.construction === 'Modular';
-  const building = placeNew({
+  const { location, ...rest } = fields;
+  const base = {
     id: `${school.id}-b${n}`,
     schoolId: school.id,
     schoolName: school.name,
-    ...fields,
+    ...rest,
     presumedAcm: fields.yearBuilt < PRESUMED_ACM_BEFORE,
     ...shape(fields.areaSqFt, fields.floors, isPortable),
     location: null,
     footprint: null,
     source: 'app',
-  }, school);
+  };
+  const building = location ? placeAt(base, location) : placeNew(base, school);
   buildings.push(building);
   await persist();
+  if (!school.location && building.location) await setSchoolLocation(school, building.location);
   return building;
+}
+
+// Put a school on the map (its pin) — used when its first building is placed
+async function setSchoolLocation(school, location) {
+  school.location = { lat: +location.lat.toFixed(6), lng: +location.lng.toFixed(6) };
+  writingSchools = writingSchools.then(() => writeJson(dataFile('schools.json'), { ...schoolsDoc, count: schools.length, schools }));
+  await writingSchools;
 }
 
 export async function updateBuilding(id, fields) {
@@ -86,5 +100,7 @@ export async function updateBuilding(id, fields) {
   const resized = { ...merged, ...shape(merged.areaSqFt, merged.floors, merged.construction === 'Modular') };
   buildings[i] = merged.location ? placeAt(resized, merged.location) : resized;
   await persist();
+  const school = schools.find((s) => s.id === buildings[i].schoolId);
+  if (school && !school.location && fields.location) await setSchoolLocation(school, fields.location);
   return buildings[i];
 }

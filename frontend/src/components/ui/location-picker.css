@@ -1,0 +1,2 @@
+.lp-map { position: relative; height: 220px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #dcebf5; }
+.lp-map .maplibregl-ctrl-group { border-radius: 6px; }

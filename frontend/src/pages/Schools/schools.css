@@ -342,3 +342,9 @@ a.sch-name:hover { color: var(--primary); text-decoration: underline; }
 /* Add Building from the district list: school picker above the building fields */
 .bf-school { margin-bottom: 14px; }
 
+
+/* Building map location: coordinates above a click-to-place map */
+.bf-location > span { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.bf-coords { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.bf-location.invalid .lp-map { border-color: var(--status-critical); }
+@media (max-width: 520px) { .bf-coords { grid-template-columns: minmax(0, 1fr); } }

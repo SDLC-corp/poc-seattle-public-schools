@@ -18209,6 +18209,104 @@
           "reason": "Approved and closed"
         }
       ]
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-13",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-kurosems-b1-f2-r6-1",
+      "schoolId": "kurosems",
+      "buildingId": "kurosems-b1",
+      "floorId": "kurosems-b1-f2",
+      "roomId": "kurosems-b1-f2-r6",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "extra": [
+        {
+          "materialId": "ACM-kurosems-b1-f1-r3-1",
+          "schoolId": "kurosems",
+          "buildingId": "kurosems-b1",
+          "floorId": "kurosems-b1-f1",
+          "roomId": "kurosems-b1-f1-r3",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-kurosems-b1-f1-r7-1",
+          "schoolId": "kurosems",
+          "buildingId": "kurosems-b1",
+          "floorId": "kurosems-b1-f1",
+          "roomId": "kurosems-b1-f1-r7",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        }
+      ],
+      "inspectorId": "u130",
+      "inspectorName": "Shashank Jaiswal",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-90001",
+        "expiresOn": "2027-11-05"
+      },
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T11:15:53.468Z",
+        "notes": ""
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T11:15:53.468Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00165",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Shashank Jaiswal",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T11:15:58.197Z",
+      "outlook": {
+        "eventId": "AAMkADQ5NmU4NzZhLTRjOWItNDE0ZC1iNmM2LWMxNjIwNWNkMmQ3ZABGAAAAAADPgUQwZsQuQYv2SWUEmZrgBwCRPFtTIS83RozljoR260a2AAAAAAENAACRPFtTIS83RozljoR260a2AAA6NWvvAAA=",
+        "webLink": "https://outlook.office365.com/owa/?itemid=AAMkADQ5NmU4NzZhLTRjOWItNDE0ZC1iNmM2LWMxNjIwNWNkMmQ3ZABGAAAAAADPgUQwZsQuQYv2SWUEmZrgBwCRPFtTIS83RozljoR260a2AAAAAAENAACRPFtTIS83RozljoR260a2AAA6NWvvAAA%3D&exvsurl=1&path=/calendar/item",
+        "addedAt": "2026-11-05T11:15:58.197Z",
+        "addedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "invited": "Shashank Jaiswal <shashank@sdlccorp.com>"
+      }
     }
   ]
 }

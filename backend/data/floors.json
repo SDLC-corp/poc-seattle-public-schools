@@ -9615,6 +9615,19 @@
         "uploadedAt": "2026-11-03T09:35:21.532Z"
       },
       "source": "app"
+    },
+    {
+      "id": "adamses-b4-f1",
+      "buildingId": "adamses-b4",
+      "schoolId": "adamses",
+      "number": 0,
+      "name": "Ground Floor",
+      "rooms": 12,
+      "acmRooms": 10,
+      "acmStatus": "Assumed ACM",
+      "planImage": null,
+      "labels": [],
+      "source": "app"
     }
   ]
 }

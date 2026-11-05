@@ -1,6 +1,131 @@
 {
   "entries": [
     {
+      "id": "AUD-000135",
+      "at": "2026-11-05T11:25:52.126Z",
+      "action": "create",
+      "module": "Schools & Facilities",
+      "recordId": "adamses-b4",
+      "summary": "Added building test – Adams Elementary",
+      "changes": [
+        {
+          "field": "Name",
+          "to": "test"
+        },
+        {
+          "field": "Code",
+          "to": "ADAMSES-D"
+        },
+        {
+          "field": "Year Built",
+          "to": "2026"
+        },
+        {
+          "field": "Floors",
+          "to": "1"
+        },
+        {
+          "field": "Area (sq ft)",
+          "to": "200"
+        },
+        {
+          "field": "Construction",
+          "to": "Masonry"
+        },
+        {
+          "field": "Rooms",
+          "to": "12"
+        },
+        {
+          "field": "Rooms with ACM",
+          "to": "10"
+        },
+        {
+          "field": "ACM Status",
+          "to": "Assumed ACM"
+        },
+        {
+          "field": "Map location",
+          "to": "47.67374, -122.392964"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "test"
+      },
+      "link": "/schools/adamses/buildings",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000134",
+      "at": "2026-11-05T11:15:58.248Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00165",
+      "summary": "Added inspection INS-2026-00165 to the Outlook calendar (invited Shashank Jaiswal <shashank@sdlccorp.com>)",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000133",
+      "at": "2026-11-05T11:15:53.516Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00165",
+      "summary": "Assigned 3-year reinspection INS-2026-00165 of 3 ACMs to Shashank Jaiswal for 2026-11-13 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "3-Year Reinspection"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Shashank Jaiswal"
+        },
+        {
+          "field": "Scheduled Date",
+          "to": "2026-11-13"
+        },
+        {
+          "field": "Scheduled Time",
+          "to": "09:00"
+        },
+        {
+          "field": "ACMs",
+          "to": "3"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00165",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
       "id": "AUD-000132",
       "at": "2026-11-05T09:37:38.452Z",
       "action": "create",

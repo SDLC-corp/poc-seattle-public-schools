@@ -11,6 +11,7 @@ import { syncFloorRooms } from '../data/floorRoomsSync.js';
 // Looked up live so schools added in the app are found
 const schoolById = { get: (id) => schools.find((s) => s.id === id), has: (id) => schools.some((s) => s.id === id) };
 const CONSTRUCTION = ['Concrete', 'Masonry', 'Steel Frame', 'Wood Frame', 'Modular'];
+const BOUNDS = { lat: [47.4, 47.8], lng: [-122.5, -122.2] }; // Seattle area, same as schools
 const THIS_YEAR = new Date().getFullYear();
 
 const int = (v) => (v === '' || v === null || v === undefined ? NaN : Number(v));
@@ -29,6 +30,17 @@ function validateBuilding(body, existing, schoolId) {
     roomsWithAcm: pickInt('roomsWithAcm'),
     acmStatus: body.acmStatus ?? existing?.acmStatus,
   };
+  // Map position (optional): both latitude and longitude, in the Seattle area like schools. Without one a new
+  // building is placed beside the school's other buildings.
+  const hasLat = body.lat !== '' && body.lat != null;
+  const hasLng = body.lng !== '' && body.lng != null;
+  if (hasLat || hasLng) {
+    const lat = Number(body.lat);
+    const lng = Number(body.lng);
+    if (!hasLat || !hasLng || !Number.isFinite(lat) || !Number.isFinite(lng)) errors.lat = 'Enter both latitude and longitude, or leave both empty';
+    else if (lat < BOUNDS.lat[0] || lat > BOUNDS.lat[1] || lng < BOUNDS.lng[0] || lng > BOUNDS.lng[1]) errors.lat = 'The location must be in the Seattle area';
+    else b.location = { lat: +lat.toFixed(6), lng: +lng.toFixed(6) };
+  }
   if (!b.name) errors.name = 'Building name is required';
   if (!b.code) errors.code = 'Building code is required';
   else if (buildings.some((x) => x.code === b.code && x.id !== existing?.id)) errors.code = 'That code is already used';
@@ -54,6 +66,7 @@ function validateBuilding(body, existing, schoolId) {
 const view = (x) => ({
   Name: x.name, Code: x.code, 'Year Built': x.yearBuilt, Floors: x.floors, 'Area (sq ft)': x.areaSqFt,
   Construction: x.construction, Rooms: x.rooms, 'Rooms with ACM': x.roomsWithAcm, 'ACM Status': x.acmStatus,
+  'Map location': x.location ? `${x.location.lat}, ${x.location.lng}` : '—',
 });
 
 const router = Router();

@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
-import { X, Info, TriangleAlert } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { X, Info, TriangleAlert, MapPin } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
+import LocationPicker from '../../components/ui/LocationPicker'
 import { request } from '../../lib/api'
 import { MAX_FLOORS, ACM_STATUSES, CONSTRUCTION, PRESUMED_ACM_BEFORE } from './buildingUtils'
 
@@ -31,6 +32,8 @@ export default function BuildingForm({ school: fixedSchool, building, existing, 
     rooms: String(building?.rooms ?? ''),
     acmStatus: building?.acmStatus ?? 'Assumed ACM',
     roomsWithAcm: String(building?.roomsWithAcm || ''),
+    lat: building?.location ? String(building.location.lat) : '',
+    lng: building?.location ? String(building.location.lng) : '',
   }))
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(false)
@@ -45,13 +48,20 @@ export default function BuildingForm({ school: fixedSchool, building, existing, 
   // Choosing a school suggests its next free code, unless a code was typed in by hand
   const pickSchool = (id) => {
     const next = schools.find((s) => s.id === id) ?? null
-    setForm((f) => ({ ...f, code: !f.code || (school && f.code === suggestCode(school, existingFor(school))) ? (next ? suggestCode(next, existingFor(next)) : '') : f.code }))
+    // A pin placed for the previous school is dropped, so the map moves to the new school
+    setForm((f) => ({ ...f, lat: '', lng: '', code: !f.code || (school && f.code === suggestCode(school, existingFor(school))) ? (next ? suggestCode(next, existingFor(next)) : '') : f.code }))
     setSchool(next)
     setErrors((e) => ({ ...e, schoolId: undefined }))
   }
   const year = Number(form.yearBuilt)
   const preAhera = form.yearBuilt.length === 4 && year < PRESUMED_ACM_BEFORE
   const noAcm = form.acmStatus === 'No ACM'
+  // Map position: the point typed in or picked; the map starts at the school (or one of its buildings)
+  const point = form.lat !== '' && form.lng !== '' && Number.isFinite(Number(form.lat)) && Number.isFinite(Number(form.lng)) ? { lat: Number(form.lat), lng: Number(form.lng) } : null
+  const siblings = school ? existingFor(school).filter((x) => x.id !== building?.id) : []
+  const mapCenter = school?.location ?? siblings.find((x) => x.location)?.location ?? null
+  const footprints = useMemo(() => siblings.map((x) => x.footprint).filter(Boolean), [school?.id, building?.id]) // eslint-disable-line react-hooks/exhaustive-deps
+  const pickPoint = (p) => { setForm((f) => ({ ...f, lat: String(p.lat), lng: String(p.lng) })); setErrors((e) => ({ ...e, lat: undefined })) }
 
   const submit = async (e) => {
     e.preventDefault()
@@ -120,6 +130,17 @@ export default function BuildingForm({ school: fixedSchool, building, existing, 
             </label>
           </div>
 
+          {/* Where the building is: drawn on the dashboard map at this point */}
+          <div className={`uf-field bf-location${errors.lat ? ' invalid' : ''}`}>
+            <span><MapPin size={13} />Map Location <small className="bf-max">click the map or type coordinates{isNew ? ' — optional, placed beside the school’s buildings if empty' : ''}</small></span>
+            <div className="bf-coords">
+              <input {...input('lat', { inputMode: 'decimal', placeholder: 'Latitude e.g. 47.6762', 'aria-label': 'Latitude' })} />
+              <input {...input('lng', { inputMode: 'decimal', placeholder: 'Longitude e.g. -122.3182', 'aria-label': 'Longitude' })} />
+              {point && <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={() => setForm((f) => ({ ...f, lat: '', lng: '' }))}>Clear</button>}
+            </div>
+            <LocationPicker value={point} center={mapCenter} footprints={footprints} onChange={pickPoint} label="Click to place the building" />
+            {err('lat')}
+          </div>
           {isNew ? <div className="uf-field bf-acm">
             <span id="bf-acm">ACM Status *</span>
             <div className="bf-seg" role="radiogroup" aria-labelledby="bf-acm">
