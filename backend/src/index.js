@@ -12,7 +12,8 @@ const PORT = process.env.PORT || 5000;
 // and the local Vite dev server is always allowed.
 const toOrigin = (u) => { try { return new URL(u.trim()).origin; } catch { return null; } };
 const allowedOrigins = new Set(['http://localhost:5173', ...(process.env.CLIENT_URL ?? '').split(',').map(toOrigin).filter(Boolean)]);
-app.use(cors({ origin: (origin, done) => done(null, !origin || allowedOrigins.has(origin)) }));
+// maxAge: the browser remembers the CORS check for 2 hours instead of repeating it before every API call
+app.use(cors({ origin: (origin, done) => done(null, !origin || allowedOrigins.has(origin)), maxAge: 7200 }));
 app.use(express.json({ limit: '3mb' })); // settings can carry an uploaded logo (≤2 MB)
 
 // gzip JSON responses (the room / material lists are megabytes as plain JSON, a tenth of that compressed).

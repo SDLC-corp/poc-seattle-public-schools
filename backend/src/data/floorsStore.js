@@ -56,19 +56,41 @@ export const planSourcePath = (f) => (f?.planSource ? (f.planSource.sample ? pat
  * Uploading one of these PDFs (recognised by its file name) uses this image directly, so the plan always loads,
  * also on a server where uploads aren't kept.
  */
-const squash = (s) => String(s ?? '').toLowerCase().replace(/\.[a-z0-9]+$/, '').replace(/[^a-z0-9]/g, '');
+// A file name as a set of words, with floor numbers written any way made the same: "Second" = "2nd" = "2",
+// "Ground" = "G" = "0", … — so "School_Floor_2_Plan_UPDATE.pdf" is the same plan as "School_Floor_Second_Plan_UPDATE"
+const NUMBER_WORDS = {
+  ground: '0', g: '0', gf: '0', basement: 'b', first: '1', '1st': '1', second: '2', '2nd': '2', third: '3', '3rd': '3',
+  fourth: '4', '4th': '4', fifth: '5', '5th': '5', one: '1', two: '2', three: '3', four: '4', five: '5',
+};
+const NOISE = new Set(['copy', 'final', 'pdf', 'png']);
+// A copy number ("plan (1).pdf", "plan - Copy (2)") is ignored so it's never read as a floor number
+const words = (s) => String(s ?? '').toLowerCase().replace(/\.[a-z0-9]+$/, '').replace(/\s*(-\s*copy\s*)?\(\d+\)\s*$/, '')
+  .split(/[^a-z0-9]+/).filter(Boolean).map((w) => NUMBER_WORDS[w] ?? w).filter((w) => !NOISE.has(w) && !/^\d{1,2}$/.test(w) || /^\d$/.test(w));
+const floorNumber = (ws) => ws.find((w) => /^(\d|b)$/.test(w)) ?? null;
+
 export function knownPlans() {
   if (!existsSync(SAMPLE_PLAN_DIR)) return [];
   return readdirSync(SAMPLE_PLAN_DIR).filter((n) => /\.pdf$/i.test(n)).map((pdf) => {
-    const image = pdf.replace(/\.pdf$/i, '.png');
-    if (!existsSync(path.join(SAMPLE_PLAN_DIR, image))) return null;
-    return { key: squash(pdf), pdf, image, label: pdf.replace(/\.pdf$/i, '').replace(/_/g, ' ') };
+    // The plan image is the PNG (or JPG / WebP) with the same name in the same folder
+    const base = pdf.replace(/\.pdf$/i, '');
+    const image = ['.png', '.jpg', '.jpeg', '.webp'].map((x) => base + x).find((n) => existsSync(path.join(SAMPLE_PLAN_DIR, n)));
+    if (!image) return null;
+    const ws = words(pdf);
+    return { key: ws.join(' '), words: ws, floor: floorNumber(ws), pdf, image, label: base.replace(/_/g, ' ') };
   }).filter(Boolean);
 }
-// The known plan an uploaded file is: its name contains the plan's name (ignoring case, spaces, "_", "(1)" etc.)
+
+/**
+ * The known plan an uploaded file is: every word of the plan's name is in the file's name, in any order, and the
+ * floor number agrees ("School_Floor_2_Plan_UPDATE (1).pdf" → School_Floor_Second_Plan_UPDATE). The best match wins.
+ */
 export const matchKnownPlan = (fileName) => {
-  const name = squash(fileName);
-  return name ? knownPlans().find((p) => name.includes(p.key)) ?? null : null;
+  const ws = words(fileName);
+  if (!ws.length) return null;
+  const have = new Set(ws);
+  const floor = floorNumber(ws);
+  const hits = knownPlans().filter((p) => p.words.every((w) => have.has(w)) && (p.floor === null || floor === null || p.floor === floor));
+  return hits.sort((a, b) => b.words.length - a.words.length)[0] ?? null;
 };
 export const knownPlanPath = (file) => {
   const plan = knownPlans().find((p) => p.pdf === file || p.image === file);

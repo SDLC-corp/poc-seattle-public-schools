@@ -27,7 +27,9 @@ export async function authHeaders() {
 export async function request(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
-    headers: { 'Content-Type': 'application/json', ...(await authHeaders()), ...options.headers },
+    // Content-Type only when there's a body: on a plain GET it would make the browser send an extra CORS
+    // "preflight" request first whenever the API is on another host (the deployed setup)
+    headers: { ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...(await authHeaders()), ...options.headers },
     body: options.body ? JSON.stringify(options.body) : undefined,
   })
   const body = res.status === 204 ? {} : await res.json().catch(() => ({}))
