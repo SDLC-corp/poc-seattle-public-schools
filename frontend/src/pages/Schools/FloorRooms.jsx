@@ -142,7 +142,9 @@ export default function FloorRooms() {
       .then(([s, f, r, m]) => {
         if (cancelled) return
         setSchool(s); setFloor(f); setRooms(r.rooms); setMeta(m)
-        if (autoDetect && f.planUrl && !r.rooms.some((x) => x.polygon)) detectRef.current(f)
+        // A newly uploaded plan replaces the old outlines (they belong to the previous drawing); rooms with ACM
+        // records are kept by the server
+        if (autoDetect && f.planUrl) detectRef.current(f)
       })
       .catch((err) => { if (!cancelled) setError(err.status === 404 ? 'notFound' : err.message) })
     return () => { cancelled = true }

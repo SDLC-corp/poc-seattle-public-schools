@@ -3,6 +3,8 @@ import { Navigate, Route, Routes, useLocation, useParams, Link } from 'react-rou
 import { Construction, SearchX } from 'lucide-react'
 import AppLayout from './components/layout/AppLayout'
 import { findNav, pathForId } from './components/layout/navItems'
+// All page styles up front (pages share them, e.g. the KPI tiles); only the page code is loaded on demand
+import './styles/allStyles'
 import RequireAuth from './auth/RequireAuth'
 
 // Pages load on demand: each page's code is downloaded the first time it's opened (keeps the first load small)

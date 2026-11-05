@@ -23,8 +23,9 @@ async function uploadPlanSource(floorId, pdf) {
 // A PDF page as the plan image: sharp enough for room detection, within the 5 MB limit (falls back to less detail)
 async function renderPdfPage(file, page) {
   const { pdfToPlanImage } = await import('../../lib/pdfPlan')
-  let out = await pdfToPlanImage(file, page, 3000)
-  if (out.file.size > MAX_PLAN_BYTES) out = await pdfToPlanImage(file, page, 2000)
+  // Same size as before (2200 px on the long side) so plan files stay small and load fast; less detail if still too big
+  let out = await pdfToPlanImage(file, page, 2200)
+  if (out.file.size > MAX_PLAN_BYTES) out = await pdfToPlanImage(file, page, 1600)
   return out
 }
 
