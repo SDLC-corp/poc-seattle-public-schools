@@ -1,0 +1,66 @@
+{
+  "target": {
+    "siteId": "sdlccorp.sharepoint.com,0cf8c6e4-4383-4e6a-a29e-97e0981cd3e8,151dc149-5e1e-44a1-823f-3ad080353c41",
+    "siteName": "Communication site",
+    "driveId": "b!5Mb4DINDak6inpfgmBzT6EnBHRUeXqFEgj860IA1PEHY06yI0FX5S5EExFWSYplf",
+    "driveName": "Documents",
+    "folderId": "01W7YG4G7LLM7OBPVHU5CIVN45WUTEVTSK",
+    "webUrl": "https://sdlccorp.sharepoint.com/Shared%20Documents/Seattle%20Public%20Schools",
+    "setAt": "2026-11-05T12:00:20.171Z",
+    "setBy": {
+      "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+      "name": "Mayuri Kundalwal"
+    }
+  },
+  "synced": {
+    "inspection:INS-2027-00005:e1ddc7b9-1f3e-4d69-959a-1ec4f8ab21ff": "e1ddc7b9-1f3e-4d69-959a-1ec4f8ab21ff",
+    "inspection:INS-2026-00159:0bd65523-9d84-4ece-9c71-381e867c71e0": "0bd65523-9d84-4ece-9c71-381e867c71e0",
+    "inspection:INS-2026-00159:72fff57c-91c9-43d7-8479-86c31492e368": "72fff57c-91c9-43d7-8479-86c31492e368",
+    "inspection:INS-2026-00159:1c8fe882-9d83-4268-9071-c6a605e70cd0": "1c8fe882-9d83-4268-9071-c6a605e70cd0",
+    "inspection:INS-2026-00159:5251e4d9-9385-4c8d-84e7-1b7e05e2a8e0": "5251e4d9-9385-4c8d-84e7-1b7e05e2a8e0",
+    "inspection:INS-2026-00163:cd86a063-09c5-4e6f-9e1d-d7b509587a8d": "cd86a063-09c5-4e6f-9e1d-d7b509587a8d",
+    "invoice:SPS-NW-2026-1001": "3160-1793854175302",
+    "invoice:SPS-EA-2026-1002": "3204-1793854175318",
+    "invoice:SPS-PS-2026-1003": "3181-1793854175323",
+    "invoice:SPS-CH-2026-1005": "3181-1793854175337",
+    "invoice:SPS-SE-2026-1004": "3139-1793854175331",
+    "invoice:SPS-NW-2026-1006": "3139-1793854175344",
+    "invoice:SPS-EA-2026-1007": "3171-1793854175351",
+    "invoice:SPS-SE-2026-1009": "3166-1793854175364",
+    "invoice:SPS-PS-2026-1008": "3171-1793854175358",
+    "invoice:SPS-CH-2026-1010": "3191-1793854175314",
+    "report:inspection-summary": "2026-11-05",
+    "report:reinspection": "2026-11-05",
+    "report:detailed-inspection": "2026-11-05",
+    "report:bulk-samples": "2026-11-05",
+    "report:air-monitoring": "2026-11-05",
+    "report:acm-inventory": "2026-11-05",
+    "report:surveillance": "2026-11-05",
+    "report:training": "2026-11-05",
+    "report:om-activities": "2026-11-05",
+    "report:inspection-records": "2026-11-05",
+    "report:compliance": "2026-11-05",
+    "report:reinspection-due": "2026-11-05",
+    "report:management-plans": "2026-11-05",
+    "report:surveillance-records": "2026-11-05",
+    "report:response-actions": "2026-11-05",
+    "report:annual-notifications": "2026-11-05",
+    "report:notifications": "2026-11-05",
+    "document:DOC-000005": "2026-11-03T08:08:25.597Z",
+    "document:DOC-000004": "2026-11-03T08:08:25.565Z",
+    "document:DOC-000003": "2026-11-03T08:08:25.529Z",
+    "document:DOC-000002": "2026-11-03T08:08:25.348Z",
+    "document:DOC-000001": "2026-11-03T08:08:25.258Z"
+  },
+  "runs": [
+    {
+      "at": "2026-11-05T12:00:35.890Z",
+      "by": "Mayuri Kundalwal",
+      "uploaded": 38,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 15658,
+      "errors": []
+    }
+  ]
+}

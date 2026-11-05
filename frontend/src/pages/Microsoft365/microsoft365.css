@@ -130,3 +130,31 @@
   .m365-day li { grid-template-columns: minmax(0, 1fr) auto; }
   .m365-time { grid-column: 1 / -1; }
 }
+
+/* SharePoint folder sync (Seattle Public Schools folder: Inspections, Invoices, Reports, Documents) */
+.m365-sync { display: grid; gap: 12px; margin-bottom: 14px; padding: 16px 18px; }
+.m365-sync-head { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.m365-sync-head > div:nth-child(2) { flex: 1; min-width: 220px; }
+.m365-sync-head h3 { margin: 0 0 2px; font-size: 15px; font-weight: 600; color: var(--ink-1); }
+.m365-sync-head p { margin: 0; font-size: 12.5px; }
+.m365-sync-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: #e6f2fa; color: #0a66a8; flex-shrink: 0; }
+.m365-sync-where { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; color: var(--ink-2); }
+.m365-sync-where strong { color: var(--ink-1); }
+.m365-sync-where .ai-link { margin-left: 10px; }
+.m365-sync-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.m365-sync-folders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.m365-sync-folders li { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid var(--grid); border-radius: 8px; background: #f8fafc; min-width: 0; }
+.m365-sync-folders li > svg { color: #0a66a8; flex-shrink: 0; }
+.m365-sync-folders span { display: flex; flex-direction: column; min-width: 0; }
+.m365-sync-folders strong { font-size: 13px; color: var(--ink-1); }
+.m365-sync-folders small { font-size: 11.5px; color: var(--ink-2); }
+.m365-sync-progress { display: grid; gap: 5px; }
+.m365-sync-progress small { font-size: 12px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m365-sync-bar { height: 6px; border-radius: 3px; background: var(--grid); overflow: hidden; }
+.m365-sync-bar span { display: block; height: 100%; background: var(--primary); transition: width .2s; }
+.m365-sync-last { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 12.5px; color: #0c7f0c; }
+.m365-sync-last.warn { color: #b02a2a; }
+.m365-sync-hint { margin: 0; font-size: 12.5px; }
+.m365-spin { animation: m365-spin 1s linear infinite; }
+@keyframes m365-spin { to { transform: rotate(360deg); } }
+@media (max-width: 900px) { .m365-sync-folders { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

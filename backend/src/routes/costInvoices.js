@@ -46,7 +46,8 @@ router.get('/', (req, res, next) => {
 // GET /api/cost-invoices/:number/pdf — the invoice's PDF, inline (?download=1 to save it)
 router.get('/:number/pdf', (req, res, next) => {
   try {
-    const inv = latest().find((x) => x.invoice_number === req.params.number);
+    // Any invoice on record (the list shows the latest; the SharePoint sync uploads them all)
+    const inv = allInvoices().find((x) => x.invoice_number === req.params.number);
     const file = inv?.pdf_file && new URL(inv.pdf_file, DIR);
     // Only files inside data/invoices/pdf are served
     if (!file || !file.href.startsWith(new URL('pdf/', DIR).href) || !existsSync(file)) return res.status(404).json({ error: 'Invoice PDF not found' });

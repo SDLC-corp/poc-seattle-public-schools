@@ -1,6 +1,386 @@
 {
   "entries": [
     {
+      "id": "AUD-000156",
+      "at": "2026-11-05T12:00:35.894Z",
+      "action": "export",
+      "module": "Integrations",
+      "recordId": "sharepoint-sync",
+      "summary": "Synced to SharePoint (Communication site › Seattle Public Schools): 38 uploaded, 0 unchanged",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000155",
+      "at": "2026-11-05T12:00:33.426Z",
+      "action": "export",
+      "module": "Notifications",
+      "recordId": "notifications-report.csv",
+      "summary": "Exported 71 rows of the System Notifications report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000154",
+      "at": "2026-11-05T12:00:33.353Z",
+      "action": "export",
+      "module": "Documents",
+      "recordId": "annual-notifications-report.csv",
+      "summary": "Exported 105 rows of the AHERA Annual Notifications report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000153",
+      "at": "2026-11-05T12:00:32.948Z",
+      "action": "export",
+      "module": "Inspections",
+      "recordId": "response-actions-report.csv",
+      "summary": "Exported 57 rows of the Response Actions report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000152",
+      "at": "2026-11-05T12:00:32.590Z",
+      "action": "export",
+      "module": "Management Plans",
+      "recordId": "management-plans-report.csv",
+      "summary": "Exported 105 rows of the Management Plans report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000151",
+      "at": "2026-11-05T12:00:32.545Z",
+      "action": "export",
+      "module": "Surveillance",
+      "recordId": "surveillance-records-report.csv",
+      "summary": "Exported 1107 rows of the Surveillance Findings report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000150",
+      "at": "2026-11-05T12:00:32.114Z",
+      "action": "export",
+      "module": "Inspections",
+      "recordId": "reinspection-due-report.csv",
+      "summary": "Exported 737 rows of the ACM Reinspection Due report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000149",
+      "at": "2026-11-05T12:00:31.607Z",
+      "action": "export",
+      "module": "Inspections",
+      "recordId": "inspection-records-report.csv",
+      "summary": "Exported 221 rows of the Inspection Records report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000148",
+      "at": "2026-11-05T12:00:31.247Z",
+      "action": "export",
+      "module": "Compliance",
+      "recordId": "compliance-report.csv",
+      "summary": "Exported 105 rows of the School Compliance report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000147",
+      "at": "2026-11-05T12:00:30.797Z",
+      "action": "export",
+      "module": "Operations & Maintenance",
+      "recordId": "om-activities-report.csv",
+      "summary": "Exported 276 rows of the O&M Activities report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000146",
+      "at": "2026-11-05T12:00:30.569Z",
+      "action": "export",
+      "module": "Personnel",
+      "recordId": "training-report.csv",
+      "summary": "Exported 208 rows of the Training Compliance report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000145",
+      "at": "2026-11-05T12:00:30.462Z",
+      "action": "export",
+      "module": "Surveillance",
+      "recordId": "surveillance-report.csv",
+      "summary": "Exported 525 rows of the 6-Month Surveillance Schedule report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000144",
+      "at": "2026-11-05T12:00:29.866Z",
+      "action": "export",
+      "module": "ACM Inventory",
+      "recordId": "acm-inventory-report.csv",
+      "summary": "Exported 1643 rows of the ACM Inventory report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000143",
+      "at": "2026-11-05T12:00:29.681Z",
+      "action": "export",
+      "module": "Air Monitoring",
+      "recordId": "air-monitoring-report.csv",
+      "summary": "Exported 48 rows of the Air Monitoring report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000142",
+      "at": "2026-11-05T12:00:29.382Z",
+      "action": "export",
+      "module": "Lab Results",
+      "recordId": "bulk-samples-report.csv",
+      "summary": "Exported 5550 rows of the Bulk Sample Results report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000141",
+      "at": "2026-11-05T12:00:28.825Z",
+      "action": "export",
+      "module": "Inspections",
+      "recordId": "reinspection-report.csv",
+      "summary": "Exported 34 rows of the 3-Year Reinspection Schedule report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000140",
+      "at": "2026-11-05T12:00:28.773Z",
+      "action": "export",
+      "module": "Inspections",
+      "recordId": "detailed-inspection-report.csv",
+      "summary": "Exported 1643 rows of the Material Assessments report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000139",
+      "at": "2026-11-05T12:00:28.435Z",
+      "action": "export",
+      "module": "Inspections",
+      "recordId": "inspection-summary-report.csv",
+      "summary": "Exported 559 rows of the Inspection Schedule report to CSV",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000138",
+      "at": "2026-11-05T12:00:20.202Z",
+      "action": "update",
+      "module": "Integrations",
+      "recordId": "sharepoint-sync",
+      "summary": "SharePoint sync folder set to Communication site › Documents › Seattle Public Schools",
+      "changes": [],
+      "related": null,
+      "link": null,
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
       "id": "AUD-000137",
       "at": "2026-11-05T11:41:19.017Z",
       "action": "update",

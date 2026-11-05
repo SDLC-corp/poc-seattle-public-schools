@@ -3,6 +3,7 @@ import { Search, Globe, Star, Library, Folder, FileText, Upload, FolderPlus, Ext
 import { useGraph } from '../../auth/useGraph'
 import { fmtBytes } from '../../auth/graph'
 import ConnectGate from './ConnectGate'
+import SharePointSync from './SharePointSync'
 
 const MAX_UPLOAD = 250 * 1024 * 1024 // Graph simple upload limit
 const ITEM_SELECT = 'id,name,size,lastModifiedDateTime,lastModifiedBy,webUrl,folder,file'
@@ -107,6 +108,8 @@ export default function SharePointTab({ onToast }) {
   return (
     <ConnectGate g={g} name="SharePoint" what="Browse district sites and document libraries, and upload inspection reports and plans.">
       {error && <div className="u-banner">SharePoint: {error}</div>}
+      {/* After creating / syncing, refresh the library listing so the new folder and files show */}
+      <SharePointSync call={call} site={site} drive={drive} onToast={onToast} onChanged={() => setReload((n) => n + 1)} />
       <div className="m365-sp">
         <aside className="u-card m365-sites">
           <form className="u-search" onSubmit={(e) => { e.preventDefault(); setSiteSearch(siteQuery.trim()) }}>
