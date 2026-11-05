@@ -25,11 +25,14 @@ const ACM_RANK = { 'ACM Present': 2, 'Assumed ACM': 1, 'No ACM': 0 };
 
 // API shape: adds the sample layout, the plan image URL (cache-busted) and, when the plan came from a PDF, the
 // original PDF's URL
-export const planSourceUrl = (f) => (f.planSource ? `/api/floors/${f.id}/plan/source?v=${encodeURIComponent(f.planSource.uploadedAt)}` : null);
+// The file name is part of the address (&f=), so any server instance can serve the file even if its own copy of the
+// floor record is behind (Vercel runs several instances that don't share saved data)
+export const planSourceUrl = (f) => (f.planSource ? `/api/floors/${f.id}/plan/source?v=${encodeURIComponent(f.planSource.uploadedAt)}&f=${encodeURIComponent(path.basename(f.planSource.storedName))}` : null);
+export const planImageUrl = (f) => (f.planImage ? `/api/floors/${f.id}/plan?v=${encodeURIComponent(f.planImage.uploadedAt)}&f=${encodeURIComponent(path.basename(f.planImage.storedName))}` : null);
 export const present = (f) => ({
   ...f,
   layout: f.derivedCounts ? null : floorLayout(f), // app-added floors have no sample layout
-  planUrl: f.planImage ? `/api/floors/${f.id}/plan?v=${encodeURIComponent(f.planImage.uploadedAt)}` : null,
+  planUrl: planImageUrl(f),
   planSourceUrl: planSourceUrl(f),
   ...planFiles(f),
 });
@@ -92,6 +95,22 @@ export const matchKnownPlan = (fileName) => {
   const hits = knownPlans().filter((p) => p.words.every((w) => have.has(w)) && (p.floor === null || floor === null || p.floor === floor));
   return hits.sort((a, b) => b.words.length - a.words.length)[0] ?? null;
 };
+/**
+ * A floor's plan file named in its address (&f=), found even when this instance's floor record doesn't list it:
+ * a known plan's image / PDF (part of the app), or a file uploaded for this floor (named "<floorId>-…").
+ * Only those files can be reached this way.
+ */
+export function findFloorFile(floorId, name, kind) {
+  const file = path.basename(String(name ?? ''));
+  const ok = kind === 'pdf' ? /\.pdf$/i.test(file) : /\.(png|jpe?g|webp)$/i.test(file);
+  if (!file || !ok) return null;
+  const known = knownPlanPath(file);
+  if (known) return known;
+  if (!file.startsWith(`${floorId}-`)) return null;
+  const p = uploadedFile(file);
+  return existsSync(p) ? p : null;
+}
+
 export const knownPlanPath = (file) => {
   const plan = knownPlans().find((p) => p.pdf === file || p.image === file);
   return plan ? path.join(SAMPLE_PLAN_DIR, file) : null;

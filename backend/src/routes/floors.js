@@ -4,7 +4,7 @@ import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { buildings } from '../data/store.js';
 import {
-  getFloors, getAllFloors, getFloor, addFloor, updateFloor, removeFloor, setPlanImage, setPlanSource, present, planPath, planSourcePath, planSourceUrl, planFiles, knownPlans, matchKnownPlan, knownPlanPath, useKnownPlan, PLAN_DIR,
+  getFloors, getAllFloors, getFloor, addFloor, updateFloor, removeFloor, setPlanImage, setPlanSource, present, planPath, planSourcePath, planSourceUrl, planImageUrl, planFiles, findFloorFile, knownPlans, matchKnownPlan, knownPlanPath, useKnownPlan, PLAN_DIR,
 } from '../data/floorsStore.js';
 import { getRooms, removeFloorRooms } from '../data/roomsStore.js';
 import { historyAt } from '../data/facilityHistory.js';
@@ -113,7 +113,7 @@ router.get('/', (req, res) => {
         buildingName: b?.name ?? null,
         buildingCode: b?.code ?? null,
         schoolName: b?.schoolName ?? null,
-        planUrl: f.planImage ? `/api/floors/${f.id}/plan?v=${encodeURIComponent(f.planImage.uploadedAt)}` : null,
+        planUrl: planImageUrl(f),
         planSourceUrl: planSourceUrl(f),
         ...planFiles(f),
         roomStats: roomStats(roomsByFloor.get(f.id) ?? []),
@@ -303,19 +303,25 @@ router.post('/:id/plan/source', express.raw({ type: () => true, limit: MAX_PDF_B
 // GET /floors/:id/plan/source — the plan's original PDF, inline (?download=1 to save it)
 router.get('/:id/plan/source', (req, res) => {
   const f = getFloor(req.params.id);
-  const file = planSourcePath(f);
-  if (!file || !existsSync(file)) return res.status(404).json({ error: 'No PDF for this floor plan' });
+  // This floor's record first; else the file named in the address (another server instance may have saved the plan)
+  const own = planSourcePath(f);
+  const file = own && existsSync(own) ? own : findFloorFile(req.params.id, req.query.f, 'pdf');
+  if (!file) return res.status(404).json({ error: 'No PDF for this floor plan' });
+  const name = file === own ? f.planSource.name : path.basename(file);
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Content-Disposition', `${req.query.download === '1' ? 'attachment' : 'inline'}; filename*=UTF-8''${encodeURIComponent(f.planSource.name)}`);
+  res.setHeader('Content-Disposition', `${req.query.download === '1' ? 'attachment' : 'inline'}; filename*=UTF-8''${encodeURIComponent(name)}`);
   res.type('application/pdf').sendFile(file);
 });
 
+const IMAGE_MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp' };
 router.get('/:id/plan', (req, res) => {
   const f = getFloor(req.params.id);
-  const file = planPath(f);
+  // This floor's record first; else the file named in the address (another server instance may have saved the plan)
+  const own = planPath(f);
+  const file = own && existsSync(own) ? own : findFloorFile(req.params.id, req.query.f, 'image');
   if (!file) return res.status(404).json({ error: 'No floor plan image' });
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.type(f.planImage.mime).sendFile(file);
+  res.type(IMAGE_MIME[path.extname(file).slice(1).toLowerCase()] ?? 'image/png').sendFile(file);
 });
 
 router.delete('/:id/plan', async (req, res, next) => {
