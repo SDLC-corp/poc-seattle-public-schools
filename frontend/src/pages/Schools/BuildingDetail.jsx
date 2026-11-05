@@ -112,7 +112,7 @@ export default function BuildingDetail() {
     let cancelled = false
     request(`/floors?buildingId=${encodeURIComponent(buildingId)}`)
       .then((d) => { if (!cancelled) setFloorData({ buildingId, floors: d.floors }) })
-      .catch((err) => { if (!cancelled) setError(err.message) })
+      .catch((err) => { if (!cancelled) setError(err.status === 404 ? 'notFound' : err.message) })
     return () => { cancelled = true }
   }, [buildingId])
 
@@ -149,6 +149,10 @@ export default function BuildingDetail() {
   const closeBuildingForm = useCallback(() => setEditBuilding(false), [])
 
   const mappedRooms = (floors ?? []).reduce((n, f) => n + (f.roomStats?.mapped ?? 0), 0)
+  // Totals come from the same floor list shown below, so the card and the Floors tab always agree
+  const totals = floors
+    ? { floors: floors.length, rooms: floors.reduce((n, f) => n + (f.rooms ?? 0), 0), acm: floors.reduce((n, f) => n + (f.acmRooms ?? 0), 0) }
+    : { floors: b?.floors, rooms: b?.rooms, acm: b?.roomsWithAcm }
   const tabRooms = roomData?.buildingId === buildingId ? roomData : null
 
   if (!tab) return <Navigate to={`/schools/${schoolId}/buildings/${buildingId}`} replace />
@@ -245,8 +249,8 @@ export default function BuildingDetail() {
         {b && (
           <section className="u-card bd-card">
             <div className="bd-id">
-              <span className={`bd-thumb f${b.floors}`} aria-hidden="true">
-                {Array.from({ length: b.floors }, (_, i) => <i key={i} />)}
+              <span className={`bd-thumb f${Math.min(Math.max(totals.floors ?? 1, 1), 3)}`} aria-hidden="true">
+                {Array.from({ length: Math.min(Math.max(totals.floors ?? 1, 1), 3) }, (_, i) => <i key={i} />)}
               </span>
               <div>
                 <h2>{b.name} <AcmBadge status={b.acmStatus} /></h2>
@@ -254,9 +258,9 @@ export default function BuildingDetail() {
               </div>
             </div>
             <div className="bd-stats">
-              <Stat label="Total Floors" value={fmtNum(b.floors)} />
-              <Stat label="Total Rooms" value={fmtNum(b.rooms)} />
-              <Stat label="ACM Rooms" value={fmtNum(b.roomsWithAcm)} tone={b.roomsWithAcm ? 'critical' : undefined} />
+              <Stat label="Total Floors" value={fmtNum(totals.floors)} />
+              <Stat label="Total Rooms" value={fmtNum(totals.rooms)} />
+              <Stat label="ACM Rooms" value={fmtNum(totals.acm)} tone={totals.acm ? 'critical' : undefined} />
               <Stat label="Mapped Rooms" value={fmtNum(mappedRooms)} />
             </div>
             <div className="bd-card-actions">

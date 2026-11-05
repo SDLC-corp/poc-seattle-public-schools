@@ -99,6 +99,8 @@ const router = Router();
 router.get('/', (req, res) => {
   const { buildingId, schoolId } = req.query;
   if (buildingId) {
+    // An unknown building is an error, not "no floors" (otherwise a building this server doesn't have looks empty)
+    if (!buildings.some((b) => b.id === buildingId)) return res.status(404).json({ error: 'Building not found' });
     const list = getFloors(buildingId).map(withRooms);
     return res.json({ count: list.length, floors: list });
   }

@@ -162,7 +162,9 @@ const removePlanFile = (f) => Promise.all([
 async function syncBuilding(buildingId) {
   const mine = getFloors(buildingId);
   const b = buildings.find((x) => x.id === buildingId);
-  if (!b || !mine.length) return b;
+  if (!b) return b;
+  // No floors left: nothing in it (the totals mustn't keep the old numbers)
+  if (!mine.length) return updateBuilding(buildingId, { floors: 0, rooms: 0, roomsWithAcm: 0, acmStatus: 'Not Assessed' });
   const acmStatus = mine.reduce((s, f) => (ACM_RANK[f.acmStatus] > ACM_RANK[s] ? f.acmStatus : s), 'No ACM');
   return updateBuilding(buildingId, {
     floors: mine.length,

@@ -205,13 +205,14 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
       // detect: the floor plan screen runs room detection on the new plan
       onSaved(saved, res.building, isNew, warning, { detect: Boolean(planFile || knownPlan) && !warning })
     } catch (err) {
-      setErrors(err.fields ?? { form: err.message })
+      // `forNumber`: a server error about the number only applies to the number it was about
+      setErrors({ ...(err.fields ?? { form: err.message }), forNumber: number })
       setSaving(false)
     }
   }
 
   const building = buildings.find((b) => b.id === form.buildingId)
-  const shownNumberError = errors.number ?? (form.number !== null ? numberError : null)
+  const shownNumberError = (errors.forNumber === number ? errors.number : null) ?? (form.number !== null ? numberError : null)
 
   return (
     <aside className="u-card sch-details fp-panel" aria-label={isNew ? 'Add floor' : 'Edit floor'}>
@@ -283,7 +284,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
         {!converting && imageUrl && (
           <>
             <div className="fp-plan-tools">
-              <span className="u-muted u-small">{planFile || knownPlan ? 'New floor plan — replaces the current one when you save' : 'Current floor plan'}</span>
+              <span className="u-muted u-small">{!floor ? 'Floor plan — saved with the new floor' : planFile || knownPlan ? (floor.planUrl ? 'New floor plan — replaces the current one when you save' : 'Floor plan — saved with the floor') : 'Current floor plan'}</span>
               <span className="fp-plan-btns">
                 <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={() => fileRef.current?.click()}><Upload size={13} />Replace Plan</button>
                 <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={removePlan}><ImageOff size={13} />Remove Plan</button>
