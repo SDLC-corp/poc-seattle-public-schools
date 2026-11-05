@@ -222,7 +222,7 @@ export default function ChatAssistant() {
         <section className="ca-panel" role="dialog" aria-label="Asbestos assistant">
           <header className="ca-head">
             <span className="ca-avatar"><Sparkles size={18} /></span>
-            <div><strong>Asbestos Assistant</strong><small><span className="ca-dot" />Sample · answers are scripted</small></div>
+            <div><strong>Asbestos Assistant</strong><small><span className="ca-dot" />Online</small></div>
             {messages.length > 0 && <button type="button" className="ca-icon-btn" onClick={reset} title="New conversation" aria-label="New conversation"><RotateCcw size={16} /></button>}
             <button type="button" className="ca-icon-btn" onClick={() => setOpen(false)} title="Close" aria-label="Close assistant"><X size={18} /></button>
           </header>

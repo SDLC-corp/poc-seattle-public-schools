@@ -2,6 +2,34 @@
   "note": "ACM materials recorded per room (sample + app)",
   "materials": [
     {
+      "id": "ACM-mw3b1m8pr3fo",
+      "attachments": [],
+      "source": "app",
+      "createdAt": "2026-11-05T08:49:54.649Z",
+      "roomId": "RM-mw3ayqx0hh57",
+      "floorId": "adamses-b1-f1",
+      "buildingId": "adamses-b1",
+      "schoolId": "adamses",
+      "scope": "room",
+      "name": "Pipe Insulation",
+      "materialType": "Asbestos Cement (AC)",
+      "location": "Floor (entire room)",
+      "quantity": 50,
+      "unit": "Sq ft",
+      "friability": "Friable",
+      "classification": "Confirmed",
+      "condition": "Good",
+      "riskRanking": "Medium",
+      "assessmentDate": "2026-11-05",
+      "acmStatus": "ACM Present",
+      "notes": "",
+      "relatedTracking": [],
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      }
+    },
+    {
       "id": "ACM-mw0hwhi4hoim",
       "attachments": [],
       "source": "app",
@@ -18,7 +46,7 @@
       "unit": "Sq ft",
       "friability": "Friable",
       "classification": "Confirmed",
-      "condition": "Good",
+      "condition": "Damaged",
       "riskRanking": "Medium",
       "assessmentDate": "2026-11-03",
       "acmStatus": "ACM Present",
@@ -27,7 +55,8 @@
       "createdBy": {
         "id": "demo",
         "name": "John Doe"
-      }
+      },
+      "updatedAt": "2026-11-05T08:18:31.455Z"
     },
     {
       "id": "ACM-adamses-b2-f1-r2-1",
@@ -2863,7 +2892,7 @@
       "unit": "Linear ft",
       "friability": "Friable",
       "classification": "Presumed (PACM)",
-      "condition": "Not Assessed",
+      "condition": "Good",
       "riskRanking": "Medium",
       "assessmentDate": "2026-05-02",
       "acmStatus": "Assumed ACM",
@@ -2877,7 +2906,8 @@
         "id": null,
         "name": "Sample data"
       },
-      "source": "sample"
+      "source": "app",
+      "updatedAt": "2026-11-05T09:19:49.963Z"
     },
     {
       "id": "ACM-alkies-b3-f2-r2-2",
@@ -8554,7 +8584,7 @@
       "unit": "Sq ft",
       "friability": "Non-Friable",
       "classification": "Confirmed",
-      "condition": "Significantly Damaged",
+      "condition": "Good",
       "riskRanking": "High",
       "assessmentDate": "2026-09-23",
       "acmStatus": "ACM Present",
@@ -8569,7 +8599,8 @@
         "id": null,
         "name": "Sample data"
       },
-      "source": "sample"
+      "source": "app",
+      "updatedAt": "2026-11-05T07:40:20.794Z"
     },
     {
       "id": "ACM-blainek8-b1-f2-r3-2",

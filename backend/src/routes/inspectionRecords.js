@@ -11,6 +11,7 @@ import { lifecycleOf, timelineOf, autoStageOf, MANUAL_STAGES, syncInspectionStag
 import * as OM from '../data/omStore.js';
 import { SAMPLE_TYPES as AIR_TYPES, METHODS as AIR_METHODS, limitFor } from '../data/airStore.js';
 import { notify } from '../data/notificationsStore.js';
+import { getRecord as getSurveillance } from '../data/surveillanceStore.js';
 import * as OMM from '../data/omMeta.js';
 import { MAX_ATTACHMENT_BYTES } from '../data/acmMeta.js';
 import { listUsers } from './users.js';
@@ -24,7 +25,8 @@ const PNG_URL = /^data:image\/png;base64,[A-Za-z0-9+/=]+$/;
 const MAX_SIGNATURE_CHARS = 300_000;
 const MODULE = 'Inspections';
 // Workflow state labels (the form); list status labels come from M.STATUSES
-const STATUS_LABEL = { scheduled: 'Scheduled', draft: 'In Progress', submitted: 'Pending Review', approved: 'Approved', returned: 'Returned for Changes' };
+// Submitted = in review; once the reviewer verifies and approves it, the inspection is Completed
+const STATUS_LABEL = { scheduled: 'Scheduled', draft: 'In Progress', submitted: 'In Review', approved: 'Completed', returned: 'Returned for Changes' };
 const OPEN_STATES = ['scheduled', 'draft', 'returned'];
 
 // Looked up live so schools added in the app are found
@@ -79,6 +81,7 @@ function rows() {
   const place = placeLookup();
   const mats = new Map(getMaterials().map((m) => [m.id, m]));
   const today = todayIso();
+  const nowIso = new Date().toISOString();
   return getRecords().map((r) => {
     const m = mats.get(r.materialId);
     const status = M.statusOf(r);
@@ -95,7 +98,15 @@ function rows() {
       conditionChange: r.assessment?.conditionChange ?? null, priority: r.risk?.priority ?? null,
       recommendedAction: r.risk?.recommendedAction ?? null, sampleResult: r.sampling?.required === 'Yes' ? r.sampling.result : null,
       openActions: openActions(r), reviewerName: r.verification?.reviewerName ?? null, approvedOn: r.verification?.approvalDate || null,
+      // Sent for review: when submitted (older records: their last change), and how long it has waited
+      submittedOn: r.state === 'submitted' ? (r.submittedAt ?? r.updatedAt ?? r.createdAt ?? '').slice(0, 10) || null : null,
+      // When it was sent for review, for "latest first" (seeded demo dates in the future don't count)
+      submittedAt: r.state === 'submitted' ? [r.submittedAt, r.updatedAt, r.createdAt].find((t) => t && t <= nowIso) ?? '' : '',
+      completionDate: r.verification?.completionDate || null,
       parentId: r.parentId ?? null, // a follow-up inspection carried out under another one
+      surveillanceId: r.surveillanceId ?? null, // a damage inspection requested from a surveillance record
+      // Latest real activity (last change, assignment or creation); seeded demo dates in the future don't count
+      lastActivity: [r.updatedAt, r.assignment?.assignedAt, r.createdAt].filter((t) => t && t <= nowIso).sort().at(-1) ?? '',
     };
   });
 }
@@ -110,6 +121,8 @@ function filterRows(list, { school, building, floor, type, state, status, condit
 }
 
 const SORTS = {
+  recent: (r) => r.lastActivity,
+  submitted: (r) => r.submittedAt,
   id: (r) => r.id, date: (r) => r.shownDate, nextDue: (r) => r.nextDue, type: (r) => r.type, material: (r) => r.materialName,
   facility: (r) => `${r.schoolName} ${r.buildingName}`, assignedTo: (r) => r.assignedTo ?? '',
   condition: (r) => M.CONDITION_RANK[r.condition] ?? -1, priority: (r) => M.PRIORITIES.indexOf(r.priority),
@@ -185,12 +198,14 @@ router.get('/material/:materialId', (req, res) => {
 // GET /api/inspection-records?school=&building=&floor=&type=&state=&condition=&priority=&q=&sort=&dir=&page=&pageSize=
 router.get('/', (req, res) => {
   const filtered = filterRows(rows(), req.query);
-  const key = SORTS[req.query.sort] ? req.query.sort : 'date';
-  const d = (req.query.dir ?? (key === 'date' ? 'desc' : 'asc')) === 'asc' ? 1 : -1;
+  // Default: most recent activity first, so newly assigned / edited inspections are at the top
+  const key = SORTS[req.query.sort] ? req.query.sort : 'recent';
+  const d = (req.query.dir ?? (['date', 'recent', 'submitted'].includes(key) ? 'desc' : 'asc')) === 'asc' ? 1 : -1;
   const get = SORTS[key];
   const sorted = [...filtered].sort((a, b) => {
     const x = get(a); const y = get(b);
-    return d * (typeof x === 'number' ? x - y : String(x).localeCompare(String(y), 'en', { numeric: true })) || b.id.localeCompare(a.id);
+    return d * (typeof x === 'number' ? x - y : String(x).localeCompare(String(y), 'en', { numeric: true }))
+      || String(b.shownDate).localeCompare(String(a.shownDate)) || b.id.localeCompare(a.id);
   });
   const pageSize = Math.min(100, Math.max(1, Number(req.query.pageSize) || 10));
   const pages = Math.max(1, Math.ceil(sorted.length / pageSize));
@@ -538,21 +553,21 @@ router.post('/records/:id/lab-results', async (req, res, next) => {
     const acms = M.acmsOf(r);
     const empty = (v) => v === '' || v == null;
     // Air samples: the fibre count against the Air Monitoring limit
-    const airResult = (acm, x) => {
+    const airResult = (s, x) => {
       if (x.result === 'Not Analyzed') return { result: 'Not Analyzed', airValue: null };
       if (empty(x.value)) return { result: 'Pending', airValue: null };
       const v = Number(x.value);
-      const limit = limitFor(acm.sampling.airType, M.airMethodOf(acm.sampling.testMethod));
+      const limit = limitFor(s.airType, M.airMethodOf(s.testMethod));
       return {
         result: v > limit.value ? 'Exceeds Limit' : 'Below Limit', airValue: v, limit,
         passFail: v > limit.value ? 'Fail' : 'Pass', limitValue: limit.value, measureUnit: limit.unit,
       };
     };
     // Bulk / dust / soil: the measured content or loading against the type's limit (older records: a result only)
-    const sampleResult = (acm, x) => {
+    const sampleResult = (s, x) => {
       const cleared = { measuredValue: null, measureUnit: null, limitValue: null, passFail: null, asbestosTypes: [] };
       if (x.result === 'Not Analyzed') return { result: 'Not Analyzed', ...cleared };
-      const m = M.measureOf(acm.sampling);
+      const m = M.measureOf(s);
       if (empty(x.value) || !m) return { result: M.SAMPLE_RESULTS.includes(x.result) && empty(x.value) ? x.result : 'Pending', ...cleared };
       const v = Number(x.value);
       return {
@@ -560,20 +575,26 @@ router.post('/records/:id/lab-results', async (req, res, next) => {
         passFail: v > m.limit ? 'Fail' : 'Pass', asbestosTypes: v > 0 ? (x.asbestosTypes ?? []).filter((t) => M.ASBESTOS_TYPES.includes(t)) : [],
       };
     };
-    list.forEach((x, i) => {
+    // Each result names its ACM and which of its samples (sampleKey, 0 = the first)
+    const keyOf = (x) => Math.max(0, Number(x?.sampleKey) || 0);
+    const sampleFor = (x) => {
       const acm = acms.find((a) => a.materialId === x?.materialId);
-      if (!acm || acm.sampling?.required !== 'Yes') { errors[`results.${i}`] = 'This ACM has no sample on the inspection'; return; }
+      return acm ? M.samplesOf(acm).find((y) => y.k === keyOf(x))?.s ?? null : null;
+    };
+    list.forEach((x, i) => {
+      const s = sampleFor(x);
+      if (!s) { errors[`results.${i}`] = 'This sample isn’t on the inspection'; return; }
       if (!empty(x.analysisDate)) {
         if (!validDay(x.analysisDate)) errors[`results.${i}.analysisDate`] = 'Enter a valid date';
         else if (x.analysisDate > new Date().toISOString().slice(0, 10)) errors[`results.${i}.analysisDate`] = 'The analysis date can’t be in the future';
       }
-      if (r.reviewGates && !acm.sampling.sentToLabAt) { errors[`results.${i}`] = 'The sample hasn’t been sent to the laboratory yet – the inspection needs its review first'; return; }
+      if (r.reviewGates && !s.sentToLabAt) { errors[`results.${i}`] = 'The sample hasn’t been sent to the laboratory yet – the reviewer sends it when approving the inspection'; return; }
       if (x.result === 'Not Analyzed') return;
-      const m = M.sampleTypeOf(acm.sampling) === M.AIR_SAMPLE ? null : M.measureOf(acm.sampling);
+      const m = M.sampleTypeOf(s) === M.AIR_SAMPLE ? null : M.measureOf(s);
       if (!empty(x.value) && (!Number.isFinite(Number(x.value)) || Number(x.value) < 0)) errors[`results.${i}.value`] = 'Enter a number of 0 or more';
       else if (m?.max != null && Number(x.value) > m.max) errors[`results.${i}.value`] = `Enter at most ${m.max}${m.unit}`;
       else if (m && Number(x.value) > 0 && !(x.asbestosTypes ?? []).some((t) => M.ASBESTOS_TYPES.includes(t))) errors[`results.${i}.asbestosTypes`] = 'Choose the asbestos type found';
-      else if (!m && M.sampleTypeOf(acm.sampling) !== M.AIR_SAMPLE && empty(x.value) && !M.SAMPLE_RESULTS.includes(x.result)) errors[`results.${i}.result`] = 'Choose the result';
+      else if (!m && M.sampleTypeOf(s) !== M.AIR_SAMPLE && empty(x.value) && !M.SAMPLE_RESULTS.includes(x.result)) errors[`results.${i}.result`] = 'Choose the result';
     });
     if (!list.length) errors.results = 'Enter at least one result';
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
@@ -582,44 +603,45 @@ router.post('/records/:id/lab-results', async (req, res, next) => {
     const by = { id: currentUser().id, name: currentUser().name };
     const changes = [];
     const exceeded = [];
-    const apply = (acm) => {
-      const x = list.find((y) => y.materialId === acm.materialId);
-      if (!x) return acm;
+    // One sample with its result applied (unchanged when the result and lab details are the same)
+    const applyTo = (acm, s, x) => {
       const note = String(x.notes ?? '').trim().slice(0, 1000);
-      const isAir = M.sampleTypeOf(acm.sampling) === M.AIR_SAMPLE;
-      const air = isAir ? airResult(acm, x) : null;
-      const { limit, ...found } = air ?? sampleResult(acm, x);
+      const isAir = M.sampleTypeOf(s) === M.AIR_SAMPLE;
+      const air = isAir ? airResult(s, x) : null;
+      const { limit, ...found } = air ?? sampleResult(s, x);
       // The laboratory's details of the analysis (only the fields sent are changed; an empty lab name keeps the one
-      // chosen when the sample was taken)
+      // the reviewer chose)
       const details = {};
       const detailChanges = [];
       for (const [k, label] of Object.entries(LAB_DETAILS)) {
         if (x[k] === undefined) continue;
         const v = String(x[k] ?? '').trim().slice(0, 120);
         if (k === 'laboratory' && !v) continue;
-        if (v !== (acm.sampling[k] ?? '')) { details[k] = v; detailChanges.push({ field: `${acm.sampling.sampleId || acm.materialId} ${label}`, from: acm.sampling[k] || '—', to: v || '—' }); }
+        if (v !== (s[k] ?? '')) { details[k] = v; detailChanges.push({ field: `${s.sampleId || acm.materialId} ${label}`, from: s[k] || '—', to: v || '—' }); }
       }
-      const sampling = { ...acm.sampling, ...found, ...details, resultNotes: note };
-      const before = M.resultSummary(acm.sampling);
-      const resultChanged = before !== M.resultSummary(sampling) || note !== (acm.sampling.resultNotes ?? '');
-      if (!resultChanged && !detailChanges.length) return acm;
+      const next = { ...s, ...found, ...details, resultNotes: note };
+      const before = M.resultSummary(s);
+      const resultChanged = before !== M.resultSummary(next) || note !== (s.resultNotes ?? '');
+      if (!resultChanged && !detailChanges.length) return s;
       changes.push(...detailChanges);
-      if (!resultChanged) return { ...acm, sampling: { ...sampling, resultUpdatedAt: now } };
-      changes.push({ field: `Result ${acm.sampling.sampleId || acm.materialId}`, from: before, to: M.resultSummary(sampling) });
-      if (air?.result === 'Exceeds Limit' && acm.sampling.result !== 'Exceeds Limit') exceeded.push({ acm, air });
+      if (!resultChanged) return { ...next, resultUpdatedAt: now };
+      changes.push({ field: `Result ${s.sampleId || acm.materialId}`, from: before, to: M.resultSummary(next) });
+      if (air?.result === 'Exceeds Limit' && s.result !== 'Exceeds Limit') exceeded.push({ acm, s, air });
       // A first result is "recorded"; a later change is an update
-      return { ...acm, sampling: { ...sampling, resultRecordedAt: now, resultRecordedBy: by, ...(acm.sampling.resultRecordedAt ? { resultUpdatedAt: now } : {}) } };
+      return { ...next, resultRecordedAt: now, resultRecordedBy: by, ...(s.resultRecordedAt ? { resultUpdatedAt: now } : {}) };
     };
+    const apply = (acm) => list.filter((x) => x.materialId === acm.materialId)
+      .reduce((a, x) => M.withSample(a, keyOf(x), (s) => applyTo(acm, s, x)), acm);
     const [first, ...extra] = acms.map(apply);
     const updated = await updateRecord(r.id, { sampling: first.sampling, extra });
     logAudit(req, { action: 'update', module: MODULE, recordId: r.id, link: link(r), summary: `Recorded lab results for inspection ${r.id}`, changes });
     // Same alert as an Air Monitoring exceedance
-    for (const { acm, air } of exceeded) {
+    for (const { acm, s, air } of exceeded) {
       const m = getMaterial(acm.materialId);
       const place = placeLookup()(acm);
       notify({
         type: 'compliance', priority: 'high', title: 'Air Monitoring Exceedance',
-        message: `${acm.sampling.airType} air sample ${acm.sampling.sampleId} at ${place.roomNumber} ${place.roomName} measured ${air.airValue} ${air.limit.unit} (limit ${air.limit.value} ${air.limit.unit}).`,
+        message: `${s.airType} air sample ${s.sampleId} at ${place.roomNumber} ${place.roomName} measured ${air.airValue} ${air.limit.unit} (limit ${air.limit.value} ${air.limit.unit}).`,
         description: `Inspection ${r.id} (${m?.name ?? acm.materialId}) at ${place.schoolName}, ${place.buildingName} exceeded the ${air.limit.basis}. Stop work in the area if abatement is ongoing, review containment, and re-sample before re-occupancy.`,
         schoolId: acm.schoolId, schoolName: place.schoolName, buildingName: place.buildingName, rooms: `${place.roomNumber} ${place.roomName}`.trim(),
         link: link(r), linkLabel: 'Open inspection',
@@ -727,6 +749,61 @@ const ASSESSMENT_LISTS = {
 const RISK_LISTS = { priority: M.PRIORITIES, damageSeverity: M.SEVERITIES, recommendedAction: M.RECOMMENDED_ACTIONS, immediateAttention: ['Yes', 'No'], followUpRequired: ['Yes', 'No'] };
 const oneOf = (v, list) => v === '' || v == null || list.includes(v);
 
+const MAX_SAMPLES = 10;
+
+/**
+ * One sample from the form (sampling fields under `key`, e.g. 'sampling.' or 'sampling.more.1.'), merged with
+ * what was recorded for it (result, lab details, when it was sent). The laboratory is chosen by the reviewer
+ * when the inspection is approved, so it isn't asked for here (one already on the record is kept).
+ */
+function parseSample(s, prev, { submit }, err, key) {
+  const isAir = s.sampleType === M.AIR_SAMPLE;
+  const kept = Object.fromEntries(['resultNotes', 'measuredValue', 'measureUnit', 'limitValue', 'passFail', 'asbestosTypes', 'resultRecordedAt',
+    'resultRecordedBy', 'resultUpdatedAt', 'sentToLabAt', 'sentToLabBy', 'labSampleId', 'analysisMethod', 'analysisStandard', 'analysisDate',
+    'materialLayer', 'labReportNo'].filter((k) => prev?.[k] != null && prev[k] !== '').map((k) => [k, prev[k]]));
+  const out = {
+    sampleType: String(s.sampleType ?? '').trim(),
+    sampleId: String(s.sampleId ?? '').trim().toUpperCase().slice(0, 30), collectionDate: String(s.collectionDate ?? ''),
+    laboratory: String(prev?.laboratory || s.laboratory || '').trim(), testMethod: String(s.testMethod ?? '').trim(), notes: String(s.notes ?? '').trim().slice(0, 1000),
+    result: prev?.result ?? s.result ?? 'Pending',
+    // Air samples: kind of air sample (Air Monitoring's types), how long it ran, and the measured value
+    ...(isAir ? {
+      airType: String(s.airType ?? '').trim(), durationMin: s.durationMin === '' || s.durationMin == null ? null : Number(s.durationMin),
+      ...(prev?.airValue != null ? { airValue: prev.airValue } : {}),
+    } : {}),
+    // Kept on records saved before the field was removed from the form
+    ...(s.sampleLocation ? { sampleLocation: String(s.sampleLocation).trim().slice(0, 120) } : {}),
+    ...kept,
+  };
+  if (!(isAir ? M.AIR_RESULTS : M.SAMPLE_RESULTS).includes(out.result)) err(`${key}result`, 'Invalid result');
+  if (out.laboratory && out.laboratory !== prev?.laboratory && !M.LABORATORIES.includes(out.laboratory)) err(`${key}laboratory`, 'Choose a laboratory');
+  const typeDef = M.SAMPLE_TYPES.find((t) => t.value === out.sampleType);
+  if (out.sampleType && !typeDef) err(`${key}sampleType`, 'Choose the sample type');
+  // What to test must suit the sample type (an older method already on the record stays valid)
+  const keptMethod = prev?.testMethod && out.testMethod === prev.testMethod;
+  if (out.testMethod && !keptMethod && !(typeDef ? typeDef.testMethods : M.TEST_METHODS).includes(out.testMethod)) {
+    err(`${key}testMethod`, typeDef ? `Choose a test for ${/^[aeiou]/i.test(typeDef.value) ? 'an' : 'a'} ${typeDef.value.toLowerCase()}` : 'Choose what to test');
+  }
+  if (isAir) {
+    if (out.airType && !AIR_TYPES.includes(out.airType)) err(`${key}airType`, 'Choose the kind of air sample');
+    const d = out.durationMin;
+    if (d != null && (!Number.isFinite(d) || d < 1 || d > 1440)) err(`${key}durationMin`, 'Duration must be 1–1440 minutes');
+  }
+  if (out.collectionDate && !validDay(out.collectionDate)) err(`${key}collectionDate`, 'Enter a valid date');
+  if (submit) {
+    const need = (cond, k, msg) => { if (cond) err(`${key}${k}`, msg); };
+    need(!out.sampleId, 'sampleId', 'Sample ID is required');
+    need(!out.collectionDate, 'collectionDate', 'Collection date is required');
+    need(!out.sampleType, 'sampleType', 'Choose the sample type');
+    need(!out.testMethod, 'testMethod', 'Choose what to test');
+    if (isAir) {
+      need(!out.airType, 'airType', 'Choose the kind of air sample');
+      need(out.durationMin == null, 'durationMin', 'Enter how long the sample ran');
+    }
+  }
+  return out;
+}
+
 /**
  * One ACM's part of an inspection (location, condition assessment, checklist, sampling, risk) from the form,
  * merged over what was saved. Errors go into `errors` under `prefix` ('' for the first ACM, 'extra.<i>.' for
@@ -757,23 +834,13 @@ function parseAcm(src, prev, { submit, date }, errors, prefix = '') {
     checklist: Object.fromEntries(M.CHECKLIST.map((q) => [q.key, cl[q.key] ?? ''])),
     // Optional note per checklist question (evidence files carry the question's key instead)
     checklistNotes: Object.fromEntries(M.CHECKLIST.map((q) => [q.key, String(cn[q.key] ?? '').trim().slice(0, 500)]).filter(([, t]) => t)),
+    // The first sample on `sampling`, further samples of the same ACM in `sampling.more`
     sampling: s.required === 'Yes'
       ? {
-        required: 'Yes', sampleType: String(s.sampleType ?? '').trim(),
-        sampleId: String(s.sampleId ?? '').trim().toUpperCase().slice(0, 30), collectionDate: String(s.collectionDate ?? ''),
-        laboratory: String(s.laboratory ?? '').trim(), testMethod: String(s.testMethod ?? '').trim(), notes: String(s.notes ?? '').trim().slice(0, 1000),
-        result: s.result ?? 'Pending',
-        // Air samples: kind of air sample (Air Monitoring's types), how long it ran, and the measured value
-        ...(s.sampleType === M.AIR_SAMPLE ? {
-          airType: String(s.airType ?? '').trim(), durationMin: s.durationMin === '' || s.durationMin == null ? null : Number(s.durationMin),
-          ...(prev?.sampling?.airValue != null ? { airValue: prev.sampling.airValue } : {}),
-        } : {}),
-        ...(prev?.sampling?.resultNotes ? { resultNotes: prev.sampling.resultNotes } : {}),
-        ...(prev?.sampling?.resultRecordedAt ? { resultRecordedAt: prev.sampling.resultRecordedAt, resultRecordedBy: prev.sampling.resultRecordedBy } : {}),
-        // Kept on records saved before the field was removed from the form
-        ...(s.sampleLocation ? { sampleLocation: String(s.sampleLocation).trim().slice(0, 120) } : {}),
-        // When the inspection was submitted and the sample sent for analysis (kept once set)
-        ...(prev?.sampling?.sentToLabAt ? { sentToLabAt: prev.sampling.sentToLabAt, sentToLabBy: prev.sampling.sentToLabBy } : {}),
+        required: 'Yes', ...parseSample(s, prev?.sampling, { submit }, err, 'sampling.'),
+        more: (Array.isArray(s.more) ? s.more.slice(0, MAX_SAMPLES - 1) : []).map((x, j) => parseSample(
+          x && typeof x === 'object' ? x : {}, prev?.sampling?.more?.[j], { submit }, err, `sampling.more.${j}.`,
+        )),
       }
       : { required: s.required === 'No' ? 'No' : '' },
     risk: {
@@ -788,28 +855,13 @@ function parseAcm(src, prev, { submit, date }, errors, prefix = '') {
   for (const [k, list] of Object.entries(ASSESSMENT_LISTS)) if (!oneOf(item.assessment[k], list)) err(`assessment.${k}`, 'Invalid choice');
   for (const q of M.CHECKLIST) if (!oneOf(item.checklist[q.key], q.answers)) err(`checklist.${q.key}`, 'Invalid answer');
   for (const [k, list] of Object.entries(RISK_LISTS)) if (!oneOf(item.risk[k], list)) err(`risk.${k}`, 'Invalid choice');
-  const isAir = item.sampling.sampleType === M.AIR_SAMPLE;
-  if (item.sampling.required === 'Yes' && !(isAir ? M.AIR_RESULTS : M.SAMPLE_RESULTS).includes(item.sampling.result)) err('sampling.result', 'Invalid result');
-  // Laboratory from the list (a lab already on the record stays valid)
-  const keptLab = prev?.sampling?.laboratory && item.sampling.laboratory === prev.sampling.laboratory;
-  if (item.sampling.laboratory && !keptLab && !M.LABORATORIES.includes(item.sampling.laboratory)) err('sampling.laboratory', 'Choose a laboratory');
-  const typeDef = M.SAMPLE_TYPES.find((t) => t.value === item.sampling.sampleType);
-  if (item.sampling.sampleType && !typeDef) err('sampling.sampleType', 'Choose the sample type');
-  // What to test must suit the sample type (an older method already on the record stays valid)
-  const keptMethod = prev?.sampling?.testMethod && item.sampling.testMethod === prev.sampling.testMethod;
-  if (item.sampling.testMethod && !keptMethod && !(typeDef ? typeDef.testMethods : M.TEST_METHODS).includes(item.sampling.testMethod)) {
-    err('sampling.testMethod', typeDef ? `Choose a test for ${/^[aeiou]/i.test(typeDef.value) ? 'an' : 'a'} ${typeDef.value.toLowerCase()}` : 'Choose what to test');
-  }
-  if (isAir) {
-    if (item.sampling.airType && !AIR_TYPES.includes(item.sampling.airType)) err('sampling.airType', 'Choose the kind of air sample');
-    const d = item.sampling.durationMin;
-    if (d != null && (!Number.isFinite(d) || d < 1 || d > 1440)) err('sampling.durationMin', 'Duration must be 1–1440 minutes');
-  }
+  // Each sample's id once within the ACM
+  const sampleIds = M.samplesOf(item).map(({ s }) => s.sampleId).filter(Boolean);
+  if (new Set(sampleIds).size !== sampleIds.length) err('sampling.more', 'Each sample needs its own Sample ID');
 
   // Dates
   if (item.risk.targetDate && !validDay(item.risk.targetDate)) err('risk.targetDate', 'Enter a valid date');
   else if (item.risk.targetDate && date && item.risk.targetDate < date) err('risk.targetDate', 'Must be on or after the inspection date');
-  if (item.sampling.collectionDate && !validDay(item.sampling.collectionDate)) err('sampling.collectionDate', 'Enter a valid date');
 
   if (submit) {
     const need = (cond, key, msg) => { if (cond) err(key, msg); };
@@ -817,17 +869,6 @@ function parseAcm(src, prev, { submit, date }, errors, prefix = '') {
     for (const k of ['currentCondition', ...Object.keys(ASSESSMENT_LISTS)]) need(!item.assessment[k], `assessment.${k}`, 'Required');
     for (const q of M.CHECKLIST) need(!item.checklist[q.key], `checklist.${q.key}`, 'Answer this question');
     need(!item.sampling.required, 'sampling.required', 'Is a sample required?');
-    if (item.sampling.required === 'Yes') {
-      need(!item.sampling.sampleId, 'sampling.sampleId', 'Sample ID is required');
-      need(!item.sampling.collectionDate, 'sampling.collectionDate', 'Collection date is required');
-      need(!item.sampling.sampleType, 'sampling.sampleType', 'Choose the sample type');
-      need(!item.sampling.laboratory, 'sampling.laboratory', 'Laboratory is required');
-      need(!item.sampling.testMethod, 'sampling.testMethod', 'Choose what to test');
-      if (isAir) {
-        need(!item.sampling.airType, 'sampling.airType', 'Choose the kind of air sample');
-        need(item.sampling.durationMin == null, 'sampling.durationMin', 'Enter how long the sample ran');
-      }
-    }
     for (const k of Object.keys(RISK_LISTS)) need(!item.risk[k], `risk.${k}`, 'Required');
     need(item.risk.followUpRequired === 'Yes' && !item.risk.targetDate, 'risk.targetDate', 'Target date is required when follow-up is needed');
     // Answers that contradict each other make the record unreliable for AHERA
@@ -880,6 +921,8 @@ function validate(body, existing) {
       completionDate: String(v.completionDate ?? ''),
     },
     state: submit ? 'submitted' : 'draft',
+    // When it went to review (listed under Inspections › In Review)
+    ...(submit ? { submittedAt: new Date().toISOString() } : {}),
     // Inspections submitted from now on have a reviewer confirm each later stage (see inspectionLifecycle);
     // a follow-up inspection (child) has none — its work counts towards its parent's stages
     ...((submit || existing?.reviewGates) && !existing?.parentId ? { reviewGates: true } : {}),
@@ -898,17 +941,32 @@ function validate(body, existing) {
   const sig = r.verification.inspectorSignature;
   if (sig && sig !== 'on-file' && (!PNG_URL.test(sig) || sig.length > MAX_SIGNATURE_CHARS)) errors['verification.inspectorSignature'] = 'Signature could not be read; clear it and sign again';
 
+  /**
+   * O&M tasks (action items): the inspector gives the work type, ACM, description, priority and due date; the
+   * reviewer assigns the contractor / person when approving, which creates the O&M activity. What the reviewer
+   * set (assignee, O&M activity) is kept from the saved record. Older items have a team in `assignedTo` instead.
+   */
   const items = pick('actionItems', []);
-  if (!Array.isArray(items) || items.length > 20) errors.actionItems = 'Up to 20 action items';
+  if (!Array.isArray(items) || items.length > 20) errors.actionItems = 'Up to 20 O&M tasks';
   else {
-    r.actionItems = items.map((x, i) => ({
-      id: /^AI-\d{1,3}$/.test(x?.id) ? x.id : `AI-${i + 1}`, action: String(x?.action ?? '').trim().slice(0, 200), assignedTo: x?.assignedTo ?? '',
-      priority: x?.priority ?? 'Medium', dueDate: String(x?.dueDate ?? ''), status: x?.status ?? 'Pending',
-    }));
+    const acmIds = M.acmsOf(r).map((a) => a.materialId);
+    r.actionItems = items.map((x, i) => {
+      const id = /^AI-\d{1,3}$/.test(x?.id) ? x.id : `AI-${i + 1}`;
+      const before = existing?.actionItems?.find((y) => y.id === id);
+      return {
+        id, type: String(x?.type ?? before?.type ?? '').trim(), materialId: acmIds.includes(x?.materialId) ? x.materialId : acmIds[0] ?? null,
+        action: String(x?.action ?? '').trim().slice(0, 200), assignedTo: x?.assignedTo ?? before?.assignedTo ?? '',
+        priority: x?.priority ?? 'Medium', dueDate: String(x?.dueDate ?? ''), status: x?.status ?? 'Pending',
+        ...(before?.assignee ? { assignee: before.assignee } : {}), ...(before?.assignedToId ? { assignedToId: before.assignedToId } : {}),
+        ...(before?.omActivityId ? { omActivityId: before.omActivityId } : {}),
+      };
+    });
     r.actionItems.forEach((x, i) => {
-      if (!x.action) errors[`actionItems.${i}.action`] = 'Describe the action';
-      if (!M.TEAMS.includes(x.assignedTo)) errors[`actionItems.${i}.assignedTo`] = 'Choose who is responsible';
-      if (!M.PRIORITIES.includes(x.priority)) errors[`actionItems.${i}.priority`] = 'Invalid priority';
+      if (!x.action) errors[`actionItems.${i}.action`] = 'Describe the work';
+      if (x.type && !OMM.TYPE_VALUES.includes(x.type)) errors[`actionItems.${i}.type`] = 'Choose the work type';
+      else if (submit && !x.type && !x.omActivityId && !x.assignedTo) errors[`actionItems.${i}.type`] = 'Choose the work type';
+      if (x.assignedTo && !M.TEAMS.includes(x.assignedTo)) errors[`actionItems.${i}.assignedTo`] = 'Invalid team';
+      if (![...M.PRIORITIES, ...OMM.PRIORITIES].includes(x.priority)) errors[`actionItems.${i}.priority`] = 'Invalid priority';
       if (!M.ACTION_STATUSES.includes(x.status)) errors[`actionItems.${i}.status`] = 'Invalid status';
       if (x.dueDate && !validDay(x.dueDate)) errors[`actionItems.${i}.dueDate`] = 'Invalid date';
       else if (submit && !x.dueDate) errors[`actionItems.${i}.dueDate`] = 'Due date required';
@@ -923,7 +981,7 @@ function validate(body, existing) {
     need(!sig, 'verification.inspectorSignature', 'The inspector must sign the inspection');
     need(!r.verification.completionDate, 'verification.completionDate', 'Completion date is required');
     const followUp = M.acmsOf(r).some((x) => x.risk.followUpRequired === 'Yes' || x.checklist.immediateAction === 'Yes');
-    need(followUp && !r.actionItems.length, 'actionItems', 'Add at least one action item for the follow-up');
+    need(followUp && !r.actionItems.length, 'actionItems', 'Add at least one O&M task for the follow-up');
   }
   return { r, material, errors };
 }
@@ -999,43 +1057,123 @@ router.put('/records/:id', async (req, res, next) => {
   }
 });
 
-// Reviewer decision: { decision: 'approve' | 'return', reviewerId, signature, comments }
+/**
+ * Reviewer decision: { decision: 'approve' | 'return', signature, reviewDate, verified, comments, labs, assignees }.
+ * The reviewer is the signed-in person. Approving needs their confirmation that they verified the record, a
+ * signature, the review date, a laboratory for every sample (labs: { '<materialId>:<sampleKey>': lab }) and a
+ * contractor / person for every O&M task (assignees: { '<task id>': person id }) — the samples are then sent to
+ * their laboratories and each task becomes an O&M activity. Returning needs a note for the inspector.
+ */
 router.post('/records/:id/review', async (req, res, next) => {
   try {
     const existing = getRecord(req.params.id);
     if (!existing) return res.status(404).json({ error: 'Inspection record not found' });
     if (existing.state !== 'submitted') return res.status(409).json({ error: 'Only inspections waiting for review can be reviewed' });
-    const { decision, reviewerId, signature, comments } = req.body ?? {};
+    const { decision, signature, comments, verified } = req.body ?? {};
+    const labs = req.body?.labs && typeof req.body.labs === 'object' ? req.body.labs : {};
+    const assignees = req.body?.assignees && typeof req.body.assignees === 'object' ? req.body.assignees : {};
+    const reviewDate = String(req.body?.reviewDate || todayIso());
     const errors = {};
-    const reviewer = reviewers().find((u) => u.id === reviewerId);
+    const me = currentUser();
+    const reviewer = { id: me.id, name: me.name };
+    const approve = decision === 'approve';
     if (!['approve', 'return'].includes(decision)) errors.decision = 'Approve or return the inspection';
-    if (!reviewer) errors['verification.reviewerId'] = 'Choose the reviewer';
-    if (decision === 'approve' && (typeof signature !== 'string' || !PNG_URL.test(signature) || signature.length > MAX_SIGNATURE_CHARS)) {
+    if (approve && verified !== true) errors['verification.verified'] = 'Confirm you have verified the inspection';
+    if (approve && (typeof signature !== 'string' || !PNG_URL.test(signature) || signature.length > MAX_SIGNATURE_CHARS)) {
       errors['verification.reviewerSignature'] = 'The reviewer must sign to approve';
     }
+    if (!validDay(reviewDate)) errors['verification.reviewDate'] = 'Enter a valid date';
+    else if (reviewDate > todayIso()) errors['verification.reviewDate'] = 'The review date can’t be in the future';
+    else if (existing.date && reviewDate < existing.date.slice(0, 10)) errors['verification.reviewDate'] = 'The review date can’t be before the inspection date';
     const note = String(comments ?? '').trim().slice(0, 500);
     if (decision === 'return' && !note) errors['verification.reviewComments'] = 'Tell the inspector what to change';
+    // The laboratory for each sample and who does each O&M task
+    const people = omAssignees();
+    if (approve) {
+      for (const { a, k, s } of M.allSamplesOf(existing)) {
+        const lab = labs[`${a.materialId}:${k}`] || s.laboratory;
+        if (!lab) errors[`labs.${a.materialId}:${k}`] = 'Choose the laboratory';
+        else if (lab !== s.laboratory && !M.LABORATORIES.includes(lab)) errors[`labs.${a.materialId}:${k}`] = 'Choose a laboratory from the list';
+      }
+      // O&M tasks with a work type (older action items already name a team)
+      for (const t of (existing.actionItems ?? []).filter((x) => x.type && !x.omActivityId && x.status !== 'Completed')) {
+        if (!people.some((p) => p.id === assignees[t.id])) errors[`assignees.${t.id}`] = 'Choose the contractor / person';
+      }
+    }
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
 
-    const { updated, conditionChange } = await decideInspection(req, existing, decision === 'approve', reviewer, signature, note);
+    let { updated, conditionChange } = await decideInspection(req, existing, approve, reviewer, signature, note, reviewDate);
+    if (approve) {
+      updated = await sendSamplesToLab(req, updated, labs, reviewer);
+      updated = await assignOmTasks(req, updated, assignees);
+    }
     await syncStages(updated);
-    res.json({ record: { ...updated, statusLabel: STATUS_LABEL[updated.state] }, conditionChange });
+    res.json({ record: { ...getRecord(updated.id), statusLabel: STATUS_LABEL[updated.state] }, conditionChange });
   } catch (err) {
     next(err);
   }
 });
+
+// On approval: every sample gets the laboratory the reviewer chose and is sent there (results can then be entered)
+async function sendSamplesToLab(req, r, labs, reviewer) {
+  const now = new Date().toISOString();
+  const changes = [];
+  const acms = M.acmsOf(r).map((a) => M.samplesOf(a).reduce((acc, { k, s }) => M.withSample(acc, k, (x) => {
+    const laboratory = labs[`${a.materialId}:${k}`] || x.laboratory;
+    if (laboratory !== x.laboratory || !x.sentToLabAt) changes.push({ field: `Sample ${x.sampleId || a.materialId}`, to: `Sent to ${laboratory}` });
+    return { ...x, laboratory, ...(x.sentToLabAt ? {} : { sentToLabAt: now, sentToLabBy: reviewer }) };
+  }), a));
+  if (!changes.length) return r;
+  const [first, ...extra] = acms;
+  const updated = await updateRecord(r.id, { sampling: first.sampling, extra });
+  logAudit(req, { action: 'update', module: MODULE, recordId: r.id, link: link(r), summary: `Sent ${changes.length} sample${changes.length === 1 ? '' : 's'} of inspection ${r.id} to the laboratory`, changes });
+  return updated;
+}
+
+// On approval: each O&M task the inspector listed becomes an O&M activity, assigned to the reviewer's choice
+async function assignOmTasks(req, r, assignees) {
+  const people = omAssignees();
+  const now = new Date().toISOString();
+  const me = currentUser();
+  const toOm = (p) => (p === 'Critical' ? 'Urgent' : OMM.PRIORITIES.includes(p) ? p : 'Medium');
+  const created = [];
+  const items = [];
+  for (const t of r.actionItems ?? []) {
+    const person = t.type && !t.omActivityId && t.status !== 'Completed' ? people.find((p) => p.id === assignees[t.id]) : null;
+    if (!person) { items.push(t); continue; }
+    const m = getMaterial(t.materialId ?? r.materialId) ?? getMaterial(r.materialId);
+    const type = OMM.TYPE_VALUES.includes(t.type) ? t.type : OMM.TYPE_VALUES[0];
+    const activity = await OM.add('activities', {
+      id: OM.nextActivityId(), type, description: t.action, materialId: m.id, schoolId: m.schoolId, buildingId: m.buildingId, floorId: m.floorId, roomId: m.roomId,
+      priority: toOm(t.priority), dueDate: t.dueDate, assignedToId: person.id, assignedToName: person.name, state: 'pending',
+      work: null, completedAt: null, completedBy: null, attachments: [], inspectionId: r.id,
+      history: [{ at: now, by: me.name, action: `Created from inspection ${r.id} on review` }, { at: now, by: me.name, action: `Assigned to ${person.name}` }],
+      createdAt: now, createdBy: { id: me.id, name: me.name }, sample: false,
+    });
+    created.push(activity);
+    items.push({ ...t, type, assignee: person.name, assignedToId: person.id, assignedTo: t.assignedTo || 'O&M – Maintenance', omActivityId: activity.id });
+    logAudit(req, {
+      action: 'create', module: 'Operations & Maintenance', recordId: activity.id, link: `/operations/activities/${activity.id}`,
+      summary: `Created ${type.toLowerCase()} ${activity.id} from inspection ${r.id}`,
+      changes: [{ field: 'Type', to: type }, { field: 'Assigned To', to: person.name }, { field: 'Due Date', to: activity.dueDate }],
+    });
+  }
+  if (!created.length) return r;
+  return updateRecord(r.id, { actionItems: items });
+}
 
 /**
  * The final review of a submitted inspection: approved (locked; its ACM conditions update the inventory) or
  * returned for changes. Also used when a stage reviewer approves a closure request or the follow-up result.
  * Returns { updated, conditionChange }.
  */
-async function decideInspection(req, existing, approve, reviewer, signature, note) {
+async function decideInspection(req, existing, approve, reviewer, signature, note, reviewDate = todayIso()) {
   const updated = await updateRecord(existing.id, {
     state: approve ? 'approved' : 'returned',
     verification: {
       ...existing.verification, reviewerId: reviewer.id, reviewerName: reviewer.name, reviewerSignature: approve ? signature : null,
-      reviewStatus: approve ? 'Approved' : 'Returned for Changes', reviewComments: note, approvalDate: approve ? todayIso() : '',
+      reviewStatus: approve ? 'Completed' : 'Returned for Changes', reviewComments: note, approvalDate: approve ? reviewDate : '', reviewDate,
+      reviewedAt: new Date().toISOString(),
     },
   });
   logAudit(req, {
@@ -1099,6 +1237,24 @@ async function createFollowUp(req, r, plan) {
   });
   return child;
 }
+
+// POST /records/:id/follow-ups { inspectorId, scheduledDate, scheduledTime, notes } — schedule a follow-up inspection
+// of this (submitted or completed) inspection's ACMs, carried out under it
+router.post('/records/:id/follow-ups', async (req, res, next) => {
+  try {
+    const r = getRecord(req.params.id);
+    if (!r) return res.status(404).json({ error: 'Inspection record not found' });
+    if (r.parentId) return res.status(409).json({ error: 'A follow-up inspection can’t have follow-ups of its own – schedule it from the parent' });
+    if (!['submitted', 'approved'].includes(r.state)) return res.status(409).json({ error: 'Follow-ups can be scheduled once the inspection is submitted' });
+    const plan = req.body ?? {};
+    const errors = followUpPlanErrors(plan);
+    if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
+    const child = await createFollowUp(req, r, plan);
+    res.status(201).json({ record: { ...child, statusLabel: STATUS_LABEL[child.state] } });
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Action item status can be updated at any stage (it's follow-up work, not part of the signed record)
 router.patch('/records/:id/actions/:actionId', async (req, res, next) => {
@@ -1188,8 +1344,9 @@ router.delete('/records/:id/attachments/:fileId', async (req, res, next) => {
 // --- Assignment & scheduling ---
 
 /**
- * POST /assign { materialIds[], type, inspectorId, scheduledDate, notes }
- * Creates one scheduled inspection per material. Materials that already have an open inspection of the
+ * POST /assign { materialIds[], type, inspectorId, scheduledDate, scheduledTime, notes }
+ * Creates one scheduled inspection per school covering all its chosen ACMs (the first on the record, the
+ * others in `extra`, as when ACMs are added in the form). ACMs that already have an open inspection of the
  * same type are skipped (and reported) so nobody is assigned the same work twice.
  */
 router.post('/assign', async (req, res, next) => {
@@ -1209,32 +1366,91 @@ router.post('/assign', async (req, res, next) => {
     if (!validTime(scheduledTime)) errors.scheduledTime = 'Choose the time of the inspection';
     if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
 
-    const open = new Set(getRecords().filter((r) => r.type === type && ['scheduled', 'draft', 'returned', 'submitted'].includes(r.state)).map((r) => r.materialId));
-    const created = [];
-    const skipped = [];
+    // Every ACM already covered by an open inspection of this type (as its first ACM or one of the others)
+    const open = new Set(getRecords().filter((r) => r.type === type && ['scheduled', 'draft', 'returned', 'submitted'].includes(r.state))
+      .flatMap((r) => M.acmsOf(r).map((a) => a.materialId)));
+    const skipped = mats.filter((m) => open.has(m.id)).map((m) => m.id);
+    const free = mats.filter((m) => !open.has(m.id));
     const note = String(notes ?? '').trim().slice(0, 500);
-    for (const m of mats) {
-      if (open.has(m.id)) { skipped.push(m.id); continue; }
+    const me = currentUser();
+    const acm = (m) => ({
+      materialId: m.id, schoolId: m.schoolId, buildingId: m.buildingId, floorId: m.floorId, roomId: m.roomId,
+      locationDescription: '', homogeneousAreaId: '', assessment: {}, checklist: {}, sampling: {}, risk: {},
+    });
+    // One inspection per school, covering all of its chosen ACMs
+    const bySchool = new Map();
+    for (const m of free) {
+      if (!bySchool.has(m.schoolId)) bySchool.set(m.schoolId, []);
+      bySchool.get(m.schoolId).push(m);
+    }
+    const created = [];
+    for (const list of bySchool.values()) {
+      const [first, ...extra] = list.map(acm);
+      const now = new Date().toISOString();
       const rec = await addRecord({
-        type, date: null, scheduledDate, scheduledTime, materialId: m.id, schoolId: m.schoolId, buildingId: m.buildingId, floorId: m.floorId, roomId: m.roomId,
-        locationDescription: '', homogeneousAreaId: '', inspectorId: inspector.id, inspectorName: inspector.name, certification: inspector.certification,
-        assessment: {}, checklist: {}, sampling: {}, risk: {}, comments: '', actionItems: [],
+        type, date: null, scheduledDate, scheduledTime, ...first, extra,
+        inspectorId: inspector.id, inspectorName: inspector.name, certification: inspector.certification, comments: '', actionItems: [],
         verification: { reviewStatus: 'Not Submitted' },
-        assignment: { assignedBy: { id: currentUser().id, name: currentUser().name }, assignedAt: new Date().toISOString(), notes: note },
-        state: 'scheduled', attachments: [], createdAt: new Date().toISOString(), createdBy: { id: currentUser().id, name: currentUser().name }, sample: false,
+        assignment: { assignedBy: { id: me.id, name: me.name }, assignedAt: now, notes: note },
+        state: 'scheduled', attachments: [], createdAt: now, createdBy: { id: me.id, name: me.name }, sample: false,
       });
-      created.push(rec.id);
-    }
-    if (created.length) {
+      created.push({ id: rec.id, acms: list.length, schoolId: rec.schoolId });
       logAudit(req, {
-        action: 'create', module: MODULE, recordId: created.length === 1 ? created[0] : `${created[0]}…${created.at(-1)}`,
-        link: created.length === 1 ? `/inspections/records/${created[0]}` : '/inspections',
-        summary: `Assigned ${created.length} ${type.toLowerCase()}${created.length > 1 ? 's' : ''} to ${inspector.name} for ${scheduledDate} ${scheduledTime}`,
-        changes: [{ field: 'Type', to: type }, { field: 'Assigned To', to: inspector.name }, { field: 'Scheduled Date', to: scheduledDate }, { field: 'Scheduled Time', to: scheduledTime }, { field: 'Inspections', to: String(created.length) }],
+        action: 'create', module: MODULE, recordId: rec.id, link: link(rec),
+        summary: `Assigned ${type.toLowerCase()} ${rec.id} of ${list.length} ACM${list.length === 1 ? '' : 's'} to ${inspector.name} for ${scheduledDate} ${scheduledTime}`,
+        changes: [{ field: 'Type', to: type }, { field: 'Assigned To', to: inspector.name }, { field: 'Scheduled Date', to: scheduledDate }, { field: 'Scheduled Time', to: scheduledTime }, { field: 'ACMs', to: String(list.length) }],
       });
     }
-    await syncStages(...created.map((id) => getRecord(id)));
-    res.status(201).json({ created, skipped });
+    await syncStages(...created.map((c) => getRecord(c.id)));
+    res.status(201).json({ created: created.map((c) => c.id), inspections: created, acms: free.length, skipped });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * POST /from-surveillance { surveillanceId, inspectorId, scheduledDate, scheduledTime, notes }
+ * A damage inspection (Damage Assessment) of the surveillance record's ACM, requested from that record and
+ * linked to it (surveillanceId). Only one open request per surveillance record.
+ */
+router.post('/from-surveillance', async (req, res, next) => {
+  try {
+    const { surveillanceId, inspectorId, scheduledDate, scheduledTime, notes } = req.body ?? {};
+    const sv = getSurveillance(String(surveillanceId ?? ''));
+    if (!sv) return res.status(404).json({ error: 'Surveillance record not found' });
+    if (sv.state === 'draft') return res.status(409).json({ error: 'Record the surveillance before requesting an inspection' });
+    const m = getMaterial(sv.materialId);
+    if (!m) return res.status(409).json({ error: 'The surveillance record’s ACM no longer exists' });
+    const open = getRecords().find((r) => r.surveillanceId === sv.id && ['scheduled', 'draft', 'returned', 'submitted'].includes(r.state));
+    if (open) return res.status(409).json({ error: `Inspection ${open.id} has already been requested for this surveillance`, inspectionId: open.id });
+    const errors = {};
+    const inspector = inspectors().find((u) => u.id === inspectorId);
+    if (!inspector) errors.inspectorId = 'Choose the accredited inspector';
+    if (!validDay(scheduledDate)) errors.scheduledDate = 'Choose the date';
+    else if (scheduledDate < todayIso()) errors.scheduledDate = 'The date can’t be in the past';
+    if (!validTime(scheduledTime)) errors.scheduledTime = 'Choose the time';
+    if (Object.keys(errors).length) return res.status(400).json({ error: 'Please fix the highlighted fields', fields: errors });
+
+    const me = currentUser();
+    const now = new Date().toISOString();
+    const note = String(notes ?? '').trim().slice(0, 500)
+      || `Damage inspection requested from surveillance ${sv.id} (condition ${sv.condition ?? 'not recorded'}${sv.changed ? ', changed since last check' : ''}).`;
+    const rec = await addRecord({
+      type: 'Damage Assessment', date: null, scheduledDate, scheduledTime,
+      materialId: m.id, schoolId: m.schoolId, buildingId: m.buildingId, floorId: m.floorId, roomId: m.roomId,
+      locationDescription: '', homogeneousAreaId: '', assessment: {}, checklist: {}, sampling: {}, risk: {}, comments: '', actionItems: [], extra: [],
+      inspectorId: inspector.id, inspectorName: inspector.name, certification: inspector.certification,
+      verification: { reviewStatus: 'Not Submitted' }, surveillanceId: sv.id,
+      assignment: { assignedBy: { id: me.id, name: me.name }, assignedAt: now, notes: note },
+      state: 'scheduled', attachments: [], createdAt: now, createdBy: { id: me.id, name: me.name }, sample: false,
+    });
+    logAudit(req, {
+      action: 'create', module: MODULE, recordId: rec.id, link: link(rec),
+      summary: `Requested damage inspection ${rec.id} from surveillance ${sv.id} with ${inspector.name} for ${scheduledDate} ${scheduledTime}`,
+      changes: [{ field: 'Type', to: rec.type }, { field: 'From Surveillance', to: sv.id }, { field: 'ACM', to: m.name }, { field: 'Assigned To', to: inspector.name }, { field: 'Scheduled', to: `${scheduledDate} ${scheduledTime}` }],
+    });
+    await syncStages(rec);
+    res.status(201).json({ record: { ...rec, statusLabel: STATUS_LABEL[rec.state] } });
   } catch (err) {
     next(err);
   }

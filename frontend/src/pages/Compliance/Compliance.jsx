@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router'
 import {
   ShieldCheck, Download, School, CircleCheck, Clock, TriangleAlert, Search, ChevronLeft, ChevronRight,
   Ellipsis, CircleAlert, Construction, Building2, X,
@@ -62,8 +62,11 @@ export default function Compliance() {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(5)
   const [refreshKey, setRefreshKey] = useState(0)
-  const [selection, setSelection] = useState(null) // { kind: 'inspection' | 'school', id }
-  const [detailsOpen, setDetailsOpen] = useState(false)
+  // ?inspection=<id> (e.g. from the dashboard calendar) opens that inspection's details
+  const [searchParams] = useSearchParams()
+  const linkedInspection = searchParams.get('inspection')
+  const [selection, setSelection] = useState(() => (linkedInspection ? { kind: 'inspection', id: linkedInspection } : null)) // { kind: 'inspection' | 'school', id }
+  const [detailsOpen, setDetailsOpen] = useState(Boolean(linkedInspection))
   const [scheduling, setScheduling] = useState(null) // the inspection being booked (date + inspector)
   const [toast, setToast] = useState(null)
   const [error, setError] = useState(null)

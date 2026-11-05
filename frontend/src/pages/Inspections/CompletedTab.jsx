@@ -16,10 +16,10 @@ const NO_LOCATION = { school: '', building: '', floor: '' }
 const COLUMNS = [
   { key: 'id', label: 'Inspection ID' }, { key: 'type', label: 'Inspection Type' }, { key: 'facility', label: 'Facility' },
   { label: 'Room / Location' }, { key: 'assignedTo', label: 'Inspector' }, { key: 'date', label: 'Inspection Date' },
-  { label: 'Approved' }, { key: 'condition', label: 'Condition' }, { key: 'priority', label: 'Priority' }, { key: 'nextDue', label: 'Next Due' },
+  { label: 'Completed (Reviewed)' }, { key: 'condition', label: 'Condition' }, { key: 'priority', label: 'Priority' }, { key: 'nextDue', label: 'Next Due' },
 ]
 
-// Completed inspections: approved, with no follow-up action left open
+// Completed inspections: verified and approved by a reviewer
 export default function CompletedTab({ meta }) {
   const navigate = useNavigate()
   const [tree, setTree] = useState(null)

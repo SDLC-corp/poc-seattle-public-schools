@@ -227,7 +227,7 @@ export default function SamplePage() {
       )}
 
       {entering && s && (
-        <SampleResultDialog inspectionId={s.inspectionId} materialId={s.materialId} onClose={() => setEntering(false)}
+        <SampleResultDialog inspectionId={s.inspectionId} materialId={s.materialId} sampleKey={s.sampleKey ?? 0} onClose={() => setEntering(false)}
           onSaved={(text, warn) => { setEntering(false); setToast({ kind: warn ? 'error' : 'success', text }); setRefreshKey((k) => k + 1) }} />
       )}
       {toast && (

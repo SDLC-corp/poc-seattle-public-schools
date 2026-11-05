@@ -55,7 +55,7 @@ function applyReviewGates(r, life) {
     return rv?.status === 'approved' ? { ...s, reviewedBy: rv.reviewerName, reviewedAt: rv.decidedAt } : s;
   });
   // Samples go to the laboratory once a reviewer has checked the submitted inspection
-  const unsent = M.acmsOf(r).some((a) => a.sampling?.required === 'Yes' && a.sampling.result === 'Pending' && !a.sampling.sentToLabAt);
+  const unsent = M.allSamplesOf(r).some(({ s }) => s.result === 'Pending' && !s.sentToLabAt);
   const submittedReview = latestReview(r, 'submitted');
   if (unsent && submittedReview?.status === 'pending') {
     const at = stages.findIndex((s) => s.id === 'submitted');
@@ -137,7 +137,7 @@ function autoLifecycleOf(r, records) {
   const approved = r.state === 'approved';
   const submitted = approved || r.state === 'submitted'; // findings are final
   // Across every ACM the inspection covers
-  const samples = M.acmsOf(r).filter((a) => a.sampling?.required === 'Yes').map((a) => a.sampling);
+  const samples = M.allSamplesOf(r).map((x) => x.s);
   const labNeeded = samples.length > 0;
   // Pending if any result is pending; skipped only if none was analysed
   const labResult = samples.some((s) => s.result === 'Pending') ? 'Pending'
@@ -364,15 +364,18 @@ export function timelineOf(r, records = getRecords()) {
 
   // Submitted: inspector sign-off and the reviewer's decision
   if (v.completionDate && (r.state === 'submitted' || r.state === 'approved')) {
-    add('submitted', { kind: 'event', at: v.completionDate, by: r.inspectorName ?? null, title: 'Submitted for review', detail: 'Inspector signed the record' });
+    add('submitted', { kind: 'event', at: r.submittedAt ?? v.completionDate, by: r.inspectorName ?? null, title: 'Submitted for review', detail: 'Inspector signed the record', tone: 'info' });
   }
   if (r.state === 'approved') {
-    add('submitted', { kind: 'event', at: v.approvalDate || null, by: v.reviewerName ?? null, title: 'Approved', detail: 'Reviewer signed the record', notes: v.reviewComments || null, tone: 'good' });
+    add('submitted', {
+      kind: 'event', at: v.reviewedAt ?? (v.reviewDate || v.approvalDate || null), by: v.reviewerName ?? null, title: 'Reviewed & completed',
+      detail: ['Reviewer verified and signed the record', (v.reviewDate || v.approvalDate) && `review date ${v.reviewDate || v.approvalDate}`].filter(Boolean).join(' · '),
+      notes: v.reviewComments || null, tone: 'good',
+    });
   }
 
-  // Laboratory analysis (one sample per ACM that needed one)
-  for (const acm of acms.filter((a) => a.sampling?.required === 'Yes')) {
-    const s = acm.sampling;
+  // Laboratory analysis (every sample of every ACM that needed one)
+  for (const { a: acm, s } of M.allSamplesOf(r)) {
     const of = several ? ` (${acmName(acm)})` : '';
     add('lab', {
       kind: 'event', at: s.collectionDate || null, by: r.inspectorName ?? null, title: `Sample ${s.sampleId || ''} collected${of}`.replace('  ', ' '),
@@ -428,8 +431,7 @@ export function timelineOf(r, records = getRecords()) {
         });
       }
     }
-    for (const a of M.acmsOf(k).filter((x) => x.sampling?.required === 'Yes')) {
-      const s = a.sampling;
+    for (const { s } of M.allSamplesOf(k)) {
       add('followUp', {
         kind: 'event', at: s.resultRecordedAt ?? s.collectionDate ?? null, by: s.resultRecordedBy?.name ?? k.inspectorName ?? null,
         title: `Follow-up sample ${s.sampleId || ''}: ${M.resultSummary(s)}`.replace('  ', ' '), notes: s.resultNotes || null,

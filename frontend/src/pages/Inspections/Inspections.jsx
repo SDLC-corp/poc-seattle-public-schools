@@ -15,6 +15,7 @@ import AssignTab from './AssignTab'
 import CalendarTab from './CalendarTab'
 import DueTab from './DueTab'
 import CompletedTab from './CompletedTab'
+import ReviewTab from './ReviewTab'
 import ReassignDialog from './ReassignDialog'
 import { fmtDay, floorLink, toQs } from '../Surveillance/survMeta'
 import { STATUS_TONE, fmtTime } from './inspMeta'
@@ -31,6 +32,7 @@ const TABS = [
   { id: 'list', label: 'Inspection List', path: '/inspections' },
   { id: 'upcoming', label: 'Upcoming', path: '/inspections/upcoming' },
   { id: 'overdue', label: 'Overdue', path: '/inspections/overdue' },
+  { id: 'review', label: 'In Review', path: '/inspections/review' },
   { id: 'completed', label: 'Completed', path: '/inspections/completed' },
   { id: 'calendar', label: 'Inspection Calendar', path: '/inspections/calendar' },
   // Opened from the "Assign Inspection" button, not shown as a tab
@@ -162,12 +164,11 @@ function ListTab({ meta, selected, setSelected, reload, onToast, onReassign }) {
         </div>
       </div>
 
-      <div className="a-kpis in-kpis">
+      <div className="a-kpis in-kpis in-kpis-5">
         <Kpi icon={ClipboardList} value={s?.total} label="Total Inspections" tone="primary" active={!filters.status} onClick={() => set('status')('')} />
         <Kpi icon={CircleCheck} value={s?.completed} label="Completed" sub={pct(s?.completed, s?.total)} tone="good" active={filters.status === 'completed'} onClick={() => toggleStatus('completed')} />
         <Kpi icon={Clock3} value={s?.inProgress} label="In Progress" sub={s && `${pct(s.inProgress, s.total)} · ${s.returned} returned`} tone="warning" active={filters.status === 'inProgress'} onClick={() => toggleStatus('inProgress')} />
-        <Kpi icon={Hourglass} value={s?.pendingReview} label="Pending Review" sub={pct(s?.pendingReview, s?.total)} tone="violet" active={filters.status === 'pendingReview'} onClick={() => toggleStatus('pendingReview')} />
-        <Kpi icon={TriangleAlert} value={s?.actionRequired} label="Action Required" sub={pct(s?.actionRequired, s?.total)} tone="critical" active={filters.status === 'actionRequired'} onClick={() => toggleStatus('actionRequired')} />
+        <Kpi icon={Hourglass} value={s?.pendingReview} label="In Review" sub={pct(s?.pendingReview, s?.total)} tone="violet" active={filters.status === 'pendingReview'} onClick={() => toggleStatus('pendingReview')} />
         <Kpi icon={CalendarDays} value={s?.scheduled} label="Scheduled" sub={s && `${pct(s.scheduled, s.total)} · ${s.overdue} overdue`} tone="teal" active={filters.status === 'scheduled'} onClick={() => toggleStatus('scheduled')} />
       </div>
 
@@ -328,8 +329,15 @@ export default function Inspections() {
 
       {tab.id === 'list' && <ListTab meta={meta} selected={selected} setSelected={setSelected} reload={reload} onToast={setToast} onReassign={(ids) => openReassign(ids ?? [...selected])} />}
       {(tab.id === 'upcoming' || tab.id === 'overdue') && <DueTab key={tab.id} view={tab.id} meta={meta} reload={reload} onSchedule={(ids) => openReassign(ids, true)} />}
+      {tab.id === 'review' && <ReviewTab meta={meta} />}
       {tab.id === 'completed' && <CompletedTab meta={meta} />}
-      {tab.id === 'assign' && <AssignTab meta={meta} onToast={setToast} onDone={(text) => { setToast({ kind: 'success', text }); navigate('/inspections') }} />}
+      {/* After assigning: open the new inspection (or, for several schools, the Upcoming list where they're scheduled) */}
+      {tab.id === 'assign' && <AssignTab meta={meta} onToast={setToast} onDone={(text, res) => {
+        const toastState = { state: { toast: { kind: 'success', text } } }
+        if (res?.created.length === 1) navigate(`/inspections/records/${res.created[0]}`, toastState)
+        else if (res?.created.length > 1) { setToast({ kind: 'success', text }); navigate('/inspections/upcoming') }
+        else { setToast({ kind: 'success', text }); navigate('/inspections') }
+      }} />}
       {tab.id === 'calendar' && <CalendarTab />}
 
       {reassigning && (

@@ -9,7 +9,8 @@ function niceMax(v) {
 // data: [{ label, sublabel?, value, color }]
 export default function BarChart({ data, ticks = 4, ariaLabel }) {
   const [hover, setHover] = useState(null)
-  const max = niceMax(Math.max(...data.map((d) => d.value)))
+  // 0 floor: with no data yet Math.max() is -Infinity, which made every tick NaN (and their keys collide)
+  const max = niceMax(Math.max(0, ...data.map((d) => d.value)))
   const total = data.reduce((s, d) => s + d.value, 0)
   const tickValues = Array.from({ length: ticks + 1 }, (_, i) => Math.round((max / ticks) * i))
 
@@ -17,13 +18,13 @@ export default function BarChart({ data, ticks = 4, ariaLabel }) {
     <div className="bar-chart" role="img" aria-label={ariaLabel}>
       <div className="bar-plot">
         <div className="bar-axis">
-          {tickValues.map((t) => (
-            <span key={t} style={{ bottom: `${(t / max) * 100}%` }}>{t}</span>
+          {tickValues.map((t, i) => (
+            <span key={i} style={{ bottom: `${(t / max) * 100}%` }}>{t}</span>
           ))}
         </div>
         <div className="bar-area">
-          {tickValues.map((t) => (
-            <div key={t} className={`bar-grid${t === 0 ? ' base' : ''}`} style={{ bottom: `${(t / max) * 100}%` }} />
+          {tickValues.map((t, i) => (
+            <div key={i} className={`bar-grid${t === 0 ? ' base' : ''}`} style={{ bottom: `${(t / max) * 100}%` }} />
           ))}
           {data.map((d, i) => (
             <div

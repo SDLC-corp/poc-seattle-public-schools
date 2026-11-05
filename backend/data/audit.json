@@ -1,6 +1,1626 @@
 {
   "entries": [
     {
+      "id": "AUD-000132",
+      "at": "2026-11-05T09:37:38.452Z",
+      "action": "create",
+      "module": "Surveillance",
+      "recordId": "SUR-2026-0916",
+      "summary": "Recorded surveillance of Ceiling Tile",
+      "changes": [
+        {
+          "field": "Date",
+          "to": "2026-11-05"
+        },
+        {
+          "field": "Inspector",
+          "to": "Grace Alder"
+        },
+        {
+          "field": "Condition",
+          "to": "Damaged"
+        },
+        {
+          "field": "Changed Since Last",
+          "to": "No"
+        },
+        {
+          "field": "Corrective Action",
+          "to": "Yes"
+        },
+        {
+          "field": "Next Due",
+          "to": "2027-05-06"
+        },
+        {
+          "field": "Comments",
+          "to": "test"
+        },
+        {
+          "field": "Action Items",
+          "to": "1"
+        },
+        {
+          "field": "Signed",
+          "to": "Yes"
+        },
+        {
+          "field": "Status",
+          "to": "actionRequired"
+        }
+      ],
+      "related": null,
+      "link": "/surveillance/records/SUR-2026-0916",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000131",
+      "at": "2026-11-05T09:19:50.173Z",
+      "action": "update",
+      "module": "ACM Inventory",
+      "recordId": "ACM-alkies-b3-f2-r2-1",
+      "summary": "Condition of Duct Wrap updated from approved inspection INS-2026-00164",
+      "changes": [
+        {
+          "field": "Condition",
+          "from": "Damaged",
+          "to": "Good"
+        }
+      ],
+      "related": null,
+      "link": "/schools/alkies/buildings/alkies-b3/floors/alkies-b3-f2?room=alkies-b3-f2-r2",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000130",
+      "at": "2026-11-05T09:19:49.962Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00164",
+      "summary": "Approved inspection INS-2026-00164",
+      "changes": [
+        {
+          "field": "Review Status",
+          "from": "Pending Review",
+          "to": "Approved"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00164",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000129",
+      "at": "2026-11-05T09:19:22.675Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00164",
+      "summary": "Submitted Follow-up Inspection of Duct Wrap for review",
+      "changes": [
+        {
+          "field": "Date",
+          "from": "—",
+          "to": "2026-11-05"
+        },
+        {
+          "field": "Condition",
+          "from": "—",
+          "to": "Good"
+        },
+        {
+          "field": "Condition Change",
+          "from": "—",
+          "to": "Improved"
+        },
+        {
+          "field": "Priority",
+          "from": "—",
+          "to": "Low"
+        },
+        {
+          "field": "Recommended Action",
+          "from": "—",
+          "to": "No Action – Continue O&M"
+        },
+        {
+          "field": "Sample Required",
+          "from": "—",
+          "to": "No"
+        },
+        {
+          "field": "Status",
+          "from": "Scheduled",
+          "to": "In Review"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00164",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000128",
+      "at": "2026-11-05T09:17:13.609Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00164",
+      "summary": "Scheduled follow-up inspection INS-2026-00164 of inspection INS-2026-00163 with Morgan Quill for 2026-12-05 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Follow-up Inspection"
+        },
+        {
+          "field": "Follow-up Of",
+          "to": "INS-2026-00163"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Morgan Quill"
+        },
+        {
+          "field": "Scheduled",
+          "to": "2026-12-05 09:00"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00164",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000127",
+      "at": "2026-11-05T09:16:32.195Z",
+      "action": "update",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0275",
+      "summary": "Updated O&M activity OM-2026-0275",
+      "changes": [
+        {
+          "field": "Assigned To",
+          "from": "Samuel Birch",
+          "to": "Peyton Fairley"
+        },
+        {
+          "field": "Status",
+          "from": "In Progress",
+          "to": "Completed"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0275",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000126",
+      "at": "2026-11-05T09:15:26.226Z",
+      "action": "update",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0275",
+      "summary": "Updated O&M activity OM-2026-0275",
+      "changes": [
+        {
+          "field": "Status",
+          "from": "Pending",
+          "to": "In Progress"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0275",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000125",
+      "at": "2026-11-05T09:14:29.199Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00163",
+      "summary": "Recorded lab results for inspection INS-2026-00163",
+      "changes": [
+        {
+          "field": "TEST-AIR_1 Laboratory Sample ID",
+          "from": "—",
+          "to": "LAB-SP-1"
+        },
+        {
+          "field": "TEST-AIR_1 Analysis Method",
+          "from": "—",
+          "to": "Polarized Light Microscopy (PLM)"
+        },
+        {
+          "field": "TEST-AIR_1 Analysis Standard",
+          "from": "—",
+          "to": "NIOSH 7400"
+        },
+        {
+          "field": "TEST-AIR_1 Analysis Date",
+          "from": "—",
+          "to": "2026-11-03"
+        },
+        {
+          "field": "TEST-AIR_1 Lab Report No.",
+          "from": "—",
+          "to": "test1"
+        },
+        {
+          "field": "Result TEST-AIR_1",
+          "from": "Pending",
+          "to": "Below Limit · 0.01 f/cc · Pass (limit 0.01 f/cc)"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00163",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000124",
+      "at": "2026-11-05T09:12:56.696Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00163",
+      "summary": "Recorded lab results for inspection INS-2026-00163",
+      "changes": [
+        {
+          "field": "Result TEST_FLOOR_BMS-2",
+          "from": "No Asbestos Detected · 0% · Pass (limit 1%)",
+          "to": "Asbestos Detected · 1% Amosite, Chrysotile · Pass (limit 1%)"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00163",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000123",
+      "at": "2026-11-05T09:12:27.910Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00163",
+      "summary": "Recorded lab results for inspection INS-2026-00163",
+      "changes": [
+        {
+          "field": "TEST_FLOOR_BMS-2 Analysis Method",
+          "from": "—",
+          "to": "X-Ray Diffraction (XRD)"
+        },
+        {
+          "field": "TEST_FLOOR_BMS-2 Analysis Standard",
+          "from": "—",
+          "to": "EPA/600/M4-82/020"
+        },
+        {
+          "field": "TEST_FLOOR_BMS-2 Analysis Date",
+          "from": "—",
+          "to": "2026-11-04"
+        },
+        {
+          "field": "TEST_FLOOR_BMS-2 Material Layer",
+          "from": "—",
+          "to": "TEST"
+        },
+        {
+          "field": "Result TEST_FLOOR_BMS-2",
+          "from": "Pending",
+          "to": "No Asbestos Detected · 0% · Pass (limit 1%)"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00163",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000122",
+      "at": "2026-11-05T09:08:54.802Z",
+      "action": "create",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0276",
+      "summary": "Created preventive maintenance OM-2026-0276 from inspection INS-2026-00163",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Preventive Maintenance"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Samuel Birch"
+        },
+        {
+          "field": "Due Date",
+          "to": "2026-11-20"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0276",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000121",
+      "at": "2026-11-05T09:08:54.749Z",
+      "action": "create",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0275",
+      "summary": "Created routine maintenance OM-2026-0275 from inspection INS-2026-00163",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Routine Maintenance"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Samuel Birch"
+        },
+        {
+          "field": "Due Date",
+          "to": "2026-11-20"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0275",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000120",
+      "at": "2026-11-05T09:08:54.679Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00163",
+      "summary": "Sent 2 samples of inspection INS-2026-00163 to the laboratory",
+      "changes": [
+        {
+          "field": "Sample TEST-AIR_1",
+          "to": "Sent to Accredited PLM Lab A (sample)"
+        },
+        {
+          "field": "Sample TEST_FLOOR_BMS-2",
+          "to": "Sent to Accredited PLM Lab B (sample)"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00163",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000119",
+      "at": "2026-11-05T09:08:54.596Z",
+      "action": "update",
+      "module": "ACM Inventory",
+      "recordId": "ACM-alkies-b3-f2-r2-1",
+      "summary": "Condition of Duct Wrap updated from approved inspection INS-2026-00163",
+      "changes": [
+        {
+          "field": "Condition",
+          "from": "Not Assessed",
+          "to": "Damaged"
+        }
+      ],
+      "related": null,
+      "link": "/schools/alkies/buildings/alkies-b3/floors/alkies-b3-f2?room=alkies-b3-f2-r2",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000118",
+      "at": "2026-11-05T09:08:54.388Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00163",
+      "summary": "Approved inspection INS-2026-00163",
+      "changes": [
+        {
+          "field": "Review Status",
+          "from": "Pending Review",
+          "to": "Approved"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00163",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000117",
+      "at": "2026-11-05T09:07:07.936Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00163",
+      "summary": "Submitted Initial Inspection of Duct Wrap for review",
+      "changes": [
+        {
+          "field": "Date",
+          "from": "—",
+          "to": "2026-11-05"
+        },
+        {
+          "field": "Condition",
+          "from": "—",
+          "to": "Damaged"
+        },
+        {
+          "field": "Condition Change",
+          "from": "—",
+          "to": "First Assessment"
+        },
+        {
+          "field": "Priority",
+          "from": "—",
+          "to": "High"
+        },
+        {
+          "field": "Recommended Action",
+          "from": "—",
+          "to": "Removal"
+        },
+        {
+          "field": "Sample Required",
+          "from": "—",
+          "to": "Yes"
+        },
+        {
+          "field": "Sample Result",
+          "from": "—",
+          "to": "Pending"
+        },
+        {
+          "field": "Action Items",
+          "from": "0",
+          "to": "2"
+        },
+        {
+          "field": "ACMs",
+          "from": "17",
+          "to": "1"
+        },
+        {
+          "field": "Status",
+          "from": "Scheduled",
+          "to": "In Review"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00163",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000116",
+      "at": "2026-11-05T09:04:03.312Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00163",
+      "summary": "Attached before inspection photo to inspection INS-2026-00163",
+      "changes": [
+        {
+          "field": "Before Inspection Photo",
+          "to": "Bright Modern Classroom with Blue Chairs.png"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00163",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000115",
+      "at": "2026-11-05T08:57:24.559Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00163",
+      "summary": "Assigned initial inspection INS-2026-00163 of 17 ACMs to Morgan Quill for 2026-11-12 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Initial Inspection"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Morgan Quill"
+        },
+        {
+          "field": "Scheduled Date",
+          "to": "2026-11-12"
+        },
+        {
+          "field": "Scheduled Time",
+          "to": "09:00"
+        },
+        {
+          "field": "ACMs",
+          "to": "17"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00163",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000114",
+      "at": "2026-11-05T08:55:24.654Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00162",
+      "summary": "Assigned initial inspection INS-2026-00162 of 1 ACM to Morgan Quill for 2026-11-12 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Initial Inspection"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Morgan Quill"
+        },
+        {
+          "field": "Scheduled Date",
+          "to": "2026-11-12"
+        },
+        {
+          "field": "Scheduled Time",
+          "to": "09:00"
+        },
+        {
+          "field": "ACMs",
+          "to": "1"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00162",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000113",
+      "at": "2026-11-05T08:49:54.826Z",
+      "action": "create",
+      "module": "ACM Inventory",
+      "recordId": "ACM-mw3b1m8pr3fo",
+      "summary": "Added ACM material Pipe Insulation (ACM Present) – room G01 Room 1, Ground Floor, Main Building",
+      "changes": [
+        {
+          "field": "Name",
+          "to": "Pipe Insulation"
+        },
+        {
+          "field": "Type",
+          "to": "Asbestos Cement (AC)"
+        },
+        {
+          "field": "Location",
+          "to": "Floor (entire room)"
+        },
+        {
+          "field": "Quantity",
+          "to": "50 Sq ft"
+        },
+        {
+          "field": "Friability",
+          "to": "Friable"
+        },
+        {
+          "field": "Classification",
+          "to": "Confirmed"
+        },
+        {
+          "field": "Condition",
+          "to": "Good"
+        },
+        {
+          "field": "Risk Ranking",
+          "to": "Medium"
+        },
+        {
+          "field": "Assessment Date",
+          "to": "2026-11-05"
+        },
+        {
+          "field": "ACM Status",
+          "to": "ACM Present"
+        },
+        {
+          "field": "Scope",
+          "to": "room"
+        },
+        {
+          "field": "Notes",
+          "to": "—"
+        },
+        {
+          "field": "Related Tracking",
+          "to": "—"
+        }
+      ],
+      "related": {
+        "school": "Adams Elementary",
+        "building": "Main Building"
+      },
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-f1?room=RM-mw3ayqx0hh57",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000112",
+      "at": "2026-11-05T08:18:44.719Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00161",
+      "summary": "Requested damage inspection INS-2026-00161 from surveillance SUR-2026-0915 with Logan Crane for 2026-11-08 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Damage Assessment"
+        },
+        {
+          "field": "From Surveillance",
+          "to": "SUR-2026-0915"
+        },
+        {
+          "field": "ACM",
+          "to": "Ceiling Tile"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Logan Crane"
+        },
+        {
+          "field": "Scheduled",
+          "to": "2026-11-08 09:00"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00161",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000111",
+      "at": "2026-11-05T08:18:31.538Z",
+      "action": "create",
+      "module": "Surveillance",
+      "recordId": "SUR-2026-0915",
+      "summary": "Recorded surveillance of Ceiling Tile",
+      "changes": [
+        {
+          "field": "Date",
+          "to": "2026-11-05"
+        },
+        {
+          "field": "Inspector",
+          "to": "Grace Alder"
+        },
+        {
+          "field": "Condition",
+          "to": "Damaged"
+        },
+        {
+          "field": "Changed Since Last",
+          "to": "No"
+        },
+        {
+          "field": "Corrective Action",
+          "to": "Yes"
+        },
+        {
+          "field": "Next Due",
+          "to": "2027-05-06"
+        },
+        {
+          "field": "Comments",
+          "to": "test"
+        },
+        {
+          "field": "Action Items",
+          "to": "1"
+        },
+        {
+          "field": "Signed",
+          "to": "Yes"
+        },
+        {
+          "field": "Status",
+          "to": "actionRequired"
+        }
+      ],
+      "related": null,
+      "link": "/surveillance/records/SUR-2026-0915",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000110",
+      "at": "2026-11-05T08:18:31.526Z",
+      "action": "update",
+      "module": "ACM Inventory",
+      "recordId": "ACM-mw0hwhi4hoim",
+      "summary": "Condition of Ceiling Tile updated from surveillance SUR-2026-0915",
+      "changes": [
+        {
+          "field": "Condition",
+          "from": "Good",
+          "to": "Damaged"
+        }
+      ],
+      "related": null,
+      "link": "/schools/adamses/buildings/adamses-b1/floors/adamses-b1-fmw0hscs5?room=RM-mw0hsga7f3pg",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000109",
+      "at": "2026-11-05T07:40:20.979Z",
+      "action": "update",
+      "module": "ACM Inventory",
+      "recordId": "ACM-blainek8-b1-f2-r3-1",
+      "summary": "Condition of Transite Panel updated from approved inspection INS-2026-00160",
+      "changes": [
+        {
+          "field": "Condition",
+          "from": "Damaged",
+          "to": "Good"
+        }
+      ],
+      "related": null,
+      "link": "/schools/blainek8/buildings/blainek8-b1/floors/blainek8-b1-f2?room=blainek8-b1-f2-r3",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000108",
+      "at": "2026-11-05T07:40:20.793Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00160",
+      "summary": "Approved inspection INS-2026-00160",
+      "changes": [
+        {
+          "field": "Review Status",
+          "from": "Pending Review",
+          "to": "Approved"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00160",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000107",
+      "at": "2026-11-05T07:39:50.275Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00160",
+      "summary": "Submitted Follow-up Inspection of Transite Panel for review",
+      "changes": [
+        {
+          "field": "Date",
+          "from": "—",
+          "to": "2026-11-05"
+        },
+        {
+          "field": "Condition",
+          "from": "—",
+          "to": "Good"
+        },
+        {
+          "field": "Condition Change",
+          "from": "—",
+          "to": "Improved"
+        },
+        {
+          "field": "Priority",
+          "from": "—",
+          "to": "Low"
+        },
+        {
+          "field": "Recommended Action",
+          "from": "—",
+          "to": "No Action – Continue O&M"
+        },
+        {
+          "field": "Sample Required",
+          "from": "—",
+          "to": "No"
+        },
+        {
+          "field": "Status",
+          "from": "Scheduled",
+          "to": "In Review"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00160",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000106",
+      "at": "2026-11-05T07:38:40.643Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00160",
+      "summary": "Scheduled follow-up inspection INS-2026-00160 of inspection INS-2026-00159 with Morgan Quill for 2026-12-05 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Follow-up Inspection"
+        },
+        {
+          "field": "Follow-up Of",
+          "to": "INS-2026-00159"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Morgan Quill"
+        },
+        {
+          "field": "Scheduled",
+          "to": "2026-12-05 09:00"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00160",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000105",
+      "at": "2026-11-05T07:37:50.324Z",
+      "action": "create",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0274",
+      "summary": "Created minor repair OM-2026-0274 from inspection INS-2026-00159",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Minor Repair"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Samuel Birch"
+        },
+        {
+          "field": "Due Date",
+          "to": "2026-11-18"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0274",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000104",
+      "at": "2026-11-05T07:37:50.241Z",
+      "action": "create",
+      "module": "Operations & Maintenance",
+      "recordId": "OM-2026-0273",
+      "summary": "Created controlled disturbance OM-2026-0273 from inspection INS-2026-00159",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Controlled Disturbance"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Samuel Underwood"
+        },
+        {
+          "field": "Due Date",
+          "to": "2026-11-18"
+        }
+      ],
+      "related": null,
+      "link": "/operations/activities/OM-2026-0273",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000103",
+      "at": "2026-11-05T07:37:50.196Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00159",
+      "summary": "Sent 2 samples of inspection INS-2026-00159 to the laboratory",
+      "changes": [
+        {
+          "field": "Sample TEST-1",
+          "to": "Sent to Accredited PLM Lab B (sample)"
+        },
+        {
+          "field": "Sample TEST-2",
+          "to": "Sent to Accredited PLM Lab A (sample)"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00159",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000102",
+      "at": "2026-11-05T07:37:50.152Z",
+      "action": "update",
+      "module": "ACM Inventory",
+      "recordId": "ACM-blainek8-b1-f2-r3-1",
+      "summary": "Condition of Transite Panel updated from approved inspection INS-2026-00159",
+      "changes": [
+        {
+          "field": "Condition",
+          "from": "Significantly Damaged",
+          "to": "Damaged"
+        }
+      ],
+      "related": null,
+      "link": "/schools/blainek8/buildings/blainek8-b1/floors/blainek8-b1-f2?room=blainek8-b1-f2-r3",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000101",
+      "at": "2026-11-05T07:37:50.026Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00159",
+      "summary": "Approved inspection INS-2026-00159",
+      "changes": [
+        {
+          "field": "Review Status",
+          "from": "Pending Review",
+          "to": "Approved"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00159",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000100",
+      "at": "2026-11-05T06:46:07.968Z",
+      "action": "update",
+      "module": "Inspections",
+      "recordId": "INS-2026-00159",
+      "summary": "Submitted 3-Year Reinspection of Transite Panel for review",
+      "changes": [
+        {
+          "field": "Date",
+          "from": "—",
+          "to": "2026-11-05"
+        },
+        {
+          "field": "Condition",
+          "from": "—",
+          "to": "Damaged"
+        },
+        {
+          "field": "Condition Change",
+          "from": "—",
+          "to": "Improved"
+        },
+        {
+          "field": "Priority",
+          "from": "—",
+          "to": "Medium"
+        },
+        {
+          "field": "Recommended Action",
+          "from": "—",
+          "to": "Repair"
+        },
+        {
+          "field": "Sample Required",
+          "from": "—",
+          "to": "Yes"
+        },
+        {
+          "field": "Sample Result",
+          "from": "—",
+          "to": "Pending"
+        },
+        {
+          "field": "Action Items",
+          "from": "0",
+          "to": "2"
+        },
+        {
+          "field": "ACMs",
+          "from": "16",
+          "to": "1"
+        },
+        {
+          "field": "Status",
+          "from": "Scheduled",
+          "to": "In Review"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00159",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000099",
+      "at": "2026-11-05T06:44:57.133Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00159",
+      "summary": "Attached material condition photo to inspection INS-2026-00159",
+      "changes": [
+        {
+          "field": "Material Condition Photo",
+          "to": "asbestos_material_room_mapping_dashboard.png"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00159",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000098",
+      "at": "2026-11-05T06:35:03.909Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00159",
+      "summary": "Attached work completion report to inspection INS-2026-00159",
+      "changes": [
+        {
+          "field": "Work Completion Report",
+          "to": "Speckled Cream Vinyl Tile Floor.png"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00159",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000097",
+      "at": "2026-11-05T06:24:52.588Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00159",
+      "summary": "Attached material condition photo to inspection INS-2026-00159",
+      "changes": [
+        {
+          "field": "Material Condition Photo",
+          "to": "Speckled Cream Vinyl Tile Floor.png"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00159",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000096",
+      "at": "2026-11-05T06:24:46.848Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00159",
+      "summary": "Attached material condition photo to inspection INS-2026-00159",
+      "changes": [
+        {
+          "field": "Material Condition Photo",
+          "to": "Insulated Pipe Elbow Against Cinderblock Wall.png"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00159",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000095",
+      "at": "2026-11-05T06:23:00.102Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00159",
+      "summary": "Assigned 3-year reinspection INS-2026-00159 of 16 ACMs to Morgan Quill for 2026-11-12 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "3-Year Reinspection"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Morgan Quill"
+        },
+        {
+          "field": "Scheduled Date",
+          "to": "2026-11-12"
+        },
+        {
+          "field": "Scheduled Time",
+          "to": "09:00"
+        },
+        {
+          "field": "ACMs",
+          "to": "16"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00159",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000094",
+      "at": "2026-11-05T06:18:50.844Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00158",
+      "summary": "Assigned 3-year reinspection INS-2026-00158 of 12 ACMs to Logan Crane for 2026-11-12 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "3-Year Reinspection"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Logan Crane"
+        },
+        {
+          "field": "Scheduled Date",
+          "to": "2026-11-12"
+        },
+        {
+          "field": "Scheduled Time",
+          "to": "09:00"
+        },
+        {
+          "field": "ACMs",
+          "to": "12"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00158",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000093",
+      "at": "2026-11-05T06:17:45.396Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00157",
+      "summary": "Assigned 3-year reinspection INS-2026-00157 of 5 ACMs to Morgan Pemberton for 2026-11-12 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "3-Year Reinspection"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Morgan Pemberton"
+        },
+        {
+          "field": "Scheduled Date",
+          "to": "2026-11-12"
+        },
+        {
+          "field": "Scheduled Time",
+          "to": "09:00"
+        },
+        {
+          "field": "ACMs",
+          "to": "5"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00157",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000092",
+      "at": "2026-11-05T06:13:38.022Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00138…INS-2026-00156",
+      "summary": "Assigned 19 3-year reinspections to Rowan Pemberton for 2026-11-12 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "3-Year Reinspection"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Rowan Pemberton"
+        },
+        {
+          "field": "Scheduled Date",
+          "to": "2026-11-12"
+        },
+        {
+          "field": "Scheduled Time",
+          "to": "09:00"
+        },
+        {
+          "field": "Inspections",
+          "to": "19"
+        }
+      ],
+      "related": null,
+      "link": "/inspections",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000091",
+      "at": "2026-11-05T06:12:28.456Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00129…INS-2026-00137",
+      "summary": "Assigned 9 3-year reinspections to Morgan Pemberton for 2026-11-12 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "3-Year Reinspection"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Morgan Pemberton"
+        },
+        {
+          "field": "Scheduled Date",
+          "to": "2026-11-12"
+        },
+        {
+          "field": "Scheduled Time",
+          "to": "09:00"
+        },
+        {
+          "field": "Inspections",
+          "to": "9"
+        }
+      ],
+      "related": null,
+      "link": "/inspections",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000090",
+      "at": "2026-11-05T06:11:37.110Z",
+      "action": "create",
+      "module": "Inspections",
+      "recordId": "INS-2026-00128",
+      "summary": "Scheduled follow-up inspection INS-2026-00128 of inspection INS-2025-00001 with Logan Crane for 2026-12-05 09:00",
+      "changes": [
+        {
+          "field": "Type",
+          "to": "Follow-up Inspection"
+        },
+        {
+          "field": "Follow-up Of",
+          "to": "INS-2025-00001"
+        },
+        {
+          "field": "Assigned To",
+          "to": "Logan Crane"
+        },
+        {
+          "field": "Scheduled",
+          "to": "2026-12-05 09:00"
+        }
+      ],
+      "related": null,
+      "link": "/inspections/records/INS-2026-00128",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
       "id": "AUD-000089",
       "at": "2026-11-04T11:29:47.866Z",
       "action": "update",

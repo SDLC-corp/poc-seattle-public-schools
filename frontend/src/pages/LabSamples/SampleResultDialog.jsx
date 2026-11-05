@@ -32,7 +32,10 @@ export function PickOrType({ label, value, choices, placeholder, onChange }) {
  * limit gives Pass / Fail, asbestos type when found, "not analysed", notes and lab reports. Saved on the
  * inspection, so its Laboratory Analysis stage and review follow as usual.
  */
-export default function SampleResultDialog({ inspectionId, materialId, onClose, onSaved }) {
+// The sample of the ACM's samples to enter (sampleKey: position, 0 = the first; an ACM can have several)
+const sampleOfAcm = (a, k) => (k ? a?.sampling?.more?.[k - 1] : a?.sampling)
+
+export default function SampleResultDialog({ inspectionId, materialId, sampleKey = 0, onClose, onSaved }) {
   const [record, setRecord] = useState(null)
   const [meta, setMeta] = useState(null)
   const [row, setRow] = useState(null) // { notAnalyzed, value, asbestosTypes, notes, files, removeReports }
@@ -46,20 +49,20 @@ export default function SampleResultDialog({ inspectionId, materialId, onClose, 
       .then(([d, m]) => {
         if (cancelled) return
         const r = d.record
-        const a = [r, ...(r.extra ?? [])].find((x) => x.materialId === materialId)
+        const smp = sampleOfAcm([r, ...(r.extra ?? [])].find((x) => x.materialId === materialId), sampleKey)
         setRecord(r)
         setMeta(m)
-        if (a) {
+        if (smp) {
           setRow({
-            notAnalyzed: a.sampling.result === 'Not Analyzed', value: a.sampling.airValue ?? a.sampling.measuredValue ?? '',
-            asbestosTypes: a.sampling.asbestosTypes ?? [], notes: a.sampling.resultNotes ?? '', files: [], removeReports: [],
-            ...Object.fromEntries(LAB_DETAILS.map((k) => [k, a.sampling[k] ?? ''])),
+            notAnalyzed: smp.result === 'Not Analyzed', value: smp.airValue ?? smp.measuredValue ?? '',
+            asbestosTypes: smp.asbestosTypes ?? [], notes: smp.resultNotes ?? '', files: [], removeReports: [],
+            ...Object.fromEntries(LAB_DETAILS.map((k) => [k, smp[k] ?? ''])),
           })
         }
       })
       .catch((e) => { if (!cancelled) setErrors({ form: e.message }) })
     return () => { cancelled = true }
-  }, [inspectionId, materialId])
+  }, [inspectionId, materialId, sampleKey])
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape' && !saving) onClose() }
@@ -68,7 +71,7 @@ export default function SampleResultDialog({ inspectionId, materialId, onClose, 
   }, [onClose, saving])
 
   const acm = record && [record, ...(record.extra ?? [])].find((x) => x.materialId === materialId)
-  const s = acm?.sampling
+  const s = sampleOfAcm(acm, sampleKey)
   const isAir = s?.sampleType === 'Air Sample'
   const m = !s ? null : isAir
     ? (() => { const l = meta?.air?.limits[`${s.airType}|${/TEM/.test(s.testMethod ?? '') ? 'TEM' : 'PCM'}`]; return { label: 'Fibre Count', unit: l?.unit ?? 'f/cc', limit: l?.value, basis: l?.basis } })()
@@ -112,8 +115,8 @@ export default function SampleResultDialog({ inspectionId, materialId, onClose, 
       setSaving('Saving result…')
       const details = Object.fromEntries(LAB_DETAILS.map((k) => [k, row[k]]))
       const result = row.notAnalyzed
-        ? { materialId, result: 'Not Analyzed', notes: row.notes, ...details }
-        : { materialId, value: row.value, asbestosTypes: row.asbestosTypes, notes: row.notes, ...details }
+        ? { materialId, sampleKey, result: 'Not Analyzed', notes: row.notes, ...details }
+        : { materialId, sampleKey, value: row.value, asbestosTypes: row.asbestosTypes, notes: row.notes, ...details }
       await request(`/inspection-records/records/${inspectionId}/lab-results`, { method: 'POST', body: { results: [result] } })
       const recorded = s.result && s.result !== 'Pending'
       onSaved(`${recorded ? 'Lab result updated' : 'Lab result saved'} on inspection ${inspectionId}.${failed.length ? ` Not uploaded: ${failed.join(', ')}.` : ''}`, failed.length > 0)
@@ -140,7 +143,7 @@ export default function SampleResultDialog({ inspectionId, materialId, onClose, 
         <div className="u-modal-body lr-drawer-body">
           <input ref={fileInput} type="file" accept=".pdf,.jpg,.jpeg,.png,.webp" multiple hidden onChange={(e) => { addFiles(e.target.files); e.target.value = '' }} />
           {!record && !errors.form && <p className="u-muted">Loading…</p>}
-          {record && !acm && <p className="uf-error">This sample is no longer on inspection {inspectionId}.</p>}
+          {record && !s && <p className="uf-error">This sample is no longer on inspection {inspectionId}.</p>}
           {row && m && (
             <>
               <p className="ai-add-intro">

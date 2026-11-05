@@ -10,8 +10,8 @@ import './layout.css'
 
 const STORAGE_KEY = 'sidebar-collapsed'
 const MOBILE_QUERY = '(max-width: 768px)'
-// Wide working screens that start with the sidebar collapsed (Floor Plan & ACM Mapping, Management Plan)
-const WIDE_ROUTES = [/^\/schools\/[^/]+\/buildings\/[^/]+\/floors\/[^/]+/, /^\/management-plans(\/|$)/]
+// Wide working screens that start with the sidebar collapsed (Floor Plan & ACM Mapping, Management Plan, an invoice)
+const WIDE_ROUTES = [/^\/schools\/[^/]+\/buildings\/[^/]+\/floors\/[^/]+/, /^\/management-plans(\/|$)/, /^\/cost\/invoices\/[^/]+/]
 
 function readCollapsed() {
   try {

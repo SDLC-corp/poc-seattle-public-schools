@@ -4,6 +4,7 @@ import SearchSelect from '../../components/ui/SearchSelect'
 import { fmtDay, isoToday, addDays } from '../Surveillance/survMeta'
 import { request, uploadFile, API_BASE } from '../../lib/api'
 import { LAB_DETAILS, METHODS, STANDARDS, PickOrType } from '../LabSamples/SampleResultDialog'
+import { samplesOf } from './inspMeta'
 
 const MAX_BYTES = 10 * 1024 * 1024
 const blankTask = (materialId) => ({ materialId: materialId ?? '', type: '', description: '', assignedToId: '', priority: 'Medium', dueDate: addDays(isoToday(), 14) })
@@ -18,15 +19,16 @@ export default function LabOmDialog({ mode, record, meta, materials, lifecycle, 
   const acms = [record, ...(record.extra ?? [])]
   const nameOf = (id) => materials.find((m) => m.id === id)?.name ?? id
   const placeOf = (id) => { const m = materials.find((x) => x.id === id); return m ? `${m.floorName} · ${m.roomNumber} ${m.roomName}` : '' }
-  const samples = acms.filter((a) => a.sampling?.required === 'Yes')
+  // Every sample of every ACM (an ACM can have several; k is the sample's position, 0 = first)
+  const samples = acms.flatMap((a) => samplesOf(a).map(({ k, s }) => ({ a, k, s })))
 
   const reportsOf = (id) => (record.attachments ?? []).filter((f) => f.category === 'Laboratory Report' && (f.materialId ?? record.materialId) === id)
-  const [rows, setRows] = useState(() => samples.map((a) => ({
-    materialId: a.materialId, notAnalyzed: a.sampling.result === 'Not Analyzed', value: a.sampling.airValue ?? a.sampling.measuredValue ?? '',
-    asbestosTypes: a.sampling.asbestosTypes ?? [], notes: a.sampling.resultNotes ?? '', files: [], removeReports: [],
-    ...Object.fromEntries(LAB_DETAILS.map((k) => [k, a.sampling[k] ?? ''])),
+  const [rows, setRows] = useState(() => samples.map(({ a, k, s }) => ({
+    materialId: a.materialId, sampleKey: k, notAnalyzed: s.result === 'Not Analyzed', value: s.airValue ?? s.measuredValue ?? '',
+    asbestosTypes: s.asbestosTypes ?? [], notes: s.resultNotes ?? '', files: [], removeReports: [],
+    ...Object.fromEntries(LAB_DETAILS.map((key) => [key, s[key] ?? ''])),
   })))
-  const anyRecorded = samples.some((a) => a.sampling.result && a.sampling.result !== 'Pending')
+  const anyRecorded = samples.some(({ s }) => s.result && s.result !== 'Pending')
   // Each sample type's measurement: air – fibre count against the Air Monitoring limit; bulk / soil – asbestos
   // content (%); dust – loading (s/cm²); each against its limit for Pass / Fail
   const isAir = (s) => s.sampleType === 'Air Sample'
@@ -134,8 +136,8 @@ export default function LabOmDialog({ mode, record, meta, materials, lifecycle, 
             results: rows.map((r) => {
               const details = Object.fromEntries(LAB_DETAILS.map((k) => [k, r[k]]))
               return r.notAnalyzed
-                ? { materialId: r.materialId, result: 'Not Analyzed', notes: r.notes, ...details }
-                : { materialId: r.materialId, value: r.value, asbestosTypes: r.asbestosTypes, notes: r.notes, ...details }
+                ? { materialId: r.materialId, sampleKey: r.sampleKey, result: 'Not Analyzed', notes: r.notes, ...details }
+                : { materialId: r.materialId, sampleKey: r.sampleKey, value: r.value, asbestosTypes: r.asbestosTypes, notes: r.notes, ...details }
             }),
           },
         })
@@ -165,15 +167,11 @@ export default function LabOmDialog({ mode, record, meta, materials, lifecycle, 
         fresh = await request(`/inspection-records/records/${record.id}`)
         requested = nextStep
       }
-      const stage = fresh.lifecycle.stages.find((s) => s.id === fresh.lifecycle.current)?.label
       const parts = [mode === 'lab' && rows.length && (anyRecorded ? 'Lab results updated' : 'Lab results saved'), omNeeded && `${tasks.length} O&M task${tasks.length === 1 ? '' : 's'} created`]
-      const next = target ? ''
-        : requested === 'close' ? ' Closure requested – the reviewer closes the inspection on approval.'
-          : requested === 'followUp' ? ' Follow-up requested – the reviewer schedules it on approval.'
-            : requested ? ' Sent for review.'
-              : fresh.lifecycle.gate === 'readyForReview' || fresh.lifecycle.gate === 'returned' ? ' Use Send for Review so a reviewer can approve them.'
-                : fresh.lifecycle.gate === 'awaitingReview' ? ' The reviewer sees the updated results.' : ''
-      onDone(fresh, `${parts.filter(Boolean).join(' · ')}. Stage: ${stage}.${next}`, failed)
+      const next = requested === 'close' ? ' Closure requested – the reviewer closes the inspection on approval.'
+        : requested === 'followUp' ? ' Follow-up requested – the reviewer schedules it on approval.'
+          : requested ? ' Sent for review.' : ''
+      onDone(fresh, `${parts.filter(Boolean).join(' · ')}.${next}`, failed)
     } catch (e) {
       setErrors(e.fields ?? { form: e.message })
     } finally {
@@ -204,13 +202,13 @@ export default function LabOmDialog({ mode, record, meta, materials, lifecycle, 
               </p>
               <div className="in-labres">
                 {rows.map((r, i) => {
-                  const s = samples[i].sampling
+                  const s = samples[i].s
                   const m = measureOf(s)
                   const v = verdict(s, r)
                   const err = (k) => errors[`results.${i}.${k}`]
                   const kept = reportsOf(r.materialId).filter((f) => !r.removeReports.includes(f.id))
                   return (
-                    <div key={r.materialId} className="in-labres-row">
+                    <div key={`${r.materialId}:${r.sampleKey}`} className="in-labres-row">
                       <div className="in-labres-head">
                         <strong>{s.sampleId || 'Sample'} · {nameOf(r.materialId)} <span className="in-labres-type">{s.sampleType || 'Bulk Material Sample'}{isAir(s) && s.airType ? ` · ${s.airType}` : ''}</span></strong>
                         <small className="u-muted">{placeOf(r.materialId)} · {s.laboratory} · {s.testMethod}{s.sentToLabAt ? ` · sent ${fmtDay(s.sentToLabAt)}` : ''}</small>

@@ -126,7 +126,8 @@ export default function SearchSelect({
       </button>
 
       {open && (
-        <div className="ss-popover">
+        // preventDefault: inside a <label>, a click in the list would otherwise be forwarded to the trigger and reopen it
+        <div className="ss-popover" onClick={(e) => e.preventDefault()}>
           {searchable && (
             <div className="ss-search">
               <Search size={15} />

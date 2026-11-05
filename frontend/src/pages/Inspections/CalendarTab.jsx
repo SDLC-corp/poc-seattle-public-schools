@@ -8,7 +8,7 @@ import { request } from '../../lib/api'
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-const LEGEND = [['scheduled', 'Scheduled'], ['inProgress', 'In Progress'], ['pendingReview', 'Pending Review'], ['actionRequired', 'Action Required'], ['completed', 'Completed']]
+const LEGEND = [['scheduled', 'Scheduled'], ['inProgress', 'In Progress'], ['pendingReview', 'In Review'], ['completed', 'Completed']]
 const MAX_CHIPS = 3
 
 // Month view: inspections on their inspection date (or scheduled date if not started). Pick a day for the full list.

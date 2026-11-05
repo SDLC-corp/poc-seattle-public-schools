@@ -1,9 +1,9 @@
 // Option lists for detailed ACM inspection records (validation, sample generator and /api/inspection-records/meta)
 export const DISTRICT = 'Seattle Public Schools';
 
-export const TYPES = ['Initial Inspection', '3-Year Reinspection', 'Follow-up Inspection', 'Pre-Renovation Inspection'];
+export const TYPES = ['Initial Inspection', '3-Year Reinspection', 'Follow-up Inspection', 'Damage Assessment', 'Pre-Renovation Inspection'];
 // No longer offered for new inspections; existing records of these types stay valid and are still listed
-export const RETIRED_TYPES = ['Damage Assessment'];
+export const RETIRED_TYPES = [];
 export const REINSPECTION_YEARS = 3; // AHERA 40 CFR 763.85(b): reinspect at least every three years
 export const CONDITIONS = ['Good', 'Damaged', 'Significantly Damaged']; // AHERA physical assessment, same scale as the ACM inventory
 export const CONDITION_RANK = { Good: 0, Damaged: 1, 'Significantly Damaged': 2 };
@@ -93,13 +93,29 @@ export const STATES = ['scheduled', 'draft', 'submitted', 'approved', 'returned'
 
 // What the lists show. An approved inspection whose follow-up isn't finished still needs action.
 export const STATUSES = {
-  scheduled: 'Scheduled', inProgress: 'In Progress', pendingReview: 'Pending Review', actionRequired: 'Action Required', completed: 'Completed',
+  scheduled: 'Scheduled', inProgress: 'In Progress', pendingReview: 'In Review', actionRequired: 'Action Required', completed: 'Completed',
 };
 /**
  * The ACMs one inspection covers: the first ACM's details live on the record itself (materialId, assessment,
  * checklist, sampling, risk…), any further ACMs in record.extra[] with the same per-ACM fields.
  */
 export const acmsOf = (r) => [r, ...(r.extra ?? [])];
+/**
+ * The samples taken from one ACM (none unless sampling is required). The first is the ACM's `sampling` itself;
+ * any further ones are in `sampling.more`, each with the same fields. k is the sample's position (0 = first) and
+ * is how lab results and sample ids refer to it.
+ */
+export const samplesOf = (a) => (a?.sampling?.required === 'Yes'
+  ? [{ k: 0, s: a.sampling }, ...(a.sampling.more ?? []).map((s, j) => ({ k: j + 1, s }))] : []);
+// Every sample of an inspection, with its ACM (a) and the ACM's position (i)
+export const allSamplesOf = (r) => acmsOf(r).flatMap((a, i) => samplesOf(a).map((x) => ({ ...x, a, i })));
+// The ACM with its sample k replaced by fn(sample)
+export function withSample(a, k, fn) {
+  if (k === 0) return { ...a, sampling: fn(a.sampling) };
+  const more = [...(a.sampling.more ?? [])];
+  more[k - 1] = fn(more[k - 1]);
+  return { ...a, sampling: { ...a.sampling, more } };
+}
 export const PER_ACM_FIELDS = ['materialId', 'schoolId', 'buildingId', 'floorId', 'roomId', 'locationDescription', 'homogeneousAreaId', 'assessment', 'checklist', 'checklistNotes', 'sampling', 'risk'];
 const anyAcm = (r, test) => acmsOf(r).some(test);
 
@@ -107,8 +123,8 @@ export function statusOf(r) {
   if (r.state === 'scheduled') return 'scheduled';
   if (r.state === 'draft' || r.state === 'returned') return 'inProgress';
   if (r.state === 'submitted') return 'pendingReview';
-  const followUp = anyAcm(r, (x) => x.risk?.followUpRequired === 'Yes' || x.risk?.immediateAttention === 'Yes');
-  return followUp && (r.actionItems ?? []).some((a) => a.status !== 'Completed') ? 'actionRequired' : 'completed';
+  // Verified and approved by the reviewer
+  return 'completed';
 }
 
 // Life cycle of an inspection, worked out from the record (stageOf)

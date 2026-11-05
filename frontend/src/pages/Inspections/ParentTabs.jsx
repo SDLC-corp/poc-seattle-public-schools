@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router'
-import { CalendarPlus, FlaskConical, Wrench, FileText, Pencil, Plus, ExternalLink, ClipboardPen, Wind } from 'lucide-react'
+import { CalendarPlus, FlaskConical, Wrench, FileText, Pencil, Plus, ExternalLink, ClipboardPen, Wind, Play } from 'lucide-react'
 import Badge from '../AcmInventory/Badge'
 import { fmtDay } from '../Surveillance/survMeta'
 import { API_BASE } from '../../lib/api'
-import { STATE_TONE, ACTION_TONE, RESULT_TONE, PASS_TONE, CONDITION_TONE, measureText, limitText, fmtTime } from './inspMeta'
+import { STATE_TONE, ACTION_TONE, RESULT_TONE, PASS_TONE, CONDITION_TONE, measureText, limitText, fmtTime, samplesOf, sampleLink } from './inspMeta'
 
 /**
  * Tabs of an inspection with follow-up inspections carried out under it (children): the follow-ups, and the
@@ -22,12 +22,15 @@ const verdictOf = (k) => {
 }
 
 // The follow-ups, one row each; choosing one opens its form below (selected / onSelect)
-export function FollowUpsPanel({ followUps, selected, onSelect }) {
+export function FollowUpsPanel({ followUps, selected, onSelect, onSchedule }) {
   return (
     <section className="u-card in-tabpanel" aria-label="Follow-up inspections">
-      <header className="in-tabpanel-head">
-        <h2><CalendarPlus size={17} />Follow-up Inspections</h2>
-        <p className="in-hint">Carried out under this inspection – its Follow-up Verification stage follows them.</p>
+      <header className="in-tabpanel-head in-tabpanel-head-row">
+        <div>
+          <h2><CalendarPlus size={17} />Follow-up Inspections</h2>
+          <p className="in-hint">Inspections of the same ACMs carried out under this one, to verify the work or the condition.</p>
+        </div>
+        {onSchedule && <button type="button" className="u-btn u-btn-primary" onClick={onSchedule}><Plus size={15} />Schedule Follow-up</button>}
       </header>
       {followUps.length ? (
         <div className="u-table-wrap">
@@ -37,7 +40,7 @@ export function FollowUpsPanel({ followUps, selected, onSelect }) {
             </thead>
             <tbody>
               {followUps.map((k) => {
-                const samples = acmsOf(k).filter((a) => a.sampling?.required === 'Yes')
+                const samples = acmsOf(k).flatMap((a) => samplesOf(a).map((x) => ({ ...x, materialId: a.materialId })))
                 const v = verdictOf(k)
                 return (
                   <tr key={k.id} className={`in-fu-row${k.id === selected ? ' selected' : ''}`} onClick={() => onSelect(k.id)}>
@@ -46,15 +49,22 @@ export function FollowUpsPanel({ followUps, selected, onSelect }) {
                     <td className="u-nowrap">{k.scheduledDate ? fmtDay(k.scheduledDate) : '—'}{k.scheduledTime && <small className="in-rv-sub">{fmtTime(k.scheduledTime)}</small>}</td>
                     <td className="u-nowrap">{k.date ? fmtDay(k.date) : <span className="u-muted">Not yet</span>}</td>
                     <td>{acmsOf(k).map((a) => a.assessment?.currentCondition).filter(Boolean).map((c, i) => <Badge key={i} tone={CONDITION_TONE[c]}>{c}</Badge>)}{!k.assessment?.currentCondition && <span className="u-muted">—</span>}</td>
-                    <td>{samples.length ? samples.map((a) => <Badge key={a.materialId} tone={RESULT_TONE[a.sampling.result] ?? 'neutral'}>{a.sampling.result}</Badge>) : <span className="u-muted">No sample</span>}</td>
+                    <td>{samples.length ? samples.map((x) => <Badge key={`${x.materialId}:${x.k}`} tone={RESULT_TONE[x.s.result] ?? 'neutral'}>{x.s.result}</Badge>) : <span className="u-muted">No sample</span>}</td>
                     <td>{(k.actionItems ?? []).length ? `${openItems(k).length} open of ${k.actionItems.length}` : <span className="u-muted">None</span>}</td>
                     <td><Badge tone={STATE_TONE[k.state]}>{k.statusLabel}</Badge></td>
                     <td>{v ? <Badge tone={v.tone}>{v.text}</Badge> : <span className="u-muted">Pending</span>}</td>
                     <td className="u-nowrap">
-                      <button type="button" className={`u-btn u-btn-sm ${k.id === selected ? 'u-btn-primary' : 'u-btn-outline'}`} onClick={(e) => { e.stopPropagation(); onSelect(k.id) }}>
-                        <ClipboardPen size={13} />{['scheduled', 'draft', 'returned'].includes(k.state) ? 'Fill In' : 'View'}
-                      </button>
-                      <Link to={`/inspections/records/${k.id}`} className="u-row-btn" aria-label={`Open ${k.id} on its own page`} title="Open on its own page" onClick={(e) => e.stopPropagation()}><ExternalLink size={14} /></Link>
+                      {/* Not started yet: Start Inspection, with when it's scheduled; started: continue; otherwise view it */}
+                      <span className="in-fu-go">
+                        <span className="in-fu-go-row">
+                          <button type="button" className={`u-btn u-btn-sm ${k.state === 'scheduled' || k.id === selected ? 'u-btn-primary' : 'u-btn-outline'}`} onClick={(e) => { e.stopPropagation(); onSelect(k.id) }}>
+                            {k.state === 'scheduled' ? <><Play size={13} />Start Inspection</>
+                              : ['draft', 'returned'].includes(k.state) ? <><ClipboardPen size={13} />Continue</> : <><ClipboardPen size={13} />View</>}
+                          </button>
+                          <Link to={`/inspections/records/${k.id}`} className="u-row-btn" aria-label={`Open ${k.id} on its own page`} title="Open on its own page" onClick={(e) => e.stopPropagation()}><ExternalLink size={14} /></Link>
+                        </span>
+                        {k.state === 'scheduled' && k.scheduledDate && <small>{fmtDay(k.scheduledDate)}{k.scheduledTime ? ` · ${fmtTime(k.scheduledTime)}` : ''}</small>}
+                      </span>
                     </td>
                   </tr>
                 )
@@ -64,7 +74,7 @@ export function FollowUpsPanel({ followUps, selected, onSelect }) {
         </div>
       ) : (
         <p className="u-muted in-tabpanel-empty">
-          No follow-up inspections yet. Request one from <strong>Update Lab Results → Next Step → Request Follow-up Inspection</strong>; it’s scheduled when the reviewer approves.
+          No follow-up inspections yet.{onSchedule && <> Use <strong>Schedule Follow-up</strong> to assign one.</>}
         </p>
       )}
     </section>
@@ -74,7 +84,8 @@ export function FollowUpsPanel({ followUps, selected, onSelect }) {
 export function LabPanel({ record, followUps, materials, canEditParent, onUpdate }) {
   const navigate = useNavigate()
   const nameOf = (id) => materials.find((m) => m.id === id)?.name ?? id
-  const rows = [record, ...followUps].flatMap((r) => acmsOf(r).filter((a) => a.sampling?.required === 'Yes').map((a) => ({ r, a, s: a.sampling })))
+  // Every sample of the inspection and its follow-ups (an ACM can have several; k is the sample's position)
+  const rows = [record, ...followUps].flatMap((r) => acmsOf(r).flatMap((a, i) => samplesOf(a).map(({ k, s }) => ({ r, a, i, k, s }))))
   const reportsOf = (r, a) => (r.attachments ?? []).filter((f) => f.category === 'Laboratory Report' && (f.materialId ?? r.materialId) === a.materialId)
   // The parent's results until its lab review approves them; a follow-up's until the follow-up is approved
   const editable = (r) => (r.id === record.id ? canEditParent : r.state === 'submitted')
@@ -82,14 +93,11 @@ export function LabPanel({ record, followUps, materials, canEditParent, onUpdate
    * Where the sample is listed once it's at the lab: an air sample under Air Monitoring, others under
    * Lab & Sampling Results (ids as the server's inspectionSamples.js makes them). Null until it's been sent.
    */
-  const listedAt = (r, a) => {
-    const s = a.sampling
+  const listedAt = (r, i, k, s) => {
     const sent = (r.state === 'submitted' || r.state === 'approved') && (!r.reviewGates || s.sentToLabAt || s.result !== 'Pending')
     if (!sent) return null
-    const i = acmsOf(r).findIndex((x) => x.materialId === a.materialId)
-    return s.sampleType === 'Air Sample'
-      ? { to: `/air-monitoring/events/${encodeURIComponent(`AIR-${r.id}-${i + 1}`)}`, label: 'Air Monitoring', icon: Wind }
-      : { to: `/sampling/samples/${encodeURIComponent(`ins-${r.id}-${i}`)}`, label: 'Lab Results', icon: FlaskConical }
+    const air = s.sampleType === 'Air Sample'
+    return { to: sampleLink(r.id, i, k, s), label: air ? 'Air Monitoring' : 'Lab Results', icon: air ? Wind : FlaskConical }
   }
   return (
     <section className="u-card in-tabpanel" aria-label="Lab results">
@@ -104,12 +112,12 @@ export function LabPanel({ record, followUps, materials, canEditParent, onUpdate
               <tr><th>Sample ID</th><th>From</th><th>ACM</th><th>Type</th><th>Laboratory / Test</th><th>Collected</th><th>Result</th><th>Lab Report</th><th aria-label="Actions" /></tr>
             </thead>
             <tbody>
-              {rows.map(({ r, a, s }) => {
+              {rows.map(({ r, a, i, k, s }) => {
                 // The whole row opens the sample where it's listed (or, before it's at the lab, its result entry)
-                const at = listedAt(r, a)
+                const at = listedAt(r, i, k, s)
                 const open = at ? () => navigate(at.to) : editable(r) ? () => onUpdate(r) : null
                 return (
-                <tr key={`${r.id}-${a.materialId}`} className={open ? 'in-row-link' : undefined} tabIndex={open ? 0 : undefined}
+                <tr key={`${r.id}-${a.materialId}-${k}`} className={open ? 'in-row-link' : undefined} tabIndex={open ? 0 : undefined}
                   title={at ? `Open in ${at.label === 'Air Monitoring' ? 'Air Monitoring' : 'Lab & Sampling Results'}` : undefined}
                   onClick={(ev) => { if (open && !ev.target.closest('a, button')) open() }}
                   onKeyDown={(ev) => { if (open && ev.key === 'Enter' && ev.target === ev.currentTarget) open() }}>
@@ -139,7 +147,7 @@ export function LabPanel({ record, followUps, materials, canEditParent, onUpdate
                       )}
                       {at
                         ? <Link to={at.to} className="u-btn u-btn-outline u-btn-sm"><at.icon size={13} />{at.label}</Link>
-                        : <small className="u-muted" title="Listed under Air Monitoring / Sampling once it’s sent to the laboratory">Not at lab yet</small>}
+                        : <small className="u-muted" title="The reviewer sends the samples to the laboratory when approving the inspection">Not at lab yet</small>}
                     </span>
                   </td>
                 </tr>

@@ -3,7 +3,11 @@
 
 .rp-page { display: flex; flex-direction: column; gap: 14px; max-width: 1700px; margin: 0 auto; }
 .rp-title { margin: 0; font-size: 24px; font-weight: 600; color: var(--ink-1); }
-.rp-tabs .u-tab { text-decoration: none; white-space: nowrap; }
+/* 13 areas: tighter tabs so they fit one row on a laptop; the row scrolls sideways when narrower */
+.rp-tabs { scrollbar-width: thin; }
+.rp-tabs .u-tab { padding: 0 10px; font-size: 13px; text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+.rp-link { color: var(--primary); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.rp-link:hover { text-decoration: underline; }
 .tone-neutral { --tone: var(--ink-2); --tone-bg: #eef1f5; --tone-ring: #dde3ea; }
 
 .rp-section-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }

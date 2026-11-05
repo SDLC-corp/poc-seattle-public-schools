@@ -21,7 +21,7 @@
       },
       "shapes": [
         {
-          "id": "Dmw0feb7o-1",
+          "id": "Dmw3ayox4-1",
           "name": "Room 1",
           "points": [
             0.1329,
@@ -36,7 +36,7 @@
           "area": 0.051734
         },
         {
-          "id": "Dmw0feb7o-2",
+          "id": "Dmw3ayox4-2",
           "name": "Room 2",
           "points": [
             0.1336,
@@ -51,7 +51,7 @@
           "area": 0.02731
         },
         {
-          "id": "Dmw0feb7o-3",
+          "id": "Dmw3ayox4-3",
           "name": "Room 3",
           "points": [
             0.3129,
@@ -66,7 +66,7 @@
           "area": 0.004715
         },
         {
-          "id": "Dmw0feb7o-4",
+          "id": "Dmw3ayox4-4",
           "name": "Room 4",
           "points": [
             0.3614,
@@ -81,7 +81,7 @@
           "area": 0.004406
         },
         {
-          "id": "Dmw0feb7o-5",
+          "id": "Dmw3ayox4-5",
           "name": "Room 5",
           "points": [
             0.4771,
@@ -96,7 +96,7 @@
           "area": 0.004255
         },
         {
-          "id": "Dmw0feb7o-6",
+          "id": "Dmw3ayox4-6",
           "name": "Room 6",
           "points": [
             0.5293,
@@ -111,7 +111,7 @@
           "area": 0.004635
         },
         {
-          "id": "Dmw0feb7o-7",
+          "id": "Dmw3ayox4-7",
           "name": "Room 7",
           "points": [
             0.5736,
@@ -126,7 +126,7 @@
           "area": 0.02643
         },
         {
-          "id": "Dmw0feb7o-8",
+          "id": "Dmw3ayox4-8",
           "name": "Room 8",
           "points": [
             0.1336,
@@ -141,7 +141,7 @@
           "area": 0.02082
         },
         {
-          "id": "Dmw0feb7o-9",
+          "id": "Dmw3ayox4-9",
           "name": "Room 9",
           "points": [
             0.3014,
@@ -168,7 +168,7 @@
           "area": 0.006486
         },
         {
-          "id": "Dmw0feb7o-10",
+          "id": "Dmw3ayox4-10",
           "name": "Room 10",
           "points": [
             0.5764,
@@ -195,7 +195,7 @@
           "area": 0.00675
         },
         {
-          "id": "Dmw0feb7o-11",
+          "id": "Dmw3ayox4-11",
           "name": "Room 11",
           "points": [
             0.5921,
@@ -210,7 +210,7 @@
           "area": 0.019494
         },
         {
-          "id": "Dmw0feb7o-12",
+          "id": "Dmw3ayox4-12",
           "name": "Room 12",
           "points": [
             0.3557,
@@ -225,7 +225,7 @@
           "area": 0.008599
         },
         {
-          "id": "Dmw0feb7o-13",
+          "id": "Dmw3ayox4-13",
           "name": "Room 13",
           "points": [
             0.1329,
@@ -240,7 +240,7 @@
           "area": 0.026475
         },
         {
-          "id": "Dmw0feb7o-14",
+          "id": "Dmw3ayox4-14",
           "name": "Room 14",
           "points": [
             0.3329,
@@ -255,7 +255,7 @@
           "area": 0.02675
         },
         {
-          "id": "Dmw0feb7o-15",
+          "id": "Dmw3ayox4-15",
           "name": "Room 15",
           "points": [
             0.5364,

@@ -209,7 +209,7 @@ export default function LabSamples() {
                       {s.resultsEditable && (
                         <button type="button" className="u-row-btn" title={s.resultClass === 'pending' ? 'Enter lab results' : 'Update lab results'}
                           aria-label={`${s.resultClass === 'pending' ? 'Enter' : 'Update'} lab results for ${s.sampleNo}`}
-                          onClick={(ev) => { ev.stopPropagation(); setEntering({ inspectionId: s.inspectionId, materialId: s.materialId }) }}>
+                          onClick={(ev) => { ev.stopPropagation(); setEntering({ inspectionId: s.inspectionId, materialId: s.materialId, sampleKey: s.sampleKey ?? 0 }) }}>
                           <Pencil size={14} />
                         </button>
                       )}

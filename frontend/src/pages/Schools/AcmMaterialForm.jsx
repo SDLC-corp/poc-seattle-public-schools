@@ -5,7 +5,6 @@ import { request, uploadFile, fmtDate, API_BASE } from '../../lib/api'
 
 const FILE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'application/pdf']
 const LOCATIONS = ['Ceiling (entire room)', 'Floor (entire room)', 'Walls', 'Above ceiling – pipe runs', 'HVAC duct in ceiling plenum', 'Exterior windows', 'Mechanical room wall', 'Corridor door']
-const SCOPE_LABEL = { room: ['Room-level', 'This room only'], floor: ['Floor-level', 'Common areas / multiple rooms'], building: ['Building-level', 'Entire building'] }
 const STATUS_CLASSIFICATION = { 'ACM Present': 'Confirmed', 'No ACM': 'Negative', 'Assumed ACM': 'Assumed' }
 
 const todayIso = () => {
@@ -24,7 +23,7 @@ const blank = () => ({
   key: Math.random().toString(36).slice(2),
   values: {
     name: '', materialType: '', location: '', quantity: '', unit: 'Sq ft', friability: 'Non-Friable', classification: 'Confirmed',
-    condition: 'Good', riskRanking: 'Low', assessmentDate: todayIso(), notes: '', acmStatus: 'ACM Present', scope: 'room', relatedTracking: [],
+    condition: 'Good', riskRanking: 'Low', assessmentDate: todayIso(), notes: '', acmStatus: 'ACM Present', scope: 'room', relatedTracking: [], // scope / tracking are no longer asked: new materials are room-level
   },
   riskTouched: false,
   pending: [], // { key, file, type, description }
@@ -235,30 +234,6 @@ export default function AcmMaterialForm({ room, meta, editing, onSaved, onCancel
               ) : <p className="fr-empty-files">No attachments. Add photos, bulk sample reports or inspection reports (JPG, PNG, WebP, PDF up to 10 MB).</p>}
             </div>
 
-            <div className="fr-grid fr-grid-2 fr-options">
-              <div className="uf-field">
-                <span>Related Tracking <small>(optional)</small></span>
-                <div className="fr-checks">
-                  {meta.relatedTracking.map((t) => (
-                    <label key={t} className="fr-check">
-                      <input type="checkbox" checked={v.relatedTracking.includes(t)}
-                        onChange={(e) => set('relatedTracking')(e.target.checked ? [...v.relatedTracking, t] : v.relatedTracking.filter((x) => x !== t))} />{t}
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <div className="uf-field">
-                <span>ACM Mapping Scope *</span>
-                <div className="fr-radios fr-radios-col" role="radiogroup">
-                  {meta.scopes.map((s) => (
-                    <Radio key={s} name={`sc-${b.key}`} value={s} current={v.scope} onChange={set('scope')}>
-                      <strong>{SCOPE_LABEL[s][0]}</strong>&nbsp;<span className="u-muted">({SCOPE_LABEL[s][1]})</span>
-                    </Radio>
-                  ))}
-                </div>
-                {err('scope')}
-              </div>
-            </div>
             {b.errors.form && <p className="uf-error">{b.errors.form}</p>}
           </div>
         )

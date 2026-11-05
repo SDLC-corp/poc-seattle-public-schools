@@ -106,3 +106,18 @@
   .sv-filters, .sv-filters-short { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .sv-filters .ai-search-field, .sv-filters-short .ai-search-field { grid-column: 1 / -1; }
 }
+
+/* Request Damage Inspection dialog (from a recorded surveillance) */
+.u-modal.sv-req-dialog { width: min(560px, calc(100vw - 32px)); }
+.sv-req-dialog .u-modal-body { display: grid; gap: 14px; }
+.sv-req-dialog .u-modal-head h2 { display: flex; align-items: center; gap: 8px; }
+.sv-req-context { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.sv-req-context > div { display: grid; gap: 3px; padding: 10px 12px; border: 1px solid var(--border, #e2e8f0); border-radius: 10px; background: var(--surface-2, #f8fafc); min-width: 0; }
+.sv-req-context span { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted, #64748b); }
+.sv-req-context strong { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 14px; overflow-wrap: anywhere; }
+.sv-req-context small { font-size: 12px; color: var(--text-muted, #64748b); overflow-wrap: anywhere; }
+.sv-req-when { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.sv-req-link span { margin-left: 4px; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; background: var(--surface-2, #eef2f7); color: var(--text-muted, #475569); }
+@media (max-width: 560px) {
+  .sv-req-context, .sv-req-when { grid-template-columns: minmax(0, 1fr); }
+}

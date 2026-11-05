@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
 import {
-  ClipboardCheck, ArrowLeft, Save, Send, Plus, Trash2, Upload, Download, FileText, Image as ImageIcon, MapPin, History, Info,
-  CircleCheck, CircleAlert, Eraser, BadgeCheck, Undo2, Circle, TriangleAlert, ListChecks, Milestone, Paperclip, Layers, X, FlaskConical, Wrench, ShieldCheck,
+  ClipboardCheck, ArrowLeft, Send, Plus, Trash2, Upload, Download, FileText, Image as ImageIcon, MapPin, History, Info,
+  CircleCheck, CircleAlert, Eraser, BadgeCheck, Undo2, Circle, TriangleAlert, ListChecks, Paperclip, Layers, X, FlaskConical, Wrench,
   CornerUpLeft, CalendarPlus,
 } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
@@ -10,13 +10,11 @@ import { useConfirm } from '../../components/ui/useConfirm'
 import Badge from '../AcmInventory/Badge'
 import SignaturePad from '../Surveillance/SignaturePad'
 import { fmtDay, isoToday, addDays, shortAcm, floorLink } from '../Surveillance/survMeta'
-import { STATE_TONE, CONDITION_TONE, CHANGE_TONE, SECTIONS, conditionChange, fmtTime } from './inspMeta'
-import LifecycleStepper from './LifecycleStepper'
-import InspectionTimeline from './InspectionTimeline'
-import StageDialog from './StageDialog'
+import { STATE_TONE, CONDITION_TONE, CHANGE_TONE, SECTIONS, conditionChange, fmtTime, samplesOf } from './inspMeta'
 import LabOmDialog from './LabOmDialog'
-import StageReviewDialog from './StageReviewDialog'
-import StageReviews from './StageReviews'
+import InspectionTimeline from './InspectionTimeline'
+import InspectionReports from './InspectionReports'
+import FollowUpDialog from './FollowUpDialog'
 import { FollowUpsPanel, LabPanel, OmPanel } from './ParentTabs'
 import { request, uploadFile, API_BASE } from '../../lib/api'
 import { useGoBack } from '../../lib/useGoBack'
@@ -36,12 +34,27 @@ const perAcm = (f) => Object.fromEntries(PER_ACM.map((k) => [k, f[k]]))
 // Server error keys for a per-ACM field (extra ACMs' errors arrive as extra.<i>.<key>)
 const PER_ACM_ERR = /^(materialId|locationDescription|homogeneousAreaId|assessment\.|checklist\.|sampling\.|risk\.)/
 
+// One sample's fields (the laboratory is chosen by the reviewer, not here)
+const SAMPLE_BLANK = { sampleType: '', sampleId: '', collectionDate: '', testMethod: '', notes: '', result: 'Pending', airType: '', durationMin: '' }
+const MAX_SAMPLES = 10
+// A sample's missing fields for submitting (keys under `key`, e.g. 'sampling.' or 'sampling.more.0.')
+function sampleGaps(s, key, need) {
+  need(!s.sampleType, `${key}sampleType`, 'Choose the sample type')
+  need(!s.sampleId, `${key}sampleId`, 'Sample ID is required')
+  need(!s.collectionDate, `${key}collectionDate`, 'Collection date is required')
+  need(!s.testMethod, `${key}testMethod`, 'Choose what to test')
+  if (s.sampleType === 'Air Sample') {
+    need(!s.airType, `${key}airType`, 'Choose the kind of air sample')
+    need(s.durationMin === '' || s.durationMin == null, `${key}durationMin`, 'Enter how long the sample ran')
+  }
+}
+
 const blankAcm = (materialId) => ({
   materialId: materialId ?? '', locationDescription: '', homogeneousAreaId: '',
   assessment: { currentCondition: '', previousCondition: null, damageType: '', damageExtent: '', waterDamage: '', potentialDisturbance: '', labelled: '', managementPlanUpdated: '' },
   checklist: {},
   checklistNotes: {},
-  sampling: { required: '', sampleType: '', sampleId: '', collectionDate: '', laboratory: '', testMethod: '', notes: '', result: 'Pending', airType: '', durationMin: '' },
+  sampling: { required: '', ...SAMPLE_BLANK, more: [] },
   risk: { priority: '', damageSeverity: '', recommendedAction: '', immediateAttention: '', followUpRequired: '', targetDate: '' },
 })
 const acmFrom = (x) => {
@@ -49,7 +62,7 @@ const acmFrom = (x) => {
   return {
     ...b, locationDescription: x.locationDescription ?? '', homogeneousAreaId: x.homogeneousAreaId ?? '',
     assessment: { ...b.assessment, ...x.assessment }, checklist: { ...x.checklist }, checklistNotes: { ...x.checklistNotes },
-    sampling: { ...b.sampling, ...x.sampling }, risk: { ...b.risk, ...x.risk },
+    sampling: { ...b.sampling, ...x.sampling, more: (x.sampling?.more ?? []).map((s) => ({ ...SAMPLE_BLANK, ...s })) }, risk: { ...b.risk, ...x.risk },
   }
 }
 
@@ -108,15 +121,8 @@ function missingForSubmit(f, checklist) {
     for (const q of checklist) need(!x.checklist[q.key], `checklist.${q.key}`, 'Answer this question')
     need(!x.sampling.required, 'sampling.required', 'Is a sample required?')
     if (x.sampling.required === 'Yes') {
-      need(!x.sampling.sampleType, 'sampling.sampleType', 'Choose the sample type')
-      need(!x.sampling.sampleId, 'sampling.sampleId', 'Sample ID is required')
-      need(!x.sampling.collectionDate, 'sampling.collectionDate', 'Collection date is required')
-      need(!x.sampling.laboratory, 'sampling.laboratory', 'Laboratory is required')
-      need(!x.sampling.testMethod, 'sampling.testMethod', 'Choose what to test')
-      if (x.sampling.sampleType === 'Air Sample') {
-        need(!x.sampling.airType, 'sampling.airType', 'Choose the kind of air sample')
-        need(x.sampling.durationMin === '' || x.sampling.durationMin == null, 'sampling.durationMin', 'Enter how long the sample ran')
-      }
+      sampleGaps(x.sampling, 'sampling.', need)
+      ;(x.sampling.more ?? []).forEach((s, j) => sampleGaps(s, `sampling.more.${j}.`, need))
     }
     for (const k of RISK_REQUIRED) need(!x.risk[k], `risk.${k}`, 'Required')
     need(x.risk.followUpRequired === 'Yes' && !x.risk.targetDate, 'risk.targetDate', 'Target date is required when follow-up is needed')
@@ -128,7 +134,12 @@ function missingForSubmit(f, checklist) {
   need(!f.verification.inspectorSignature, 'verification.inspectorSignature', 'The inspector must sign the inspection')
   need(!f.verification.completionDate, 'verification.completionDate', 'Completion date is required')
   const followUp = acms.some((x) => x.risk.followUpRequired === 'Yes' || x.checklist.immediateAction === 'Yes')
-  need(followUp && !f.actionItems.length, 'actionItems', 'Add at least one action item for the follow-up')
+  need(followUp && !f.actionItems.length, 'actionItems', 'Add at least one O&M task for the follow-up')
+  f.actionItems.forEach((x, i) => {
+    need(!x.action?.trim(), `actionItems.${i}.action`, 'Describe the work')
+    need(!x.type && !x.omActivityId && !x.assignedTo, `actionItems.${i}.type`, 'Choose the work type')
+    need(!x.dueDate, `actionItems.${i}.dueDate`, 'Due date required')
+  })
   f.actionItems.forEach((a, i) => {
     need(!a.action?.trim(), `actionItems.${i}.action`, 'Describe the action')
     need(!a.dueDate, `actionItems.${i}.dueDate`, 'Due date required')
@@ -174,7 +185,7 @@ const ReadRow = ({ label, children }) => (
 
 /**
  * The inspection page, or (embedded, with recordId) a follow-up inspection's form inside its parent's
- * Follow-up tab — onChanged lets the parent reload its stages and tabs after each save or review.
+ * Follow-up tab — onChanged lets the parent reload its tabs after each save or review.
  */
 export default function InspectionForm({ recordId, embedded = false, onChanged }) {
   const params0 = useParams()
@@ -192,14 +203,14 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
   const [materials, setMaterials] = useState([])
   const [record, setRecord] = useState(null)
   const [ctx, setCtx] = useState(null)
-  const [lifecycle, setLifecycle] = useState(null)
-  const [timeline, setTimeline] = useState(null)
-  const [changingStage, setChangingStage] = useState(false)
   // Lab results / O&M tasks dialog ('lab' | 'om'), for this inspection or one of its follow-ups (labTarget)
   const [labOm, setLabOm] = useState(null)
   const [labTarget, setLabTarget] = useState(null)
   // Follow-up inspections carried out under this one, or the inspection this one follows up
   const [followUps, setFollowUps] = useState([])
+  const [schedulingFollowUp, setSchedulingFollowUp] = useState(false)
+  // What happened, oldest first (Timeline tab)
+  const [timeline, setTimeline] = useState(null)
   const [parentInfo, setParentInfo] = useState(null)
   // The open tab and the follow-up shown in the Follow-up tab live in the URL (?tab=&fu=), so coming back from
   // a page opened from here (an O&M activity, a lab sample…) returns to the same view
@@ -214,14 +225,18 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
   const setTab = (t) => setView({ tab: t === 'inspection' ? null : t })
   const setOpenFollowUp = (fid) => setView({ fu: fid })
   const goBack = useGoBack('/inspections')
-  // Stage review dialog ('request' | 'decide')
-  const [reviewing, setReviewing] = useState(null)
   const [form, setForm] = useState(() => blankForm(params.get('material')))
   const [allErrors, setErrors] = useState({})
   const [saving, setSaving] = useState(null)
   const [loadError, setLoadError] = useState(null)
   const [docCategory, setDocCategory] = useState('Material Condition Photo')
-  const [review, setReview] = useState({ reviewerId: '', signature: null, comments: '' })
+  // labs: '<materialId>:<sample position>' → laboratory; assignees: O&M task id → contractor / person id
+  const [review, setReview] = useState({ signature: null, comments: '', reviewDate: isoToday(), verified: false, labs: {}, assignees: {} })
+  // The signed-in person, who is the reviewer of a submitted inspection
+  const [me, setMe] = useState(null)
+  useEffect(() => { request('/me').then((u) => setMe({ name: u.name, role: u.role })).catch(() => {}) }, [])
+  // Opened from Inspections › In Review: go straight to the reviewer's section, and back to the list after deciding
+  const fromReviewList = !embedded && params.get('review') === '1'
   const [toast, setToast] = useState(() => (embedded ? null : routerLocation.state?.toast ?? null))
 
   useEffect(() => {
@@ -257,12 +272,12 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
     loadedOnce.current = true
   }, [record]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Life-cycle stages and timeline follow the saved record (save, review and action-item changes all replace it)
+  // Follow-ups and the parent follow the saved record (save, review and action-item changes all replace it)
   useEffect(() => {
     if (!record?.id) return
     let cancelled = false
     request(`/inspection-records/records/${record.id}`)
-      .then((d) => { if (!cancelled) { setLifecycle(d.lifecycle); setTimeline(d.timeline); setFollowUps(d.followUps ?? []); setParentInfo(d.parent ?? null) } })
+      .then((d) => { if (!cancelled) { setFollowUps(d.followUps ?? []); setParentInfo(d.parent ?? null); setTimeline(d.timeline ?? []) } })
       .catch(() => {})
     return () => { cancelled = true }
   }, [record])
@@ -352,12 +367,49 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
     setForm((f) => ({ ...f, actionItems: f.actionItems.map((a, k) => (k === i ? { ...a, [key]: value } : a)) }))
     clearErr(`actionItems.${i}.${key}`, 'actionItems')
   }
+  // An O&M task: the inspector says what work is needed; the reviewer assigns the contractor / person
   const addItem = () => setForm((f) => {
     const n = f.actionItems.reduce((m, a) => Math.max(m, Number(String(a.id).split('-')[1]) || 0), 0) + 1
-    return { ...f, actionItems: [...f.actionItems, { id: `AI-${n}`, action: '', assignedTo: 'Facilities Manager', priority: f.risk.priority || 'Medium', dueDate: f.risk.targetDate || addDays(f.date || isoToday(), 14), status: 'Pending' }] }
+    const priority = f.risk.priority === 'Critical' ? 'Urgent' : f.risk.priority || 'Medium'
+    return {
+      ...f,
+      actionItems: [...f.actionItems, {
+        id: `AI-${n}`, type: '', materialId: f.materialId, action: '', priority, dueDate: f.risk.targetDate || addDays(f.date || isoToday(), 14), status: 'Pending',
+      }],
+    }
   })
 
+  // Samples of the selected ACM: j = -1 is the first (form.sampling), j ≥ 0 is form.sampling.more[j]
+  const sampleAt = (j) => (j < 0 ? form.sampling : form.sampling.more?.[j] ?? SAMPLE_BLANK)
+  const sampleKey = (j) => (j < 0 ? 'sampling.' : `sampling.more.${j}.`)
+  const updateSample = (j, patch) => setForm((f) => (j < 0
+    ? { ...f, sampling: { ...f.sampling, ...patch } }
+    : { ...f, sampling: { ...f.sampling, more: (f.sampling.more ?? []).map((s, i) => (i === j ? { ...s, ...patch } : s)) } }))
+  const setSample = (j, key) => (value) => { updateSample(j, { [key]: value }); clearErr(`${sampleKey(j)}${key}`) }
+  const setSampleTypeAt = (j, value) => {
+    const methods = meta?.sampleTypes?.find((t) => t.value === value)?.testMethods ?? []
+    const cur = sampleAt(j).testMethod
+    updateSample(j, { sampleType: value, testMethod: methods.includes(cur) ? cur : methods.length === 1 ? methods[0] : '' })
+    clearErr(`${sampleKey(j)}sampleType`, `${sampleKey(j)}testMethod`)
+  }
+  const addSample = () => setForm((f) => ({
+    ...f,
+    sampling: {
+      ...f.sampling,
+      more: [...(f.sampling.more ?? []), { ...SAMPLE_BLANK, sampleType: f.sampling.sampleType, testMethod: f.sampling.testMethod, collectionDate: f.sampling.collectionDate || f.date }],
+    },
+  }))
+  const removeSample = (j) => { setForm((f) => ({ ...f, sampling: { ...f.sampling, more: (f.sampling.more ?? []).filter((_, i) => i !== j) } })); setErrors({}) }
+
   // Select the ACM an error belongs to and scroll to its section
+  // From the In Review list: once the inspection has loaded, bring the reviewer's section into view
+  const scrolledToReview = useRef(false)
+  useEffect(() => {
+    if (!fromReviewList || scrolledToReview.current || record?.state !== 'submitted' || !meta) return
+    scrolledToReview.current = true
+    setTimeout(() => document.getElementById('sec-verification')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300)
+  }, [fromReviewList, record?.state, meta])
+
   const goToError = (key) => {
     const extra = key.match(/^extra\.(\d+)\.(.+)$/)
     if (extra) selectAcm(Number(extra[1]) + 1)
@@ -413,9 +465,11 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
     setErrors({})
     try {
       const res = await request(`/inspection-records/records/${record.id}/review`, { method: 'POST', body: { decision, ...review } })
-      setRecord(res.record)
       const change2 = res.conditionChange ? ` ACM condition updated: ${res.conditionChange.from} → ${res.conditionChange.to}.` : ''
-      setToast({ kind: 'success', text: decision === 'approve' ? `Inspection ${record.id} approved.${change2}` : `Inspection ${record.id} returned to the inspector.` })
+      const text = decision === 'approve' ? `Inspection ${record.id} verified and approved.${change2}` : `Inspection ${record.id} returned to the inspector.`
+      if (fromReviewList) { navigate('/inspections/review', { state: { toast: { kind: 'success', text } } }); return }
+      setRecord(res.record)
+      setToast({ kind: 'success', text })
     } catch (e) {
       setErrors(e.fields ?? {})
       setToast({ kind: 'error', text: e.message })
@@ -434,26 +488,38 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
     }
   }
 
-  const upload = async (file) => {
+  // Files belong to a saved inspection: one not saved yet (or whose selected ACM isn't saved yet) is saved as in
+  // progress first, without leaving the form, then the file is attached
+  const ensureSaved = async () => {
+    if (record && savedAcmIds.includes(form.materialId)) return record
+    const acms = allAcms(form)
+    const { acms: _acms, active: _active, ...shared } = form
+    const body = { ...shared, ...acms[0], extra: acms.slice(1), state: 'draft' }
+    const res = record
+      ? await request(`/inspection-records/records/${record.id}`, { method: 'PUT', body })
+      : await request('/inspection-records', { method: 'POST', body })
+    return res.record
+  }
+  const attach = async (file, fields, done) => {
     try {
-      const f = await uploadFile(`/inspection-records/records/${record.id}/attachments`, file, { category: docCategory })
-      setRecord((r) => ({ ...r, attachments: [...r.attachments, f] }))
-      setToast({ kind: 'success', text: `Uploaded ${f.name}` })
+      const saved = await ensureSaved()
+      const f = await uploadFile(`/inspection-records/records/${saved.id}/attachments`, file, fields)
+      // A new inspection now has a record: open it (it loads with the file attached)
+      if (!record) {
+        navigate(`/inspections/records/${saved.id}`, { replace: true, state: { toast: { kind: 'success', text: `${done} ${f.name} – inspection ${saved.id} saved.` } } })
+        return
+      }
+      setRecord((r) => { const base = saved === record ? r : saved; return { ...base, attachments: [...(base.attachments ?? []), f] } })
+      setToast({ kind: 'success', text: `${done} ${f.name}` })
     } catch (e) {
-      setToast({ kind: 'error', text: e.message })
+      setErrors(e.fields ?? {})
+      setToast({ kind: 'error', text: e.fields ? `Fill in the required details before attaching files: ${e.message}` : e.message })
     }
   }
-  const uploadEvidence = async (key, file) => {
-    try {
-      const f = await uploadFile(`/inspection-records/records/${record.id}/attachments`, file, {
-        category: file.type === 'application/pdf' ? 'Supporting Document' : 'Material Condition Photo', checklist: key, material: form.materialId,
-      })
-      setRecord((r) => ({ ...r, attachments: [...r.attachments, f] }))
-      setToast({ kind: 'success', text: `Attached ${f.name}` })
-    } catch (e) {
-      setToast({ kind: 'error', text: e.message })
-    }
-  }
+  const upload = (file) => attach(file, { category: docCategory }, 'Uploaded')
+  const uploadEvidence = (key, file) => attach(file, {
+    category: file.type === 'application/pdf' ? 'Supporting Document' : 'Material Condition Photo', checklist: key, material: form.materialId,
+  }, 'Attached')
   const removeDoc = async (f) => {
     if (!(await confirm({ title: `Remove ${f.name}?`, message: 'The file will be deleted from this inspection.', confirmLabel: 'Remove', tone: 'danger' }))) return
     try {
@@ -465,26 +531,24 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
   }
 
   const hasSamples = Boolean(record && [record, ...(record.extra ?? [])].some((x) => x.sampling?.required === 'Yes'))
-  // Lab results can be entered / corrected once the samples are at the lab, until the lab review approves them
-  const labApproved = Boolean(record?.reviewGates && (record.stageReviews ?? []).filter((x) => x.stage === 'lab').at(-1)?.status === 'approved')
-  const canEditResults = Boolean(hasSamples && lifecycle && (record.state === 'submitted' || record.state === 'approved')
-    && !(lifecycle.current === 'submitted' && lifecycle.gate) && !labApproved)
+  // Lab results can be entered / corrected once the samples are at the lab: the reviewer sends them when approving
+  // (older records sent them on submit)
+  const canEditResults = Boolean(hasSamples && (record.state === 'approved' || (record.state === 'submitted' && !record.reviewGates)))
   // A follow-up inspection (child) continues its parent; a parent shows its follow-ups, lab and O&M in tabs
   const isChild = Boolean(record?.parentId)
   const showTabs = Boolean(record && !isChild && (record.state === 'submitted' || record.state === 'approved'))
   const family = record ? [record, ...followUps] : []
-  const familySamples = family.flatMap((r) => [r, ...(r.extra ?? [])]).filter((a) => a.sampling?.required === 'Yes').length
+  const familySamples = family.flatMap((r) => [r, ...(r.extra ?? [])]).reduce((n, a) => n + samplesOf(a).length, 0)
   const familyTasks = family.reduce((n, r) => n + (r.actionItems?.length ?? 0), 0)
-  const timelineEvents = (timeline ?? []).reduce((n, s) => n + s.events.filter((e) => e.kind !== 'stage').length, 0)
-  // Every inspection (not a follow-up shown inside its parent) has Inspection + Timeline; submitted ones also the rest
-  const sectionTabs = record && !isChild ? [
+  // Submitted inspections (not a follow-up shown inside its parent) get tabs for their follow-ups, lab samples and O&M work
+  const sectionTabs = showTabs ? [
     { id: 'inspection', label: 'Inspection', icon: ClipboardCheck },
-    ...(showTabs ? [
-      { id: 'followUp', label: 'Follow-up Inspections', icon: CalendarPlus, count: followUps.length },
-      { id: 'lab', label: 'Lab Results', icon: FlaskConical, count: familySamples },
-      { id: 'om', label: 'O&M Tasks', icon: Wrench, count: familyTasks },
-    ] : []),
-    { id: 'timeline', label: 'Timeline', icon: History, count: timelineEvents },
+    { id: 'followUp', label: 'Follow-up Inspections', icon: CalendarPlus, count: followUps.length },
+    { id: 'lab', label: 'Lab Results', icon: FlaskConical, count: familySamples },
+    { id: 'om', label: 'O&M Tasks', icon: Wrench, count: familyTasks },
+    // A generated report each for the inspection and its follow-ups, plus every attached file
+    { id: 'reports', label: 'Reports', icon: FileText, count: family.reduce((n, r) => n + 1 + (r.attachments?.length ?? 0), 0) },
+    { id: 'timeline', label: 'Timeline', icon: History },
   ] : []
   const activeTab = sectionTabs.some((t) => t.id === tab) ? tab : 'inspection'
   // The follow-up whose form is open: the chosen one, else the first not yet approved, else the latest
@@ -493,13 +557,13 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
   // ?labResults=1 (from Lab & Sampling Results / Air Monitoring) opens the lab results dialog once
   const labLinkOpened = useRef(false)
   useEffect(() => {
-    if (embedded || labLinkOpened.current || params.get('labResults') !== '1' || !meta || !lifecycle) return
+    if (embedded || labLinkOpened.current || params.get('labResults') !== '1' || !meta || !record) return
     labLinkOpened.current = true
     // A follow-up's results are entered from its parent's Lab Results tab
-    if (record?.parentId) navigate(`/inspections/records/${record.parentId}?tab=lab`, { replace: true })
+    if (record.parentId) navigate(`/inspections/records/${record.parentId}?tab=lab`, { replace: true })
     else if (canEditResults) setLabOm('lab')
-    else setToast({ kind: 'error', text: labApproved ? 'The lab results were approved in the Laboratory Analysis review and can no longer be changed.' : 'Lab results can be entered once the samples have been sent to the laboratory.' })
-  }, [params, meta, lifecycle, canEditResults, labApproved, record?.parentId, navigate, embedded])
+    else setToast({ kind: 'error', text: 'Lab results can be entered once the reviewer has approved the inspection and sent the samples to the laboratory.' })
+  }, [params, meta, record, canEditResults, navigate, embedded])
 
   if (loadError === 'notFound') {
     return <div className="coming-soon"><strong>Inspection not found</strong><span><Link to="/inspections">Back to inspections</Link></span></div>
@@ -508,20 +572,16 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
   // Section completeness for the index (what Submit will require)
   const a = form.assessment
   const filled = (obj, keys) => keys.every((k) => obj[k])
-  // Sample type decides what can be tested; air samples also record their kind and duration
-  const sampleTypeDef = meta?.sampleTypes?.find((t) => t.value === form.sampling.sampleType)
-  const testOptions = sampleTypeDef?.testMethods ?? []
-  const isAirSample = form.sampling.sampleType === 'Air Sample'
-  const airLimit = isAirSample && form.sampling.airType && form.sampling.testMethod
-    ? meta?.air.limits[`${form.sampling.airType}|${/TEM/.test(form.sampling.testMethod) ? 'TEM' : 'PCM'}`] : null
-  const setSampleType = (value) => {
-    const methods = meta?.sampleTypes?.find((t) => t.value === value)?.testMethods ?? []
-    setForm((f) => ({
-      ...f,
-      sampling: { ...f.sampling, sampleType: value, testMethod: methods.includes(f.sampling.testMethod) ? f.sampling.testMethod : methods.length === 1 ? methods[0] : '' },
-    }))
-    clearErr('sampling.sampleType', 'sampling.testMethod')
-  }
+  // A sample's type decides what can be tested; air samples also record their kind and duration
+  const testOptionsOf = (s) => meta?.sampleTypes?.find((t) => t.value === s.sampleType)?.testMethods ?? []
+  const airLimitOf = (s) => (s.sampleType === 'Air Sample' && s.airType && s.testMethod
+    ? meta?.air.limits[`${s.airType}|${/TEM/.test(s.testMethod) ? 'TEM' : 'PCM'}`] : null)
+  // For the reviewer: every sample on the saved record (to choose its laboratory) and the O&M tasks to assign
+  const reviewSamples = record ? [record, ...(record.extra ?? [])].flatMap((x) => samplesOf(x).map(({ k, s }) => ({ a: x, k, s, key: `${x.materialId}:${k}` }))) : []
+  // (older action items already name a team, so only O&M tasks with a work type are assigned here)
+  const reviewTasks = (record?.actionItems ?? []).filter((t) => t.type && !t.omActivityId && t.status !== 'Completed')
+  const sampleComplete = (s) => filled(s, ['sampleType', 'sampleId', 'collectionDate', 'testMethod'])
+    && (s.sampleType !== 'Air Sample' || (s.airType && s.durationMin !== '' && s.durationMin != null))
   // Action items are needed if any ACM needs follow-up
   const followUp = acmList.some((x) => x.risk.followUpRequired === 'Yes' || x.checklist.immediateAction === 'Yes')
   const several = acmList.length > 1
@@ -560,8 +620,7 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
     acm: Boolean(mat),
     condition: filled(a, ['currentCondition', 'damageType', 'damageExtent', 'waterDamage', 'potentialDisturbance', 'labelled', 'managementPlanUpdated']),
     checklist: (meta?.checklist ?? []).every((q) => form.checklist[q.key]),
-    sampling: form.sampling.required === 'No' || (form.sampling.required === 'Yes' && filled(form.sampling, ['sampleType', 'sampleId', 'collectionDate', 'laboratory', 'testMethod'])
-      && (!isAirSample || (form.sampling.airType && form.sampling.durationMin !== '' && form.sampling.durationMin != null))),
+    sampling: form.sampling.required === 'No' || (form.sampling.required === 'Yes' && sampleComplete(form.sampling) && (form.sampling.more ?? []).every(sampleComplete)),
     risk: filled(form.risk, ['priority', 'damageSeverity', 'recommendedAction', 'immediateAttention', 'followUpRequired']) && (form.risk.followUpRequired !== 'Yes' || form.risk.targetDate),
     documents: null,
     comments: null,
@@ -582,35 +641,21 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
           : <h1><ClipboardCheck size={24} />Asbestos Inspection – Detailed Form</h1>}
         <div className="ai-head-actions">
           {!embedded && <button type="button" className="u-btn u-btn-outline" onClick={goBack}><ArrowLeft size={15} />Back</button>}
-          {/* A follow-up inspection's stages, lab results and O&M work continue on its parent */}
+          {/* A follow-up inspection's lab results and O&M work continue on its parent */}
           {isChild && !embedded && (
             <Link className="u-btn u-btn-primary" to={`/inspections/records/${record.parentId}?tab=followUp`}><CornerUpLeft size={15} />Open Parent {record.parentId}</Link>
           )}
-          {!isChild && lifecycle && (record?.state === 'submitted' || record?.state === 'approved') && (
+          {!isChild && (record?.state === 'submitted' || record?.state === 'approved') && (
             <>
-              {/* Stage review: send the finished stage for review, or (reviewer) approve / return it */}
-              {(lifecycle.gate === 'readyForReview' || lifecycle.gate === 'returned') && (
-                <button type="button" className="u-btn u-btn-primary" onClick={() => setReviewing('request')}><Send size={15} />Send for Review</button>
-              )}
-              {lifecycle.gate === 'awaitingReview' && (
-                <button type="button" className="u-btn u-btn-primary" onClick={() => setReviewing('decide')}><ShieldCheck size={15} />Review Stage</button>
-              )}
-              {/* Lab results once the samples have gone to the lab (after the submitted inspection's review) */}
               {canEditResults && (
-                <button type="button" className={`u-btn ${lifecycle.current === 'lab' ? 'u-btn-primary' : 'u-btn-outline'}`} onClick={() => setLabOm('lab')}>
-                  <FlaskConical size={15} />{lifecycle.current === 'lab' ? 'Update Lab Results' : 'Lab Results'}
-                </button>
+                <button type="button" className="u-btn u-btn-outline" onClick={() => setLabOm('lab')}><FlaskConical size={15} />Lab Results</button>
               )}
               <button type="button" className="u-btn u-btn-outline" onClick={() => navigate(`/operations/activities/new?inspection=${record.id}`)}><Wrench size={15} />Add O&amp;M Task</button>
-              <button type="button" className="u-btn u-btn-primary" onClick={() => setChangingStage(true)}><Milestone size={15} />Change Stage</button>
             </>
           )}
           {editable && (
             <>
-              {/* In progress = saved, still being filled in; submitted = findings final, sent for review */}
-              <button type="button" className="u-btn u-btn-outline" disabled={!!saving} onClick={() => save('draft')} title="Save and keep working on the inspection">
-                <Save size={15} />{saving === 'draft' ? 'Saving…' : 'Mark as In Progress'}
-              </button>
+              {/* Submitted = findings final, sent for review */}
               <button type="button" className="u-btn u-btn-primary" disabled={!!saving} onClick={() => save('submitted')} title="Findings are complete — send for review">
                 <Send size={15} />{saving === 'submitted' ? 'Submitting…' : isChild ? 'Submit for Review' : 'Inspection Submitted'}
               </button>
@@ -620,6 +665,15 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
       </div>
 
       {loadError && <div className="u-banner">Couldn't load the form ({loadError}).</div>}
+      {record?.surveillanceId && (
+        <div className="in-banner info">
+          <Info size={16} />
+          <div>
+            <strong>Damage inspection requested from surveillance <Link to={`/surveillance/records/${record.surveillanceId}`}>{record.surveillanceId}</Link></strong>
+            <span>The 6-month surveillance of this ACM found it needed a damage inspection.</span>
+          </div>
+        </div>
+      )}
       {record?.state === 'returned' && record.verification?.reviewComments && (
         <div className="in-banner warn"><Undo2 size={16} /><div><strong>Returned by {record.verification.reviewerName}</strong><span>{record.verification.reviewComments}</span></div></div>
       )}
@@ -628,12 +682,14 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
           <Info size={16} />
           <div>
             <strong>Assigned to {record.inspectorName}{record.scheduledDate ? ` for ${fmtDay(record.scheduledDate)}${record.scheduledTime ? ` at ${fmtTime(record.scheduledTime)}` : ''}` : ''}{record.assignment?.assignedBy ? ` by ${record.assignment.assignedBy.name}` : ''}</strong>
-            <span>{record.assignment?.notes || 'Fill in the form on site. Mark as In Progress to start the inspection; Inspection Submitted when it’s complete.'}</span>
+            <span>{record.assignment?.notes || 'Fill in the form on site and select Inspection Submitted when it’s complete.'}</span>
           </div>
         </div>
       )}
-      {record?.state === 'submitted' && <div className="in-banner info"><Info size={16} /><div><strong>Waiting for review</strong><span>The record is locked until a reviewer approves it or returns it with comments (section 10).</span></div></div>}
-      {record?.state === 'approved' && <div className="in-banner ok"><BadgeCheck size={16} /><div><strong>Approved by {record.verification?.reviewerName} on {fmtDay(record.verification?.approvalDate)}</strong><span>Approved inspections are locked. Action item status can still be updated.</span></div></div>}
+      {record?.state === 'submitted' && (
+        <div className="in-banner info"><Info size={16} /><div><strong>In review</strong><span>Listed under Inspections › In Review. The record is locked until a reviewer verifies, signs and approves it, or returns it with notes (section 10).</span></div></div>
+      )}
+      {record?.state === 'approved' && <div className="in-banner ok"><BadgeCheck size={16} /><div><strong>Completed – verified by {record.verification?.reviewerName} on {fmtDay(record.verification?.reviewDate || record.verification?.approvalDate)}</strong><span>Completed inspections are locked. Action item status can still be updated.</span></div></div>}
 
       {isChild && !embedded && (
         <div className="in-banner info in-child-banner">
@@ -641,14 +697,13 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
           <div>
             <strong>Follow-up inspection of <Link to={`/inspections/records/${record.parentId}?tab=followUp`}>{record.parentId}</Link>{parentInfo ? ` · ${parentInfo.type}` : ''}</strong>
             <span>
-              Carried out under the parent inspection – it has no stages of its own. Its result, lab samples and O&amp;M work show in the parent’s
-              Follow-up, Lab Results and O&amp;M tabs{parentInfo ? `; the parent is in ${parentInfo.stageLabel}` : ''}.
+              Carried out under the parent inspection. Its result, lab samples and O&amp;M work show in the parent’s
+              Follow-up, Lab Results and O&amp;M tabs.
             </span>
           </div>
         </div>
       )}
-      {record && !isChild && <LifecycleStepper lifecycle={lifecycle} />}
-      {/* Tabs: the inspection and its timeline; once submitted also its follow-ups, lab samples and O&M work */}
+      {/* Tabs once submitted: the inspection, its follow-ups, lab samples and O&M work */}
       {sectionTabs.length > 0 && (
         <div className="in-family-tabs" role="tablist" aria-label="Inspection sections">
           {sectionTabs.map((t) => (
@@ -658,13 +713,19 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
           ))}
         </div>
       )}
-      {activeTab === 'timeline' && (timeline?.length ? <InspectionTimeline timeline={timeline} /> : <div className="u-card u-muted in-tab-empty">No activity recorded yet.</div>)}
       {showTabs && activeTab === 'followUp' && (
         <>
-          <FollowUpsPanel followUps={followUps} selected={shownFollowUp} onSelect={setOpenFollowUp} />
+          <FollowUpsPanel followUps={followUps} selected={shownFollowUp} onSchedule={() => setSchedulingFollowUp(true)}
+            onSelect={(fid) => {
+              setOpenFollowUp(fid)
+              // Bring its form (below the list) into view
+              setTimeout(() => document.getElementById('in-fu-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
+            }} />
           {/* The selected follow-up's own form: filled in, submitted for review and approved here */}
           {shownFollowUp && (
-            <InspectionForm key={shownFollowUp} recordId={shownFollowUp} embedded onChanged={() => setRecord((r) => ({ ...r }))} />
+            <div id="in-fu-form">
+              <InspectionForm key={shownFollowUp} recordId={shownFollowUp} embedded onChanged={() => setRecord((r) => ({ ...r }))} />
+            </div>
           )}
         </>
       )}
@@ -673,13 +734,11 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
           onUpdate={(r) => { setLabTarget(r.id === record.id ? null : r); setLabOm('lab') }} />
       )}
       {/* O&M tasks are added with the full O&M activity form, for this inspection or one of its follow-ups */}
+      {showTabs && activeTab === 'reports' && <InspectionReports record={record} ctx={ctx} materials={materials} followUps={followUps} />}
+      {showTabs && activeTab === 'timeline' && (timeline ? <InspectionTimeline timeline={timeline} record={record} followUps={followUps} /> : <div className="u-card u-muted in-tab-empty">Loading…</div>)}
       {showTabs && activeTab === 'om' && <OmPanel record={record} followUps={followUps} onAdd={(r) => navigate(`/operations/activities/new?inspection=${r.id}`)} />}
       {activeTab === 'inspection' && (
       <>
-      {record && !isChild && (
-        <StageReviews record={record} lifecycle={lifecycle} materials={materials} onUpdateResults={canEditResults ? () => setLabOm('lab') : undefined}
-          onReview={lifecycle?.gate === 'awaitingReview' && (record.state === 'submitted' || record.state === 'approved') ? () => setReviewing('decide') : undefined} />
-      )}
 
       <section className="u-card in-record">
         <div className="in-record-title">
@@ -873,7 +932,6 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
                 {(meta?.checklist ?? []).map((q) => {
                   // Evidence for this question on the selected ACM (older files without an ACM belong to the first one)
                   const files = record?.attachments.filter((f) => f.checklistKey === q.key && (f.materialId ?? record.materialId) === form.materialId) ?? []
-                  const canAttach = savedAcmIds.includes(form.materialId)
                   return (
                     <tr key={q.key} className={errors[`checklist.${q.key}`] ? 'invalid' : undefined}>
                       <td>{q.question}<Err msg={errors[`checklist.${q.key}`]} /></td>
@@ -882,8 +940,7 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
                         <div className="in-cl-row">
                           <input className="u-input in-cl-note" value={form.checklistNotes[q.key] ?? ''} maxLength={500} placeholder="Add a note (optional)"
                             onChange={(e) => setIn('checklistNotes', q.key)(e.target.value)} aria-label={`Note for: ${q.question}`} />
-                          <button type="button" className="u-row-btn" disabled={!canAttach} aria-label={`Attach a photo or document to: ${q.question}`}
-                            title={canAttach ? 'Attach a photo or document' : 'Mark as In Progress first to attach files'}
+                          <button type="button" className="u-row-btn" aria-label={`Attach a photo or document to: ${q.question}`} title="Attach a photo or document"
                             onClick={() => { setEvidenceFor(q.key); evidenceRef.current?.click() }}>
                             <Paperclip size={14} />
                           </button>
@@ -914,70 +971,85 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
               <Err msg={errors['sampling.required']} />
             </div>
             {form.sampling.required === 'Yes' && (
-              <div className="sv-grid in-grid-3 in-gap-top">
-                <div className="uf-field sv-span-3">
-                  <span>Sample Type *</span>
-                  <div className={`in-stype${editable ? '' : ' locked'}`} role="radiogroup" aria-label="Sample type">
-                    {(meta?.sampleTypes ?? []).map((t) => (
-                      <label key={t.value} className={`in-stype-opt${form.sampling.sampleType === t.value ? ' on' : ''}`}>
-                        <input type="radio" name={`sample-type-${form.active}`} checked={form.sampling.sampleType === t.value} onChange={() => setSampleType(t.value)} />
-                        <strong>{t.value}</strong>
-                        <small>{t.purpose}</small>
-                        <small className="u-muted">{t.examples}</small>
-                      </label>
-                    ))}
-                  </div>
-                  <Err msg={errors['sampling.sampleType']} />
-                </div>
-                <label className="uf-field">
-                  <span>Sample ID *</span>
-                  <input className={`u-input${errors['sampling.sampleId'] ? ' invalid' : ''}`} value={form.sampling.sampleId} maxLength={30} placeholder="e.g. SMP-00125"
-                    onChange={(e) => setIn('sampling', 'sampleId')(e.target.value.toUpperCase())} />
-                  <Err msg={errors['sampling.sampleId']} />
-                </label>
-                <label className="uf-field">
-                  <span>Collection Date *</span>
-                  <input type="date" className={`u-input${errors['sampling.collectionDate'] ? ' invalid' : ''}`} value={form.sampling.collectionDate} max={isoToday()}
-                    onChange={(e) => setIn('sampling', 'collectionDate')(e.target.value)} />
-                  <Err msg={errors['sampling.collectionDate']} />
-                </label>
-                <div className="uf-field">
-                  <span>Laboratory Name *</span>
-                  <SearchSelect variant="field" label="Laboratory" value={form.sampling.laboratory} onChange={setIn('sampling', 'laboratory')} searchable={false}
-                    options={[{ value: '', label: 'Select a laboratory' },
-                      ...opt([...(meta?.laboratories ?? []), ...(form.sampling.laboratory && !meta?.laboratories.includes(form.sampling.laboratory) ? [form.sampling.laboratory] : [])])]} />
-                  <Err msg={errors['sampling.laboratory']} />
-                </div>
-                <div className="uf-field sv-span-2">
-                  <span>What to Test *</span>
-                  <SearchSelect variant="field" label="What to test" value={form.sampling.testMethod} onChange={setIn('sampling', 'testMethod')} searchable={false}
-                    options={[{ value: '', label: sampleTypeDef ? 'Select the analysis' : 'Choose the sample type first' },
-                      ...opt([...testOptions, ...(form.sampling.testMethod && !testOptions.includes(form.sampling.testMethod) ? [form.sampling.testMethod] : [])])]} />
-                  <Err msg={errors['sampling.testMethod']} />
-                </div>
-                {isAirSample && (
-                  <>
-                    <div className="uf-field">
-                      <span>Air Sample Kind *</span>
-                      <SearchSelect variant="field" label="Air sample kind" value={form.sampling.airType ?? ''} onChange={setIn('sampling', 'airType')} searchable={false}
-                        options={[{ value: '', label: 'Select' }, ...opt(meta?.air.types ?? [])]} />
-                      <Err msg={errors['sampling.airType']} />
+              <div className="in-samples in-gap-top">
+                {[-1, ...(form.sampling.more ?? []).map((_, j) => j)].map((j, n) => {
+                  const s = sampleAt(j)
+                  const key = sampleKey(j)
+                  const err = (k) => errors[`${key}${k}`]
+                  const tests = testOptionsOf(s)
+                  const airLimit = airLimitOf(s)
+                  return (
+                    <div key={j} className="in-sample-card">
+                      <header className="in-sample-head">
+                        <strong><FlaskConical size={15} />Sample {n + 1}{s.sampleId ? <span className="u-muted"> · {s.sampleId}</span> : null}</strong>
+                        {s.laboratory && <span className="in-sample-lab">Laboratory: {s.laboratory}</span>}
+                        {j >= 0 && editable && <button type="button" className="u-row-btn" onClick={() => removeSample(j)} aria-label={`Remove sample ${n + 1}`} title="Remove this sample"><Trash2 size={14} /></button>}
+                      </header>
+                      <div className="sv-grid in-grid-3">
+                        <div className="uf-field sv-span-3">
+                          <span>Sample Type *</span>
+                          <div className={`in-stype${editable ? '' : ' locked'}`} role="radiogroup" aria-label={`Sample ${n + 1} type`}>
+                            {(meta?.sampleTypes ?? []).map((t) => (
+                              <label key={t.value} className={`in-stype-opt${s.sampleType === t.value ? ' on' : ''}`}>
+                                <input type="radio" name={`sample-type-${form.active}-${j}`} checked={s.sampleType === t.value} onChange={() => setSampleTypeAt(j, t.value)} />
+                                <strong>{t.value}</strong>
+                                <small>{t.purpose}</small>
+                                <small className="u-muted">{t.examples}</small>
+                              </label>
+                            ))}
+                          </div>
+                          <Err msg={err('sampleType')} />
+                        </div>
+                        <label className="uf-field">
+                          <span>Sample ID *</span>
+                          <input className={`u-input${err('sampleId') ? ' invalid' : ''}`} value={s.sampleId} maxLength={30} placeholder="e.g. SMP-00125"
+                            onChange={(e) => setSample(j, 'sampleId')(e.target.value.toUpperCase())} />
+                          <Err msg={err('sampleId')} />
+                        </label>
+                        <label className="uf-field">
+                          <span>Collection Date *</span>
+                          <input type="date" className={`u-input${err('collectionDate') ? ' invalid' : ''}`} value={s.collectionDate} max={isoToday()}
+                            onChange={(e) => setSample(j, 'collectionDate')(e.target.value)} />
+                          <Err msg={err('collectionDate')} />
+                        </label>
+                        <div className="uf-field">
+                          <span>What to Test *</span>
+                          <SearchSelect variant="field" label={`What to test (sample ${n + 1})`} value={s.testMethod} onChange={setSample(j, 'testMethod')} searchable={false}
+                            options={[{ value: '', label: s.sampleType ? 'Select the analysis' : 'Choose the sample type first' },
+                              ...opt([...tests, ...(s.testMethod && !tests.includes(s.testMethod) ? [s.testMethod] : [])])]} />
+                          <Err msg={err('testMethod')} />
+                        </div>
+                        {s.sampleType === 'Air Sample' && (
+                          <>
+                            <div className="uf-field">
+                              <span>Air Sample Kind *</span>
+                              <SearchSelect variant="field" label={`Air sample kind (sample ${n + 1})`} value={s.airType ?? ''} onChange={setSample(j, 'airType')} searchable={false}
+                                options={[{ value: '', label: 'Select' }, ...opt(meta?.air.types ?? [])]} />
+                              <Err msg={err('airType')} />
+                            </div>
+                            <label className="uf-field">
+                              <span>Duration (minutes) *</span>
+                              <input type="number" min={1} max={1440} className={`u-input${err('durationMin') ? ' invalid' : ''}`} value={s.durationMin ?? ''}
+                                onChange={(e) => setSample(j, 'durationMin')(e.target.value === '' ? '' : Number(e.target.value))} />
+                              <Err msg={err('durationMin')} />
+                            </label>
+                            {airLimit && <p className="sv-hint in-air-limit">Judged against {airLimit.basis}: {airLimit.value} {airLimit.unit}. Listed under Air Monitoring once it&apos;s at the lab.</p>}
+                          </>
+                        )}
+                        <label className="uf-field sv-span-3">
+                          <span>Additional Notes</span>
+                          <textarea className="u-input sv-textarea" rows={2} maxLength={1000} value={s.notes ?? ''} placeholder="Chain of custody, turnaround, special handling…"
+                            onChange={(e) => setSample(j, 'notes')(e.target.value)} />
+                        </label>
+                      </div>
                     </div>
-                    <label className="uf-field">
-                      <span>Duration (minutes) *</span>
-                      <input type="number" min={1} max={1440} className={`u-input${errors['sampling.durationMin'] ? ' invalid' : ''}`} value={form.sampling.durationMin ?? ''}
-                        onChange={(e) => setIn('sampling', 'durationMin')(e.target.value === '' ? '' : Number(e.target.value))} />
-                      <Err msg={errors['sampling.durationMin']} />
-                    </label>
-                    {airLimit && <p className="sv-hint in-air-limit">Judged against {airLimit.basis}: {airLimit.value} {airLimit.unit}. Listed under Air Monitoring once submitted.</p>}
-                  </>
+                  )
+                })}
+                <Err msg={errors['sampling.more']} />
+                {editable && (form.sampling.more?.length ?? 0) < MAX_SAMPLES - 1 && (
+                  <button type="button" className="u-btn u-btn-outline u-btn-sm in-add-sample" onClick={addSample}><Plus size={13} />Add Another Sample</button>
                 )}
-                <label className="uf-field sv-span-3">
-                  <span>Additional Notes</span>
-                  <textarea className="u-input sv-textarea" rows={2} maxLength={1000} value={form.sampling.notes ?? ''} placeholder="Chain of custody, turnaround, special handling…"
-                    onChange={(e) => setIn('sampling', 'notes')(e.target.value)} />
-                </label>
-                <p className="sv-hint sv-span-3">The result is recorded after submission with “Update Lab Results” (with the lab report).</p>
+                <p className="sv-hint">The reviewer chooses the laboratory for each sample when approving the inspection. Results are recorded after that with “Lab Results” (with the lab report).</p>
               </div>
             )}
           </Section>
@@ -1023,15 +1095,14 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
 
           <Section id="documents" n={7} title="Photos & Documents"
             hint="Before-inspection, material condition and damaged-area photographs, laboratory reports and supporting documents."
-            aside={record && record.state !== 'approved' && (
+            aside={record?.state !== 'approved' && (
               <div className="in-upload">
                 <SearchSelect variant="field" label="Document category" value={docCategory} onChange={setDocCategory} searchable={false} options={opt(meta?.docCategories ?? [])} />
                 <input ref={fileRef} type="file" accept=".pdf,.png,.jpg,.jpeg,.webp" hidden onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) upload(f) }} />
                 <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={() => fileRef.current?.click()}><Upload size={13} />Upload</button>
               </div>
             )}>
-            {!record && <p className="u-muted sv-empty-line">Mark the inspection as In Progress first, then attach photos and reports (PDF, JPG, PNG, WebP — up to 10 MB each).</p>}
-            {record && !record.attachments.length && <p className="u-muted sv-empty-line">No photos or documents attached.</p>}
+            {!record?.attachments.length && <p className="u-muted sv-empty-line">No photos or documents attached yet (PDF, JPG, PNG, WebP — up to 10 MB each).</p>}
             {record?.attachments.length > 0 && (
               <ul className="sv-docs">
                 {record.attachments.map((f) => (
@@ -1057,52 +1128,75 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
             </Section>
           </fieldset>
 
-          <Section id="actions" n={9} title="Action Items"
-            aside={editable && <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={addItem} disabled={form.actionItems.length >= 20}><Plus size={13} />Add Action Item</button>}>
+          <Section id="actions" n={9} title="O&M Tasks"
+            hint="Work the inspection calls for. The reviewer assigns the contractor or person when approving, and each task becomes an O&M activity."
+            aside={editable && <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={addItem} disabled={form.actionItems.length >= 20}><Plus size={13} />Add O&amp;M Task</button>}>
             <Err msg={errors.actionItems} />
             {form.actionItems.length ? (
-              <div className="u-table-wrap">
-                <table className="u-table sv-items">
-                  <thead><tr><th>Action</th><th>Assigned To</th><th>Priority</th><th>Due Date</th><th>Status</th>{editable && <th><span className="sr-only">Remove</span></th>}</tr></thead>
-                  <tbody>
-                    {form.actionItems.map((x, i) => (
-                      <tr key={x.id}>
-                        <td>
-                          <input className={`u-input${errors[`actionItems.${i}.action`] ? ' invalid' : ''}`} value={x.action} maxLength={200} disabled={!editable}
-                            placeholder="e.g. Review damaged ceiling tile" onChange={(e) => setItem(i, 'action')(e.target.value)} aria-label={`Action ${i + 1}`} />
-                          <Err msg={errors[`actionItems.${i}.action`]} />
-                        </td>
-                        <td className="sv-item-select">
+              <ol className="in-om-list">
+                {form.actionItems.map((x, i) => (
+                  // One card per task: what and when on top, the description below, who on the right
+                  <li key={x.id} className="in-om-card">
+                    <header className="in-om-card-head">
+                      <strong><Wrench size={14} />Task {i + 1}</strong>
+                      <span className="in-om-who">
+                        {x.omActivityId
+                          ? <>{x.assignee ?? x.assignedTo}<Link to={`/operations/activities/${x.omActivityId}`} className="sv-id">{x.omActivityId}</Link></>
+                          : x.assignee || (x.assignedTo && !x.type) ? x.assignee ?? x.assignedTo
+                            : <span className="u-muted">Contractor / person assigned by the reviewer</span>}
+                      </span>
+                      {editable && (
+                        <button type="button" className="u-row-btn" onClick={() => setForm((f) => ({ ...f, actionItems: f.actionItems.filter((_, k) => k !== i) }))} aria-label={`Remove task ${i + 1}`} title="Remove task"><Trash2 size={14} /></button>
+                      )}
+                    </header>
+                    <div className={`in-omt-grid${several ? ' with-acm' : ''}`}>
+                      <div className="uf-field">
+                        <span>Work Type *</span>
+                        {editable
+                          ? <SearchSelect variant="field" label={`Work type (task ${i + 1})`} value={x.type ?? ''} onChange={setItem(i, 'type')} searchable={false}
+                            options={[{ value: '', label: 'Select the work' }, ...opt(meta?.om?.types ?? [])]} />
+                          : <strong className="in-om-read">{x.type || '—'}</strong>}
+                        <Err msg={errors[`actionItems.${i}.type`]} />
+                      </div>
+                      {several && (
+                        <div className="uf-field">
+                          <span>ACM</span>
                           {editable
-                            ? <SearchSelect variant="field" label={`Assigned to (action ${i + 1})`} value={x.assignedTo} onChange={setItem(i, 'assignedTo')} searchable={false} options={opt(meta?.teams ?? [])} />
-                            : x.assignedTo}
-                          <Err msg={errors[`actionItems.${i}.assignedTo`]} />
-                        </td>
-                        <td className="sv-item-status">
-                          {editable
-                            ? <SearchSelect variant="field" label={`Priority (action ${i + 1})`} value={x.priority} onChange={setItem(i, 'priority')} searchable={false} options={opt(meta?.priorities ?? [])} />
-                            : x.priority}
-                        </td>
-                        <td>
-                          <input type="date" className={`u-input${errors[`actionItems.${i}.dueDate`] ? ' invalid' : ''}`} value={x.dueDate} disabled={!editable}
-                            onChange={(e) => setItem(i, 'dueDate')(e.target.value)} aria-label={`Due date (action ${i + 1})`} />
-                          <Err msg={errors[`actionItems.${i}.dueDate`]} />
-                        </td>
-                        <td className="sv-item-status">
-                          {/* Follow-up progress stays editable after submission/approval */}
-                          <SearchSelect variant="field" label={`Status (action ${i + 1})`} value={x.status} searchable={false} options={opt(meta?.actionStatuses ?? [])}
-                            onChange={(v) => (editable ? setItem(i, 'status')(v) : setActionStatus(x, v))} />                      </td>
-                        {editable && (
-                          <td className="ai-col-actions">
-                            <button type="button" className="u-row-btn" onClick={() => setForm((f) => ({ ...f, actionItems: f.actionItems.filter((_, k) => k !== i) }))} aria-label={`Remove action ${i + 1}`}><Trash2 size={14} /></button>
-                          </td>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : <p className="u-muted sv-empty-line">{followUp ? 'Follow-up is required — add at least one action item.' : 'No action items.'}</p>}
+                            ? <SearchSelect variant="field" label={`ACM (task ${i + 1})`} value={x.materialId ?? acmList[0]?.materialId} onChange={setItem(i, 'materialId')} searchable={false}
+                              options={acmList.map((y) => ({ value: y.materialId, label: acmMeta(y)?.name ?? y.materialId }))} />
+                            : <strong className="in-om-read">{acmMeta({ materialId: x.materialId })?.name ?? '—'}</strong>}
+                        </div>
+                      )}
+                      <div className="uf-field">
+                        <span>Priority</span>
+                        {editable
+                          ? <SearchSelect variant="field" label={`Priority (task ${i + 1})`} value={x.priority} onChange={setItem(i, 'priority')} searchable={false}
+                            options={opt([...(meta?.om?.priorities ?? []), ...(x.priority && !(meta?.om?.priorities ?? []).includes(x.priority) ? [x.priority] : [])])} />
+                          : <strong className="in-om-read">{x.priority}</strong>}
+                      </div>
+                      <label className="uf-field">
+                        <span>Due Date *</span>
+                        <input type="date" className={`u-input${errors[`actionItems.${i}.dueDate`] ? ' invalid' : ''}`} value={x.dueDate} disabled={!editable}
+                          onChange={(e) => setItem(i, 'dueDate')(e.target.value)} aria-label={`Due date (task ${i + 1})`} />
+                        <Err msg={errors[`actionItems.${i}.dueDate`]} />
+                      </label>
+                      <div className="uf-field">
+                        <span>Status</span>
+                        {/* Follow-up progress stays editable after submission/approval */}
+                        <SearchSelect variant="field" label={`Status (task ${i + 1})`} value={x.status} searchable={false} options={opt(meta?.actionStatuses ?? [])}
+                          onChange={(v) => (editable ? setItem(i, 'status')(v) : setActionStatus(x, v))} />
+                      </div>
+                      <label className="uf-field in-omt-desc">
+                        <span>Description *</span>
+                        <input className={`u-input${errors[`actionItems.${i}.action`] ? ' invalid' : ''}`} value={x.action} maxLength={200} disabled={!editable}
+                          placeholder="e.g. Repair and encapsulate damaged pipe insulation" onChange={(e) => setItem(i, 'action')(e.target.value)} aria-label={`Description (task ${i + 1})`} />
+                        <Err msg={errors[`actionItems.${i}.action`]} />
+                      </label>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            ) : <p className="u-muted sv-empty-line">{followUp ? 'Follow-up is required — add at least one O&M task.' : 'No O&M tasks.'}</p>}
           </Section>
 
           <Section id="verification" n={10} title="Verification & Signatures">
@@ -1140,13 +1234,8 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
                 <h3>Reviewer</h3>
                 {state === 'submitted' ? (
                   <>
-                    <div className="uf-field">
-                      <span>Reviewer *</span>
-                      <SearchSelect variant="field" label="Reviewer" value={review.reviewerId} searchable={false}
-                        onChange={(v) => { setReview((r) => ({ ...r, reviewerId: v })); clearErr('verification.reviewerId') }}
-                        options={[{ value: '', label: 'Select the reviewer' }, ...(meta?.reviewers ?? []).map((u) => ({ value: u.id, label: `${u.name}${u.title ? ` – ${u.title}` : ''}` }))]} />
-                      <Err msg={errors['verification.reviewerId']} />
-                    </div>
+                    {/* The signed-in person reviews: their name goes on the record with their signature */}
+                    <ReadRow label="Reviewer">{me ? <>{me.name}{me.role ? <span className="u-muted"> · {me.role}</span> : null}</> : '…'}</ReadRow>
                     <div className="uf-field in-gap-top">
                       <span className="in-sign-label">
                         Reviewer Signature (required to approve)
@@ -1157,14 +1246,72 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
                       <Err msg={errors['verification.reviewerSignature']} />
                     </div>
                     <label className="uf-field in-gap-top">
-                      <span>Review Comments (required to return)</span>
-                      <textarea className="u-input sv-textarea" rows={2} maxLength={500} value={review.comments}
+                      <span>Review Date *</span>
+                      <input type="date" className={`u-input in-date${errors['verification.reviewDate'] ? ' invalid' : ''}`} value={review.reviewDate}
+                        min={form.date || undefined} max={isoToday()} onChange={(e) => { setReview((r) => ({ ...r, reviewDate: e.target.value })); clearErr('verification.reviewDate') }} />
+                      <Err msg={errors['verification.reviewDate']} />
+                    </label>
+                    {/* The laboratory for each sample (the inspector doesn't choose it) */}
+                    {reviewSamples.length > 0 && (
+                      <div className="in-review-block">
+                        <h4><FlaskConical size={14} />Laboratory for each sample *<span className="in-review-count">{reviewSamples.length}</span></h4>
+                        {/* Most samples go to one lab: set it for all at once, then change any single one */}
+                        {reviewSamples.length > 1 && (
+                          <div className="in-review-all">
+                            <span>Same laboratory for all samples</span>
+                            <SearchSelect variant="field" label="Laboratory for all samples" searchable={false}
+                              value={reviewSamples.every(({ key, s }) => (review.labs[key] ?? s.laboratory) === (review.labs[reviewSamples[0].key] ?? reviewSamples[0].s.laboratory)) ? (review.labs[reviewSamples[0].key] ?? reviewSamples[0].s.laboratory ?? '') : ''}
+                              onChange={(v) => {
+                                setReview((r) => ({ ...r, labs: { ...r.labs, ...Object.fromEntries(reviewSamples.map(({ key }) => [key, v])) } }))
+                                clearErr(...reviewSamples.map(({ key }) => `labs.${key}`))
+                              }}
+                              options={[{ value: '', label: 'Choose for all…' }, ...opt(meta?.laboratories ?? [])]} />
+                          </div>
+                        )}
+                        {reviewSamples.map(({ a, k, s, key }) => (
+                          <div key={key} className="in-review-row">
+                            <span><strong>{s.sampleId || `Sample ${k + 1}`}</strong><small title={[acmMeta(a)?.name, s.sampleType, s.testMethod].filter(Boolean).join(' · ')}>{[acmMeta(a)?.name, s.sampleType].filter(Boolean).join(' · ')}</small>{s.testMethod && <small title={s.testMethod}>{s.testMethod}</small>}</span>
+                            <div>
+                              <SearchSelect variant="field" label={`Laboratory for ${s.sampleId || `sample ${k + 1}`}`} value={review.labs[key] ?? s.laboratory ?? ''} searchable={false}
+                                onChange={(v) => { setReview((r) => ({ ...r, labs: { ...r.labs, [key]: v } })); clearErr(`labs.${key}`) }}
+                                options={[{ value: '', label: 'Choose the laboratory' }, ...opt(meta?.laboratories ?? [])]} />
+                              <Err msg={errors[`labs.${key}`]} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {/* Who does each O&M task the inspector listed (becomes an O&M activity on approval) */}
+                    {reviewTasks.length > 0 && (
+                      <div className="in-review-block">
+                        <h4><Wrench size={14} />Assign O&amp;M tasks *</h4>
+                        {reviewTasks.map((t) => (
+                          <div key={t.id} className="in-review-row">
+                            <span><strong>{t.type || 'O&M task'}</strong><small title={t.action}>{t.action}</small><small>{[t.dueDate && `Due ${fmtDay(t.dueDate)}`, t.priority].filter(Boolean).join(' · ')}</small></span>
+                            <div>
+                              <SearchSelect variant="field" label={`Contractor / person for ${t.action || t.id}`} value={review.assignees[t.id] ?? ''} searchPlaceholder="Search people…"
+                                onChange={(v) => { setReview((r) => ({ ...r, assignees: { ...r.assignees, [t.id]: v } })); clearErr(`assignees.${t.id}`) }}
+                                options={[{ value: '', label: 'Choose the contractor / person' }, ...(meta?.om?.assignees ?? []).map((p) => ({ value: p.id, label: p.name, meta: p.category }))]} />
+                              <Err msg={errors[`assignees.${t.id}`]} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <label className="uf-field in-gap-top">
+                      <span>Additional Notes <small className="u-muted">(optional when approving; required to return)</small></span>
+                      <textarea className="u-input sv-textarea" rows={3} maxLength={500} value={review.comments} placeholder="Anything to record with the review, or what the inspector should change"
                         onChange={(e) => { setReview((r) => ({ ...r, comments: e.target.value })); clearErr('verification.reviewComments') }} />
                       <Err msg={errors['verification.reviewComments']} />
                     </label>
+                    <label className={`in-verify-check${errors['verification.verified'] ? ' invalid' : ''}`}>
+                      <input type="checkbox" checked={review.verified} onChange={(e) => { setReview((r) => ({ ...r, verified: e.target.checked })); clearErr('verification.verified') }} />
+                      <span>I have verified this inspection – the ACM details, condition assessment, checklist, samples, photos and O&amp;M tasks are complete and accurate.</span>
+                    </label>
+                    <Err msg={errors['verification.verified']} />
                     <div className="in-review-actions">
                       <button type="button" className="u-btn u-btn-outline" disabled={!!saving} onClick={() => decide('return')}><Undo2 size={15} />Return for Changes</button>
-                      <button type="button" className="u-btn u-btn-primary" disabled={!!saving} onClick={() => decide('approve')}><BadgeCheck size={15} />Approve Inspection</button>
+                      <button type="button" className="u-btn u-btn-primary" disabled={!!saving} onClick={() => decide('approve')}><BadgeCheck size={15} />Verify &amp; Approve</button>
                     </div>
                     {mat && form.assessment.currentCondition && mat.condition !== form.assessment.currentCondition && (
                       <p className="sv-callout"><Info size={14} /><span>Approving will update the material's condition in the ACM inventory from <strong>{mat.condition}</strong> to <strong>{form.assessment.currentCondition}</strong>.</span></p>
@@ -1172,13 +1319,14 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
                   </>
                 ) : (
                   <div className="sv-grid in-grid-2">
-                    <ReadRow label="Review Status"><Badge tone={STATE_TONE[state]}>{record?.verification?.reviewStatus ?? 'Not Submitted'}</Badge></ReadRow>
+                    <ReadRow label="Review Status"><Badge tone={STATE_TONE[state]}>{state === 'approved' ? 'Completed' : record?.verification?.reviewStatus ?? 'Not Submitted'}</Badge></ReadRow>
                     <ReadRow label="Reviewer Name">{record?.verification?.reviewerName}</ReadRow>
-                    <ReadRow label="Approval Date">{record?.verification?.approvalDate ? fmtDay(record.verification.approvalDate) : ''}</ReadRow>
+                    <ReadRow label="Review Date">{record?.verification?.reviewDate || record?.verification?.approvalDate ? fmtDay(record.verification.reviewDate || record.verification.approvalDate) : ''}</ReadRow>
                     <ReadRow label="Reviewer Signature">
                       {record?.verification?.reviewerSignature === 'on-file' ? 'On file'
                         : record?.verification?.reviewerSignature ? <img className="in-sig-img" src={record.verification.reviewerSignature} alt="Reviewer signature" /> : ''}
                     </ReadRow>
+                    {state === 'approved' && record?.verification?.reviewComments && <ReadRow label="Reviewer Notes">{record.verification.reviewComments}</ReadRow>}
                     {!record || state === 'draft' || state === 'scheduled' ? <p className="sv-hint sv-span-2">An EHS manager reviews the inspection after it's submitted.</p> : null}
                   </div>
                 )}
@@ -1240,18 +1388,23 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
       )}
 
       {confirmDialog}
-      {reviewing && record && lifecycle && (
-        <StageReviewDialog mode={reviewing} record={record} lifecycle={lifecycle} meta={meta} materials={materials} onClose={() => setReviewing(null)}
-          onDone={(res, text) => { setReviewing(null); setRecord(res.record); setToast({ kind: 'success', text }) }} />
+      {schedulingFollowUp && record && (
+        <FollowUpDialog record={record} meta={meta} onClose={() => setSchedulingFollowUp(false)}
+          onDone={(child) => {
+            setSchedulingFollowUp(false)
+            setOpenFollowUp(child.id)
+            setRecord((r) => ({ ...r })) // reload the follow-ups
+            setToast({ kind: 'success', text: `Follow-up inspection ${child.id} scheduled with ${child.inspectorName} for ${fmtDay(child.scheduledDate)} at ${fmtTime(child.scheduledTime)}.` })
+          }} />
       )}
       {labOm && record && (
-        <LabOmDialog mode={labOm} record={labTarget ?? record} meta={meta} materials={materials} lifecycle={labTarget ? null : lifecycle}
+        <LabOmDialog mode={labOm} record={labTarget ?? record} meta={meta} materials={materials} lifecycle={null}
           onClose={() => { setLabOm(null); setLabTarget(null) }}
           onDone={(res, text, failed) => {
             setLabOm(null)
             const forFollowUp = Boolean(labTarget)
             setLabTarget(null)
-            // A follow-up's results / tasks: reload this inspection (its stages and tabs follow the follow-up)
+            // A follow-up's results / tasks: reload this inspection (its tabs follow the follow-up)
             if (forFollowUp) setRecord((r) => ({ ...r }))
             else {
               setRecord(res.record)
@@ -1259,14 +1412,6 @@ export default function InspectionForm({ recordId, embedded = false, onChanged }
             }
             const label = forFollowUp ? `${res.record.id}: ${text}` : text
             setToast(failed.length ? { kind: 'error', text: `${label} Not uploaded: ${failed.join(', ')}` } : { kind: 'success', text: label })
-          }} />
-      )}
-      {changingStage && lifecycle && (
-        <StageDialog record={record} lifecycle={lifecycle} meta={meta} onClose={() => setChangingStage(false)}
-          onDone={(res, text, failed) => {
-            setChangingStage(false)
-            setRecord(res.record)
-            setToast(failed.length ? { kind: 'error', text: `${text} Not uploaded: ${failed.join(', ')}` } : { kind: 'success', text })
           }} />
       )}
       {toast && (

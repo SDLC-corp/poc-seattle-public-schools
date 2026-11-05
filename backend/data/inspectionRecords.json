@@ -4176,7 +4176,70 @@
         "id": "u120",
         "name": "Rowan Pemberton"
       },
-      "sample": true
+      "sample": true,
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "COMPLETED",
+          "at": "2025-10-11",
+          "by": {
+            "id": null,
+            "name": "Rowan Pemberton"
+          },
+          "reason": "Inspector: Rowan Pemberton",
+          "derived": true
+        },
+        {
+          "stage": "inProgress",
+          "status": "COMPLETED",
+          "at": "2025-10-11",
+          "by": {
+            "id": null,
+            "name": "Rowan Pemberton"
+          },
+          "reason": "Recorded by Rowan Pemberton",
+          "derived": true
+        },
+        {
+          "stage": "submitted",
+          "status": "COMPLETED",
+          "at": "2025-10-11",
+          "by": {
+            "id": null,
+            "name": "Rowan Pemberton"
+          },
+          "reason": "Approved by Samuel Fenwick",
+          "derived": true
+        },
+        {
+          "stage": "lab",
+          "status": "COMPLETED",
+          "at": "2025-10-11",
+          "by": {
+            "id": null,
+            "name": "Rowan Pemberton"
+          },
+          "reason": "SMP-67814 · Asbestos Detected",
+          "derived": true
+        },
+        {
+          "stage": "action",
+          "status": "COMPLETED",
+          "at": "2025-10-13",
+          "by": null,
+          "reason": "2 of 2 action items completed",
+          "derived": true
+        },
+        {
+          "stage": "followUp",
+          "status": "IN_PROGRESS",
+          "at": "2025-10-13",
+          "by": null,
+          "reason": "Waiting for a follow-up inspection of this ACM",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T08:57:24.564Z"
     },
     {
       "id": "INS-2025-00051",
@@ -5002,7 +5065,67 @@
         "id": "u121",
         "name": "Samuel Jessup"
       },
-      "sample": true
+      "sample": true,
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "COMPLETED",
+          "at": "2025-12-01",
+          "by": {
+            "id": null,
+            "name": "Samuel Jessup"
+          },
+          "reason": "Inspector: Samuel Jessup",
+          "derived": true
+        },
+        {
+          "stage": "inProgress",
+          "status": "COMPLETED",
+          "at": "2025-12-01",
+          "by": {
+            "id": null,
+            "name": "Samuel Jessup"
+          },
+          "reason": "Recorded by Samuel Jessup",
+          "derived": true
+        },
+        {
+          "stage": "submitted",
+          "status": "COMPLETED",
+          "at": "2025-12-01",
+          "by": {
+            "id": null,
+            "name": "Samuel Jessup"
+          },
+          "reason": "Approved by Rowan Jessup",
+          "derived": true
+        },
+        {
+          "stage": "lab",
+          "status": "NOT_REQUIRED",
+          "at": "2025-12-04",
+          "by": null,
+          "reason": "No sample collected",
+          "derived": true
+        },
+        {
+          "stage": "action",
+          "status": "COMPLETED",
+          "at": "2025-12-04",
+          "by": null,
+          "reason": "1 of 1 action item completed",
+          "derived": true
+        },
+        {
+          "stage": "followUp",
+          "status": "IN_PROGRESS",
+          "at": "2025-12-04",
+          "by": null,
+          "reason": "Waiting for a follow-up inspection of this ACM",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T08:57:24.634Z"
     },
     {
       "id": "INS-2025-00061",
@@ -9353,7 +9476,67 @@
         "id": "u116",
         "name": "Logan Crane"
       },
-      "sample": true
+      "sample": true,
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "COMPLETED",
+          "at": "2026-06-18",
+          "by": {
+            "id": null,
+            "name": "Logan Crane"
+          },
+          "reason": "Inspector: Logan Crane",
+          "derived": true
+        },
+        {
+          "stage": "inProgress",
+          "status": "COMPLETED",
+          "at": "2026-06-18",
+          "by": {
+            "id": null,
+            "name": "Logan Crane"
+          },
+          "reason": "Recorded by Logan Crane",
+          "derived": true
+        },
+        {
+          "stage": "submitted",
+          "status": "COMPLETED",
+          "at": "2026-06-18",
+          "by": {
+            "id": null,
+            "name": "Logan Crane"
+          },
+          "reason": "Approved by Rowan Jessup",
+          "derived": true
+        },
+        {
+          "stage": "lab",
+          "status": "NOT_REQUIRED",
+          "at": "2026-06-25",
+          "by": null,
+          "reason": "No sample collected",
+          "derived": true
+        },
+        {
+          "stage": "action",
+          "status": "COMPLETED",
+          "at": "2026-06-25",
+          "by": null,
+          "reason": "1 of 1 action item completed",
+          "derived": true
+        },
+        {
+          "stage": "followUp",
+          "status": "IN_PROGRESS",
+          "at": "2026-06-25",
+          "by": null,
+          "reason": "Waiting for a follow-up inspection of this ACM",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:23:00.107Z"
     },
     {
       "id": "INS-2026-00049",
@@ -14887,7 +15070,21 @@
         "name": "John Doe"
       },
       "sample": false,
-      "id": "INS-2026-00126"
+      "id": "INS-2026-00126",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-03",
+          "by": {
+            "id": null,
+            "name": "John Doe"
+          },
+          "reason": "Assigned by John Doe to Logan Crane",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T08:18:44.724Z"
     },
     {
       "type": "Follow-up Inspection",
@@ -14950,6 +15147,3068 @@
         }
       ],
       "updatedAt": "2026-11-04T08:57:53.023Z"
+    },
+    {
+      "type": "Follow-up Inspection",
+      "date": null,
+      "scheduledDate": "2026-12-05",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-lowelles-b1-f3-r3-1",
+      "schoolId": "lowelles",
+      "buildingId": "lowelles-b1",
+      "floorId": "lowelles-b1-f3",
+      "roomId": "lowelles-b1-f3-r3",
+      "locationDescription": "Floor (entire room), Classroom 203",
+      "homogeneousAreaId": "",
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "extra": [],
+      "inspectorId": "u116",
+      "inspectorName": "Logan Crane",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-21212",
+        "expiresOn": "2026-12-16"
+      },
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "parentId": "INS-2025-00001",
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:11:37.045Z",
+        "notes": "Follow-up of inspection INS-2025-00001"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:11:37.045Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00128"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-adamses-b3-f2-r2-1",
+      "schoolId": "adamses",
+      "buildingId": "adamses-b3",
+      "floorId": "adamses-b3-f2",
+      "roomId": "adamses-b3-f2-r2",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u119",
+      "inspectorName": "Morgan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79678",
+        "expiresOn": "2027-07-17"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:12:28.097Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:12:28.097Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00129",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:12:28.464Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-adamses-b3-f2-r2-2",
+      "schoolId": "adamses",
+      "buildingId": "adamses-b3",
+      "floorId": "adamses-b3-f2",
+      "roomId": "adamses-b3-f2-r2",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u119",
+      "inspectorName": "Morgan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79678",
+        "expiresOn": "2027-07-17"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:12:28.111Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:12:28.111Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00130",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:12:28.514Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-adamses-b3-f2-r4-1",
+      "schoolId": "adamses",
+      "buildingId": "adamses-b3",
+      "floorId": "adamses-b3-f2",
+      "roomId": "adamses-b3-f2-r4",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u119",
+      "inspectorName": "Morgan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79678",
+        "expiresOn": "2027-07-17"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:12:28.146Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:12:28.146Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00131",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:12:28.540Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-adamses-b3-f2-r6-1",
+      "schoolId": "adamses",
+      "buildingId": "adamses-b3",
+      "floorId": "adamses-b3-f2",
+      "roomId": "adamses-b3-f2-r6",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u119",
+      "inspectorName": "Morgan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79678",
+        "expiresOn": "2027-07-17"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:12:28.173Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:12:28.173Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00132",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:12:28.567Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-adamses-b3-f2-r6-2",
+      "schoolId": "adamses",
+      "buildingId": "adamses-b3",
+      "floorId": "adamses-b3-f2",
+      "roomId": "adamses-b3-f2-r6",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u119",
+      "inspectorName": "Morgan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79678",
+        "expiresOn": "2027-07-17"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:12:28.235Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:12:28.236Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00133",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:12:28.595Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-adamses-b3-f1-r8-1",
+      "schoolId": "adamses",
+      "buildingId": "adamses-b3",
+      "floorId": "adamses-b3-f1",
+      "roomId": "adamses-b3-f1-r8",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u119",
+      "inspectorName": "Morgan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79678",
+        "expiresOn": "2027-07-17"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:12:28.325Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:12:28.325Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00134",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:12:28.636Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-adamses-b3-f1-r8-2",
+      "schoolId": "adamses",
+      "buildingId": "adamses-b3",
+      "floorId": "adamses-b3-f1",
+      "roomId": "adamses-b3-f1-r8",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u119",
+      "inspectorName": "Morgan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79678",
+        "expiresOn": "2027-07-17"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:12:28.379Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:12:28.379Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00135",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:12:28.668Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-adamses-b3-f1-r9-1",
+      "schoolId": "adamses",
+      "buildingId": "adamses-b3",
+      "floorId": "adamses-b3-f1",
+      "roomId": "adamses-b3-f1-r9",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u119",
+      "inspectorName": "Morgan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79678",
+        "expiresOn": "2027-07-17"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:12:28.409Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:12:28.409Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00136",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:12:28.702Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-adamses-b3-f1-r10-1",
+      "schoolId": "adamses",
+      "buildingId": "adamses-b3",
+      "floorId": "adamses-b3-f1",
+      "roomId": "adamses-b3-f1-r10",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u119",
+      "inspectorName": "Morgan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79678",
+        "expiresOn": "2027-07-17"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:12:28.425Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:12:28.425Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00137",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:12:28.730Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b2-f2-r2-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b2",
+      "floorId": "sugiyamahs-b2-f2",
+      "roomId": "sugiyamahs-b2-f2-r2",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.613Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.613Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00138",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.023Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b2-f2-r3-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b2",
+      "floorId": "sugiyamahs-b2-f2",
+      "roomId": "sugiyamahs-b2-f2-r3",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.670Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.670Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00139",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.050Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b2-f2-r8-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b2",
+      "floorId": "sugiyamahs-b2-f2",
+      "roomId": "sugiyamahs-b2-f2-r8",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.703Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.703Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00140",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.065Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b2-f2-r8-2",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b2",
+      "floorId": "sugiyamahs-b2-f2",
+      "roomId": "sugiyamahs-b2-f2-r8",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.742Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.742Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00141",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.080Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b2-f1-r4-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b2",
+      "floorId": "sugiyamahs-b2-f1",
+      "roomId": "sugiyamahs-b2-f1-r4",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.760Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.760Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00142",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.093Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b2-f1-r5-2",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b2",
+      "floorId": "sugiyamahs-b2-f1",
+      "roomId": "sugiyamahs-b2-f1-r5",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.771Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.771Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00143",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.109Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b2-f1-r5-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b2",
+      "floorId": "sugiyamahs-b2-f1",
+      "roomId": "sugiyamahs-b2-f1-r5",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.783Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.783Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00144",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.123Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b1-f2-r3-2",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b1",
+      "floorId": "sugiyamahs-b1-f2",
+      "roomId": "sugiyamahs-b1-f2-r3",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.794Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.794Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00145",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.141Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b1-f2-r3-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b1",
+      "floorId": "sugiyamahs-b1-f2",
+      "roomId": "sugiyamahs-b1-f2-r3",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.809Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.809Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00146",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.156Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b1-f2-r4-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b1",
+      "floorId": "sugiyamahs-b1-f2",
+      "roomId": "sugiyamahs-b1-f2-r4",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.830Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.830Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00147",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.172Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b1-f1-r3-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b1",
+      "floorId": "sugiyamahs-b1-f1",
+      "roomId": "sugiyamahs-b1-f1-r3",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.868Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.868Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00148",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.185Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b1-f1-r4-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b1",
+      "floorId": "sugiyamahs-b1-f1",
+      "roomId": "sugiyamahs-b1-f1-r4",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.885Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.885Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00149",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.198Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b1-f1-r8-2",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b1",
+      "floorId": "sugiyamahs-b1-f1",
+      "roomId": "sugiyamahs-b1-f1-r8",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.898Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.898Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00150",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.212Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b1-f1-r8-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b1",
+      "floorId": "sugiyamahs-b1-f1",
+      "roomId": "sugiyamahs-b1-f1-r8",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.921Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.921Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00151",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.224Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b3-f2-r1-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b3",
+      "floorId": "sugiyamahs-b3-f2",
+      "roomId": "sugiyamahs-b3-f2-r1",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.943Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.943Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00152",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.247Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b3-f2-r1-2",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b3",
+      "floorId": "sugiyamahs-b3-f2",
+      "roomId": "sugiyamahs-b3-f2-r1",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.967Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.967Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00153",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.339Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b3-f2-r2-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b3",
+      "floorId": "sugiyamahs-b3-f2",
+      "roomId": "sugiyamahs-b3-f2-r2",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.981Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.981Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00154",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.391Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b3-f1-r3-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b3",
+      "floorId": "sugiyamahs-b3-f1",
+      "roomId": "sugiyamahs-b3-f1-r3",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:37.997Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:37.997Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00155",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.431Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-sugiyamahs-b3-f1-r4-1",
+      "schoolId": "sugiyamahs",
+      "buildingId": "sugiyamahs-b3",
+      "floorId": "sugiyamahs-b3-f1",
+      "roomId": "sugiyamahs-b3-f1-r4",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "inspectorId": "u120",
+      "inspectorName": "Rowan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79113",
+        "expiresOn": "2027-02-28"
+      },
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:13:38.010Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:13:38.010Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00156",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Rowan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:13:38.454Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-arborheightses-b1-f2-r3-1",
+      "schoolId": "arborheightses",
+      "buildingId": "arborheightses-b1",
+      "floorId": "arborheightses-b1-f2",
+      "roomId": "arborheightses-b1-f2-r3",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "extra": [
+        {
+          "materialId": "ACM-arborheightses-b1-f2-r5-1",
+          "schoolId": "arborheightses",
+          "buildingId": "arborheightses-b1",
+          "floorId": "arborheightses-b1-f2",
+          "roomId": "arborheightses-b1-f2-r5",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-arborheightses-b1-f1-r4-1",
+          "schoolId": "arborheightses",
+          "buildingId": "arborheightses-b1",
+          "floorId": "arborheightses-b1-f1",
+          "roomId": "arborheightses-b1-f1-r4",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-arborheightses-b1-f3-r1-1",
+          "schoolId": "arborheightses",
+          "buildingId": "arborheightses-b1",
+          "floorId": "arborheightses-b1-f3",
+          "roomId": "arborheightses-b1-f3-r1",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-arborheightses-b1-f3-r5-1",
+          "schoolId": "arborheightses",
+          "buildingId": "arborheightses-b1",
+          "floorId": "arborheightses-b1-f3",
+          "roomId": "arborheightses-b1-f3-r5",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        }
+      ],
+      "inspectorId": "u119",
+      "inspectorName": "Morgan Pemberton",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-79678",
+        "expiresOn": "2027-07-17"
+      },
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:17:45.368Z",
+        "notes": ""
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:17:45.368Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00157",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Pemberton",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:17:45.404Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-eaglestaffms-b2-f2-r5-1",
+      "schoolId": "eaglestaffms",
+      "buildingId": "eaglestaffms-b2",
+      "floorId": "eaglestaffms-b2-f2",
+      "roomId": "eaglestaffms-b2-f2-r5",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "extra": [
+        {
+          "materialId": "ACM-eaglestaffms-b2-f1-r1-1",
+          "schoolId": "eaglestaffms",
+          "buildingId": "eaglestaffms-b2",
+          "floorId": "eaglestaffms-b2-f1",
+          "roomId": "eaglestaffms-b2-f1-r1",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-eaglestaffms-b2-f1-r4-1",
+          "schoolId": "eaglestaffms",
+          "buildingId": "eaglestaffms-b2",
+          "floorId": "eaglestaffms-b2-f1",
+          "roomId": "eaglestaffms-b2-f1-r4",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-eaglestaffms-b2-f1-r6-1",
+          "schoolId": "eaglestaffms",
+          "buildingId": "eaglestaffms-b2",
+          "floorId": "eaglestaffms-b2-f1",
+          "roomId": "eaglestaffms-b2-f1-r6",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-eaglestaffms-b2-f1-r7-2",
+          "schoolId": "eaglestaffms",
+          "buildingId": "eaglestaffms-b2",
+          "floorId": "eaglestaffms-b2-f1",
+          "roomId": "eaglestaffms-b2-f1-r7",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-eaglestaffms-b2-f1-r7-1",
+          "schoolId": "eaglestaffms",
+          "buildingId": "eaglestaffms-b2",
+          "floorId": "eaglestaffms-b2-f1",
+          "roomId": "eaglestaffms-b2-f1-r7",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-eaglestaffms-b2-f1-r8-2",
+          "schoolId": "eaglestaffms",
+          "buildingId": "eaglestaffms-b2",
+          "floorId": "eaglestaffms-b2-f1",
+          "roomId": "eaglestaffms-b2-f1-r8",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-eaglestaffms-b2-f1-r8-1",
+          "schoolId": "eaglestaffms",
+          "buildingId": "eaglestaffms-b2",
+          "floorId": "eaglestaffms-b2-f1",
+          "roomId": "eaglestaffms-b2-f1-r8",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-eaglestaffms-b1-f1-r1-1",
+          "schoolId": "eaglestaffms",
+          "buildingId": "eaglestaffms-b1",
+          "floorId": "eaglestaffms-b1-f1",
+          "roomId": "eaglestaffms-b1-f1-r1",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-eaglestaffms-b1-f1-r1-2",
+          "schoolId": "eaglestaffms",
+          "buildingId": "eaglestaffms-b1",
+          "floorId": "eaglestaffms-b1-f1",
+          "roomId": "eaglestaffms-b1-f1-r1",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-eaglestaffms-b3-f1-r2-1",
+          "schoolId": "eaglestaffms",
+          "buildingId": "eaglestaffms-b3",
+          "floorId": "eaglestaffms-b3-f1",
+          "roomId": "eaglestaffms-b3-f1-r2",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        },
+        {
+          "materialId": "ACM-eaglestaffms-b3-f1-r3-1",
+          "schoolId": "eaglestaffms",
+          "buildingId": "eaglestaffms-b3",
+          "floorId": "eaglestaffms-b3-f1",
+          "roomId": "eaglestaffms-b3-f1-r3",
+          "locationDescription": "",
+          "homogeneousAreaId": "",
+          "assessment": {},
+          "checklist": {},
+          "sampling": {},
+          "risk": {}
+        }
+      ],
+      "inspectorId": "u116",
+      "inspectorName": "Logan Crane",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-21212",
+        "expiresOn": "2026-12-16"
+      },
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:18:50.811Z",
+        "notes": ""
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T06:18:50.811Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00158",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Logan Crane",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T06:18:50.848Z"
+    },
+    {
+      "type": "3-Year Reinspection",
+      "date": "2026-11-05",
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-blainek8-b1-f2-r3-1",
+      "schoolId": "blainek8",
+      "buildingId": "blainek8-b1",
+      "floorId": "blainek8-b1-f2",
+      "roomId": "blainek8-b1-f2-r3",
+      "locationDescription": "Wall panels / counter tops, Classroom 103",
+      "homogeneousAreaId": "",
+      "assessment": {
+        "currentCondition": "Damaged",
+        "previousCondition": "Significantly Damaged",
+        "conditionChange": "Improved",
+        "damageType": "Delamination",
+        "damageExtent": "Minor (localized, < 10%)",
+        "waterDamage": "No",
+        "potentialDisturbance": "Medium",
+        "labelled": "No",
+        "managementPlanUpdated": "No"
+      },
+      "checklist": {
+        "goodCondition": "No",
+        "damaged": "Yes",
+        "labelled": "No",
+        "inManagementPlan": "No",
+        "waterDamage": "No",
+        "furtherAssessment": "No",
+        "immediateAction": "No"
+      },
+      "sampling": {
+        "required": "Yes",
+        "sampleType": "Air Sample",
+        "sampleId": "TEST-1",
+        "collectionDate": "2026-11-05",
+        "laboratory": "Accredited PLM Lab B (sample)",
+        "testMethod": "Airborne fibres – PCM (NIOSH 7400)",
+        "notes": "test",
+        "result": "Pending",
+        "airType": "Clearance",
+        "durationMin": 100,
+        "more": [
+          {
+            "sampleType": "Bulk Material Sample",
+            "sampleId": "TEST-2",
+            "collectionDate": "2026-11-05",
+            "laboratory": "Accredited PLM Lab A (sample)",
+            "testMethod": "Asbestos content – PLM (EPA 600/R-93/116)",
+            "notes": "test",
+            "result": "Pending",
+            "sentToLabAt": "2026-11-05T07:37:50.166Z",
+            "sentToLabBy": {
+              "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+              "name": "Mayuri Kundalwal"
+            }
+          }
+        ],
+        "sentToLabAt": "2026-11-05T07:37:50.166Z",
+        "sentToLabBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        }
+      },
+      "risk": {
+        "priority": "Medium",
+        "damageSeverity": "None",
+        "recommendedAction": "Repair",
+        "immediateAttention": "Yes",
+        "followUpRequired": "No",
+        "targetDate": "2026-11-18"
+      },
+      "extra": [],
+      "inspectorId": "u117",
+      "inspectorName": "Morgan Quill",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-41217",
+        "expiresOn": "2027-04-09"
+      },
+      "comments": "test",
+      "actionItems": [
+        {
+          "id": "AI-1",
+          "type": "Controlled Disturbance",
+          "materialId": "ACM-blainek8-b1-f2-r3-1",
+          "action": "test",
+          "assignedTo": "O&M – Maintenance",
+          "priority": "Medium",
+          "dueDate": "2026-11-18",
+          "status": "Pending",
+          "assignee": "Samuel Underwood",
+          "assignedToId": "P-0010",
+          "omActivityId": "OM-2026-0273"
+        },
+        {
+          "id": "AI-2",
+          "type": "Minor Repair",
+          "materialId": "ACM-blainek8-b1-f2-r3-1",
+          "action": "test",
+          "assignedTo": "O&M – Maintenance",
+          "priority": "Medium",
+          "dueDate": "2026-11-18",
+          "status": "Pending",
+          "assignee": "Samuel Birch",
+          "assignedToId": "P-0009",
+          "omActivityId": "OM-2026-0274"
+        }
+      ],
+      "verification": {
+        "reviewStatus": "Completed",
+        "inspectorSignature": "data:image/png;base64,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",
+        "completionDate": "2026-11-05",
+        "reviewerId": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "reviewerName": "Mayuri Kundalwal",
+        "reviewerSignature": "data:image/png;base64,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",
+        "reviewComments": "",
+        "approvalDate": "2026-11-05",
+        "reviewDate": "2026-11-05",
+        "reviewedAt": "2026-11-05T07:37:49.966Z"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T06:23:00.071Z",
+        "notes": ""
+      },
+      "state": "approved",
+      "attachments": [
+        {
+          "id": "0bd65523-9d84-4ece-9c71-381e867c71e0",
+          "name": "Insulated Pipe Elbow Against Cinderblock Wall.png",
+          "mime": "image/png",
+          "size": 2638588,
+          "storedName": "0bd65523-9d84-4ece-9c71-381e867c71e0.png",
+          "uploadedAt": "2026-11-05T06:24:46.840Z",
+          "category": "Material Condition Photo",
+          "uploadedBy": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          }
+        },
+        {
+          "id": "72fff57c-91c9-43d7-8479-86c31492e368",
+          "name": "Speckled Cream Vinyl Tile Floor.png",
+          "mime": "image/png",
+          "size": 2572726,
+          "storedName": "72fff57c-91c9-43d7-8479-86c31492e368.png",
+          "uploadedAt": "2026-11-05T06:24:52.577Z",
+          "category": "Material Condition Photo",
+          "uploadedBy": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          }
+        },
+        {
+          "id": "1c8fe882-9d83-4268-9071-c6a605e70cd0",
+          "name": "Speckled Cream Vinyl Tile Floor.png",
+          "mime": "image/png",
+          "size": 2572726,
+          "storedName": "1c8fe882-9d83-4268-9071-c6a605e70cd0.png",
+          "uploadedAt": "2026-11-05T06:35:03.886Z",
+          "category": "Work Completion Report",
+          "uploadedBy": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          }
+        },
+        {
+          "id": "5251e4d9-9385-4c8d-84e7-1b7e05e2a8e0",
+          "name": "asbestos_material_room_mapping_dashboard.png",
+          "mime": "image/png",
+          "size": 1751777,
+          "storedName": "5251e4d9-9385-4c8d-84e7-1b7e05e2a8e0.png",
+          "uploadedAt": "2026-11-05T06:44:57.110Z",
+          "category": "Material Condition Photo",
+          "uploadedBy": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          }
+        }
+      ],
+      "createdAt": "2026-11-05T06:23:00.071Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00159",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Quill",
+          "derived": true
+        },
+        {
+          "stage": "initiated",
+          "status": "COMPLETED",
+          "at": "2026-11-05T06:46:07.978Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Quill"
+        },
+        {
+          "stage": "inProgress",
+          "status": "COMPLETED",
+          "at": "2026-11-05T06:46:07.978Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Recorded by Morgan Quill"
+        },
+        {
+          "stage": "submitted",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05T06:46:07.978Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Waiting for review – samples go to the laboratory once approved"
+        },
+        {
+          "stage": "followUp",
+          "status": "NOT_REQUIRED",
+          "at": "2026-11-05T06:46:07.978Z",
+          "by": null,
+          "reason": "No follow-up required"
+        },
+        {
+          "stage": "submitted",
+          "status": "COMPLETED",
+          "at": "2026-11-05T07:37:50.403Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Approved by Mayuri Kundalwal"
+        },
+        {
+          "stage": "lab",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05T07:37:50.403Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "2 samples · 2 pending"
+        },
+        {
+          "stage": "followUp",
+          "status": "PENDING",
+          "at": "2026-11-05T07:39:50.276Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Follow-up inspection INS-2026-00160 in progress · Morgan Quill"
+        }
+      ],
+      "updatedAt": "2026-11-05T07:39:50.276Z",
+      "checklistNotes": {},
+      "submittedAt": "2026-11-05T06:46:07.922Z",
+      "reviewGates": true,
+      "stageReviews": [
+        {
+          "id": "RV-1",
+          "stage": "submitted",
+          "status": "pending",
+          "requestedAt": "2026-11-05T06:46:07.924Z",
+          "requestedBy": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "note": "Inspection submitted – review it and send the samples to the laboratory.",
+          "requestFileIds": []
+        }
+      ]
+    },
+    {
+      "type": "Follow-up Inspection",
+      "date": "2026-11-05",
+      "scheduledDate": "2026-12-05",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-blainek8-b1-f2-r3-1",
+      "schoolId": "blainek8",
+      "buildingId": "blainek8-b1",
+      "floorId": "blainek8-b1-f2",
+      "roomId": "blainek8-b1-f2-r3",
+      "locationDescription": "Wall panels / counter tops, Classroom 103",
+      "homogeneousAreaId": "",
+      "assessment": {
+        "currentCondition": "Good",
+        "previousCondition": "Damaged",
+        "conditionChange": "Improved",
+        "damageType": "None",
+        "damageExtent": "None",
+        "waterDamage": "No",
+        "potentialDisturbance": "Low",
+        "labelled": "Yes",
+        "managementPlanUpdated": "No"
+      },
+      "checklist": {
+        "goodCondition": "Yes",
+        "damaged": "No",
+        "labelled": "Yes",
+        "inManagementPlan": "Yes",
+        "waterDamage": "No",
+        "furtherAssessment": "No",
+        "immediateAction": "No"
+      },
+      "sampling": {
+        "required": "No"
+      },
+      "risk": {
+        "priority": "Low",
+        "damageSeverity": "None",
+        "recommendedAction": "No Action – Continue O&M",
+        "immediateAttention": "No",
+        "followUpRequired": "No",
+        "targetDate": ""
+      },
+      "extra": [],
+      "inspectorId": "u117",
+      "inspectorName": "Morgan Quill",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-41217",
+        "expiresOn": "2027-04-09"
+      },
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Completed",
+        "inspectorSignature": "data:image/png;base64,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",
+        "completionDate": "2026-11-05",
+        "reviewerId": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "reviewerName": "Mayuri Kundalwal",
+        "reviewerSignature": "data:image/png;base64,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",
+        "reviewComments": "",
+        "approvalDate": "2026-11-05",
+        "reviewDate": "2026-11-05",
+        "reviewedAt": "2026-11-05T07:40:20.747Z"
+      },
+      "parentId": "INS-2026-00159",
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T07:38:40.617Z",
+        "notes": "test"
+      },
+      "state": "approved",
+      "attachments": [],
+      "createdAt": "2026-11-05T07:38:40.617Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00160",
+      "checklistNotes": {},
+      "submittedAt": "2026-11-05T07:39:50.242Z",
+      "updatedAt": "2026-11-05T07:40:20.994Z",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "COMPLETED",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Follow-up of inspection INS-2026-00159 · Morgan Quill",
+          "derived": true
+        },
+        {
+          "stage": "inProgress",
+          "status": "COMPLETED",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Morgan Quill"
+          },
+          "reason": "Recorded by Morgan Quill",
+          "derived": true
+        },
+        {
+          "stage": "submitted",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Morgan Quill"
+          },
+          "reason": "Final review pending",
+          "derived": true
+        },
+        {
+          "stage": "lab",
+          "status": "NOT_REQUIRED",
+          "at": "2026-11-05",
+          "by": null,
+          "reason": "No sample collected",
+          "derived": true
+        },
+        {
+          "stage": "action",
+          "status": "NOT_REQUIRED",
+          "at": "2026-11-05",
+          "by": null,
+          "reason": "No corrective action required",
+          "derived": true
+        },
+        {
+          "stage": "followUp",
+          "status": "NOT_REQUIRED",
+          "at": "2026-11-05",
+          "by": null,
+          "reason": "No follow-up required",
+          "derived": true
+        },
+        {
+          "stage": "submitted",
+          "status": "COMPLETED",
+          "at": "2026-11-05T07:40:20.994Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Approved by Mayuri Kundalwal"
+        },
+        {
+          "stage": "closed",
+          "status": "COMPLETED",
+          "at": "2026-11-05T07:40:20.994Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Approved and closed"
+        }
+      ]
+    },
+    {
+      "type": "Damage Assessment",
+      "date": null,
+      "scheduledDate": "2026-11-08",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-mw0hwhi4hoim",
+      "schoolId": "adamses",
+      "buildingId": "adamses-b1",
+      "floorId": "adamses-b1-fmw0hscs5",
+      "roomId": "RM-mw0hsga7f3pg",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "comments": "",
+      "actionItems": [],
+      "extra": [],
+      "inspectorId": "u116",
+      "inspectorName": "Logan Crane",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-21212",
+        "expiresOn": "2026-12-16"
+      },
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "surveillanceId": "SUR-2026-0915",
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T08:18:44.700Z",
+        "notes": "Damage inspection requested from surveillance SUR-2026-0915: condition Damaged. Surveillance notes: test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T08:18:44.700Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00161",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Logan Crane",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T08:18:44.759Z"
+    },
+    {
+      "type": "Initial Inspection",
+      "date": null,
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-mw3b1m8pr3fo",
+      "schoolId": "adamses",
+      "buildingId": "adamses-b1",
+      "floorId": "adamses-b1-f1",
+      "roomId": "RM-mw3ayqx0hh57",
+      "locationDescription": "",
+      "homogeneousAreaId": "",
+      "assessment": {},
+      "checklist": {},
+      "sampling": {},
+      "risk": {},
+      "extra": [],
+      "inspectorId": "u117",
+      "inspectorName": "Morgan Quill",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-41217",
+        "expiresOn": "2027-04-09"
+      },
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Not Submitted"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T08:55:24.590Z",
+        "notes": "test"
+      },
+      "state": "scheduled",
+      "attachments": [],
+      "createdAt": "2026-11-05T08:55:24.590Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00162",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Quill",
+          "derived": true
+        }
+      ],
+      "updatedAt": "2026-11-05T08:55:24.663Z"
+    },
+    {
+      "type": "Initial Inspection",
+      "date": "2026-11-05",
+      "scheduledDate": "2026-11-12",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-alkies-b3-f2-r2-1",
+      "schoolId": "alkies",
+      "buildingId": "alkies-b3",
+      "floorId": "alkies-b3-f2",
+      "roomId": "alkies-b3-f2-r2",
+      "locationDescription": "HVAC duct in ceiling plenum, Mechanical",
+      "homogeneousAreaId": "",
+      "assessment": {
+        "currentCondition": "Damaged",
+        "previousCondition": null,
+        "conditionChange": "First Assessment",
+        "damageType": "Cracks",
+        "damageExtent": "Moderate (10–25%)",
+        "waterDamage": "Yes",
+        "potentialDisturbance": "Low",
+        "labelled": "Yes",
+        "managementPlanUpdated": "No"
+      },
+      "checklist": {
+        "goodCondition": "No",
+        "damaged": "Yes",
+        "labelled": "Yes",
+        "inManagementPlan": "Yes",
+        "waterDamage": "Yes",
+        "furtherAssessment": "Yes",
+        "immediateAction": "Yes"
+      },
+      "sampling": {
+        "required": "Yes",
+        "sampleType": "Air Sample",
+        "sampleId": "TEST-AIR_1",
+        "collectionDate": "2026-11-05",
+        "laboratory": "Accredited PLM Lab A (sample)",
+        "testMethod": "Airborne fibres – PCM (NIOSH 7400)",
+        "notes": "test",
+        "result": "Below Limit",
+        "airType": "Clearance",
+        "durationMin": 100,
+        "more": [
+          {
+            "sampleType": "Bulk Material Sample",
+            "sampleId": "TEST_FLOOR_BMS-2",
+            "collectionDate": "2026-11-05",
+            "laboratory": "Accredited PLM Lab B (sample)",
+            "testMethod": "Asbestos content – PLM (EPA 600/R-93/116)",
+            "notes": "floor bulk",
+            "result": "Asbestos Detected",
+            "sentToLabAt": "2026-11-05T09:08:54.625Z",
+            "sentToLabBy": {
+              "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+              "name": "Mayuri Kundalwal"
+            },
+            "measuredValue": 1,
+            "measureUnit": "%",
+            "limitValue": 1,
+            "passFail": "Pass",
+            "asbestosTypes": [
+              "Amosite",
+              "Chrysotile"
+            ],
+            "analysisMethod": "X-Ray Diffraction (XRD)",
+            "analysisStandard": "EPA/600/M4-82/020",
+            "analysisDate": "2026-11-04",
+            "materialLayer": "TEST",
+            "resultNotes": "",
+            "resultRecordedAt": "2026-11-05T09:12:56.640Z",
+            "resultRecordedBy": {
+              "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+              "name": "Mayuri Kundalwal"
+            },
+            "resultUpdatedAt": "2026-11-05T09:12:56.640Z"
+          }
+        ],
+        "sentToLabAt": "2026-11-05T09:08:54.625Z",
+        "sentToLabBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "airValue": 0.01,
+        "passFail": "Pass",
+        "limitValue": 0.01,
+        "measureUnit": "f/cc",
+        "labSampleId": "LAB-SP-1",
+        "analysisMethod": "Polarized Light Microscopy (PLM)",
+        "analysisStandard": "NIOSH 7400",
+        "analysisDate": "2026-11-03",
+        "labReportNo": "test1",
+        "resultNotes": "",
+        "resultRecordedAt": "2026-11-05T09:14:29.123Z",
+        "resultRecordedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        }
+      },
+      "risk": {
+        "priority": "High",
+        "damageSeverity": "Severe",
+        "recommendedAction": "Removal",
+        "immediateAttention": "Yes",
+        "followUpRequired": "Yes",
+        "targetDate": "2026-11-20"
+      },
+      "extra": [],
+      "inspectorId": "u117",
+      "inspectorName": "Morgan Quill",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-41217",
+        "expiresOn": "2027-04-09"
+      },
+      "comments": "test",
+      "actionItems": [
+        {
+          "id": "AI-1",
+          "type": "Routine Maintenance",
+          "materialId": "ACM-alkies-b3-f2-r2-1",
+          "action": "test",
+          "assignedTo": "O&M – Maintenance",
+          "priority": "High",
+          "dueDate": "2026-11-20",
+          "status": "Completed",
+          "assignee": "Peyton Fairley",
+          "assignedToId": "P-0009",
+          "omActivityId": "OM-2026-0275"
+        },
+        {
+          "id": "AI-2",
+          "type": "Preventive Maintenance",
+          "materialId": "ACM-alkies-b3-f2-r2-1",
+          "action": "test",
+          "assignedTo": "O&M – Maintenance",
+          "priority": "High",
+          "dueDate": "2026-11-20",
+          "status": "Pending",
+          "assignee": "Samuel Birch",
+          "assignedToId": "P-0009",
+          "omActivityId": "OM-2026-0276"
+        }
+      ],
+      "verification": {
+        "reviewStatus": "Completed",
+        "inspectorSignature": "data:image/png;base64,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",
+        "completionDate": "2026-11-05",
+        "reviewerId": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "reviewerName": "Mayuri Kundalwal",
+        "reviewerSignature": "data:image/png;base64,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",
+        "reviewComments": "",
+        "approvalDate": "2026-11-05",
+        "reviewDate": "2026-11-05",
+        "reviewedAt": "2026-11-05T09:08:54.352Z"
+      },
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T08:57:24.516Z",
+        "notes": ""
+      },
+      "state": "approved",
+      "attachments": [
+        {
+          "id": "cd86a063-09c5-4e6f-9e1d-d7b509587a8d",
+          "name": "Bright Modern Classroom with Blue Chairs.png",
+          "mime": "image/png",
+          "size": 2114659,
+          "storedName": "cd86a063-09c5-4e6f-9e1d-d7b509587a8d.png",
+          "uploadedAt": "2026-11-05T09:04:03.296Z",
+          "category": "Before Inspection Photo",
+          "uploadedBy": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          }
+        }
+      ],
+      "createdAt": "2026-11-05T08:57:24.516Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00163",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Quill",
+          "derived": true
+        },
+        {
+          "stage": "initiated",
+          "status": "COMPLETED",
+          "at": "2026-11-05T09:07:07.946Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Assigned by Mayuri Kundalwal to Morgan Quill"
+        },
+        {
+          "stage": "inProgress",
+          "status": "COMPLETED",
+          "at": "2026-11-05T09:07:07.946Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Recorded by Morgan Quill"
+        },
+        {
+          "stage": "submitted",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05T09:07:07.946Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Waiting for review – samples go to the laboratory once approved"
+        },
+        {
+          "stage": "submitted",
+          "status": "COMPLETED",
+          "at": "2026-11-05T09:08:54.897Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Approved by Mayuri Kundalwal"
+        },
+        {
+          "stage": "lab",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05T09:08:54.897Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "2 samples · 2 pending"
+        }
+      ],
+      "updatedAt": "2026-11-05T09:16:32.195Z",
+      "checklistNotes": {},
+      "submittedAt": "2026-11-05T09:07:07.869Z",
+      "reviewGates": true,
+      "stageReviews": [
+        {
+          "id": "RV-1",
+          "stage": "submitted",
+          "status": "pending",
+          "requestedAt": "2026-11-05T09:07:07.874Z",
+          "requestedBy": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "note": "Inspection submitted – review it and send the samples to the laboratory.",
+          "requestFileIds": []
+        }
+      ]
+    },
+    {
+      "type": "Follow-up Inspection",
+      "date": "2026-11-05",
+      "scheduledDate": "2026-12-05",
+      "scheduledTime": "09:00",
+      "materialId": "ACM-alkies-b3-f2-r2-1",
+      "schoolId": "alkies",
+      "buildingId": "alkies-b3",
+      "floorId": "alkies-b3-f2",
+      "roomId": "alkies-b3-f2-r2",
+      "locationDescription": "HVAC duct in ceiling plenum, Mechanical",
+      "homogeneousAreaId": "",
+      "assessment": {
+        "currentCondition": "Good",
+        "previousCondition": "Damaged",
+        "conditionChange": "Improved",
+        "damageType": "None",
+        "damageExtent": "None",
+        "waterDamage": "No",
+        "potentialDisturbance": "Low",
+        "labelled": "No",
+        "managementPlanUpdated": "No"
+      },
+      "checklist": {
+        "goodCondition": "Yes",
+        "damaged": "No",
+        "labelled": "Yes",
+        "inManagementPlan": "Yes",
+        "waterDamage": "No",
+        "furtherAssessment": "No",
+        "immediateAction": "No"
+      },
+      "sampling": {
+        "required": "No"
+      },
+      "risk": {
+        "priority": "Low",
+        "damageSeverity": "None",
+        "recommendedAction": "No Action – Continue O&M",
+        "immediateAttention": "No",
+        "followUpRequired": "No",
+        "targetDate": ""
+      },
+      "extra": [],
+      "inspectorId": "u117",
+      "inspectorName": "Morgan Quill",
+      "certification": {
+        "name": "AHERA Building Inspector",
+        "number": "WA-INS-41217",
+        "expiresOn": "2027-04-09"
+      },
+      "comments": "",
+      "actionItems": [],
+      "verification": {
+        "reviewStatus": "Completed",
+        "inspectorSignature": "data:image/png;base64,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",
+        "completionDate": "2026-11-05",
+        "reviewerId": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "reviewerName": "Mayuri Kundalwal",
+        "reviewerSignature": "data:image/png;base64,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",
+        "reviewComments": "",
+        "approvalDate": "2026-11-05",
+        "reviewDate": "2026-11-05",
+        "reviewedAt": "2026-11-05T09:19:49.900Z"
+      },
+      "parentId": "INS-2026-00163",
+      "assignment": {
+        "assignedBy": {
+          "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+          "name": "Mayuri Kundalwal"
+        },
+        "assignedAt": "2026-11-05T09:17:13.560Z",
+        "notes": "Follow-up of inspection INS-2026-00163"
+      },
+      "state": "approved",
+      "attachments": [],
+      "createdAt": "2026-11-05T09:17:13.560Z",
+      "createdBy": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal"
+      },
+      "sample": false,
+      "id": "INS-2026-00164",
+      "checklistNotes": {},
+      "submittedAt": "2026-11-05T09:19:22.615Z",
+      "updatedAt": "2026-11-05T09:19:50.208Z",
+      "stageHistory": [
+        {
+          "stage": "initiated",
+          "status": "COMPLETED",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Follow-up of inspection INS-2026-00163 · Morgan Quill",
+          "derived": true
+        },
+        {
+          "stage": "inProgress",
+          "status": "COMPLETED",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Morgan Quill"
+          },
+          "reason": "Recorded by Morgan Quill",
+          "derived": true
+        },
+        {
+          "stage": "submitted",
+          "status": "IN_PROGRESS",
+          "at": "2026-11-05",
+          "by": {
+            "id": null,
+            "name": "Morgan Quill"
+          },
+          "reason": "Final review pending",
+          "derived": true
+        },
+        {
+          "stage": "lab",
+          "status": "NOT_REQUIRED",
+          "at": "2026-11-05",
+          "by": null,
+          "reason": "No sample collected",
+          "derived": true
+        },
+        {
+          "stage": "action",
+          "status": "NOT_REQUIRED",
+          "at": "2026-11-05",
+          "by": null,
+          "reason": "No corrective action required",
+          "derived": true
+        },
+        {
+          "stage": "followUp",
+          "status": "NOT_REQUIRED",
+          "at": "2026-11-05",
+          "by": null,
+          "reason": "No follow-up required",
+          "derived": true
+        },
+        {
+          "stage": "submitted",
+          "status": "COMPLETED",
+          "at": "2026-11-05T09:19:50.208Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Approved by Mayuri Kundalwal"
+        },
+        {
+          "stage": "closed",
+          "status": "COMPLETED",
+          "at": "2026-11-05T09:19:50.208Z",
+          "by": {
+            "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+            "name": "Mayuri Kundalwal"
+          },
+          "reason": "Approved and closed"
+        }
+      ]
     }
   ]
 }

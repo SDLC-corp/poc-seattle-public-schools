@@ -16,7 +16,15 @@ export const CONDITIONS = {
   'Significantly Damaged': { color: '#c94040', rank: 2 },
 }
 
-export const LEVEL_LABEL = { school: 'School', building: 'Building', floor: 'Floor', room: 'Room', acm: 'ACM' }
+// How each AHERA condition is presented on the overview (label, short label, tone for pills)
+export const CONDITION_VIEW = {
+  Good: { label: 'Stable', short: 'Stable', tone: 'good' },
+  Damaged: { label: 'Minor Deterioration', short: 'Minor', tone: 'warning' },
+  'Significantly Damaged': { label: 'Significant Deterioration', short: 'Significant', tone: 'critical' },
+}
+export const CONDITION_KEYS = Object.keys(CONDITION_VIEW)
+
+export const LEVEL_LABEL ={ school: 'School', building: 'Building', floor: 'Floor', room: 'Room', acm: 'ACM' }
 
 export const fmtDay = (iso) => (iso ? new Date(`${iso.slice(0, 10)}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—')
 export const fmtMonth = (ym) => new Date(`${ym}-01T00:00:00`).toLocaleDateString('en-US', { month: 'short', year: '2-digit' })

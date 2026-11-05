@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
 import {
   ShieldCheck, ArrowLeft, Save, ClipboardCheck, Plus, Trash2, Upload, Download, FileText, MapPin, History, Info,
-  CircleCheck, CircleAlert, Eraser, Building2, ExternalLink,
+  CircleCheck, CircleAlert, Eraser, Building2, ExternalLink, ClipboardPlus,
 } from 'lucide-react'
+import RequestInspectionDialog from './RequestInspectionDialog'
 import SearchSelect from '../../components/ui/SearchSelect'
 import { useConfirm } from '../../components/ui/useConfirm'
 import Badge from '../AcmInventory/Badge'
@@ -54,6 +55,21 @@ export default function SurveillanceForm() {
   const [saving, setSaving] = useState(null) // 'draft' | 'record' | null
   const [loadError, setLoadError] = useState(null)
   const [toast, setToast] = useState(() => routerLocation.state?.toast ?? null)
+  // Damage inspection requested from this record (the latest), and the request dialog
+  const [requested, setRequested] = useState(null)
+  const [requesting, setRequesting] = useState(false)
+  useEffect(() => {
+    if (!record?.id || !record.materialId) return undefined
+    let cancelled = false
+    request(`/inspection-records?type=${encodeURIComponent('Damage Assessment')}&q=${encodeURIComponent(record.materialId)}&pageSize=100`)
+      .then((d) => {
+        if (cancelled) return
+        const mine = d.records.filter((r) => r.surveillanceId === record.id).sort((a, b) => b.id.localeCompare(a.id))
+        setRequested(mine[0] ?? null)
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [record?.id, record?.materialId])
 
   useEffect(() => {
     request('/surveillance/meta').then(setMeta).catch((e) => setLoadError(e.message))
@@ -192,6 +208,10 @@ export default function SurveillanceForm() {
         <h1><ShieldCheck size={24} />Surveillance</h1>
         <div className="ai-head-actions">
           <button type="button" className="u-btn u-btn-outline" onClick={goBack}><ArrowLeft size={15} />Back</button>
+          {/* A recorded surveillance can ask for a damage inspection of its ACM (once; then it links to it) */}
+          {record && !isDraft && (requested
+            ? <Link className="u-btn u-btn-outline sv-req-link" to={`/inspections/records/${requested.id}`}><ClipboardPlus size={15} />Damage Inspection {requested.id}<span>{requested.statusText ?? requested.statusLabel}</span></Link>
+            : <button type="button" className="u-btn u-btn-outline" onClick={() => setRequesting(true)}><ClipboardPlus size={15} />Request Damage Inspection</button>)}
           {isDraft && (
             <button type="button" className="u-btn u-btn-outline" disabled={!!saving} onClick={() => save('draft')}>
               <Save size={15} />{saving === 'draft' ? 'Saving…' : 'Save Draft'}
@@ -460,6 +480,15 @@ export default function SurveillanceForm() {
       </div>
 
       {confirmDialog}
+      {requesting && record && (
+        <RequestInspectionDialog record={record} material={ctx?.material} location={ctx?.location}
+          onClose={() => setRequesting(false)}
+          onDone={(ins) => {
+            setRequesting(false)
+            setRequested(ins)
+            setToast({ kind: 'success', text: `Damage inspection ${ins.id} requested with ${ins.inspectorName ?? 'the inspector'} for ${fmtDay(ins.scheduledDate)}.` })
+          }} />
+      )}
       {toast && (
         <div className={`u-toast ${toast.kind}`} role="status">
           {toast.kind === 'success' ? <CircleCheck size={16} /> : <CircleAlert size={16} />}

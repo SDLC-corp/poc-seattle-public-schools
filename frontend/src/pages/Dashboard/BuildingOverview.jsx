@@ -52,7 +52,7 @@ export default function BuildingOverview({ state, variant = 'popup', onClose }) 
         <span><strong>{d.counts.floors}</strong>Floors</span>
         <span><strong>{d.counts.rooms}</strong>Rooms</span>
         <span><strong>{d.counts.acmRecords}</strong>ACM records</span>
-        <span className={d.counts.acmRooms ? 'warn' : undefined}><strong>{d.counts.acmRooms}</strong>ACM-affected rooms</span>
+        <span className={d.counts.acmRooms ? 'warn' : undefined}><strong>{d.counts.acmRooms}</strong>ACM-affected areas</span>
       </div>
 
       {panel && (

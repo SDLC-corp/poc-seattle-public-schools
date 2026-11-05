@@ -1,84 +1,135 @@
-import { useState } from 'react'
-import { TRENDS, TREND_ORDER, CONDITIONS, LEVEL_LABEL, fmtMonth } from './trendsMeta'
+import { useCallback, useEffect, useState } from 'react'
+import { CONDITIONS, CONDITION_VIEW, CONDITION_KEYS } from './trendsMeta'
 
-// Legend for a set of { key, label, color } — always shown with the bars, so identity isn't colour alone
-function Legend({ items }) {
+// Charts for the deterioration overview: conditions over time, the current split, and the split per material type.
+// Each shows a legend, so condition is never told by colour alone.
+
+const pct = (n, total) => (total ? (n / total) * 100 : 0)
+const fmtPct = (v) => `${v.toFixed(1)}%`
+const niceTop = (max) => {
+  const raw = Math.max(4, max) / 5
+  const mag = 10 ** Math.floor(Math.log10(raw))
+  const step = [1, 2, 2.5, 5, 10].map((m) => m * mag).find((s) => s >= raw)
+  return { step, top: step * 5 }
+}
+
+// Width of a chart's box, so the SVG is drawn at its real size and text stays readable
+function useWidth(fallback = 640) {
+  const [el, setEl] = useState(null)
+  const [w, setW] = useState(fallback)
+  const ref = useCallback((node) => setEl(node), [])
+  useEffect(() => {
+    if (!el) return undefined
+    const ro = new ResizeObserver(([e]) => { const cw = Math.round(e.contentRect.width); if (cw > 0) setW(cw) })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [el])
+  return [ref, Math.max(w, 280)]
+}
+
+export function Legend({ counts }) {
   return (
     <ul className="tr-legend">
-      {items.map((x) => <li key={x.key}><i style={{ background: x.color }} />{x.label}</li>)}
+      {CONDITION_KEYS.map((k) => <li key={k}><i style={{ background: CONDITIONS[k].color }} />{CONDITION_VIEW[k].label}{counts && <b>{counts[k].toLocaleString()}</b>}</li>)}
     </ul>
   )
 }
 
-/**
- * Locations (schools at district level, then buildings, floors, rooms or ACMs as you drill down) as horizontal
- * stacked bars of ACM trends, worst first. Clicking a bar drills into it.
- */
-export function LocationChart({ data, onDrill }) {
+/** ACMs in each condition at the end of every month (lines with a light area), with a hover crosshair. */
+export function ConditionLine({ series, height = 260 }) {
   const [hover, setHover] = useState(null)
-  const keys = TREND_ORDER.filter((k) => k !== 'baseline')
-  const max = Math.max(1, ...data.items.map((g) => keys.reduce((n, k) => n + g[k], 0)))
+  const [ref, W] = useWidth()
+  const H = height
+  const pad = { l: 62, r: 18, t: 14, b: 40 }
+  const { step, top } = niceTop(Math.max(...series.flatMap((m) => CONDITION_KEYS.map((k) => m[k]))))
+  const ticks = Array.from({ length: 6 }, (_, i) => i * step)
+  const x = (i) => pad.l + (series.length === 1 ? (W - pad.l - pad.r) / 2 : (i / (series.length - 1)) * (W - pad.l - pad.r))
+  const y = (v) => pad.t + (1 - v / top) * (H - pad.t - pad.b)
+  const every = Math.ceil(series.length / Math.max(2, Math.floor((W - pad.l) / 52)))
+  const label = (ym) => new Date(`${ym}-01T00:00:00`)
   return (
     <div className="tr-chart">
-      <Legend items={keys.map((k) => ({ key: k, label: TRENDS[k].label, color: TRENDS[k].color }))} />
-      {!data.items.length && <p className="tr-empty">No assessed ACMs for these filters.</p>}
-      <ul className="tr-hbars">
-        {data.items.map((g) => {
-          const shown = keys.reduce((n, k) => n + g[k], 0)
-          const worse = g.significant + g.deteriorating
-          return (
-            <li key={g.id}>
-              <button type="button" className="tr-hbar-row" onClick={() => onDrill(g)} onMouseEnter={() => setHover(g.id)} onMouseLeave={() => setHover(null)}
-                disabled={data.level === 'acm' && !onDrill} aria-label={`${g.name}: ${worse} deteriorating of ${g.total} ACMs. ${data.level === 'acm' ? 'Open timeline' : 'Drill down'}`}>
-                <span className="tr-hbar-name" title={g.name}>{g.name}<small>{g.total} ACM{g.total === 1 ? '' : 's'}</small></span>
-                <span className="tr-hbar-track">
-                  <span className="tr-hbar-fill" style={{ width: `${(shown / max) * 100}%` }}>
-                    {keys.map((k) => g[k] > 0 && <i key={k} style={{ flexGrow: g[k], background: TRENDS[k].color }} />)}
-                  </span>
-                </span>
-                <span className={`tr-hbar-val${worse ? ' bad' : ''}`}>{worse}</span>
-              </button>
-              {hover === g.id && (
-                <div className="tr-tip" role="status">
-                  <strong>{g.name}</strong>
-                  {TREND_ORDER.map((k) => <span key={k}><i style={{ background: TRENDS[k].color }} />{TRENDS[k].label}: <b>{g[k]}</b></span>)}
-                  <em>{data.level === 'acm' ? 'Click to open its timeline' : `Click to drill into this ${LEVEL_LABEL[data.level].toLowerCase()}`}</em>
-                </div>
-              )}
-            </li>
-          )
-        })}
-      </ul>
+      <div className="tr-plot" ref={ref} onMouseLeave={() => setHover(null)}>
+        <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} role="img"
+          aria-label={`ACMs by condition per month: ${series.map((m) => `${m.month} ${CONDITION_KEYS.map((k) => `${CONDITION_VIEW[k].short} ${m[k]}`).join(', ')}`).join('; ')}`}>
+          <text transform={`translate(14 ${(pad.t + H - pad.b) / 2}) rotate(-90)`} textAnchor="middle" className="tr-ytitle">No. of ACMs</text>
+          {ticks.map((t) => (
+            <g key={t}>
+              <line x1={pad.l} x2={W - pad.r} y1={y(t)} y2={y(t)} className={t === 0 ? 'tr-axis' : 'tr-grid'} />
+              <text x={pad.l - 8} y={y(t) + 4} textAnchor="end" className="tr-tick">{t.toLocaleString()}</text>
+            </g>
+          ))}
+          {series.map((m, i) => i % every === 0 && (
+            <text key={m.month} x={x(i)} y={H - 22} textAnchor="middle" className="tr-tick">
+              {label(m.month).toLocaleDateString('en-US', { month: 'short' })}
+              <tspan x={x(i)} dy="13" className="tr-tick-sub">{label(m.month).getFullYear()}</tspan>
+            </text>
+          ))}
+          {CONDITION_KEYS.map((k) => (
+            <polygon key={`a-${k}`} points={`${x(0)},${y(0)} ${series.map((m, i) => `${x(i)},${y(m[k])}`).join(' ')} ${x(series.length - 1)},${y(0)}`} fill={CONDITIONS[k].color} opacity="0.1" />
+          ))}
+          {hover != null && <line x1={x(hover)} x2={x(hover)} y1={pad.t} y2={H - pad.b} className="tr-cross" />}
+          {CONDITION_KEYS.map((k) => (
+            <g key={k}>
+              <polyline fill="none" stroke={CONDITIONS[k].color} strokeWidth="2.5" strokeLinejoin="round" points={series.map((m, i) => `${x(i)},${y(m[k])}`).join(' ')} />
+              {series.map((m, i) => <circle key={m.month} cx={x(i)} cy={y(m[k])} r={hover === i ? 5.5 : 4} fill={CONDITIONS[k].color} stroke="#fff" strokeWidth="1.5" />)}
+            </g>
+          ))}
+          {series.map((m, i) => (
+            <rect key={m.month} x={x(i) - (W - pad.l - pad.r) / series.length / 2} y={pad.t} width={(W - pad.l - pad.r) / series.length} height={H - pad.t - pad.b} fill="transparent" onMouseEnter={() => setHover(i)} />
+          ))}
+        </svg>
+        {hover != null && (
+          <div className="tr-tip tr-tip-line" style={{ left: Math.min(x(hover), W - 220) }} role="status">
+            <strong>{label(series[hover].month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</strong>
+            {CONDITION_KEYS.map((k) => <span key={k}><i style={{ background: CONDITIONS[k].color }} />{CONDITION_VIEW[k].label}: <b>{series[hover][k]}</b> ({fmtPct(pct(series[hover][k], series[hover].total))})</span>)}
+            <span>Assessed ACMs: <b>{series[hover].total}</b></span>
+          </div>
+        )}
+      </div>
+      <Legend />
     </div>
   )
 }
 
-// Material types as 100% bars of their ACMs' current condition
-export function MaterialChart({ data }) {
+/** The current split as a donut with each share on its segment and the total in the middle. */
+export function ConditionDonut({ kpis }) {
   const [hover, setHover] = useState(null)
-  const keys = Object.keys(CONDITIONS)
+  const R = 80
+  const C = 2 * Math.PI * R
+  let off = 0
+  let angle = -90
   return (
-    <div className="tr-chart">
-      <Legend items={keys.map((k) => ({ key: k, label: k, color: CONDITIONS[k].color }))} />
-      {!data.length && <p className="tr-empty">No assessed ACMs for these filters.</p>}
-      <ul className="tr-hbars">
-        {data.map((g) => (
-          <li key={g.name} onMouseEnter={() => setHover(g.name)} onMouseLeave={() => setHover(null)}>
-            <div className="tr-hbar-row static">
-              <span className="tr-hbar-name" title={g.name}>{g.name}<small>{g.total} ACM{g.total === 1 ? '' : 's'}</small></span>
-              <span className="tr-hbar-track">
-                <span className="tr-hbar-fill full">
-                  {keys.map((k) => g[k] > 0 && <i key={k} style={{ flexGrow: g[k], background: CONDITIONS[k].color }} />)}
-                </span>
-              </span>
-              <span className="tr-hbar-val">{Math.round((g.Good / g.total) * 100)}%<small>good</small></span>
-            </div>
-            {hover === g.name && (
-              <div className="tr-tip" role="status">
-                <strong>{g.name}</strong>
-                {keys.map((k) => <span key={k}><i style={{ background: CONDITIONS[k].color }} />{k}: <b>{g[k]}</b> ({Math.round((g[k] / g.total) * 100)}%)</span>)}
-              </div>
-            )}
+    <div className="tr-donut">
+      <div className="tr-donut-fig">
+        <svg viewBox="0 0 220 220" role="img" aria-label={CONDITION_KEYS.map((k) => `${CONDITION_VIEW[k].label} ${kpis[k]} (${fmtPct(pct(kpis[k], kpis.total))})`).join(', ')}>
+          <g transform="rotate(-90 110 110)">
+            {CONDITION_KEYS.map((k) => {
+              const len = (pct(kpis[k], kpis.total) / 100) * C
+              const el = <circle key={k} cx="110" cy="110" r={R} fill="none" stroke={CONDITIONS[k].color} strokeWidth={hover === k ? 44 : 38}
+                strokeDasharray={`${Math.max(0, len - 1.5)} ${C}`} strokeDashoffset={-off} onMouseEnter={() => setHover(k)} onMouseLeave={() => setHover(null)} />
+              off += len
+              return el
+            })}
+          </g>
+          {CONDITION_KEYS.map((k) => {
+            const share = pct(kpis[k], kpis.total)
+            const mid = angle + (share / 100) * 180
+            angle += (share / 100) * 360
+            if (share < 6) return null
+            const rad = (mid * Math.PI) / 180
+            return <text key={k} x={110 + R * Math.cos(rad)} y={110 + R * Math.sin(rad) + 4} textAnchor="middle" className="tr-donut-pct">{fmtPct(share)}</text>
+          })}
+        </svg>
+        <div className="tr-donut-center">
+          <strong>{(hover ? kpis[hover] : kpis.total).toLocaleString()}</strong>
+          <span>{hover ? CONDITION_VIEW[hover].label : 'ACMs'}</span>
+        </div>
+      </div>
+      <ul className="tr-donut-legend">
+        {CONDITION_KEYS.map((k) => (
+          <li key={k} onMouseEnter={() => setHover(k)} onMouseLeave={() => setHover(null)} className={hover === k ? 'on' : undefined}>
+            <i style={{ background: CONDITIONS[k].color }} /><span>{CONDITION_VIEW[k].label}<small>{k}</small></span><b>{kpis[k].toLocaleString()}</b>
           </li>
         ))}
       </ul>
@@ -86,59 +137,27 @@ export function MaterialChart({ data }) {
   )
 }
 
-// Deteriorations and improvements recorded per month (changes between consecutive assessments), as two lines
-export function MonthlyChart({ data }) {
-  const [hover, setHover] = useState(null)
-  const W = 640
-  const H = 220
-  const pad = { l: 34, r: 12, t: 12, b: 28 }
-  const series = [
-    { key: 'deteriorated', label: 'Deteriorated', color: TRENDS.significant.color },
-    { key: 'improved', label: 'Improved', color: TRENDS.improved.color },
-  ]
-  if (!data.length) return <div className="tr-chart"><p className="tr-empty">No repeat assessments in this period.</p></div>
-  const max = Math.max(4, ...data.flatMap((m) => series.map((s) => m[s.key])))
-  const step = Math.ceil(max / 4)
-  const top = step * 4
-  const x = (i) => pad.l + (data.length === 1 ? (W - pad.l - pad.r) / 2 : (i / (data.length - 1)) * (W - pad.l - pad.r))
-  const y = (v) => pad.t + (1 - v / top) * (H - pad.t - pad.b)
-  const ticks = [0, 1, 2, 3, 4].map((i) => i * step)
+/** Each material type as a 100% bar of its ACMs' current condition, shares written on the segments. */
+export function MaterialStack({ items }) {
+  if (!items.length) return <p className="tr-empty">No assessed ACMs for these filters.</p>
   return (
     <div className="tr-chart">
-      <Legend items={series} />
-      <div className="tr-line-wrap" onMouseLeave={() => setHover(null)}>
-        <svg viewBox={`0 0 ${W} ${H}`} className="tr-line" role="img"
-          aria-label={`Changes per month: ${data.map((m) => `${fmtMonth(m.month)} ${m.deteriorated} deteriorated, ${m.improved} improved`).join('; ')}`}>
-          {ticks.map((t) => (
-            <g key={t}>
-              <line x1={pad.l} x2={W - pad.r} y1={y(t)} y2={y(t)} className={t === 0 ? 'tr-axis' : 'tr-grid'} />
-              <text x={pad.l - 6} y={y(t) + 4} textAnchor="end" className="tr-tick">{t}</text>
-            </g>
-          ))}
-          {data.map((m, i) => i % Math.ceil(data.length / 9) === 0 && (
-            <text key={m.month} x={x(i)} y={H - 8} textAnchor="middle" className="tr-tick">{fmtMonth(m.month)}</text>
-          ))}
-          {hover != null && <line x1={x(hover)} x2={x(hover)} y1={pad.t} y2={H - pad.b} className="tr-cross" />}
-          {series.map((s) => (
-            <g key={s.key}>
-              <polyline fill="none" stroke={s.color} strokeWidth="2" strokeLinejoin="round" points={data.map((m, i) => `${x(i)},${y(m[s.key])}`).join(' ')} />
-              {data.map((m, i) => <circle key={m.month} cx={x(i)} cy={y(m[s.key])} r={hover === i ? 5 : 3.5} fill={s.color} stroke="#fff" strokeWidth="2" />)}
-            </g>
-          ))}
-          {/* Hover targets: a full-height band per month */}
-          {data.map((m, i) => (
-            <rect key={m.month} x={x(i) - (W - pad.l - pad.r) / data.length / 2} y={pad.t} width={(W - pad.l - pad.r) / data.length} height={H - pad.t - pad.b}
-              fill="transparent" onMouseEnter={() => setHover(i)} />
-          ))}
-        </svg>
-        {hover != null && (
-          <div className="tr-tip tr-tip-line" style={{ left: `${(x(hover) / W) * 100}%` }} role="status">
-            <strong>{fmtMonth(data[hover].month)}</strong>
-            {series.map((s) => <span key={s.key}><i style={{ background: s.color }} />{s.label}: <b>{data[hover][s.key]}</b></span>)}
-            <span>Repeat assessments: <b>{data[hover].assessed}</b></span>
-          </div>
-        )}
-      </div>
+      <ul className="tr-mstack">
+        {items.map((g) => (
+          <li key={g.name}>
+            <span className="tr-mstack-name" title={`${g.name} · ${g.total} ACMs`}>{g.name}<small>{g.total} ACM{g.total === 1 ? '' : 's'}</small></span>
+            <span className="tr-mstack-bar">
+              {CONDITION_KEYS.map((k) => g[k] > 0 && (
+                <i key={k} style={{ flexGrow: g[k], background: CONDITIONS[k].color }} title={`${CONDITION_VIEW[k].label}: ${g[k]} (${fmtPct(pct(g[k], g.total))})`}>
+                  {pct(g[k], g.total) >= 9 && `${Math.round(pct(g[k], g.total))}%`}
+                </i>
+              ))}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <div className="tr-mstack-axis" aria-hidden="true"><span /><span className="tr-mstack-ticks">{[0, 20, 40, 60, 80, 100].map((t) => <span key={t}>{t}%</span>)}</span></div>
+      <Legend />
     </div>
   )
 }

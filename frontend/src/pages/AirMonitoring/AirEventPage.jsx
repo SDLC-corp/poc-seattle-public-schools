@@ -221,7 +221,7 @@ export default function AirEventPage() {
           }} />
       )}
       {enteringResult && e && (
-        <SampleResultDialog inspectionId={e.inspectionId} materialId={e.materialId} onClose={() => setEnteringResult(false)}
+        <SampleResultDialog inspectionId={e.inspectionId} materialId={e.materialId} sampleKey={e.sampleKey ?? 0} onClose={() => setEnteringResult(false)}
           onSaved={(text, warn) => { setEnteringResult(false); setToast({ kind: warn ? 'error' : 'success', text }); setRefreshKey((k) => k + 1) }} />
       )}
 

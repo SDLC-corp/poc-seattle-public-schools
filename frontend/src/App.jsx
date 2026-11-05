@@ -26,6 +26,10 @@ import FloorRooms from './pages/Schools/FloorRooms'
 import LabSamples from './pages/LabSamples/LabSamples'
 import SamplePage from './pages/LabSamples/SamplePage'
 import Trends from './pages/Trends/Trends'
+import CostForecasting from './pages/Cost/CostForecasting'
+import InvoiceAnalysis from './pages/Cost/InvoiceAnalysis'
+import InvoiceDetail from './pages/Cost/InvoiceDetail'
+import CostReports from './pages/Cost/CostReports'
 import Reports from './pages/Reports/Reports'
 import AcmInventory from './pages/AcmInventory/AcmInventory'
 import Surveillance from './pages/Surveillance/Surveillance'
@@ -126,6 +130,16 @@ function App() {
           <Route path="sampling" element={<LabSamples />} />
           <Route path="sampling/samples/:id" element={<SamplePage />} />
           <Route path="trends" element={<Trends />} />
+          {/* Cost Intelligence: a static demo on local sample data */}
+          <Route path="cost" element={<Navigate to="/cost/forecasting" replace />} />
+          {/* Cost Overview was merged into Cost Forecasting; AI Cost Insights and Historical Cost Analysis were removed */}
+          <Route path="cost/overview" element={<Navigate to="/cost/forecasting" replace />} />
+          <Route path="cost/forecasting" element={<CostForecasting />} />
+          <Route path="cost/invoices" element={<InvoiceAnalysis />} />
+          <Route path="cost/invoices/:id" element={<InvoiceDetail />} />
+          <Route path="cost/history" element={<Navigate to="/cost/forecasting" replace />} />
+          <Route path="cost/insights" element={<Navigate to="/cost/forecasting" replace />} />
+          <Route path="cost/reports" element={<CostReports />} />
           <Route path="sampling/*" element={<Navigate to="/sampling" replace />} />
           <Route path="reports/:tab?/:report?" element={<Reports />} />
           <Route path="acm/:tab?" element={<AcmInventory />} />

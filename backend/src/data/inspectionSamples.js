@@ -13,7 +13,8 @@ const CLASS_OF = { 'Asbestos Detected': 'detected', 'No Asbestos Detected': 'non
 export const resultsEditable = (r) => (r.parentId ? r.state === 'submitted'
   : !(r.reviewGates && (r.stageReviews ?? []).filter((x) => x.stage === 'lab').at(-1)?.status === 'approved'));
 
-// Samples on submitted/approved inspections (they have gone to the laboratory), with their ACM's place
+// Samples on submitted/approved inspections (they have gone to the laboratory), with their ACM's place.
+// An ACM can have several samples: k is the sample's position (0 = first).
 function sentSamples() {
   const rooms = new Map(allRooms().map((r) => [r.id, r]));
   const floors = new Map(getAllFloors().map((f) => [f.id, f]));
@@ -21,14 +22,19 @@ function sentSamples() {
   const buildingName = (id) => buildings.find((b) => b.id === id)?.name ?? id;
   return getRecords()
     .filter((r) => r.state === 'submitted' || r.state === 'approved')
-    .flatMap((r) => M.acmsOf(r).map((a, i) => ({ r, a, i })))
-    // Only samples that have gone to the lab (reviewed inspections send them; older records were sent on submit)
-    .filter(({ r, a }) => a.sampling?.required === 'Yes' && (!r.reviewGates || a.sampling.sentToLabAt || a.sampling.result !== 'Pending'))
-    .map(({ r, a, i }) => ({
-      r, a, i, s: a.sampling, m: getMaterial(a.materialId), room: rooms.get(a.roomId),
+    .flatMap((r) => M.allSamplesOf(r).map((x) => ({ r, ...x })))
+    // Only samples that have gone to the lab (the reviewer sends them on approval; older records were sent on submit)
+    .filter(({ r, s }) => !r.reviewGates || s.sentToLabAt || s.result !== 'Pending')
+    .map(({ r, a, i, k, s }) => ({
+      r, a, i, k, s, m: getMaterial(a.materialId), room: rooms.get(a.roomId),
       schoolName: schoolName(a.schoolId), buildingName: buildingName(a.buildingId), floorName: floors.get(a.floorId)?.name ?? '',
     }));
 }
+
+// Ids as listed: the first sample of an ACM keeps the original form ("ins-<inspection>-<acm>", "AIR-<inspection>-<acm+1>");
+// further samples add their position
+export const labSampleId = (rId, i, k) => `ins-${rId}-${i}${k ? `-${k}` : ''}`;
+export const airEventId = (rId, i, k) => `AIR-${rId}-${i + 1}${k ? `-${k + 1}` : ''}`;
 
 /**
  * Bulk, dust/surface and soil samples taken during inspections, in the shape of the Lab & Sampling Results
@@ -37,10 +43,10 @@ function sentSamples() {
 export function inspectionSamples() {
   return sentSamples()
     .filter(({ s }) => M.sampleTypeOf(s) !== M.AIR_SAMPLE)
-    .map(({ r, a, i, s, m, room, schoolName, buildingName }) => {
+    .map(({ r, a, i, k, s, m, room, schoolName, buildingName }) => {
       const resultClass = CLASS_OF[s.result] ?? 'pending';
       return {
-        id: `ins-${r.id}-${i}`,
+        id: labSampleId(r.id, i, k), sampleKey: k,
         source: 'inspection',
         sampleType: M.sampleTypeOf(s),
         site: schoolName,
@@ -80,8 +86,8 @@ export function inspectionSamples() {
 export function inspectionAirEvents() {
   return sentSamples()
     .filter(({ s }) => M.sampleTypeOf(s) === M.AIR_SAMPLE)
-    .map(({ r, a, i, s, m, room, schoolName, buildingName }) => withDerived({
-      id: `AIR-${r.id}-${i + 1}`,
+    .map(({ r, a, i, k, s, m, room, schoolName, buildingName }) => withDerived({
+      id: airEventId(r.id, i, k), sampleKey: k,
       sampledAt: s.collectionDate ? `${s.collectionDate}T09:00:00.000Z` : s.sentToLabAt ?? r.date,
       schoolId: a.schoolId, schoolName, buildingId: a.buildingId, buildingName,
       location: room ? `${room.number} – ${room.name}` : a.locationDescription || '',

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router'
 import {
   ClipboardList, FileText, Download, Search, ChevronLeft, ChevronRight, ArrowDown, ArrowUp, RotateCcw,
 } from 'lucide-react'
@@ -44,6 +45,8 @@ function Cell({ column, row, statuses }) {
   }
   if (column.type === 'date') return fmtDay(v)
   if (v === '' || v == null) return <span className="u-muted">—</span>
+  // The record's own page (rows carry `link`)
+  if (column.type === 'link' && row.link) return <Link className="rp-link" to={row.link}>{v}</Link>
   return typeof v === 'number' ? v.toLocaleString('en-US') : v
 }
 

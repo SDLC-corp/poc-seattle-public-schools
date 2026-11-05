@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { schools, buildings } from '../data/store.js';
 import { getAllFloors } from '../data/floorsStore.js';
 import { getMaterials, allRooms } from '../data/roomsStore.js';
-import { dashboard, acmTimeline, getRules, saveRules, CONDITIONS, TRENDS } from '../data/trends.js';
+import { dashboard, overview, acmTimeline, getRules, saveRules, CONDITIONS, TRENDS } from '../data/trends.js';
 import { logAudit } from '../data/auditStore.js';
 
 const router = Router();
@@ -46,6 +46,12 @@ router.get('/', (req, res) => {
   const page = Math.min(pages, Math.max(1, Number(req.query.page) || 1));
   const { rows, ...rest } = d;
   res.json({ ...rest, table: { total: list.length, page, pageSize, pages, rows: list.slice((page - 1) * pageSize, page * pageSize) } });
+});
+
+// GET /api/trends/overview?school=&materialType=&months=12 — condition counts now and per month, by material and school,
+// and the ACMs that got worse in the period
+router.get('/overview', (req, res) => {
+  res.json(overview({ school: String(req.query.school ?? ''), materialType: String(req.query.materialType ?? ''), months: req.query.months }));
 });
 
 router.get('/export.csv', (req, res) => {

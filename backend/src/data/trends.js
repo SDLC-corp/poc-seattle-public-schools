@@ -244,6 +244,80 @@ export function dashboard(q) {
   };
 }
 
+/**
+ * Condition overview for { school, materialType, months }: every surveyed ACM by its current condition, how many were
+ * in each condition at the end of each month of the period, the split by material type and by school (with the
+ * direction of change since the period started) and the ACMs whose latest assessment in the period was worse.
+ */
+export function overview(q = {}) {
+  const hist = histories();
+  const name = lookups();
+  const months = Math.min(36, Math.max(3, Number(q.months) || 12));
+  const now = new Date();
+  const monthKeys = Array.from({ length: months }, (_, i) => {
+    const d = new Date(now.getFullYear(), now.getMonth() - (months - 1 - i), 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  });
+  const monthEnd = (key) => { const [y, m] = key.split('-').map(Number); return `${key}-${String(new Date(y, m, 0).getDate()).padStart(2, '0')}`; };
+  const today = now.toISOString().slice(0, 10);
+  const periodStart = `${monthKeys[0]}-01`;
+  const conditionAt = (list, day) => { let c = null; for (const e of list) { if (e.date > day) break; c = e.condition; } return c; };
+  const blank = () => ({ total: 0, Good: 0, Damaged: 0, 'Significantly Damaged': 0 });
+
+  // The school comparison always lists every school (the chosen one is highlighted on the page)
+  const mats = getMaterials().filter((m) => SURVEYED.includes(m.acmStatus) && (!q.materialType || m.materialType === q.materialType));
+  const totals = blank();
+  const series = monthKeys.map((month) => ({ month, ...blank() }));
+  const materials = new Map();
+  const perSchool = new Map();
+  const worse = [];
+  for (const m of mats) {
+    const list = hist.get(m.id) ?? [];
+    const current = list.at(-1)?.condition ?? (CONDITION_RANK[m.condition] !== undefined ? m.condition : null);
+    if (!current) continue;
+    if (!perSchool.has(m.schoolId)) perSchool.set(m.schoolId, { id: m.schoolId, name: name.school(m.schoolId), ...blank(), startAssessed: 0, startDamaged: 0 });
+    const s = perSchool.get(m.schoolId);
+    s.total += 1;
+    s[current] += 1;
+    const atStart = conditionAt(list, periodStart);
+    if (atStart) { s.startAssessed += 1; if (atStart !== 'Good') s.startDamaged += 1; }
+    if (q.school && m.schoolId !== q.school) continue;
+    totals.total += 1;
+    totals[current] += 1;
+    monthKeys.forEach((key, i) => {
+      const c = key === monthKeys.at(-1) ? conditionAt(list, today) : conditionAt(list, monthEnd(key));
+      if (c) { series[i].total += 1; series[i][c] += 1; }
+    });
+    const type = m.materialType || 'Other';
+    if (!materials.has(type)) materials.set(type, { name: type, ...blank() });
+    const g = materials.get(type);
+    g.total += 1;
+    g[current] += 1;
+    // Worse at its latest assessment in the period than at the one before
+    const last = list.at(-1);
+    const prev = list.at(-2);
+    if (last && prev && last.date >= periodStart && CONDITION_RANK[last.condition] > CONDITION_RANK[prev.condition]) {
+      worse.push({
+        id: m.id, acmId: shortAcm(m.id), schoolId: m.schoolId, school: name.school(m.schoolId),
+        location: [name.building(m.buildingId), name.room(m.roomId)].filter(Boolean).join(' – '),
+        material: m.materialType || m.name, previous: prev.condition, current: last.condition, lastDate: last.date, lastType: last.type, link: last.link ?? null,
+      });
+    }
+  }
+  const schoolsOut = [...perSchool.values()].map(({ startAssessed, startDamaged, ...s }) => {
+    const nowShare = s.total ? (s.Damaged + s['Significantly Damaged']) / s.total : 0;
+    const startShare = startAssessed ? startDamaged / startAssessed : nowShare;
+    const delta = nowShare - startShare;
+    return { ...s, damagedShareChange: Math.round(delta * 1000) / 10, direction: delta > 0.02 ? 'up' : delta < -0.02 ? 'down' : 'flat' };
+  }).sort((a, b) => b['Significantly Damaged'] / b.total - a['Significantly Damaged'] / a.total || b.total - a.total);
+  return {
+    months, kpis: totals, series,
+    byMaterial: [...materials.values()].sort((a, b) => b.total - a.total).slice(0, 8),
+    bySchool: schoolsOut,
+    deteriorating: worse.sort((a, b) => b.lastDate.localeCompare(a.lastDate) || CONDITION_RANK[b.current] - CONDITION_RANK[a.current]).slice(0, 100),
+  };
+}
+
 // One ACM's condition history (oldest first) with what was observed and any photos
 export function acmTimeline(id) {
   const m = getMaterials().find((x) => x.id === id);

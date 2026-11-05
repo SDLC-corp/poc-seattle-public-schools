@@ -17,6 +17,15 @@ export const measureText = (s) => {
 }
 export const limitText = (s) => (s?.limitValue == null ? '' : `limit ${withUnit(s.limitValue, s.measureUnit)}`)
 
+// The samples of one ACM: the first is acm.sampling, any further ones in sampling.more; k is the position, 0 = first
+// (server: inspectionMeta.samplesOf)
+export const samplesOf = (a) => (a?.sampling?.required === 'Yes'
+  ? [{ k: 0, s: a.sampling }, ...(a.sampling.more ?? []).map((s, j) => ({ k: j + 1, s }))] : [])
+// Where a sample is listed once it's at the lab (server: inspectionSamples.labSampleId / airEventId)
+export const sampleLink = (inspectionId, acmIndex, k, s) => (s?.sampleType === 'Air Sample'
+  ? `/air-monitoring/events/${encodeURIComponent(`AIR-${inspectionId}-${acmIndex + 1}${k ? `-${k + 1}` : ''}`)}`
+  : `/sampling/samples/${encodeURIComponent(`ins-${inspectionId}-${acmIndex}${k ? `-${k}` : ''}`)}`)
+
 // "13:30" → "1:30 PM"
 export const fmtTime = (hhmm) => {
   if (!hhmm) return ''
@@ -42,6 +51,6 @@ export const SECTIONS = [
   { id: 'risk', n: 6, title: 'Risk Assessment & Recommendations' },
   { id: 'documents', n: 7, title: 'Photos & Documents' },
   { id: 'comments', n: 8, title: 'Comments & Observations' },
-  { id: 'actions', n: 9, title: 'Action Items' },
+  { id: 'actions', n: 9, title: 'O&M Tasks' },
   { id: 'verification', n: 10, title: 'Verification & Signatures' },
 ]

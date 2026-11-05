@@ -1,6 +1,6 @@
 import {
   House, School, Layers, ClipboardCheck, FileText, FlaskConical, ScanEye,
-  Wrench, Wind, GraduationCap, ListChecks, Bell, ChartLine, TrendingDown, UsersRound, History, Settings, LifeBuoy, Plug,
+  Wrench, Wind, GraduationCap, ListChecks, Bell, ChartLine, TrendingDown, CircleDollarSign, UsersRound, History, Settings, LifeBuoy, Plug,
 } from 'lucide-react'
 
 // Every item has a route `path`. Child items are placeholders until the real pages are defined.
@@ -27,6 +27,15 @@ export const mainNav = [
   { id: 'trends', label: 'Trend Analysis', icon: TrendingDown, path: '/trends' },
   // Reached from the top bar's bell (hidden from the sidebar). badgeKey: a live count if it's shown (see Sidebar.jsx)
   { id: 'notifications', label: 'Notifications', icon: Bell, badgeKey: 'unreadNotifications', path: '/notifications', hidden: true },
+  // Cost Intelligence: a static demo on local sample data (src/pages/Cost)
+  {
+    id: 'cost', label: 'Cost Intelligence', icon: CircleDollarSign, path: '/cost',
+    children: [
+      { id: 'cost-forecasting', label: 'Cost Forecasting', path: '/cost/forecasting' },
+      { id: 'cost-invoices', label: 'Invoice Analysis', path: '/cost/invoices' },
+      { id: 'cost-reports', label: 'Cost Reports', path: '/cost/reports' },
+    ],
+  },
   // Reports & Analytics with Document Management as its Documents tab
   { id: 'reports', label: 'Reports & Documents', icon: ChartLine, path: '/reports' },
 ]

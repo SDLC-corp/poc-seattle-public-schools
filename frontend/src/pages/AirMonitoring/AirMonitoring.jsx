@@ -252,7 +252,7 @@ export default function AirMonitoring() {
                               <span className="air-acts">
                                 <button type="button" className="n-more" disabled={!editable} aria-label={`${label} for ${e.id}`}
                                   title={editable ? label : 'Submitted – read only'}
-                                  onClick={() => (e.inspectionId ? setEnteringResult({ inspectionId: e.inspectionId, materialId: e.materialId }) : setForm({ event: e }))}>
+                                  onClick={() => (e.inspectionId ? setEnteringResult({ inspectionId: e.inspectionId, materialId: e.materialId, sampleKey: e.sampleKey ?? 0 }) : setForm({ event: e }))}>
                                   <Pencil size={16} />
                                 </button>
                                 <button type="button" className="n-more" aria-label={`View ${e.id}`} title="View details" onClick={() => openEvent(e.id)}><Eye size={17} /></button>

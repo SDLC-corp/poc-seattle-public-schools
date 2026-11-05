@@ -70,7 +70,10 @@ export default function AssignTab({ meta, onToast, onDone }) {
     try {
       const res = await request('/inspection-records/assign', { method: 'POST', body: { ...form, materialIds: targets } })
       const inspector = meta?.inspectors.find((u) => u.id === form.inspectorId)?.name
-      onDone(`Assigned ${res.created.length} inspection${res.created.length === 1 ? '' : 's'} to ${inspector} for ${fmtDay(form.scheduledDate)} at ${fmtTime(form.scheduledTime)}${res.skipped.length ? ` (${res.skipped.length} skipped: already open)` : ''}.`)
+      const what = res.created.length === 1
+        ? `Inspection ${res.created[0]} covering ${res.acms} ACM${res.acms === 1 ? '' : 's'}`
+        : `${res.created.length} inspections (one per school) covering ${res.acms} ACMs`
+      onDone(`${what} assigned to ${inspector} for ${fmtDay(form.scheduledDate)} at ${fmtTime(form.scheduledTime)}${res.skipped.length ? ` (${res.skipped.length} skipped: already open)` : ''}.`, res)
     } catch (e) {
       setErrors(e.fields ?? {})
       onToast({ kind: 'error', text: e.message })
@@ -119,7 +122,7 @@ export default function AssignTab({ meta, onToast, onDone }) {
               ) : (
                 <>
                   <p>
-                    <strong>{targets.length} ACM</strong> in {rooms} room{rooms === 1 ? '' : 's'} at <strong>{placeName}</strong> will each get a {form.type.toLowerCase()}.
+                    <strong>{targets.length} ACM</strong> in {rooms} room{rooms === 1 ? '' : 's'} at <strong>{placeName}</strong> will be covered by one {form.type.toLowerCase()}.
                   </p>
                   {shown.length > targets.length && (
                     <p className="u-muted">{shown.length - targets.length} already have an inspection open and will be skipped.</p>
@@ -201,9 +204,9 @@ export default function AssignTab({ meta, onToast, onDone }) {
           <textarea className="u-input sv-textarea" rows={3} maxLength={500} value={form.notes} onChange={(e) => set('notes')(e.target.value)} placeholder="Access arrangements, contact on site…" />
         </label>
         <button type="button" className="u-btn u-btn-primary in-assign-btn" disabled={saving || !targets.length || !form.scheduledTime} onClick={assign}>
-          <CalendarClock size={15} />{saving ? 'Assigning…' : `Assign ${targets.length || ''} Inspection${targets.length === 1 ? '' : 's'}`}
+          <CalendarClock size={15} />{saving ? 'Assigning…' : `Assign Inspection${targets.length ? ` (${targets.length} ACM${targets.length === 1 ? '' : 's'})` : ''}`}
         </button>
-        <p className="sv-hint">Each material gets its own inspection record, assigned and scheduled. The inspector finds them under My Assignments.</p>
+        <p className="sv-hint">All the chosen ACMs go into one inspection record (one per school if they span several), assigned and scheduled. It opens once assigned and is listed under Upcoming.</p>
       </aside>
     </div>
   )

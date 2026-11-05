@@ -8,7 +8,8 @@ const DOT_ORDER = ['overdue', 'dueSoon', 'scheduled', 'completed']
 const STATUS_TEXT = { overdue: 'Overdue', dueSoon: 'Upcoming', scheduled: 'Scheduled', completed: 'Completed' }
 
 // Month calendar of inspections (grid beside the day's events). Clicking a day lists its events; clicking an event opens it.
-export default function ComplianceCalendar({ refreshKey, selectedInspectionId, onSelectInspection }) {
+// `stacked` puts the day's events under the grid (narrow places such as the dashboard); `title`/`action` add a card header.
+export default function ComplianceCalendar({ refreshKey, selectedInspectionId, onSelectInspection, stacked = false, title, action }) {
   const [today] = useState(() => isoDay(new Date()))
   const [month, setMonth] = useState(() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1) })
   const [selectedDay, setSelectedDay] = useState(today)
@@ -48,7 +49,8 @@ export default function ComplianceCalendar({ refreshKey, selectedInspectionId, o
   const dayEvents = (byDay[selectedDay] ?? []).slice().sort((a, b) => DOT_ORDER.indexOf(a.status) - DOT_ORDER.indexOf(b.status))
 
   return (
-    <section className="u-card c-cal">
+    <section className={`u-card c-cal${stacked ? ' c-cal-stacked' : ''}`}>
+      {title && <div className="c-cal-title"><h2>{title}</h2>{action}</div>}
       <header className="c-cal-head">
         <button type="button" className="u-row-btn" onClick={() => shiftMonth(-1)} aria-label="Previous month"><ChevronLeft size={15} /></button>
         <h2>{month.toLocaleDateString('en-US', { month: 'long' })}<small>{month.getFullYear()}</small></h2>

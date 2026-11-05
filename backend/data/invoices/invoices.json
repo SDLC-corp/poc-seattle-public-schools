@@ -1,0 +1,504 @@
+{
+  "invoices": [
+    {
+      "document_type": "historical_invoice",
+      "document_title": "Invoice 1",
+      "invoice_number": "SPS-NW-2026-1001",
+      "invoice_date": "2026-01-12",
+      "due_date": "2026-02-11",
+      "currency": "USD",
+      "contractor": {
+        "name": "Northwest Environmental Services",
+        "address": "Seattle, WA",
+        "phone": "(206) 555-1200",
+        "email": "billing1@example.com",
+        "license_reference": "WA-ASB-300"
+      },
+      "bill_to": {
+        "organization": "Seattle Public Schools",
+        "department": "Environmental Health & Safety",
+        "address": "Seattle, Washington"
+      },
+      "service_location": {
+        "school": "Lincoln Elementary School",
+        "building": "Building A",
+        "floor": "Ground Floor",
+        "room_or_area": "Mechanical Room"
+      },
+      "work_order": "SPS-EHS-2026-0501",
+      "work_description": "ACM condition assessment and inspection",
+      "line_items": [
+        {
+          "description": "ACM condition assessment and inspection",
+          "category": "inspection",
+          "quantity": 1,
+          "unit": "building",
+          "unit_rate": "1250.00",
+          "line_total": "1250.00"
+        }
+      ],
+      "financials": {
+        "subtotal": "1250.00",
+        "tax_rate_percent": "10.20",
+        "tax_amount": "127.50",
+        "discount": "0.00",
+        "grand_total": "1377.50",
+        "amount_paid": "0.00",
+        "balance_due": "1377.50"
+      },
+      "payment_terms": "Net 30",
+      "notes": "Invoice record for Seattle Public Schools Environmental Health & Safety.",
+      "pdf_file": "pdf/SPS-NW-2026-1001.pdf"
+    },
+    {
+      "document_type": "historical_invoice",
+      "document_title": "Invoice 2",
+      "invoice_number": "SPS-EA-2026-1002",
+      "invoice_date": "2026-01-31",
+      "due_date": "2026-03-02",
+      "currency": "USD",
+      "contractor": {
+        "name": "Evergreen Asbestos Abatement LLC",
+        "address": "Tacoma, WA",
+        "phone": "(206) 555-1201",
+        "email": "billing2@example.com",
+        "license_reference": "WA-ASB-301"
+      },
+      "bill_to": {
+        "organization": "Seattle Public Schools",
+        "department": "Environmental Health & Safety",
+        "address": "Seattle, Washington"
+      },
+      "service_location": {
+        "school": "Roosevelt High School",
+        "building": "Main Building",
+        "floor": "2nd Floor",
+        "room_or_area": "Room 204"
+      },
+      "work_order": "SPS-EHS-2026-0502",
+      "work_description": "Pipe insulation repair and encapsulation",
+      "line_items": [
+        {
+          "description": "Pipe insulation repair and encapsulation",
+          "category": "O&M",
+          "quantity": 120,
+          "unit": "linear_ft",
+          "unit_rate": "18.50",
+          "line_total": "2220.00"
+        }
+      ],
+      "financials": {
+        "subtotal": "2220.00",
+        "tax_rate_percent": "10.20",
+        "tax_amount": "226.44",
+        "discount": "0.00",
+        "grand_total": "2446.44",
+        "amount_paid": "2446.44",
+        "balance_due": "0.00"
+      },
+      "payment_terms": "Net 30",
+      "notes": "Invoice record for Seattle Public Schools Environmental Health & Safety.",
+      "pdf_file": "pdf/SPS-EA-2026-1002.pdf"
+    },
+    {
+      "document_type": "historical_invoice",
+      "document_title": "Invoice 3",
+      "invoice_number": "SPS-PS-2026-1003",
+      "invoice_date": "2026-02-19",
+      "due_date": "2026-03-21",
+      "currency": "USD",
+      "contractor": {
+        "name": "Pacific Safety & Compliance",
+        "address": "Bellevue, WA",
+        "phone": "(206) 555-1202",
+        "email": "billing3@example.com",
+        "license_reference": "WA-ASB-302"
+      },
+      "bill_to": {
+        "organization": "Seattle Public Schools",
+        "department": "Environmental Health & Safety",
+        "address": "Seattle, Washington"
+      },
+      "service_location": {
+        "school": "Madison Middle School",
+        "building": "Building 2",
+        "floor": "Ground Floor",
+        "room_or_area": "East Corridor"
+      },
+      "work_order": "SPS-EHS-2026-0503",
+      "work_description": "Vinyl floor tile removal and disposal",
+      "line_items": [
+        {
+          "description": "Vinyl floor tile removal and disposal",
+          "category": "abatement",
+          "quantity": 850,
+          "unit": "sq_ft",
+          "unit_rate": "4.75",
+          "line_total": "4037.50"
+        }
+      ],
+      "financials": {
+        "subtotal": "4037.50",
+        "tax_rate_percent": "10.20",
+        "tax_amount": "411.82",
+        "discount": "0.00",
+        "grand_total": "4449.32",
+        "amount_paid": "4449.32",
+        "balance_due": "0.00"
+      },
+      "payment_terms": "Net 30",
+      "notes": "Invoice record for Seattle Public Schools Environmental Health & Safety.",
+      "pdf_file": "pdf/SPS-PS-2026-1003.pdf"
+    },
+    {
+      "document_type": "historical_invoice",
+      "document_title": "Invoice 4",
+      "invoice_number": "SPS-SE-2026-1004",
+      "invoice_date": "2026-03-10",
+      "due_date": "2026-04-09",
+      "currency": "USD",
+      "contractor": {
+        "name": "Sound Environmental Contractors",
+        "address": "Kent, WA",
+        "phone": "(206) 555-1203",
+        "email": "billing4@example.com",
+        "license_reference": "WA-ASB-303"
+      },
+      "bill_to": {
+        "organization": "Seattle Public Schools",
+        "department": "Environmental Health & Safety",
+        "address": "Seattle, Washington"
+      },
+      "service_location": {
+        "school": "Garfield Elementary School",
+        "building": "East Wing",
+        "floor": "2nd Floor",
+        "room_or_area": "Science Lab"
+      },
+      "work_order": "SPS-EHS-2026-0504",
+      "work_description": "Asbestos-containing material sampling",
+      "line_items": [
+        {
+          "description": "Asbestos-containing material sampling",
+          "category": "sampling",
+          "quantity": 8,
+          "unit": "sample",
+          "unit_rate": "185.00",
+          "line_total": "1480.00"
+        }
+      ],
+      "financials": {
+        "subtotal": "1480.00",
+        "tax_rate_percent": "10.20",
+        "tax_amount": "150.96",
+        "discount": "0.00",
+        "grand_total": "1630.96",
+        "amount_paid": "0.00",
+        "balance_due": "1630.96"
+      },
+      "payment_terms": "Net 30",
+      "notes": "Invoice record for Seattle Public Schools Environmental Health & Safety.",
+      "pdf_file": "pdf/SPS-SE-2026-1004.pdf"
+    },
+    {
+      "document_type": "historical_invoice",
+      "document_title": "Invoice 5",
+      "invoice_number": "SPS-CH-2026-1005",
+      "invoice_date": "2026-03-29",
+      "due_date": "2026-04-28",
+      "currency": "USD",
+      "contractor": {
+        "name": "Cascade Hazmat Solutions",
+        "address": "Renton, WA",
+        "phone": "(206) 555-1204",
+        "email": "billing5@example.com",
+        "license_reference": "WA-ASB-304"
+      },
+      "bill_to": {
+        "organization": "Seattle Public Schools",
+        "department": "Environmental Health & Safety",
+        "address": "Seattle, Washington"
+      },
+      "service_location": {
+        "school": "Franklin K-8 School",
+        "building": "Main Building",
+        "floor": "Ground Floor",
+        "room_or_area": "Boiler Room"
+      },
+      "work_order": "SPS-EHS-2026-0505",
+      "work_description": "Containment setup and negative air equipment",
+      "line_items": [
+        {
+          "description": "Containment setup and negative air equipment",
+          "category": "abatement",
+          "quantity": 3,
+          "unit": "day",
+          "unit_rate": "620.00",
+          "line_total": "1860.00"
+        }
+      ],
+      "financials": {
+        "subtotal": "1860.00",
+        "tax_rate_percent": "10.20",
+        "tax_amount": "189.72",
+        "discount": "0.00",
+        "grand_total": "2049.72",
+        "amount_paid": "2049.72",
+        "balance_due": "0.00"
+      },
+      "payment_terms": "Net 30",
+      "notes": "Invoice record for Seattle Public Schools Environmental Health & Safety.",
+      "pdf_file": "pdf/SPS-CH-2026-1005.pdf"
+    },
+    {
+      "document_type": "historical_invoice",
+      "document_title": "Invoice 6",
+      "invoice_number": "SPS-NW-2026-1006",
+      "invoice_date": "2026-04-17",
+      "due_date": "2026-05-17",
+      "currency": "USD",
+      "contractor": {
+        "name": "Northwest Environmental Services",
+        "address": "Seattle, WA",
+        "phone": "(206) 555-1205",
+        "email": "billing6@example.com",
+        "license_reference": "WA-ASB-305"
+      },
+      "bill_to": {
+        "organization": "Seattle Public Schools",
+        "department": "Environmental Health & Safety",
+        "address": "Seattle, Washington"
+      },
+      "service_location": {
+        "school": "Cleveland High School",
+        "building": "Science Building",
+        "floor": "2nd Floor",
+        "room_or_area": "Mechanical Room"
+      },
+      "work_order": "SPS-EHS-2026-0506",
+      "work_description": "Post-abatement visual inspection",
+      "line_items": [
+        {
+          "description": "Post-abatement visual inspection",
+          "category": "inspection",
+          "quantity": 1,
+          "unit": "visit",
+          "unit_rate": "480.00",
+          "line_total": "480.00"
+        }
+      ],
+      "financials": {
+        "subtotal": "480.00",
+        "tax_rate_percent": "10.20",
+        "tax_amount": "48.96",
+        "discount": "0.00",
+        "grand_total": "528.96",
+        "amount_paid": "528.96",
+        "balance_due": "0.00"
+      },
+      "payment_terms": "Net 30",
+      "notes": "Invoice record for Seattle Public Schools Environmental Health & Safety.",
+      "pdf_file": "pdf/SPS-NW-2026-1006.pdf"
+    },
+    {
+      "document_type": "historical_invoice",
+      "document_title": "Invoice 7",
+      "invoice_number": "SPS-EA-2026-1007",
+      "invoice_date": "2026-05-06",
+      "due_date": "2026-06-05",
+      "currency": "USD",
+      "contractor": {
+        "name": "Evergreen Asbestos Abatement LLC",
+        "address": "Tacoma, WA",
+        "phone": "(206) 555-1206",
+        "email": "billing7@example.com",
+        "license_reference": "WA-ASB-306"
+      },
+      "bill_to": {
+        "organization": "Seattle Public Schools",
+        "department": "Environmental Health & Safety",
+        "address": "Seattle, Washington"
+      },
+      "service_location": {
+        "school": "Edison Elementary School",
+        "building": "Building A",
+        "floor": "Ground Floor",
+        "room_or_area": "Room 204"
+      },
+      "work_order": "SPS-EHS-2026-0507",
+      "work_description": "Air monitoring and clearance support",
+      "line_items": [
+        {
+          "description": "Air monitoring and clearance support",
+          "category": "air_monitoring",
+          "quantity": 2,
+          "unit": "day",
+          "unit_rate": "540.00",
+          "line_total": "1080.00"
+        }
+      ],
+      "financials": {
+        "subtotal": "1080.00",
+        "tax_rate_percent": "10.20",
+        "tax_amount": "110.16",
+        "discount": "0.00",
+        "grand_total": "1190.16",
+        "amount_paid": "0.00",
+        "balance_due": "1190.16"
+      },
+      "payment_terms": "Net 30",
+      "notes": "Invoice record for Seattle Public Schools Environmental Health & Safety.",
+      "pdf_file": "pdf/SPS-EA-2026-1007.pdf"
+    },
+    {
+      "document_type": "historical_invoice",
+      "document_title": "Invoice 8",
+      "invoice_number": "SPS-PS-2026-1008",
+      "invoice_date": "2026-05-25",
+      "due_date": "2026-06-24",
+      "currency": "USD",
+      "contractor": {
+        "name": "Pacific Safety & Compliance",
+        "address": "Bellevue, WA",
+        "phone": "(206) 555-1207",
+        "email": "billing8@example.com",
+        "license_reference": "WA-ASB-307"
+      },
+      "bill_to": {
+        "organization": "Seattle Public Schools",
+        "department": "Environmental Health & Safety",
+        "address": "Seattle, Washington"
+      },
+      "service_location": {
+        "school": "West Seattle Elementary",
+        "building": "North Wing",
+        "floor": "2nd Floor",
+        "room_or_area": "East Corridor"
+      },
+      "work_order": "SPS-EHS-2026-0508",
+      "work_description": "Waste packaging, transport, and disposal",
+      "line_items": [
+        {
+          "description": "Waste packaging, transport, and disposal",
+          "category": "disposal",
+          "quantity": 1,
+          "unit": "load",
+          "unit_rate": "950.00",
+          "line_total": "950.00"
+        }
+      ],
+      "financials": {
+        "subtotal": "950.00",
+        "tax_rate_percent": "10.20",
+        "tax_amount": "96.90",
+        "discount": "0.00",
+        "grand_total": "1046.90",
+        "amount_paid": "1046.90",
+        "balance_due": "0.00"
+      },
+      "payment_terms": "Net 30",
+      "notes": "Invoice record for Seattle Public Schools Environmental Health & Safety.",
+      "pdf_file": "pdf/SPS-PS-2026-1008.pdf"
+    },
+    {
+      "document_type": "historical_invoice",
+      "document_title": "Invoice 9",
+      "invoice_number": "SPS-SE-2026-1009",
+      "invoice_date": "2026-06-13",
+      "due_date": "2026-07-13",
+      "currency": "USD",
+      "contractor": {
+        "name": "Sound Environmental Contractors",
+        "address": "Kent, WA",
+        "phone": "(206) 555-1208",
+        "email": "billing9@example.com",
+        "license_reference": "WA-ASB-308"
+      },
+      "bill_to": {
+        "organization": "Seattle Public Schools",
+        "department": "Environmental Health & Safety",
+        "address": "Seattle, Washington"
+      },
+      "service_location": {
+        "school": "Hamilton International Middle School",
+        "building": "Main Building",
+        "floor": "Ground Floor",
+        "room_or_area": "Science Lab"
+      },
+      "work_order": "SPS-EHS-2026-0509",
+      "work_description": "Management plan update and documentation",
+      "line_items": [
+        {
+          "description": "Management plan update and documentation",
+          "category": "documentation",
+          "quantity": 1,
+          "unit": "building",
+          "unit_rate": "375.00",
+          "line_total": "375.00"
+        }
+      ],
+      "financials": {
+        "subtotal": "375.00",
+        "tax_rate_percent": "10.20",
+        "tax_amount": "38.25",
+        "discount": "0.00",
+        "grand_total": "413.25",
+        "amount_paid": "413.25",
+        "balance_due": "0.00"
+      },
+      "payment_terms": "Net 30",
+      "notes": "Invoice record for Seattle Public Schools Environmental Health & Safety.",
+      "pdf_file": "pdf/SPS-SE-2026-1009.pdf"
+    },
+    {
+      "document_type": "historical_invoice",
+      "document_title": "Invoice 10",
+      "invoice_number": "SPS-CH-2026-1010",
+      "invoice_date": "2026-07-02",
+      "due_date": "2026-08-01",
+      "currency": "USD",
+      "contractor": {
+        "name": "Cascade Hazmat Solutions",
+        "address": "Renton, WA",
+        "phone": "(206) 555-1209",
+        "email": "billing10@example.com",
+        "license_reference": "WA-ASB-309"
+      },
+      "bill_to": {
+        "organization": "Seattle Public Schools",
+        "department": "Environmental Health & Safety",
+        "address": "Seattle, Washington"
+      },
+      "service_location": {
+        "school": "Rainier Beach High School",
+        "building": "Building C",
+        "floor": "2nd Floor",
+        "room_or_area": "Boiler Room"
+      },
+      "work_order": "SPS-EHS-2026-0510",
+      "work_description": "Ceiling material repair and encapsulation",
+      "line_items": [
+        {
+          "description": "Ceiling material repair and encapsulation",
+          "category": "O&M",
+          "quantity": 240,
+          "unit": "sq_ft",
+          "unit_rate": "6.25",
+          "line_total": "1500.00"
+        }
+      ],
+      "financials": {
+        "subtotal": "1500.00",
+        "tax_rate_percent": "10.20",
+        "tax_amount": "153.00",
+        "discount": "0.00",
+        "grand_total": "1653.00",
+        "amount_paid": "0.00",
+        "balance_due": "1653.00"
+      },
+      "payment_terms": "Net 30",
+      "notes": "Invoice record for Seattle Public Schools Environmental Health & Safety.",
+      "pdf_file": "pdf/SPS-CH-2026-1010.pdf"
+    }
+  ]
+}

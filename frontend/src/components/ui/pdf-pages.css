@@ -1,0 +1,13 @@
+/* PdfPages: pages fitted to the box width, with a small zoom bar */
+.pdfp { display: flex; flex-direction: column; border: 1px solid var(--grid); border-radius: 8px; overflow: hidden; background: #e9edf1; }
+.pdfp-bar { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-bottom: 1px solid var(--grid); background: #fff; font-size: 12.5px; color: var(--ink-2); }
+.pdfp-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; color: var(--ink-1); }
+.pdfp-pages { margin-right: 6px; }
+.pdfp-zoom { min-width: 38px; text-align: center; font-weight: 600; }
+.pdfp-bar button { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--border); border-radius: 6px; background: #fff; color: var(--ink-1); cursor: pointer; }
+.pdfp-bar button:disabled { opacity: 0.4; cursor: default; }
+.pdfp-scroll { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 12px; overflow: auto; height: var(--pdfp-h, 75vh); }
+.pdfp-page { display: block; flex-shrink: 0; background: #fff; box-shadow: 0 2px 10px rgba(4, 43, 68, 0.15); }
+.pdfp-msg { display: flex; align-items: center; gap: 8px; margin: auto; color: var(--ink-2); font-size: 13px; }
+.pdfp-spin { animation: pdfp-spin 1s linear infinite; }
+@keyframes pdfp-spin { to { transform: rotate(360deg); } }
