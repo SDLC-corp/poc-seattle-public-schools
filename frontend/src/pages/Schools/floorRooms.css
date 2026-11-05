@@ -276,3 +276,6 @@
 .fp-source { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 12.5px; color: var(--primary); text-decoration: none; }
 .fp-source:hover { text-decoration: underline; }
 .fr-detect-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+/* A plan on record whose file isn't on this server */
+.fr-plan-missing { display: flex; align-items: flex-start; gap: 8px; margin: 0 0 10px; padding: 9px 12px; border: 1px solid #f0d9a8; border-radius: 8px; background: #fdf6e8; color: #7a5200; font-size: 12.5px; line-height: 1.45; }
+.fr-plan-missing svg { flex-shrink: 0; margin-top: 1px; }

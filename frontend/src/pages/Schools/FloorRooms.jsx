@@ -7,7 +7,7 @@ import {
 } from 'lucide-react'
 import { detectRooms } from '../../lib/roomDetection'
 import { useConfirm } from '../../components/ui/useConfirm'
-import { request, fmtDate, API_BASE } from '../../lib/api'
+import { request, fmtDate, API_BASE, apiFileUrl } from '../../lib/api'
 import PlanCanvas from './PlanCanvas'
 import { ROOM_COLORS } from './roomColors'
 import RoomInfoCard from './RoomInfoCard'
@@ -107,7 +107,7 @@ export default function FloorRooms() {
   const detect = async (f) => {
     setDetectState('running')
     try {
-      const { shapes, tables, chairs, tablesAsRooms, ms } = await detectRooms(f.planUrl)
+      const { shapes, tables, chairs, tablesAsRooms, ms } = await detectRooms(apiFileUrl(f.planUrl))
       if (!shapes.length) {
         setDetectState({ ok: false, text: 'No enclosed rooms found. Outline the rooms with the Draw tool.' })
         return
@@ -144,7 +144,7 @@ export default function FloorRooms() {
         setSchool(s); setFloor(f); setRooms(r.rooms); setMeta(m)
         // A newly uploaded plan replaces the old outlines (they belong to the previous drawing); rooms with ACM
         // records are kept by the server
-        if (autoDetect && f.planUrl) detectRef.current(f)
+        if (autoDetect && f.planUrl && f.planAvailable !== false) detectRef.current(f)
       })
       .catch((err) => { if (!cancelled) setError(err.status === 404 ? 'notFound' : err.message) })
     return () => { cancelled = true }
@@ -318,17 +318,21 @@ export default function FloorRooms() {
                   disabled={id === 'edit' && !room?.polygon}><Icon size={14} />{label}</button>
               ))}
             </div>
-            {floor?.planUrl && (
+            {/* The plan is on record but its file isn't on this server (e.g. uploaded before a Vercel redeploy) */}
+            {floor?.planUrl && floor.planAvailable === false && (
+              <p className="fr-plan-missing" role="alert"><CircleAlert size={14} />The uploaded plan image ({floor.planImage?.name}) isn&apos;t on this server any more, so the floor&apos;s layout is shown instead. Edit the floor and upload the plan again.</p>
+            )}
+            {floor?.planUrl && floor.planAvailable !== false && (
               <div className="fr-detect-tools">
                 <button type="button" className="u-btn u-btn-primary u-btn-sm" disabled={detectState === 'running'} onClick={() => detect(floor)}>
                   {detectState === 'running' ? <><LoaderCircle size={13} className="fp-spin" />Detecting…</> : <><ScanSearch size={13} />Detect Rooms</>}
                 </button>
                 {/* The original PDF the plan was rendered from (stored on the server) */}
-                {floor.planSourceUrl && (
+                {floor.planSourceUrl && floor.planSourceAvailable !== false && (
                   <>
-                    <a className="u-btn u-btn-outline u-btn-sm" href={`${API_BASE.replace(/\/api$/, '')}${floor.planSourceUrl}`} target="_blank" rel="noopener noreferrer"
+                    <a className="u-btn u-btn-outline u-btn-sm" href={apiFileUrl(floor.planSourceUrl)} target="_blank" rel="noopener noreferrer"
                       title={`${floor.planSource.name}${floor.planSource.pages > 1 ? ` – page ${floor.planSource.page} of ${floor.planSource.pages} is the plan` : ''}`}><FileText size={13} />Original PDF</a>
-                    <a className="u-btn u-btn-ghost u-btn-sm" href={`${API_BASE.replace(/\/api$/, '')}${floor.planSourceUrl}&download=1`} aria-label="Download the original PDF"><Download size={13} /></a>
+                    <a className="u-btn u-btn-ghost u-btn-sm" href={`${apiFileUrl(floor.planSourceUrl)}&download=1`} aria-label="Download the original PDF"><Download size={13} /></a>
                   </>
                 )}
               </div>
@@ -365,7 +369,7 @@ export default function FloorRooms() {
 
               {floor && rooms ? (
                 <div className="fr-plan-wrap">
-                <PlanCanvas layout={floor.layout} imageUrl={floor.planUrl} rooms={planRooms} tables={floor.tables} selectedId={selectedId} mode={tool} height={640}
+                <PlanCanvas layout={floor.layout} imageUrl={floor.planAvailable === false ? null : apiFileUrl(floor.planUrl)} rooms={planRooms} tables={floor.tables} selectedId={selectedId} mode={tool} height={640}
                   onSelect={select} onDelete={deleteRoom} onCreate={createRoom} onChangePolygon={changePolygon} />
                 {detectState === 'running' && <div className="fr-detecting"><LoaderCircle size={22} className="fp-spin" /><strong>Detecting rooms…</strong><span>OpenCV is tracing the walls on the plan</span></div>}
                 </div>

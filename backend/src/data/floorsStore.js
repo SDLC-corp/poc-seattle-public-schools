@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { unlink } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -31,18 +31,63 @@ export const present = (f) => ({
   layout: f.derivedCounts ? null : floorLayout(f), // app-added floors have no sample layout
   planUrl: f.planImage ? `/api/floors/${f.id}/plan?v=${encodeURIComponent(f.planImage.uploadedAt)}` : null,
   planSourceUrl: planSourceUrl(f),
+  ...planFiles(f),
 });
 
 export const getFloors = (buildingId) => floors.filter((f) => f.buildingId === buildingId).sort((a, b) => a.number - b.number);
 export const getAllFloors = () => floors;
 export const getFloor = (id) => floors.find((f) => f.id === id) ?? null;
-export const planPath = (f) => (f?.planImage ? path.join(f.planImage.sample ? SAMPLE_PLAN_DIR : PLAN_DIR, f.planImage.storedName) : null);
+// Plan files uploaded in the app live in uploads/floorplans (not in git, so never deployed). Copies of the plans
+// already on record are kept in data/floorplans, which is deployed: a file not found in uploads is served from there.
+const SHIPPED_PLAN_DIR = fileURLToPath(new URL('../../data/floorplans/', import.meta.url));
+const uploadedFile = (storedName) => {
+  const name = path.basename(storedName);
+  const uploaded = path.join(PLAN_DIR, name);
+  if (existsSync(uploaded)) return uploaded;
+  const shipped = path.join(SHIPPED_PLAN_DIR, name);
+  return existsSync(shipped) ? shipped : uploaded;
+};
+export const planPath = (f) => (f?.planImage ? (f.planImage.sample ? path.join(SAMPLE_PLAN_DIR, f.planImage.storedName) : uploadedFile(f.planImage.storedName)) : null);
 // The original PDF a plan image was rendered from (uploads/floorplans/<floor>-<time>.pdf)
-export const planSourcePath = (f) => (f?.planSource ? path.join(PLAN_DIR, path.basename(f.planSource.storedName)) : null);
-// Only the floor's own uploaded files (plan image and its PDF) are removed with it
+export const planSourcePath = (f) => (f?.planSource ? (f.planSource.sample ? path.join(SAMPLE_PLAN_DIR, path.basename(f.planSource.storedName)) : uploadedFile(f.planSource.storedName)) : null);
+
+/**
+ * The district's floor plan PDFs that ship with the app (data/floors): each PDF with the plan image made from it.
+ * Uploading one of these PDFs (recognised by its file name) uses this image directly, so the plan always loads,
+ * also on a server where uploads aren't kept.
+ */
+const squash = (s) => String(s ?? '').toLowerCase().replace(/\.[a-z0-9]+$/, '').replace(/[^a-z0-9]/g, '');
+export function knownPlans() {
+  if (!existsSync(SAMPLE_PLAN_DIR)) return [];
+  return readdirSync(SAMPLE_PLAN_DIR).filter((n) => /\.pdf$/i.test(n)).map((pdf) => {
+    const image = pdf.replace(/\.pdf$/i, '.png');
+    if (!existsSync(path.join(SAMPLE_PLAN_DIR, image))) return null;
+    return { key: squash(pdf), pdf, image, label: pdf.replace(/\.pdf$/i, '').replace(/_/g, ' ') };
+  }).filter(Boolean);
+}
+// The known plan an uploaded file is: its name contains the plan's name (ignoring case, spaces, "_", "(1)" etc.)
+export const matchKnownPlan = (fileName) => {
+  const name = squash(fileName);
+  return name ? knownPlans().find((p) => name.includes(p.key)) ?? null : null;
+};
+export const knownPlanPath = (file) => {
+  const plan = knownPlans().find((p) => p.pdf === file || p.image === file);
+  return plan ? path.join(SAMPLE_PLAN_DIR, file) : null;
+};
+// Whether the plan's files are actually on this server. On Vercel, uploads live in /tmp and aren't deployed, so a
+// plan uploaded elsewhere (or before the instance restarted) can be on record without its file; the app then shows
+// the floor's layout and asks for the plan to be uploaded again instead of a broken image
+export const planFiles = (f) => ({
+  planAvailable: f.planImage ? existsSync(planPath(f)) : null,
+  planSourceAvailable: f.planSource ? existsSync(planSourcePath(f)) : null,
+});
+
+// Only the floor's own uploaded files (plan image and its PDF) are removed with it — never the shipped copies in
+// data/floorplans or the sample plans, which are part of the code
+const removeUpload = (p) => (p && p.startsWith(PLAN_DIR) ? unlink(p).catch(() => {}) : null);
 const removePlanFile = (f) => Promise.all([
-  f?.planImage && !f.planImage.sample ? unlink(planPath(f)).catch(() => {}) : null,
-  f?.planSource ? unlink(planSourcePath(f)).catch(() => {}) : null,
+  f?.planImage && !f.planImage.sample ? removeUpload(planPath(f)) : null,
+  f?.planSource ? removeUpload(planSourcePath(f)) : null,
 ]);
 
 // Building totals follow its floors: count, rooms, ACM rooms and the "worst" ACM status
@@ -124,9 +169,17 @@ export async function setPlanImage(id, planImage) {
   return updateFloor(id, { planImage, planSource: null });
 }
 
+// A floor's plan set to one of the known plans (no upload): its image and PDF are the shipped files
+export async function useKnownPlan(id, plan, uploadedName) {
+  const at = new Date().toISOString();
+  const size = (n) => statSync(path.join(SAMPLE_PLAN_DIR, n)).size;
+  await setPlanImage(id, { storedName: plan.image, name: uploadedName || plan.pdf, mime: 'image/png', size: size(plan.image), uploadedAt: at, sample: true });
+  return setPlanSource(id, { storedName: plan.pdf, name: uploadedName || plan.pdf, size: size(plan.pdf), page: 1, pages: 1, uploadedAt: at, sample: true });
+}
+
 // The original PDF of the current plan image: { storedName, name, size, page, pages, uploadedAt }
 export async function setPlanSource(id, planSource) {
   const f = getFloor(id);
-  if (f.planSource && f.planSource.storedName !== planSource?.storedName) await unlink(planSourcePath(f)).catch(() => {});
+  if (f.planSource && f.planSource.storedName !== planSource?.storedName) await removeUpload(planSourcePath(f));
   return updateFloor(id, { planSource });
 }

@@ -1,6 +1,13 @@
 // Backend base URL, e.g. https://api.example.org/api. Unset: same-origin /api (Vite proxies it in dev).
 export const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '')
 
+/**
+ * A file address the backend hands out ("/api/floors/…/plan") as a URL the browser can load. With the API on another
+ * host (VITE_API_BASE_URL, e.g. the backend's own Vercel project) a bare "/api/…" would hit the frontend's site, which
+ * answers with the app page instead of the file; locally the dev server proxies /api, so it's left as is.
+ */
+export const apiFileUrl = (path) => (typeof path === 'string' && path.startsWith('/api/') ? `${API_BASE.replace(/\/api$/, '')}${path}` : path)
+
 // The signed-in user's token for this API (set by the auth provider); the backend credits actions to them
 let apiTokenProvider = null
 export const setApiTokenProvider = (fn) => { apiTokenProvider = fn }

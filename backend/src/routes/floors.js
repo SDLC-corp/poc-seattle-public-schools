@@ -4,7 +4,7 @@ import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { buildings } from '../data/store.js';
 import {
-  getFloors, getAllFloors, getFloor, addFloor, updateFloor, removeFloor, setPlanImage, setPlanSource, present, planPath, planSourcePath, planSourceUrl, PLAN_DIR,
+  getFloors, getAllFloors, getFloor, addFloor, updateFloor, removeFloor, setPlanImage, setPlanSource, present, planPath, planSourcePath, planSourceUrl, planFiles, knownPlans, matchKnownPlan, knownPlanPath, useKnownPlan, PLAN_DIR,
 } from '../data/floorsStore.js';
 import { getRooms, removeFloorRooms } from '../data/roomsStore.js';
 import { historyAt } from '../data/facilityHistory.js';
@@ -115,11 +115,61 @@ router.get('/', (req, res) => {
         schoolName: b?.schoolName ?? null,
         planUrl: f.planImage ? `/api/floors/${f.id}/plan?v=${encodeURIComponent(f.planImage.uploadedAt)}` : null,
         planSourceUrl: planSourceUrl(f),
+        ...planFiles(f),
         roomStats: roomStats(roomsByFloor.get(f.id) ?? []),
       };
     })
     .sort((a, b) => (a.schoolName ?? '').localeCompare(b.schoolName ?? '') || (a.buildingCode ?? '').localeCompare(b.buildingCode ?? '') || a.number - b.number);
   res.json({ count: list.length, floors: list });
+});
+
+// --- The district's floor plan PDFs that ship with the app (data/floors), each with its plan image ---
+
+const knownView = (p) => ({ ...p, imageUrl: `/api/floors/plan-samples/${encodeURIComponent(p.image)}`, pdfUrl: `/api/floors/plan-samples/${encodeURIComponent(p.pdf)}` });
+
+// GET /floors/plan-samples — the known plans
+router.get('/plan-samples', (req, res) => res.json({ plans: knownPlans().map(knownView) }));
+
+// GET /floors/plan-samples/match?file=<uploaded file name> — the known plan that file is, else 404
+router.get('/plan-samples/match', (req, res) => {
+  const plan = matchKnownPlan(req.query.file);
+  if (!plan) return res.status(404).json({ error: 'Not one of the known floor plans' });
+  res.json({ plan: knownView(plan) });
+});
+
+// GET /floors/plan-samples/:file — a known plan's image or PDF (only those files)
+router.get('/plan-samples/:file', (req, res) => {
+  const file = knownPlanPath(req.params.file);
+  if (!file || !existsSync(file)) return res.status(404).json({ error: 'Plan not found' });
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.type(/\.pdf$/i.test(file) ? 'application/pdf' : 'image/png').sendFile(file);
+});
+
+/**
+ * POST /floors/:id/plan/known { file } — the floor's plan is the known plan whose PDF this file is (matched by its
+ * name): the shipped image and PDF are used, nothing is uploaded, so it loads on every server.
+ */
+router.post('/:id/plan/known', async (req, res, next) => {
+  try {
+    const f = getFloor(req.params.id);
+    if (!f) return res.status(404).json({ error: 'Floor not found' });
+    const name = String(req.body?.file ?? '').replace(/[\\/:*?"<>|]+/g, '_').slice(0, 120);
+    const plan = matchKnownPlan(name);
+    if (!plan) return res.status(400).json({ error: 'Not one of the known floor plans', fields: { plan: 'Not one of the known floor plans' } });
+    const { floor } = await useKnownPlan(f.id, plan, name);
+    await syncFloorRooms(floor);
+    const building = buildingOf(f.buildingId);
+    logAudit(req, {
+      action: 'update', module: 'Schools & Facilities', recordId: f.id, link: link(building),
+      summary: `Set floor plan – ${f.name}, ${building.name} (${plan.label})`,
+      changes: [{ field: 'Floor Plan', from: f.planImage?.name ?? (f.derivedCounts ? '(none)' : 'Sample layout'), to: name || plan.pdf }],
+      related: { school: building.schoolName, building: building.name },
+    });
+    res.json(withRooms(getFloor(f.id)));
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get('/:id', (req, res) => {

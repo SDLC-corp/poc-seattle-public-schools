@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { X, Info, Upload, ImageOff, LoaderCircle, FileUp, FileText, ExternalLink } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
-import { request, API_BASE, authHeaders } from '../../lib/api'
+import { request, API_BASE, authHeaders, apiFileUrl } from '../../lib/api'
 import { floorName } from './buildingUtils'
 
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
@@ -61,6 +61,8 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
   const [planFile, setPlanFile] = useState(null)
   const [planSource, setPlanSource] = useState(null) // original file name when converted from PDF
   const [planPdf, setPlanPdf] = useState(null) // { file, page, pages } — the PDF itself, uploaded with the plan
+  // One of the district's known plan PDFs (recognised by name): its shipped image is used, nothing is uploaded
+  const [knownPlan, setKnownPlan] = useState(null) // { plan, fileName }
   const [removeImage, setRemoveImage] = useState(false)
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(false)
@@ -96,7 +98,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
 
   const fileUrl = useMemo(() => (planFile ? URL.createObjectURL(planFile) : null), [planFile])
   useEffect(() => () => { if (fileUrl) URL.revokeObjectURL(fileUrl) }, [fileUrl])
-  const imageUrl = fileUrl ?? (!removeImage ? floor?.planUrl : null) ?? null
+  const imageUrl = (knownPlan ? apiFileUrl(knownPlan.plan.imageUrl) : null) ?? fileUrl ?? (!removeImage && floor?.planAvailable !== false ? apiFileUrl(floor?.planUrl) : null) ?? null
 
   // PDF (page 1 rendered to PNG) or image → thumbnail; rooms are detected on the floor plan screen after saving
   const takeFile = async (input) => {
@@ -109,6 +111,14 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
     let source = null
     let pdf = null
     if (isPdf) {
+      // One of the known plans? Then its ready-made image is used (always loads, also on the server)
+      const match = await request(`/floors/plan-samples/match?file=${encodeURIComponent(file.name)}`).then((d) => d.plan).catch(() => null)
+      if (match) {
+        setKnownPlan({ plan: match, fileName: file.name })
+        setPlanSource(`${file.name} — matched to ${match.label}`)
+        setPlanFile(null); setPlanPdf(null); setRemoveImage(false)
+        return
+      }
       setConverting(true)
       try {
         const out = await renderPdfPage(file, 1)
@@ -126,6 +136,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
     setPlanSource(source)
     setPlanPdf(pdf)
     setPlanFile(file)
+    setKnownPlan(null)
     setRemoveImage(false)
   }
 
@@ -147,7 +158,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
     }
   }
 
-  const removePlan = () => { setPlanFile(null); setPlanSource(null); setPlanPdf(null); setRemoveImage(true) }
+  const removePlan = () => { setPlanFile(null); setPlanSource(null); setPlanPdf(null); setKnownPlan(null); setRemoveImage(true) }
 
   const submit = async (e) => {
     e.preventDefault()
@@ -156,7 +167,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
     setSaving(true)
     setErrors({})
     // A new or removed plan makes earlier detected room outlines obsolete; otherwise keep them
-    const body = { buildingId: form.buildingId, number, name, ...(planFile || removeImage ? { shapes: [] } : {}) }
+    const body = { buildingId: form.buildingId, number, name, ...(planFile || knownPlan || removeImage ? { shapes: [] } : {}) }
     try {
       const res = isNew
         ? await request('/floors', { method: 'POST', body })
@@ -164,7 +175,10 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
       let saved = res.floor
       let warning = null
       try {
-        if (planFile) {
+        if (knownPlan) {
+          // A known plan: the server uses its shipped image and PDF
+          saved = await request(`/floors/${saved.id}/plan/known`, { method: 'POST', body: { file: knownPlan.fileName } })
+        } else if (planFile) {
           saved = await uploadPlan(saved.id, planFile)
           // The PDF it came from is kept too (viewable / downloadable from the floor plan)
           if (planPdf) saved = await uploadPlanSource(saved.id, planPdf)
@@ -174,7 +188,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
         warning = `Floor saved, but the plan image wasn't (${err.message})`
       }
       // detect: the floor plan screen runs room detection on the new plan
-      onSaved(saved, res.building, isNew, warning, { detect: Boolean(planFile) && !warning })
+      onSaved(saved, res.building, isNew, warning, { detect: Boolean(planFile || knownPlan) && !warning })
     } catch (err) {
       setErrors(err.fields ?? { form: err.message })
       setSaving(false)
@@ -269,7 +283,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
               </label>
             )}
             {!planFile && !removeImage && floor?.planSourceUrl && (
-              <a className="fp-source" href={`${API_BASE.replace(/\/api$/, '')}${floor.planSourceUrl}`} target="_blank" rel="noopener noreferrer">
+              <a className="fp-source" href={apiFileUrl(floor.planSourceUrl)} target="_blank" rel="noopener noreferrer">
                 <FileText size={14} />Original PDF: {floor.planSource.name}{floor.planSource.pages > 1 ? ` (page ${floor.planSource.page} of ${floor.planSource.pages})` : ''}<ExternalLink size={12} />
               </a>
             )}
