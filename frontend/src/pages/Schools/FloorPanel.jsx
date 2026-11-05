@@ -173,7 +173,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
       const ok = await confirm({
         title: 'Replace the floor plan?',
         message: `The new plan replaces this floor's ${roomCount} room${roomCount === 1 ? '' : 's'} and their ACM records; rooms are then detected on the new plan.`,
-        detail: 'Rooms whose ACM is used by inspections, surveillance or O&M work are kept, without an outline, to place on the new plan.',
+        detail: 'The new rooms are numbered from the start. Rooms whose ACM is used by inspections, surveillance or O&M work are archived: hidden from this floor, but kept for those records.',
         confirmLabel: 'Replace Plan',
         tone: 'danger',
       })

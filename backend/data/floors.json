@@ -521,12 +521,12 @@
         "name": "School_Ground_Floor_Plan_UPDATE.pdf",
         "mime": "image/png",
         "size": 2519397,
-        "uploadedAt": "2026-11-05T16:54:24.471Z",
+        "uploadedAt": "2026-11-05T17:08:51.073Z",
         "sample": true
       },
       "shapes": [
         {
-          "id": "Dmw3sde5y-1",
+          "id": "Dmw3tasy6-1",
           "name": "Room 1",
           "points": [
             0.1329,
@@ -541,7 +541,7 @@
           "area": 0.051734
         },
         {
-          "id": "Dmw3sde5y-2",
+          "id": "Dmw3tasy6-2",
           "name": "Room 2",
           "points": [
             0.1336,
@@ -556,7 +556,7 @@
           "area": 0.02731
         },
         {
-          "id": "Dmw3sde5y-3",
+          "id": "Dmw3tasy6-3",
           "name": "Room 3",
           "points": [
             0.3129,
@@ -571,7 +571,7 @@
           "area": 0.004715
         },
         {
-          "id": "Dmw3sde5y-4",
+          "id": "Dmw3tasy6-4",
           "name": "Room 4",
           "points": [
             0.3614,
@@ -586,7 +586,7 @@
           "area": 0.004406
         },
         {
-          "id": "Dmw3sde5y-5",
+          "id": "Dmw3tasy6-5",
           "name": "Room 5",
           "points": [
             0.4771,
@@ -601,7 +601,7 @@
           "area": 0.004255
         },
         {
-          "id": "Dmw3sde5y-6",
+          "id": "Dmw3tasy6-6",
           "name": "Room 6",
           "points": [
             0.5293,
@@ -616,7 +616,7 @@
           "area": 0.004635
         },
         {
-          "id": "Dmw3sde5y-7",
+          "id": "Dmw3tasy6-7",
           "name": "Room 7",
           "points": [
             0.5736,
@@ -631,7 +631,7 @@
           "area": 0.02643
         },
         {
-          "id": "Dmw3sde5y-8",
+          "id": "Dmw3tasy6-8",
           "name": "Room 8",
           "points": [
             0.1336,
@@ -646,7 +646,7 @@
           "area": 0.02082
         },
         {
-          "id": "Dmw3sde5y-9",
+          "id": "Dmw3tasy6-9",
           "name": "Room 9",
           "points": [
             0.3014,
@@ -673,7 +673,7 @@
           "area": 0.006486
         },
         {
-          "id": "Dmw3sde5y-10",
+          "id": "Dmw3tasy6-10",
           "name": "Room 10",
           "points": [
             0.5764,
@@ -700,7 +700,7 @@
           "area": 0.00675
         },
         {
-          "id": "Dmw3sde5y-11",
+          "id": "Dmw3tasy6-11",
           "name": "Room 11",
           "points": [
             0.5921,
@@ -715,7 +715,7 @@
           "area": 0.019494
         },
         {
-          "id": "Dmw3sde5y-12",
+          "id": "Dmw3tasy6-12",
           "name": "Room 12",
           "points": [
             0.3557,
@@ -730,7 +730,7 @@
           "area": 0.008599
         },
         {
-          "id": "Dmw3sde5y-13",
+          "id": "Dmw3tasy6-13",
           "name": "Room 13",
           "points": [
             0.1329,
@@ -745,7 +745,7 @@
           "area": 0.026475
         },
         {
-          "id": "Dmw3sde5y-14",
+          "id": "Dmw3tasy6-14",
           "name": "Room 14",
           "points": [
             0.3329,
@@ -760,7 +760,7 @@
           "area": 0.02675
         },
         {
-          "id": "Dmw3sde5y-15",
+          "id": "Dmw3tasy6-15",
           "name": "Room 15",
           "points": [
             0.5364,
@@ -783,7 +783,7 @@
         "size": 1780485,
         "page": 1,
         "pages": 1,
-        "uploadedAt": "2026-11-05T16:54:24.471Z",
+        "uploadedAt": "2026-11-05T17:08:51.073Z",
         "sample": true
       }
     },

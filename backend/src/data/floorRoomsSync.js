@@ -66,8 +66,9 @@ export async function syncFloorRooms(floor) {
 
 /**
  * A new plan replaces the floor's rooms: every room is removed (with its ACM records and files) so detection starts
- * fresh — except rooms whose ACM is referenced by inspections, surveillance or O&M work, which must be kept as
- * asbestos records; those stay without an outline, to be placed on the new plan. Returns { removed, kept }.
+ * fresh and new rooms are numbered from the start — except rooms whose ACM is referenced by inspections,
+ * surveillance or O&M work, which must be kept as asbestos records: those are archived (hidden from the floor, its
+ * room list and counts; still shown where those records refer to them). Returns { removed, kept }.
  */
 export async function resetFloorRooms(floor) {
   const referenced = referencedMaterialIds();
@@ -76,7 +77,7 @@ export async function resetFloorRooms(floor) {
   for (const r of getRooms({ floorId: floor.id })) {
     const mats = getMaterials({ roomId: r.id });
     if (mats.some((m) => referenced.has(m.id))) {
-      await updateRoom(r.id, { polygon: null, shapeId: null, layoutRoomId: null });
+      await updateRoom(r.id, { polygon: null, shapeId: null, layoutRoomId: null, archived: true, archivedAt: new Date().toISOString() });
       kept += 1;
     } else {
       await removeRoom(r.id);

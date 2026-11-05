@@ -1,6 +1,93 @@
 {
   "entries": [
     {
+      "id": "AUD-000163",
+      "at": "2026-11-05T17:08:54.318Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "alkies-b3-f1",
+      "summary": "Updated Ground Floor – Career & Technical Wing, Alki Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "0",
+          "to": "15"
+        }
+      ],
+      "related": {
+        "school": "Alki Elementary",
+        "building": "Career & Technical Wing"
+      },
+      "link": "/schools/alkies/buildings/alkies-b3/floors",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000162",
+      "at": "2026-11-05T17:08:51.776Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "alkies-b3-f1",
+      "summary": "Set floor plan – Ground Floor, Career & Technical Wing (School Ground Floor Plan UPDATE)",
+      "changes": [
+        {
+          "field": "Floor Plan",
+          "from": "School_Ground_Floor_Plan_UPDATE.pdf",
+          "to": "School_Ground_Floor_Plan_UPDATE.pdf"
+        }
+      ],
+      "related": {
+        "school": "Alki Elementary",
+        "building": "Career & Technical Wing"
+      },
+      "link": "/schools/alkies/buildings/alkies-b3/floors",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
+      "id": "AUD-000161",
+      "at": "2026-11-05T17:08:50.981Z",
+      "action": "update",
+      "module": "Schools & Facilities",
+      "recordId": "alkies-b3-f1",
+      "summary": "Updated Ground Floor – Career & Technical Wing, Alki Elementary",
+      "changes": [
+        {
+          "field": "Detected Room Shapes",
+          "from": "15",
+          "to": "0"
+        }
+      ],
+      "related": {
+        "school": "Alki Elementary",
+        "building": "Career & Technical Wing"
+      },
+      "link": "/schools/alkies/buildings/alkies-b3/floors",
+      "user": {
+        "id": "0ff6c91d-9a6e-4413-b873-714331e980a1",
+        "name": "Mayuri Kundalwal",
+        "email": "mayuri.kundalwal@sdlccorp.com",
+        "role": "Signed-in user",
+        "entraId": "0ff6c91d-9a6e-4413-b873-714331e980a1"
+      },
+      "ip": "::1",
+      "source": "app"
+    },
+    {
       "id": "AUD-000160",
       "at": "2026-11-05T16:54:38.134Z",
       "action": "update",

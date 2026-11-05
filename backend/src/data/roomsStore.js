@@ -65,8 +65,10 @@ export const describeRoom = (r) => {
 
 // One shared collator: localeCompare with options builds a new one per comparison (seconds for thousands of rooms)
 const byNumber = new Intl.Collator(undefined, { numeric: true });
+// Archived rooms (from a floor plan that was replaced, kept only because inspections etc. refer to their ACM) are
+// left out of room lists, plans and counts; they're still found by id (getRoom / allRooms) for those records
 export const getRooms = (filter = {}) => rooms
-  .filter((r) => Object.entries(filter).every(([k, v]) => !v || r[k] === v))
+  .filter((r) => !r.archived && Object.entries(filter).every(([k, v]) => !v || r[k] === v))
   .map(describeRoom)
   .sort((a, b) => byNumber.compare(a.number, b.number));
 export const getRoom = (id) => {
