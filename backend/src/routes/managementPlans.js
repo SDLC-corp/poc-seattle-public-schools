@@ -1,3 +1,4 @@
+import { naturalCompare } from '../data/naturalSort.js';
 import { Router } from 'express';
 import { schools, buildings } from '../data/store.js';
 import { getMaterials, getMaterial, allRooms, updateMaterial } from '../data/roomsStore.js';
@@ -199,7 +200,7 @@ router.get('/:schoolId/register', (req, res) => {
         status: m.acmStatus, assessmentDate: m.assessmentDate, control: controlAction(m, openWork.get(m.id)),
       };
     })
-    .sort((a, b) => a.building.localeCompare(b.building) || a.ref.localeCompare(b.ref, 'en', { numeric: true }));
+    .sort((a, b) => a.building.localeCompare(b.building) || naturalCompare(a.ref, b.ref));
   const count = (risk) => records.filter((r) => r.risk === risk).length;
   res.json({
     stats: {
@@ -544,7 +545,7 @@ function controlRecords(school) {
         target: c.target, setStatus: c.status, status, notes: c.notes ?? '', work: c.work, customised: Boolean(saved[m.id]),
       };
     })
-    .sort((a, b) => (rank[a.risk] ?? 3) - (rank[b.risk] ?? 3) || a.building.localeCompare(b.building) || a.ref.localeCompare(b.ref, 'en', { numeric: true }));
+    .sort((a, b) => (rank[a.risk] ?? 3) - (rank[b.risk] ?? 3) || a.building.localeCompare(b.building) || naturalCompare(a.ref, b.ref));
 }
 
 router.get('/:schoolId/controls', (req, res) => {
@@ -901,7 +902,7 @@ function riskRecords(school) {
         history: (saved?.history ?? []).map((h) => ({ ...h, score: h.materialRisk * h.priorityRisk, level: levelFor(h.materialRisk * h.priorityRisk) })),
       };
     })
-    .sort((a, b) => b.score - a.score || a.building.localeCompare(b.building) || a.ref.localeCompare(b.ref, 'en', { numeric: true }));
+    .sort((a, b) => b.score - a.score || a.building.localeCompare(b.building) || naturalCompare(a.ref, b.ref));
 }
 
 router.get('/:schoolId/risk-assessment', (req, res) => {

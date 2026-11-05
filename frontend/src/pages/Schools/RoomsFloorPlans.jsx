@@ -2,8 +2,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router'
 import {
   Map as MapIcon, Layers, DoorOpen, TriangleAlert, CircleDashed, ShieldAlert, Search, RotateCcw, ChevronLeft, ChevronRight, Info, ClipboardList, Plus,
+  Eye, Trash2, CircleCheck, CircleAlert,
 } from 'lucide-react'
 import SearchSelect from '../../components/ui/SearchSelect'
+import { useConfirm } from '../../components/ui/useConfirm'
 import { request } from '../../lib/api'
 import { AcmBadge } from './BuildingParts'
 import FloorPanel from './FloorPanel'
@@ -50,6 +52,13 @@ export default function RoomsFloorPlans({ view = 'rooms' }) {
   const [page, setPage] = useState(1)
   const [adding, setAdding] = useState(false) // false | 'loading' | true
   const [lists, setLists] = useState(null) // { schools, buildings } for Add Floor
+  const [confirm, confirmDialog] = useConfirm()
+  const [toast, setToast] = useState(null)
+  useEffect(() => {
+    if (!toast) return undefined
+    const t = setTimeout(() => setToast(null), 4000)
+    return () => clearTimeout(t)
+  }, [toast])
 
   // Changing view resets the view-specific filters, or applies ones handed over by a KPI card (render-time, no effect needed)
   const location = useLocation()
@@ -136,6 +145,28 @@ export default function RoomsFloorPlans({ view = 'rooms' }) {
       state: { detect, toast: warning ? { kind: 'error', text: warning } : { kind: 'success', text: `Added ${floor.name}` } },
     })
   }
+  // Floors per building: a building's only floor can't be deleted (delete the building instead)
+  const floorsInBuilding = (bid) => (floors ?? []).filter((x) => x.buildingId === bid).length
+  const deleteFloor = async (f) => {
+    const n = f.roomStats?.mapped ?? 0
+    const ok = await confirm({
+      title: `Delete ${f.name}?`,
+      message: `Floor ${f.number} of ${f.buildingName} (${f.schoolName}) and its floor plan will be removed. This can't be undone.`,
+      detail: n ? `Its ${n} mapped room${n > 1 ? 's' : ''} and their ACM records will be deleted too.` : null,
+      confirmLabel: 'Delete Floor',
+      tone: 'danger',
+    })
+    if (!ok) return
+    try {
+      await request(`/floors/${f.id}`, { method: 'DELETE' })
+      setFloors((list) => list.filter((x) => x.id !== f.id))
+      setRooms((list) => list.filter((r) => r.floorId !== f.id))
+      setMaterials((list) => list.filter((m) => m.floorId !== f.id))
+      setToast({ kind: 'success', text: `Deleted ${f.name} – ${f.buildingName}` })
+    } catch (err) {
+      setToast({ kind: 'error', text: err.message })
+    }
+  }
   const firstBuildingOf = (sid) => lists?.buildings.find((b) => b.schoolId === sid)?.id ?? ''
 
   return (
@@ -197,7 +228,7 @@ export default function RoomsFloorPlans({ view = 'rooms' }) {
             <table className="u-table c-table b-table">
               {view === 'floors' && (
                 <>
-                  <thead><tr><th>School / Building</th><th>Floor</th><th className="c-num">Total Rooms</th><th className="c-num">Mapped</th><th className="c-num b-col-acmrooms">Rooms with ACM</th><th className="b-col-floor">Plan</th><th>Status</th></tr></thead>
+                  <thead><tr><th>School / Building</th><th>Floor</th><th className="c-num">Total Rooms</th><th className="c-num">Mapped</th><th className="c-num b-col-acmrooms">Rooms with ACM</th><th className="b-col-floor">Plan</th><th>Status</th><th className="b-col-actions">Actions</th></tr></thead>
                   <tbody>
                     {visible.map((f) => (
                       <tr key={f.id} tabIndex={0} onClick={() => open(floorUrl(f))} onKeyDown={(e) => { if (e.key === 'Enter') open(floorUrl(f)) }}>
@@ -208,6 +239,14 @@ export default function RoomsFloorPlans({ view = 'rooms' }) {
                         <td className="c-num b-col-acmrooms">{fmtNum((f.roomStats?.acmPresent ?? 0) + (f.roomStats?.assumed ?? 0))}</td>
                         <td className="b-col-floor">{f.planImage ? <span className="rf-plan up">Uploaded</span> : <span className="rf-plan">Sample</span>}</td>
                         <td><AcmBadge status={f.acmStatus} /></td>
+                        <td className="b-col-actions">
+                          <span className="b-actions">
+                            <button type="button" className="u-row-btn" title="Open floor plan & rooms" aria-label={`Open ${f.name} – ${f.buildingName}`} onClick={(e) => { e.stopPropagation(); open(floorUrl(f)) }}><Eye size={14} /></button>
+                            <button type="button" className="u-row-btn danger" disabled={floorsInBuilding(f.buildingId) <= 1}
+                              title={floorsInBuilding(f.buildingId) <= 1 ? 'A building needs at least one floor — delete the building instead' : 'Delete'}
+                              aria-label={`Delete ${f.name} – ${f.buildingName}`} onClick={(e) => { e.stopPropagation(); deleteFloor(f) }}><Trash2 size={14} /></button>
+                          </span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -247,7 +286,7 @@ export default function RoomsFloorPlans({ view = 'rooms' }) {
                   </tbody>
                 </>
               )}
-              {loaded && !visible.length && <tbody><tr><td colSpan={7} className="u-empty">No {noun} match these filters.</td></tr></tbody>}
+              {loaded && !visible.length && <tbody><tr><td colSpan={8} className="u-empty">No {noun} match these filters.</td></tr></tbody>}
               {!loaded && !error && <tbody><tr><td colSpan={7} className="u-empty">Loading…</td></tr></tbody>}
             </table>
           </div>
@@ -269,6 +308,13 @@ export default function RoomsFloorPlans({ view = 'rooms' }) {
           <FloorPanel mode="add" schools={lists.schools} buildings={lists.buildings} defaultSchoolId={school}
             buildingId={firstBuildingOf(school)} onClose={() => setAdding(false)} onSaved={onFloorAdded} />
         </>
+      )}
+      {confirmDialog}
+      {toast && (
+        <div className={`u-toast ${toast.kind}`} role="status">
+          {toast.kind === 'success' ? <CircleCheck size={16} /> : <CircleAlert size={16} />}
+          {toast.text}
+        </div>
       )}
     </div>
   )

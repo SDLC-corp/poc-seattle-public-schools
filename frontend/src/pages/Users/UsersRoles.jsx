@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router'
 import {
   UsersRound, UserCog, School, Wrench, HardHat, UserX, Plus, FileUp, EllipsisVertical, Download,
-  CircleCheck, CircleAlert, Construction,
+  CircleCheck, CircleAlert,
 } from 'lucide-react'
 import UsersTab from './UsersTab'
 import RolesTab from './RolesTab'
@@ -17,8 +17,6 @@ const TABS = [
   { id: 'users', label: 'Users' },
   { id: 'roles', label: 'Roles' },
   { id: 'permissions', label: 'Permissions' },
-  { id: 'access', label: 'School Access' },
-  { id: 'activity', label: 'Activity Log' },
 ]
 
 // KPI card that doubles as a quick filter
@@ -184,13 +182,6 @@ export default function UsersRoles() {
       {tab === 'permissions' && (
         <PermissionsTab roles={roleData.roles} permissions={roleData.permissions} systemRole={roleData.systemRole}
           onChanged={onRolesChanged} notify={notify} />
-      )}
-      {(tab === 'access' || tab === 'activity') && (
-        <div className="u-card u-placeholder">
-          <Construction size={28} />
-          <strong>{TABS.find((t) => t.id === tab).label}</strong>
-          <span>This section hasn't been built yet. Each user's school access is shown in their details panel.</span>
-        </div>
       )}
 
       {form && (

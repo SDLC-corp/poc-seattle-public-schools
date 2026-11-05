@@ -114,7 +114,7 @@ function SchoolView({ school: s, onSelectInspection }) {
       <dl className="cd-facts">
         <Row label="School Type">{s.type}</Row>
         <Row label="Buildings">{s.buildings}</Row>
-        <Row label="ACM Locations">{s.acmLocations} <small className="u-muted">(sample)</small></Row>
+        <Row label="ACM Locations">{s.acmLocations} <small className="u-muted">(known or assumed)</small></Row>
         <Row label="Last Inspection">{fmtDate(s.lastInspection)}</Row>
         <Row label="Next Due">{fmtDay(s.nextDue)}</Row>
         <Row label="Completed">{done.length} inspection{done.length === 1 ? '' : 's'} on record</Row>

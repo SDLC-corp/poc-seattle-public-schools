@@ -3,7 +3,7 @@ import { Link, useLocation, useParams, useSearchParams } from 'react-router'
 import {
   ChevronRight, ChevronLeft, ArrowLeft, MousePointer2, PenTool, Pencil, Trash2, Search, ClipboardList, CircleCheck,
   CircleAlert, Eye, MoreVertical, Info, SearchX, MapPinOff, ScanSearch, LoaderCircle,
-  X, Plus, Layers, DoorOpen,
+  X, Plus, Layers, DoorOpen, FileText, Download,
 } from 'lucide-react'
 import { detectRooms } from '../../lib/roomDetection'
 import { useConfirm } from '../../components/ui/useConfirm'
@@ -321,6 +321,14 @@ export default function FloorRooms() {
                 <button type="button" className="u-btn u-btn-primary u-btn-sm" disabled={detectState === 'running'} onClick={() => detect(floor)}>
                   {detectState === 'running' ? <><LoaderCircle size={13} className="fp-spin" />Detecting…</> : <><ScanSearch size={13} />Detect Rooms</>}
                 </button>
+                {/* The original PDF the plan was rendered from (stored on the server) */}
+                {floor.planSourceUrl && (
+                  <>
+                    <a className="u-btn u-btn-outline u-btn-sm" href={`${API_BASE.replace(/\/api$/, '')}${floor.planSourceUrl}`} target="_blank" rel="noopener noreferrer"
+                      title={`${floor.planSource.name}${floor.planSource.pages > 1 ? ` – page ${floor.planSource.page} of ${floor.planSource.pages} is the plan` : ''}`}><FileText size={13} />Original PDF</a>
+                    <a className="u-btn u-btn-ghost u-btn-sm" href={`${API_BASE.replace(/\/api$/, '')}${floor.planSourceUrl}&download=1`} aria-label="Download the original PDF"><Download size={13} /></a>
+                  </>
+                )}
               </div>
             )}
             <div className="fr-plan-body">
@@ -380,7 +388,7 @@ export default function FloorRooms() {
               <ClipboardList size={28} />
               <strong>Select a room to map ACM</strong>
               <span>Click a room on the plan or in the room list, or use <b>Draw</b> to outline a room the detector missed.</span>
-              {floor?.planImage && <span className="u-muted u-small">Plan: {floor.planImage.name}</span>}
+              {floor?.planImage && <span className="u-muted u-small">Plan: {floor.planSource ? `${floor.planSource.name}${floor.planSource.pages > 1 ? ` (page ${floor.planSource.page} of ${floor.planSource.pages})` : ''}` : floor.planImage.name}</span>}
             </div>
           )}
           {selectedId && !room && <div className="u-card fr-card fr-loading">Loading room…</div>}

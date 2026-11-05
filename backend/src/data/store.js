@@ -14,6 +14,20 @@ export const { buildings } = buildingsDoc;
 
 export const getSchoolBuildings = (schoolId) => buildings.filter((b) => b.schoolId === schoolId);
 
+// Id lookups for long lists: maps rebuilt only after a school or building is added, edited or removed here (every
+// change in this file calls changed()), so a list of thousands of records doesn't search the arrays per row
+let version = 0;
+const changed = () => { version += 1; };
+let lookup = null;
+function index() {
+  if (lookup?.version !== version) {
+    lookup = { version, schools: new Map(schools.map((s) => [s.id, s])), buildings: new Map(buildings.map((b) => [b.id, b])) };
+  }
+  return lookup;
+}
+export const findSchool = (id) => index().schools.get(id);
+export const findBuilding = (id) => index().buildings.get(id);
+
 let writing = Promise.resolve();
 const persist = () => {
   writing = writing.then(() => writeJson(dataFile('buildings.json'), {
@@ -40,6 +54,7 @@ export async function addSchool(fields) {
     location: fields.location ?? null, source: 'app',
   };
   schools.push(school);
+  changed();
   writingSchools = writingSchools.then(() => writeJson(dataFile('schools.json'), { ...schoolsDoc, count: schools.length, schools }));
   await writingSchools;
   return school;
@@ -82,6 +97,7 @@ export async function addBuilding(school, fields) {
   };
   const building = location ? placeAt(base, location) : placeNew(base, school);
   buildings.push(building);
+  changed();
   await persist();
   if (!school.location && building.location) await setSchoolLocation(school, building.location);
   return building;
@@ -94,11 +110,21 @@ async function setSchoolLocation(school, location) {
   await writingSchools;
 }
 
+export async function removeBuilding(id) {
+  const i = buildings.findIndex((b) => b.id === id);
+  if (i < 0) return null;
+  const [gone] = buildings.splice(i, 1); // in place, so every importer sees it gone
+  changed();
+  await persist();
+  return gone;
+}
+
 export async function updateBuilding(id, fields) {
   const i = buildings.findIndex((b) => b.id === id);
   const merged = { ...buildings[i], ...fields, presumedAcm: (fields.yearBuilt ?? buildings[i].yearBuilt) < PRESUMED_ACM_BEFORE };
   const resized = { ...merged, ...shape(merged.areaSqFt, merged.floors, merged.construction === 'Modular') };
   buildings[i] = merged.location ? placeAt(resized, merged.location) : resized;
+  changed();
   await persist();
   const school = schools.find((s) => s.id === buildings[i].schoolId);
   if (school && !school.location && fields.location) await setSchoolLocation(school, fields.location);

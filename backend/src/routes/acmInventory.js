@@ -1,5 +1,6 @@
+import { naturalCompare } from '../data/naturalSort.js';
 import { Router } from 'express';
-import { schools, buildings } from '../data/store.js';
+import { schools, buildings, findSchool, findBuilding } from '../data/store.js';
 import { getAllFloors } from '../data/floorsStore.js';
 import { getMaterials, allRooms } from '../data/roomsStore.js';
 import * as META from '../data/acmMeta.js';
@@ -11,8 +12,9 @@ import { logAudit } from '../data/auditStore.js';
 const router = Router();
 
 // Looked up live so schools added in the app are found
-const schoolName = { get: (id) => schools.find((s) => s.id === id)?.name };
-const buildingById = new Map(buildings.map((b) => [b.id, b]));
+const schoolName = { get: (id) => findSchool(id)?.name };
+// Looked up live so buildings added in the app are found
+const buildingById = { get: (id) => findBuilding(id) };
 const addYears = (iso, n) => (iso ? `${Number(iso.slice(0, 4)) + n}${iso.slice(4, 10)}` : '');
 const csvCell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
 
@@ -86,8 +88,8 @@ function sortRecords(list, sort, dir) {
     rows: [...list].sort((a, b) => {
       const x = get(a);
       const y = get(b);
-      return d * (typeof x === 'number' ? x - y : String(x).localeCompare(String(y), 'en', { numeric: true }))
-        || a.id.localeCompare(b.id, 'en', { numeric: true });
+      return d * (typeof x === 'number' ? x - y : naturalCompare(String(x), String(y)))
+        || naturalCompare(a.id, b.id);
     }),
   };
 }
@@ -124,19 +126,42 @@ router.get('/meta', (req, res) => res.json({
   types: META.MATERIAL_TYPES, conditions: META.CONDITIONS, statuses: META.MATERIAL_STATUSES,
 }));
 
-// Facility → building → floor tree with record counts (honours the non-location filters)
+/**
+ * Facility → building → floor tree (honours the non-location filters). `count` is the number of ACM there (present or
+ * assumed) — materials surveyed as "No ACM" aren't asbestos, so they don't count — unless an ACM-status filter is
+ * set, when it counts the records with that status. `records` is every material record (shown as a tooltip).
+ */
 router.get('/tree', (req, res) => {
   const list = filterRecords(records(), req.query, { location: false });
+  const counts = (r) => (req.query.status ? 1 : Number(r.acmStatus === 'ACM Present' || r.acmStatus === 'Assumed ACM'));
   const tree = new Map();
   for (const r of list) {
-    if (!tree.has(r.schoolId)) tree.set(r.schoolId, { id: r.schoolId, name: r.schoolName, count: 0, buildings: new Map() });
+    const n = counts(r);
+    if (!tree.has(r.schoolId)) tree.set(r.schoolId, { id: r.schoolId, name: r.schoolName, count: 0, records: 0, buildings: new Map() });
     const s = tree.get(r.schoolId);
-    s.count += 1;
-    if (!s.buildings.has(r.buildingId)) s.buildings.set(r.buildingId, { id: r.buildingId, name: r.buildingName, count: 0, floors: new Map() });
+    s.count += n; s.records += 1;
+    if (!s.buildings.has(r.buildingId)) s.buildings.set(r.buildingId, { id: r.buildingId, name: r.buildingName, count: 0, records: 0, floors: new Map() });
     const b = s.buildings.get(r.buildingId);
-    b.count += 1;
-    if (!b.floors.has(r.floorId)) b.floors.set(r.floorId, { id: r.floorId, name: r.floorName, number: r.floorNumber, count: 0 });
-    b.floors.get(r.floorId).count += 1;
+    b.count += n; b.records += 1;
+    if (!b.floors.has(r.floorId)) b.floors.set(r.floorId, { id: r.floorId, name: r.floorName, number: r.floorNumber, count: 0, records: 0 });
+    const f = b.floors.get(r.floorId);
+    f.count += n; f.records += 1;
+  }
+  // Unfiltered, every building and floor is listed, including ones added in the app with no ACM recorded yet (count 0)
+  const { type, condition, status, q } = req.query;
+  const allFloors = type || condition || status || q?.trim() ? [] : getAllFloors();
+  // …and every school (schools.json), even one with no buildings yet
+  for (const s of allFloors.length ? schools : []) {
+    if (!tree.has(s.id)) tree.set(s.id, { id: s.id, name: s.name, count: 0, records: 0, buildings: new Map() });
+  }
+  for (const bd of allFloors.length ? buildings : []) {
+    if (!tree.has(bd.schoolId)) tree.set(bd.schoolId, { id: bd.schoolId, name: schoolName.get(bd.schoolId) ?? bd.schoolName, count: 0, records: 0, buildings: new Map() });
+    const s = tree.get(bd.schoolId);
+    if (!s.buildings.has(bd.id)) s.buildings.set(bd.id, { id: bd.id, name: bd.name, count: 0, records: 0, floors: new Map() });
+    const b = s.buildings.get(bd.id);
+    for (const f of allFloors) {
+      if (f.buildingId === bd.id && !b.floors.has(f.id)) b.floors.set(f.id, { id: f.id, name: f.name, number: f.number, count: 0, records: 0 });
+    }
   }
   const byName = (a, b) => a.name.localeCompare(b.name);
   res.json([...tree.values()].sort(byName).map((s) => ({
@@ -171,7 +196,7 @@ router.get('/groups', (req, res) => {
         key: k, label: g.label(r), sub: g.sub?.(r) ?? null, filter: g.filter(r), total: 0,
         status: { 'ACM Present': 0, 'Assumed ACM': 0, 'No ACM': 0 },
         condition: { Good: 0, Damaged: 0, 'Significantly Damaged': 0, 'Not Assessed': 0 },
-        friable: 0, quantities: {}, rooms: new Set(), lastAssessed: '',
+        friable: 0, quantities: {}, rooms: new Set(), acmRooms: new Set(), lastAssessed: '',
       });
     }
     const x = groups.get(k);
@@ -182,12 +207,14 @@ router.get('/groups', (req, res) => {
     // Quantities only add up within a unit, and only for ACM (present or assumed)
     if (r.acmStatus !== 'No ACM') x.quantities[r.unit] = (x.quantities[r.unit] ?? 0) + r.quantity;
     x.rooms.add(r.roomId);
+    if (r.acmStatus === 'ACM Present' || r.acmStatus === 'Assumed ACM') x.acmRooms.add(r.roomId);
     if (r.assessmentDate > x.lastAssessed) x.lastAssessed = r.assessmentDate;
   }
   const rows = [...groups.values()]
-    .map(({ rooms, quantities, ...x }) => ({
+    .map(({ rooms, acmRooms, quantities, ...x }) => ({
       ...x,
       rooms: rooms.size,
+      acmRooms: acmRooms.size, // rooms with known or assumed ACM
       quantities: Object.entries(quantities).map(([unit, total]) => ({ unit, total: Math.round(total * 100) / 100 }))
         .sort((a, b) => b.total - a.total),
     }))

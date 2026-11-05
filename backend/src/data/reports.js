@@ -1,4 +1,4 @@
-import { schools, buildings } from './store.js';
+import { schools, buildings, findSchool, findBuilding } from './store.js';
 import { getInspections, schoolRows } from './complianceStore.js';
 import { getAllFloors } from './floorsStore.js';
 import { getMaterials, allRooms } from './roomsStore.js';
@@ -24,8 +24,9 @@ const dayMs = (iso) => Date.parse(`${iso}T00:00:00`);
 const addYears = (iso, n) => `${Number(iso.slice(0, 4)) + n}${iso.slice(4, 10)}`;
 
 // Looked up live so schools added in the app are found
-const schoolName = { get: (id) => schools.find((s) => s.id === id)?.name };
-const buildingName = new Map(buildings.map((b) => [b.id, b.name]));
+const schoolName = { get: (id) => findSchool(id)?.name };
+// Looked up live so buildings added in the app are found
+const buildingName = { get: (id) => findBuilding(id)?.name };
 const floorById = () => new Map(getAllFloors().map((f) => [f.id, f]));
 
 // Status values per report: value → { label, tone } (tone picks the badge colour on screen)
