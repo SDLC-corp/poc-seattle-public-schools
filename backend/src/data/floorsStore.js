@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { unlink } from 'node:fs/promises';
+import { unlink, copyFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { uploadDir } from './paths.js';
@@ -95,6 +95,33 @@ export const matchKnownPlan = (fileName) => {
   const hits = knownPlans().filter((p) => p.words.every((w) => have.has(w)) && (p.floor === null || floor === null || p.floor === floor));
   return hits.sort((a, b) => b.words.length - a.words.length)[0] ?? null;
 };
+/**
+ * A plan uploaded before under this file name (on any floor) whose files are still on this server — so the same PDF
+ * or image isn't rendered and sent again: the server copies it. Matched by the original file name, ignoring case and
+ * separators. Returns the floor that has it.
+ */
+const plainName = (s) => String(s ?? '').toLowerCase().replace(/\s*\(page \d+\)(?=\.[a-z0-9]+$)/, '').replace(/\.[a-z0-9]+$/, '').replace(/[^a-z0-9]/g, '');
+export function findUploadedPlan(fileName) {
+  const want = plainName(fileName);
+  if (!want) return null;
+  return floors.find((f) => f.planImage && !f.planImage.sample
+    && plainName(f.planSource?.name ?? f.planImage.name) === want
+    && existsSync(planPath(f)) && (!f.planSource || existsSync(planSourcePath(f)))) ?? null;
+}
+
+// The floor's plan copied (on the server) from another floor's earlier upload of the same file
+export async function copyUploadedPlan(id, from) {
+  const at = new Date().toISOString();
+  const stamp = Date.now();
+  const imageName = `${id}-${stamp}${path.extname(from.planImage.storedName)}`;
+  await copyFile(planPath(from), path.join(PLAN_DIR, imageName));
+  await setPlanImage(id, { ...from.planImage, storedName: imageName, uploadedAt: at });
+  if (!from.planSource) return { floor: getFloor(id) };
+  const pdfName = `${id}-${stamp}.pdf`;
+  await copyFile(planSourcePath(from), path.join(PLAN_DIR, pdfName));
+  return setPlanSource(id, { ...from.planSource, storedName: pdfName, uploadedAt: at, sample: false });
+}
+
 /**
  * A floor's plan file named in its address (&f=), found even when this instance's floor record doesn't list it:
  * a known plan's image / PDF (part of the app), or a file uploaded for this floor (named "<floorId>-…").

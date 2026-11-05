@@ -4,7 +4,7 @@ import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { buildings } from '../data/store.js';
 import {
-  getFloors, getAllFloors, getFloor, addFloor, updateFloor, removeFloor, setPlanImage, setPlanSource, present, planPath, planSourcePath, planSourceUrl, planImageUrl, planFiles, findFloorFile, knownPlans, matchKnownPlan, knownPlanPath, useKnownPlan, PLAN_DIR,
+  getFloors, getAllFloors, getFloor, addFloor, updateFloor, removeFloor, setPlanImage, setPlanSource, present, planPath, planSourcePath, planSourceUrl, planImageUrl, planFiles, findFloorFile, findUploadedPlan, copyUploadedPlan, knownPlans, matchKnownPlan, knownPlanPath, useKnownPlan, PLAN_DIR,
 } from '../data/floorsStore.js';
 import { getRooms, removeFloorRooms } from '../data/roomsStore.js';
 import { historyAt } from '../data/facilityHistory.js';
@@ -133,8 +133,11 @@ router.get('/plan-samples', (req, res) => res.json({ plans: knownPlans().map(kno
 // GET /floors/plan-samples/match?file=<uploaded file name> — the known plan that file is, else 404
 router.get('/plan-samples/match', (req, res) => {
   const plan = matchKnownPlan(req.query.file);
-  if (!plan) return res.status(404).json({ error: 'Not one of the known floor plans' });
-  res.json({ plan: knownView(plan) });
+  if (plan) return res.json({ plan: knownView(plan) });
+  // Uploaded before under this name (any floor)? Then it's reused — copied on the server, not sent again
+  const prev = findUploadedPlan(req.query.file);
+  if (prev) return res.json({ plan: { kind: 'previous', label: prev.planSource?.name ?? prev.planImage.name, imageUrl: planImageUrl(prev) } });
+  res.status(404).json({ error: 'Not a floor plan already on the server' });
 });
 
 // GET /floors/plan-samples/:file — a known plan's image or PDF (only those files)
@@ -156,8 +159,11 @@ router.post('/:id/plan/known', async (req, res, next) => {
     if (!f) return res.status(404).json({ error: 'Floor not found' });
     const name = String(req.body?.file ?? '').replace(/[\\/:*?"<>|]+/g, '_').slice(0, 120);
     const plan = matchKnownPlan(name);
-    if (!plan) return res.status(400).json({ error: 'Not one of the known floor plans', fields: { plan: 'Not one of the known floor plans' } });
-    await useKnownPlan(f.id, plan, name);
+    const prev = plan ? null : findUploadedPlan(name);
+    if (!plan && !prev) return res.status(400).json({ error: 'Not a floor plan already on the server', fields: { plan: 'Not a floor plan already on the server — upload the file instead' } });
+    if (plan) await useKnownPlan(f.id, plan, name);
+    else if (prev.id !== f.id) await copyUploadedPlan(f.id, prev); // same file uploaded for another floor: copied here
+    else await setPlanImage(f.id, { ...f.planImage, uploadedAt: new Date().toISOString() }).then(() => f.planSource && setPlanSource(f.id, { ...f.planSource }));
     // A new plan: the old rooms and outlines go, detection starts fresh on the new drawing
     await resetFloorRooms(f);
     const { floor } = await updateFloor(f.id, { shapes: [], tables: [] });
@@ -165,7 +171,7 @@ router.post('/:id/plan/known', async (req, res, next) => {
     const building = buildingOf(f.buildingId);
     logAudit(req, {
       action: 'update', module: 'Schools & Facilities', recordId: f.id, link: link(building),
-      summary: `Set floor plan – ${f.name}, ${building.name} (${plan.label})`,
+      summary: `Set floor plan – ${f.name}, ${building.name} (${plan ? plan.label : `reused ${name}`})`,
       changes: [{ field: 'Floor Plan', from: f.planImage?.name ?? (f.derivedCounts ? '(none)' : 'Sample layout'), to: name || plan.pdf }],
       related: { school: building.schoolName, building: building.name },
     });

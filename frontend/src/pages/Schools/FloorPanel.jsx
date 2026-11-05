@@ -112,15 +112,16 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
     setErrors((er) => ({ ...er, plan: undefined }))
     let source = null
     let pdf = null
+    // Already on the server under this name (one of the known plans, or uploaded before)? Then nothing is rendered or
+    // sent: the server uses / copies the file it has — instant, even for a large PDF
+    const match = await request(`/floors/plan-samples/match?file=${encodeURIComponent(file.name)}`).then((d) => d.plan).catch(() => null)
+    if (match) {
+      setKnownPlan({ plan: match, fileName: file.name })
+      setPlanSource(null)
+      setPlanFile(null); setPlanPdf(null); setRemoveImage(false)
+      return
+    }
     if (isPdf) {
-      // One of the known plans? Then its ready-made image is used (always loads, also on the server)
-      const match = await request(`/floors/plan-samples/match?file=${encodeURIComponent(file.name)}`).then((d) => d.plan).catch(() => null)
-      if (match) {
-        setKnownPlan({ plan: match, fileName: file.name })
-        setPlanSource(`${file.name} — matched to ${match.label}`)
-        setPlanFile(null); setPlanPdf(null); setRemoveImage(false)
-        return
-      }
       setConverting(true)
       try {
         const out = await renderPdfPage(file, 1)
