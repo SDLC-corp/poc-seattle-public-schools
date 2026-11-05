@@ -7,6 +7,7 @@ import { floorLayout } from './floorLayout.js';
 import { getRooms, addRooms, updateRoom, removeRoom, getMaterials } from './roomsStore.js';
 import { getFloor, getFloors, updateFloor } from './floorsStore.js';
 import { roomNumber } from './buildingGeometry.js';
+import { referencedMaterialIds } from './facilityHistory.js';
 
 const rectPolygon = (r, L) => [r.x / L.width, r.y / L.depth, (r.x + r.w) / L.width, r.y / L.depth,
   (r.x + r.w) / L.width, (r.y + r.h) / L.depth, r.x / L.width, (r.y + r.h) / L.depth].map((v) => +v.toFixed(4));
@@ -61,6 +62,29 @@ export async function syncFloorRooms(floor) {
   if (fresh.length) await addRooms(fresh);
   await refreshFloorCounts(floor.id);
   return getRooms({ floorId: floor.id });
+}
+
+/**
+ * A new plan replaces the floor's rooms: every room is removed (with its ACM records and files) so detection starts
+ * fresh — except rooms whose ACM is referenced by inspections, surveillance or O&M work, which must be kept as
+ * asbestos records; those stay without an outline, to be placed on the new plan. Returns { removed, kept }.
+ */
+export async function resetFloorRooms(floor) {
+  const referenced = referencedMaterialIds();
+  let removed = 0;
+  let kept = 0;
+  for (const r of getRooms({ floorId: floor.id })) {
+    const mats = getMaterials({ roomId: r.id });
+    if (mats.some((m) => referenced.has(m.id))) {
+      await updateRoom(r.id, { polygon: null, shapeId: null, layoutRoomId: null });
+      kept += 1;
+    } else {
+      await removeRoom(r.id);
+      removed += 1;
+    }
+  }
+  await refreshFloorCounts(floor.id);
+  return { removed, kept };
 }
 
 // Floors added in the app (derivedCounts) take rooms / ACM rooms / ACM status from their mapped rooms.

@@ -8,6 +8,15 @@ import * as OM from './omStore.js';
  * work. AHERA records must be kept, so a place with any of these can't be deleted (its ACMs would be orphaned).
  * where: { buildingId } or { floorId }
  */
+// Every ACM that inspections (any of their ACMs), surveillance or O&M work refer to
+export function referencedMaterialIds() {
+  const ids = new Set();
+  for (const r of getInspectionRecords()) for (const a of acmsOf(r)) ids.add(a.materialId);
+  for (const r of getSurveillanceRecords()) ids.add(r.materialId);
+  for (const a of OM.all('activities')) ids.add(a.materialId);
+  return ids;
+}
+
 export function historyAt({ buildingId, floorId }) {
   const at = (x) => (floorId ? x.floorId === floorId : x.buildingId === buildingId);
   const inspections = getInspectionRecords().filter((r) => r.state !== 'draft' && acmsOf(r).some(at)).length;

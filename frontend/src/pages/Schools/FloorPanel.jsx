@@ -4,6 +4,7 @@ import { X, Info, Upload, ImageOff, LoaderCircle, FileUp, FileText, ExternalLink
 import SearchSelect from '../../components/ui/SearchSelect'
 import { request, API_BASE, authHeaders, apiFileUrl } from '../../lib/api'
 import { floorName } from './buildingUtils'
+import { useConfirm } from '../../components/ui/useConfirm'
 
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
 const MAX_PLAN_BYTES = 5 * 1024 * 1024 // server limit for the stored plan image
@@ -66,6 +67,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
   const [removeImage, setRemoveImage] = useState(false)
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(false)
+  const [confirm, confirmDialog] = useConfirm()
   // Floors of the chosen building; loaded below unless the caller passed them
   const [siblings, setSiblings] = useState({ buildingId: initialFloors ? initialBuildingId : null, floors: initialFloors })
   const fileRef = useRef(null)
@@ -164,6 +166,18 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
     e.preventDefault()
     if (!form.buildingId) { setErrors({ buildingId: pickSchool && !schoolId ? 'Choose a school, then its building' : 'Choose a building' }); return }
     if (numberError) { setErrors({ number: numberError }); return }
+    // A new plan replaces the floor's rooms: confirm when there are rooms to lose
+    const roomCount = floor?.roomStats?.mapped ?? 0
+    if (!isNew && (planFile || knownPlan) && roomCount > 0) {
+      const ok = await confirm({
+        title: 'Replace the floor plan?',
+        message: `The new plan replaces this floor's ${roomCount} room${roomCount === 1 ? '' : 's'} and their ACM records; rooms are then detected on the new plan.`,
+        detail: 'Rooms whose ACM is used by inspections, surveillance or O&M work are kept, without an outline, to place on the new plan.',
+        confirmLabel: 'Replace Plan',
+        tone: 'danger',
+      })
+      if (!ok) return
+    }
     setSaving(true)
     setErrors({})
     // A new or removed plan makes earlier detected room outlines obsolete; otherwise keep them
@@ -268,7 +282,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
         {!converting && imageUrl && (
           <>
             <div className="fp-plan-tools">
-              <span className="u-muted u-small">{planSource ?? planFile?.name ?? floor?.planImage?.name ?? 'Uploaded plan'}</span>
+              <span className="u-muted u-small">{planFile || knownPlan ? 'New floor plan — replaces the current one when you save' : 'Current floor plan'}</span>
               <span className="fp-plan-btns">
                 <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={() => fileRef.current?.click()}><Upload size={13} />Replace Plan</button>
                 <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={removePlan}><ImageOff size={13} />Remove Plan</button>
@@ -284,7 +298,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
             )}
             {!planFile && !removeImage && floor?.planSourceUrl && (
               <a className="fp-source" href={apiFileUrl(floor.planSourceUrl)} target="_blank" rel="noopener noreferrer">
-                <FileText size={14} />Original PDF: {floor.planSource.name}{floor.planSource.pages > 1 ? ` (page ${floor.planSource.page} of ${floor.planSource.pages})` : ''}<ExternalLink size={12} />
+                <FileText size={14} />Original PDF<ExternalLink size={12} />
               </a>
             )}
             <a className="fp-thumb" href={imageUrl} target="_blank" rel="noopener noreferrer" title="Open the plan in a new tab">
@@ -303,6 +317,7 @@ export default function FloorPanel({ mode, floor, buildingId: initialBuildingId,
           </button>
         </footer>
       </form>
+      {confirmDialog}
     </aside>
   )
 }

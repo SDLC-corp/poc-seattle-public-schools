@@ -8,7 +8,7 @@ import {
 } from '../data/floorsStore.js';
 import { getRooms, removeFloorRooms } from '../data/roomsStore.js';
 import { historyAt } from '../data/facilityHistory.js';
-import { syncFloorRooms } from '../data/floorRoomsSync.js';
+import { syncFloorRooms, resetFloorRooms } from '../data/floorRoomsSync.js';
 import { logAudit, diff } from '../data/auditStore.js';
 
 const MAX_PLAN_BYTES = 5 * 1024 * 1024;
@@ -157,7 +157,10 @@ router.post('/:id/plan/known', async (req, res, next) => {
     const name = String(req.body?.file ?? '').replace(/[\\/:*?"<>|]+/g, '_').slice(0, 120);
     const plan = matchKnownPlan(name);
     if (!plan) return res.status(400).json({ error: 'Not one of the known floor plans', fields: { plan: 'Not one of the known floor plans' } });
-    const { floor } = await useKnownPlan(f.id, plan, name);
+    await useKnownPlan(f.id, plan, name);
+    // A new plan: the old rooms and outlines go, detection starts fresh on the new drawing
+    await resetFloorRooms(f);
+    const { floor } = await updateFloor(f.id, { shapes: [], tables: [] });
     await syncFloorRooms(floor);
     const building = buildingOf(f.buildingId);
     logAudit(req, {
@@ -254,7 +257,10 @@ router.post('/:id/plan', express.raw({ type: () => true, limit: MAX_PLAN_BYTES }
     const storedName = `${f.id}-${Date.now()}.${type.ext}`;
     await writeFile(path.join(PLAN_DIR, storedName), body);
     const name = String(req.query.name ?? '').replace(/[\\/:*?"<>|]+/g, '_').slice(0, 120) || storedName;
-    const { floor } = await setPlanImage(f.id, { storedName, name, mime: type.mime, size: body.length, uploadedAt: new Date().toISOString() });
+    await setPlanImage(f.id, { storedName, name, mime: type.mime, size: body.length, uploadedAt: new Date().toISOString() });
+    // A new plan: the old rooms and outlines go, detection starts fresh on the new drawing
+    await resetFloorRooms(f);
+    const { floor } = await updateFloor(f.id, { shapes: [], tables: [] });
     await syncFloorRooms(floor);
     const building = buildingOf(f.buildingId);
     logAudit(req, {

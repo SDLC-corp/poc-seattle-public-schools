@@ -142,7 +142,7 @@ export default function RoomsFloorPlans({ view = 'rooms' }) {
   const onFloorAdded = (floor, _building, _isNew, warning, { detect = false } = {}) => {
     setAdding(false)
     navigate(`/schools/${floor.schoolId}/buildings/${floor.buildingId}/floors/${floor.id}`, {
-      state: { detect, toast: warning ? { kind: 'error', text: warning } : { kind: 'success', text: `Added ${floor.name}` } },
+      state: { detect, floor, toast: warning ? { kind: 'error', text: warning } : { kind: 'success', text: `Added ${floor.name}` } },
     })
   }
   // Floors per building: a building's only floor can't be deleted (delete the building instead)

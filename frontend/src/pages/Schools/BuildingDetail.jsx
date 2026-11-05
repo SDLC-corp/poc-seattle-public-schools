@@ -182,6 +182,7 @@ export default function BuildingDetail() {
     navigate(`/schools/${floor.schoolId}/buildings/${floor.buildingId}/floors/${floor.id}`, {
       state: {
         detect,
+        floor, // the floor as just saved (with its new plan), so the plan screen never shows an older copy
         toast: warning ? { kind: 'error', text: warning } : { kind: 'success', text: isNew ? `Added ${floor.name}` : `Saved ${floor.name}` },
       },
     })
@@ -327,7 +328,7 @@ export default function BuildingDetail() {
                     <tr key={f.id} className={f.id === panel?.floorId ? 'selected' : ''} tabIndex={0}
                       onClick={() => openFloor(f.id)} onKeyDown={(e) => { if (e.key === 'Enter') openFloor(f.id) }}>
                       <td><span className="bd-fnum">{f.number}</span></td>
-                      <td><strong>{f.name}</strong>{f.planImage && <small className="p-sub">Plan: {f.planImage.name}</small>}</td>
+                      <td><strong>{f.name}</strong></td>
                       <td className="c-num">{fmtNum(f.rooms)}</td>
                       <td className="c-num">{fmtNum(f.acmRooms)}</td>
                       <td className="c-num b-col-acmrooms">{f.roomStats?.mapped ?? 0}{f.roomStats?.acmPresent ? <small className="p-sub">{f.roomStats.acmPresent} with ACM</small> : null}</td>

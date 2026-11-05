@@ -101,6 +101,7 @@ export default function FloorRooms() {
   const [detectState, setDetectState] = useState(null) // null | 'running' | { ok, text }
   // Set when arriving from Add / Edit Floor with a new plan: detect its rooms once the floor has loaded
   const [autoDetect] = useState(() => Boolean(location.state?.detect))
+  const [savedFloor] = useState(() => location.state?.floor ?? null) // the floor as saved by Add / Edit Floor
 
   // OpenCV room detection on the floor's uploaded plan (tessera-style wall/doorway room finder);
   // detected outlines replace the current ones straight away (the server keeps rooms that have ACM records)
@@ -141,10 +142,14 @@ export default function FloorRooms() {
     Promise.all([request(`/schools/${schoolId}`), request(`/floors/${floorId}`), request(`/rooms?floorId=${encodeURIComponent(floorId)}`), request('/acm-materials/meta')])
       .then(([s, f, r, m]) => {
         if (cancelled) return
-        setSchool(s); setFloor(f); setRooms(r.rooms); setMeta(m)
-        // A newly uploaded plan replaces the old outlines (they belong to the previous drawing); rooms with ACM
-        // records are kept by the server
-        if (autoDetect && f.planUrl && f.planAvailable !== false) detectRef.current(f)
+        // Arriving from Add / Edit Floor: the floor as just saved there wins if it's newer than what this request
+        // returned (on a multi-instance server the read can briefly come from an instance without the new plan)
+        const saved = savedFloor?.id === f.id ? savedFloor : null
+        const newer = saved?.planImage && (!f.planImage || saved.planImage.uploadedAt > f.planImage.uploadedAt)
+        const fl = newer ? { ...f, ...saved, roomStats: f.roomStats } : f
+        setSchool(s); setFloor(fl); setRooms(r.rooms); setMeta(m)
+        // A newly uploaded plan: its rooms are detected straight away (the old rooms were removed by the server)
+        if (autoDetect && fl.planUrl && fl.planAvailable !== false) detectRef.current(fl)
       })
       .catch((err) => { if (!cancelled) setError(err.status === 404 ? 'notFound' : err.message) })
     return () => { cancelled = true }
@@ -320,7 +325,7 @@ export default function FloorRooms() {
             </div>
             {/* The plan is on record but its file isn't on this server (e.g. uploaded before a Vercel redeploy) */}
             {floor?.planUrl && floor.planAvailable === false && (
-              <p className="fr-plan-missing" role="alert"><CircleAlert size={14} />The uploaded plan image ({floor.planImage?.name}) isn&apos;t on this server any more, so the floor&apos;s layout is shown instead. Edit the floor and upload the plan again.</p>
+              <p className="fr-plan-missing" role="alert"><CircleAlert size={14} />The uploaded plan image isn&apos;t on this server any more, so the floor&apos;s layout is shown instead. Edit the floor and upload the plan again.</p>
             )}
             {floor?.planUrl && floor.planAvailable !== false && (
               <div className="fr-detect-tools">
@@ -330,8 +335,7 @@ export default function FloorRooms() {
                 {/* The original PDF the plan was rendered from (stored on the server) */}
                 {floor.planSourceUrl && floor.planSourceAvailable !== false && (
                   <>
-                    <a className="u-btn u-btn-outline u-btn-sm" href={apiFileUrl(floor.planSourceUrl)} target="_blank" rel="noopener noreferrer"
-                      title={`${floor.planSource.name}${floor.planSource.pages > 1 ? ` – page ${floor.planSource.page} of ${floor.planSource.pages} is the plan` : ''}`}><FileText size={13} />Original PDF</a>
+                    <a className="u-btn u-btn-outline u-btn-sm" href={apiFileUrl(floor.planSourceUrl)} target="_blank" rel="noopener noreferrer"><FileText size={13} />Original PDF</a>
                     <a className="u-btn u-btn-ghost u-btn-sm" href={`${apiFileUrl(floor.planSourceUrl)}&download=1`} aria-label="Download the original PDF"><Download size={13} /></a>
                   </>
                 )}
@@ -393,9 +397,7 @@ export default function FloorRooms() {
             <div className="u-card fr-card fr-pick">
               <ClipboardList size={28} />
               <strong>Select a room to map ACM</strong>
-              <span>Click a room on the plan or in the room list, or use <b>Draw</b> to outline a room the detector missed.</span>
-              {floor?.planImage && <span className="u-muted u-small">Plan: {floor.planSource ? `${floor.planSource.name}${floor.planSource.pages > 1 ? ` (page ${floor.planSource.page} of ${floor.planSource.pages})` : ''}` : floor.planImage.name}</span>}
-            </div>
+              <span>Click a room on the plan or in the room list, or use <b>Draw</b> to outline a room the detector missed.</span>            </div>
           )}
           {selectedId && !room && <div className="u-card fr-card fr-loading">Loading room…</div>}
           {room && meta && (
