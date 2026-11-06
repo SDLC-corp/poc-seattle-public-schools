@@ -140,14 +140,21 @@ export function LabPanel({ record, followUps, materials, canEditParent, onUpdate
                   </td>
                   <td>
                     <span className="in-lab-acts">
-                      {editable(r) && (
-                        <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={() => onUpdate(r)}>
-                          <Pencil size={13} />{s.result === 'Pending' ? 'Enter' : 'Update'}
-                        </button>
+                      {/* At the lab: its details page (Lab & Sampling Results or Air Monitoring), where results are entered */}
+                      {at ? (
+                        <Link to={at.to} className="u-btn u-btn-outline u-btn-sm" title={`Open in ${at.label === 'Air Monitoring' ? 'Air Monitoring' : 'Lab & Sampling Results'}`}>
+                          <at.icon size={13} />Lab Details
+                        </Link>
+                      ) : (
+                        <>
+                          {editable(r) && (
+                            <button type="button" className="u-btn u-btn-outline u-btn-sm" onClick={() => onUpdate(r)}>
+                              <Pencil size={13} />{s.result === 'Pending' ? 'Enter' : 'Update'}
+                            </button>
+                          )}
+                          <small className="u-muted" title="The reviewer sends the samples to the laboratory when approving the inspection">Not at lab yet</small>
+                        </>
                       )}
-                      {at
-                        ? <Link to={at.to} className="u-btn u-btn-outline u-btn-sm"><at.icon size={13} />{at.label}</Link>
-                        : <small className="u-muted" title="The reviewer sends the samples to the laboratory when approving the inspection">Not at lab yet</small>}
                     </span>
                   </td>
                 </tr>

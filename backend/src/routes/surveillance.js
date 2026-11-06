@@ -44,6 +44,7 @@ function placeLookup() {
       schoolName: schoolName.get(x.schoolId) ?? x.schoolId,
       buildingName: buildingName.get(x.buildingId) ?? x.buildingId,
       floorName: floors.get(x.floorId)?.name ?? '',
+      floorNumber: floors.get(x.floorId)?.number ?? null,
       roomNumber: room?.number ?? '',
       roomName: room?.name ?? '',
     };
@@ -127,22 +128,42 @@ function sortRows(list, sort, dir) {
   };
 }
 
-router.get('/meta', (req, res) => res.json({
-  conditions: CONDITIONS,
-  actionStatuses: ACTION_STATUSES,
-  teams: TEAMS,
-  intervalDays: INTERVAL_DAYS,
-  nextId: nextId(),
-  inspectors: listUsers().filter((u) => SIGNERS.includes(u.roleId) && u.status === 'active')
-    .map((u) => ({ id: u.id, name: u.name, title: u.jobTitle })).sort(listOrder),
-}));
+// The signed-in person's user record (matched by email, else name), if they have one
+function meUser() {
+  const me = currentUser();
+  const email = String(me.email ?? '').toLowerCase();
+  return listUsers().find((u) => u.status === 'active' && ((email && String(u.email).toLowerCase() === email) || u.name === me.name)) ?? null;
+}
+// Who can be recorded as having done the surveillance: inspectors / managers, and the signed-in person
+const canInspect = (u, me = meUser()) => u.status === 'active' && (SIGNERS.includes(u.roleId) || u.id === me?.id);
+
+router.get('/meta', (req, res) => {
+  const me = meUser();
+  const inspectors = listUsers().filter((u) => canInspect(u, me))
+    .map((u) => ({ id: u.id, name: u.name, title: u.jobTitle })).sort(listOrder);
+  res.json({
+    conditions: CONDITIONS,
+    actionStatuses: ACTION_STATUSES,
+    teams: TEAMS,
+    intervalDays: INTERVAL_DAYS,
+    nextId: nextId(),
+    // The signed-in person first, so a new surveillance starts with them as the inspector
+    inspectors: me ? [...inspectors.filter((u) => u.id === me.id), ...inspectors.filter((u) => u.id !== me.id)] : inspectors,
+    me: { name: currentUser().name, inspectorId: me?.id ?? null },
+  });
+});
 
 // Materials that can be surveyed, for the "Associated ACM" picker
 router.get('/materials', (req, res) => {
   const place = placeLookup();
   res.json(getMaterials().filter((m) => SURVEYED.includes(m.acmStatus)).map((m) => {
     const p = place(m);
-    return { id: m.id, name: m.name, acmStatus: m.acmStatus, place: `${p.schoolName} / ${p.buildingName} / ${p.floorName} / ${p.roomNumber} ${p.roomName}`.trim() };
+    return {
+      id: m.id, name: m.name, acmStatus: m.acmStatus, place: `${p.schoolName} / ${p.buildingName} / ${p.floorName} / ${p.roomNumber} ${p.roomName}`.trim(),
+      // For the form's School → Building → Floor → ACM dropdowns
+      schoolId: m.schoolId, schoolName: p.schoolName, buildingId: m.buildingId, buildingName: p.buildingName,
+      floorId: m.floorId ?? null, floorName: p.floorName, floorNumber: p.floorNumber, roomNumber: p.roomNumber, roomName: p.roomName,
+    };
   }).sort((a, b) => naturalCompare(a.place, b.place)));
 });
 
@@ -252,7 +273,8 @@ function validate(body, existing) {
   else if (!SURVEYED.includes(material.acmStatus) && !existing) errors.materialId = 'Only ACM Present or Assumed ACM materials are surveyed';
 
   const inspectorId = pick('inspectorId', '');
-  const inspector = listUsers().find((u) => u.id === inspectorId && SIGNERS.includes(u.roleId));
+  // (a record keeps the person it was saved with, even when someone else edits it)
+  const inspector = listUsers().find((u) => u.id === inspectorId && (canInspect(u) || u.id === existing?.inspectorId));
   const sig = pick('signature', {}) ?? {};
   const r = {
     materialId: material?.id ?? null,

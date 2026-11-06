@@ -42,7 +42,7 @@ const whenText = (days) => {
 }
 
 // Upcoming / Overdue: open inspections by scheduled date, plus ACM whose 3-year reinspection is due with nothing open
-export default function DueTab({ view, meta, reload, onSchedule }) {
+export default function DueTab({ tabs, view, meta, reload, onSchedule }) {
   const navigate = useNavigate()
   const overdue = view === 'overdue'
   const [tree, setTree] = useState(null)
@@ -107,6 +107,7 @@ export default function DueTab({ view, meta, reload, onSchedule }) {
           </div>
         </div>
       </div>
+      {tabs}
 
       <div className="a-kpis in-kpis in-kpis-5">
         {overdue

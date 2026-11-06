@@ -20,7 +20,7 @@ const COLUMNS = [
 ]
 
 // Completed inspections: verified and approved by a reviewer
-export default function CompletedTab({ meta }) {
+export default function CompletedTab({ tabs, meta }) {
   const navigate = useNavigate()
   const [tree, setTree] = useState(null)
   const [location, setLocation] = useState(NO_LOCATION)
@@ -79,6 +79,7 @@ export default function CompletedTab({ meta }) {
           </div>
         </div>
       </div>
+      {tabs}
 
       <section className="u-card ai-records">
         <header className="ai-group-head">

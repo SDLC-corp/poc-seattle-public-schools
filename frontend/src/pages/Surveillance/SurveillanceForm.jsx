@@ -51,6 +51,8 @@ export default function SurveillanceForm() {
   const [ctx, setCtx] = useState(null) // { material, location, history }
   const [form, setForm] = useState(() => ({ ...EMPTY, materialId: params.get('material') ?? '', date: isoToday(), nextDue: '', signature: { image: null, date: isoToday() } }))
   const [touched, setTouched] = useState({ changed: false, nextDue: false })
+  // School / building / floor chosen in the form (null = follow the chosen ACM)
+  const [pick, setPick] = useState({ schoolId: null, buildingId: null, floorId: null })
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(null) // 'draft' | 'record' | null
   const [loadError, setLoadError] = useState(null)
@@ -72,7 +74,11 @@ export default function SurveillanceForm() {
   }, [record?.id, record?.materialId])
 
   useEffect(() => {
-    request('/surveillance/meta').then(setMeta).catch((e) => setLoadError(e.message))
+    request('/surveillance/meta').then((m) => {
+      setMeta(m)
+      // A new surveillance is done by the signed-in person unless chosen otherwise
+      if (!id && m.me?.inspectorId) setForm((f) => (f.inspectorId ? f : { ...f, inspectorId: m.me.inspectorId }))
+    }).catch((e) => setLoadError(e.message))
     request('/surveillance/materials').then(setMaterials).catch(() => {})
   }, [])
 
@@ -202,6 +208,34 @@ export default function SurveillanceForm() {
   const mat = shownCtx?.material
   const materialOptions = materials.length || !mat ? materials : [{ id: mat.id, name: mat.name, place: '' }]
 
+  // School → Building → Floor → ACM. Each level narrows the next; until the user picks a level it follows the chosen ACM.
+  const selMat = materials.find((m) => m.id === form.materialId)
+  const cur = {
+    schoolId: pick.schoolId ?? selMat?.schoolId ?? '',
+    buildingId: pick.buildingId ?? selMat?.buildingId ?? '',
+    floorId: pick.floorId ?? selMat?.floorId ?? '',
+  }
+  const uniq = (list, key, label) => [...new Map(list.filter((m) => m[key]).map((m) => [m[key], { value: m[key], label: label(m), m }])).values()]
+  const inSchool = materials.filter((m) => !cur.schoolId || m.schoolId === cur.schoolId)
+  const inBuilding = inSchool.filter((m) => !cur.buildingId || m.buildingId === cur.buildingId)
+  const inFloor = inBuilding.filter((m) => !cur.floorId || m.floorId === cur.floorId)
+  const schoolOptions = uniq(materials, 'schoolId', (m) => m.schoolName).sort((a, b) => a.label.localeCompare(b.label))
+  const buildingOptions = uniq(inSchool, 'buildingId', (m) => (cur.schoolId ? m.buildingName : `${m.buildingName} — ${m.schoolName}`)).sort((a, b) => a.label.localeCompare(b.label, undefined, { numeric: true }))
+  const floorOptions = uniq(inBuilding, 'floorId', (m) => m.floorName || m.floorId).sort((a, b) => (a.m.floorNumber ?? 0) - (b.m.floorNumber ?? 0))
+  const acmLabel = (m) => (cur.floorId ? `${m.name} — ${`${m.roomNumber} ${m.roomName}`.trim() || 'whole floor'}` : `${m.name} — ${m.place}`)
+  // Changing a level clears the ACM when it's no longer in it
+  const choose = (level) => (value) => {
+    const next = level === 'schoolId' ? { schoolId: value, buildingId: '', floorId: '' }
+      : level === 'buildingId' ? { ...cur, buildingId: value, floorId: '' }
+        : { ...cur, floorId: value }
+    setPick(next)
+    if (selMat && ((next.schoolId && selMat.schoolId !== next.schoolId) || (next.buildingId && selMat.buildingId !== next.buildingId) || (next.floorId && selMat.floorId !== next.floorId))) set('materialId')('')
+  }
+  const chooseAcm = (value) => {
+    set('materialId')(value)
+    if (value) setPick({ schoolId: null, buildingId: null, floorId: null }) // the levels follow the ACM
+  }
+
   return (
     <div className="ai-page sv-page">
       <div className="ai-head">
@@ -250,14 +284,45 @@ export default function SurveillanceForm() {
               <div className="uf-field">
                 <span>Inspector / Personnel *</span>
                 <SearchSelect variant="field" label="Inspector" value={form.inspectorId} onChange={set('inspectorId')} searchPlaceholder="Search people…"
-                  options={[{ value: '', label: 'Select a person' }, ...(meta?.inspectors ?? []).map((u) => ({ value: u.id, label: `${u.name}${u.title ? ` – ${u.title}` : ''}` }))]} />
+                  options={[{ value: '', label: 'Select a person' }, ...(meta?.inspectors ?? []).map((u) => ({ value: u.id, label: `${u.name}${u.title ? ` – ${u.title}` : ''}${u.id === meta?.me?.inspectorId ? ' (you)' : ''}` }))]} />
                 <Err msg={errors.inspectorId} />
+                {meta?.me && !meta.me.inspectorId && isDraft && (
+                  <small className="u-muted">Signed in as {meta.me.name}, who isn't in User Management, so choose who did the surveillance.</small>
+                )}
               </div>
+              {isDraft ? (
+                <>
+                  <div className="uf-field">
+                    <span>School</span>
+                    <SearchSelect variant="field" label="School" value={cur.schoolId} onChange={choose('schoolId')} searchPlaceholder="Search schools…"
+                      options={[{ value: '', label: 'All schools' }, ...schoolOptions.map(({ value, label }) => ({ value, label }))]} />
+                  </div>
+                  <div className="uf-field">
+                    <span>Building</span>
+                    <SearchSelect variant="field" label="Building" value={cur.buildingId} onChange={choose('buildingId')} searchPlaceholder="Search buildings…"
+                      options={[{ value: '', label: 'All buildings' }, ...buildingOptions.map(({ value, label }) => ({ value, label }))]} />
+                  </div>
+                  <div className="uf-field">
+                    <span>Floor</span>
+                    <SearchSelect variant="field" label="Floor" value={cur.floorId} onChange={choose('floorId')} searchPlaceholder="Search floors…"
+                      options={[{ value: '', label: cur.buildingId ? 'All floors' : 'Choose a building first' }, ...(cur.buildingId ? floorOptions.map(({ value, label }) => ({ value, label })) : [])]} />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <label className="uf-field"><span>School</span><input className="u-input" readOnly value={loc?.schoolName ?? ''} /></label>
+                  <label className="uf-field"><span>Building</span><input className="u-input" readOnly value={loc?.buildingName ?? ''} /></label>
+                  <label className="uf-field"><span>Floor</span><input className="u-input" readOnly value={loc?.floorName ?? ''} /></label>
+                </>
+              )}
               <div className="uf-field sv-span-2">
                 <span>Associated ACM *</span>
                 {isDraft ? (
-                  <SearchSelect variant="field" label="Associated ACM" value={form.materialId} onChange={set('materialId')} searchPlaceholder="Search by material, school or room…"
-                    options={[{ value: '', label: 'Select the ACM being surveyed' }, ...materialOptions.map((m) => ({ value: m.id, label: `${m.name} — ${m.place}` }))]} />
+                  <SearchSelect variant="field" label="Associated ACM" value={form.materialId} onChange={chooseAcm} searchPlaceholder="Search by material or room…"
+                    options={[
+                      { value: '', label: inFloor.length ? `Select the ACM being surveyed (${inFloor.length})` : 'No ACM to survey here' },
+                      ...(materials.length ? inFloor : materialOptions).map((m) => ({ value: m.id, label: m.roomNumber !== undefined ? acmLabel(m) : `${m.name} — ${m.place}` })),
+                    ]} />
                 ) : (
                   <input className="u-input" value={mat ? `${shortAcm(mat.id, loc?.schoolId)} – ${mat.name}` : ''} readOnly title="The ACM of a recorded surveillance can't be changed" />
                 )}

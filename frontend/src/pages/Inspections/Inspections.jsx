@@ -94,7 +94,10 @@ const COLUMNS = [
   { key: 'date', label: 'Inspection Date' }, { key: 'nextDue', label: 'Next Due Date' }, { key: 'status', label: 'Status' },
 ]
 
-function ListTab({ meta, selected, setSelected, reload, onToast, onReassign }) {
+// Views whose filters come before the tabs
+const FILTERS_FIRST = ['list', 'upcoming', 'overdue', 'review', 'completed']
+
+function ListTab({ tabs, meta, selected, setSelected, reload, onToast, onReassign }) {
   const navigate = useNavigate()
   const [confirm, confirmDialog] = useConfirm()
   const [tree, setTree] = useState(null)
@@ -195,6 +198,7 @@ function ListTab({ meta, selected, setSelected, reload, onToast, onReassign }) {
           </div>
         </div>
       </div>
+      {tabs}
 
       <div className="a-kpis in-kpis in-kpis-5">
         <Kpi icon={ClipboardList} value={s?.total} label="Total Inspections" tone="primary" active={!filters.status} onClick={() => set('status')('')} />
@@ -348,6 +352,12 @@ export default function Inspections() {
 
   if (!tab) return <Navigate to="/inspections" replace />
 
+  const tabsNav = (
+    <nav className="u-tabs ai-tabs" aria-label="Inspection views">
+      {TABS.filter((t) => !t.hidden || t.id === tab.id).map((t) => <Link key={t.id} to={t.path} className={`u-tab${t.id === tab.id ? ' active' : ''}`} aria-current={t.id === tab.id ? 'page' : undefined}>{t.label}</Link>)}
+    </nav>
+  )
+
   return (
     <div className="ai-page">
       <div className="ai-head">
@@ -356,14 +366,13 @@ export default function Inspections() {
           <AssignMenu selectedCount={selected.size} onAssign={() => navigate('/inspections/assign')} onReassign={() => openReassign([...selected])} />
         </div>
       </div>
-      <nav className="u-tabs ai-tabs" aria-label="Inspection views">
-        {TABS.filter((t) => !t.hidden || t.id === tab.id).map((t) => <Link key={t.id} to={t.path} className={`u-tab${t.id === tab.id ? ' active' : ''}`} aria-current={t.id === tab.id ? 'page' : undefined}>{t.label}</Link>)}
-      </nav>
+      {/* Views with filters show them first, then these tabs (each view places `tabs` under its filters) */}
+      {!FILTERS_FIRST.includes(tab.id) && tabsNav}
 
-      {tab.id === 'list' && <ListTab meta={meta} selected={selected} setSelected={setSelected} reload={reload} onToast={setToast} onReassign={(ids) => openReassign(ids ?? [...selected])} />}
-      {(tab.id === 'upcoming' || tab.id === 'overdue') && <DueTab key={tab.id} view={tab.id} meta={meta} reload={reload} onSchedule={(ids) => openReassign(ids, true)} />}
-      {tab.id === 'review' && <ReviewTab meta={meta} />}
-      {tab.id === 'completed' && <CompletedTab meta={meta} />}
+      {tab.id === 'list' && <ListTab tabs={tabsNav} meta={meta} selected={selected} setSelected={setSelected} reload={reload} onToast={setToast} onReassign={(ids) => openReassign(ids ?? [...selected])} />}
+      {(tab.id === 'upcoming' || tab.id === 'overdue') && <DueTab key={tab.id} tabs={tabsNav} view={tab.id} meta={meta} reload={reload} onSchedule={(ids) => openReassign(ids, true)} />}
+      {tab.id === 'review' && <ReviewTab tabs={tabsNav} meta={meta} />}
+      {tab.id === 'completed' && <CompletedTab tabs={tabsNav} meta={meta} />}
       {/* After assigning: back to the Inspection List (newest first) with a success popup */}
       {tab.id === 'assign' && <AssignTab meta={meta} onToast={setToast} onDone={(text, res) => {
         setReload((n) => n + 1)

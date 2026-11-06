@@ -21,7 +21,7 @@ const daysSince = (iso) => (iso ? Math.max(0, Math.floor((Date.now() - Date.pars
  * Inspections submitted and waiting for review, oldest first. "Review" opens the inspection at its reviewer section,
  * where the reviewer verifies it, signs, dates and approves it (or returns it with notes), then comes back here.
  */
-export default function ReviewTab({ meta }) {
+export default function ReviewTab({ tabs, meta }) {
   const [tree, setTree] = useState(null)
   const [location, setLocation] = useState(NO_LOCATION)
   const [type, setType] = useState('')
@@ -80,6 +80,7 @@ export default function ReviewTab({ meta }) {
           </div>
         </div>
       </div>
+      {tabs}
 
       <section className="u-card ai-records">
         <header className="ai-group-head">

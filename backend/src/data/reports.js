@@ -95,13 +95,6 @@ const PLAN_STATUS = {
   reviewOverdue: { label: 'Review Overdue', tone: 'critical' },
   draft: { label: 'No Plan on Record', tone: 'neutral' },
 };
-const RESPONSE_STATUS = {
-  completed: { label: 'Completed', tone: 'good' },
-  inProgress: { label: 'In Progress', tone: 'warning' },
-  planned: { label: 'Planned', tone: 'primary' },
-  notStarted: { label: 'Not Started', tone: 'neutral' },
-  overdue: { label: 'Overdue', tone: 'critical' },
-};
 const ANNUAL_NOTICE_STATUS = {
   sent: { label: 'On File', tone: 'good' },
   missing: { label: 'Not on File', tone: 'critical' },
@@ -744,75 +737,6 @@ export const REPORTS = {
       { key: 'due', label: 'Review Due ≤ 60 Days', value: countBy(rows, 'reviewDue'), tone: 'warning', icon: 'clock', status: 'reviewDue' },
       { key: 'overdue', label: 'Review Overdue', value: countBy(rows, 'reviewOverdue'), tone: 'critical', icon: 'alert', status: 'reviewOverdue' },
       { key: 'none', label: 'No Plan on Record', value: countBy(rows, 'draft'), tone: 'violet', icon: 'help', status: 'draft' },
-    ],
-  },
-
-  // --- AHERA response actions (40 CFR 763.90) recommended by inspections, tracked through their O&M work ---
-  'response-actions': {
-    title: 'Response Actions',
-    description: 'Repair, encapsulation, enclosure, removal and other response actions recommended by inspections, with the O&M work carrying them out.',
-    module: 'Inspections',
-    filters: SCHEDULE_FILTERS,
-    statusLabel: 'Progress',
-    statuses: RESPONSE_STATUS,
-    columns: [
-      { key: 'date', label: 'Inspection Date', type: 'date' },
-      { key: 'id', label: 'Inspection ID', type: 'link' },
-      { key: 'school', label: 'Facility', type: 'wrap' },
-      { key: 'material', label: 'ACM Material', type: 'wrap' },
-      { key: 'condition', label: 'Condition' },
-      { key: 'action', label: 'Response Action', type: 'wrap' },
-      { key: 'target', label: 'Target Date', type: 'date' },
-      { key: 'work', label: 'O&M Work', type: 'wrap' },
-      { key: 'status', label: 'Progress', type: 'status' },
-      { key: 'room', label: 'Room', csvOnly: true },
-      { key: 'priority', label: 'Priority', csvOnly: true },
-      { key: 'inspectionId', label: 'Inspection', csvOnly: true },
-      { key: 'building', label: 'Building', csvOnly: true },
-      { key: 'inspector', label: 'Inspector', csvOnly: true },
-      { key: 'immediate', label: 'Immediate Attention', csvOnly: true },
-    ],
-    rows: () => {
-      const place = placer();
-      const mats = materialNames();
-      const today = isoToday();
-      const activities = OM.all('activities');
-      return getInspectionRecords().filter((r) => ['submitted', 'returned', 'approved'].includes(r.state)).flatMap((r) => acmsOf(r)
-        .map((a, i) => ({ a, i }))
-        .filter(({ a }) => a.risk?.recommendedAction && !a.risk.recommendedAction.startsWith('No Action'))
-        .map(({ a, i }) => {
-          const work = activities.filter((w) => w.inspectionId === r.id && w.materialId === a.materialId);
-          // The inspection's own action items for this ACM (older records track the work there, not in O&M)
-          const items = (r.actionItems ?? []).filter((x) => !x.omActivityId && (x.materialId ? x.materialId === a.materialId : i === 0));
-          const states = [...work.map((w) => w.state), ...items.map((x) => ({ Completed: 'completed', 'In Progress': 'inProgress' }[x.status] ?? 'pending'))];
-          const done = states.length > 0 && states.every((s) => s === 'completed');
-          const target = a.risk.targetDate || '';
-          let status = !states.length ? 'notStarted' : done ? 'completed' : states.some((s) => s !== 'pending') ? 'inProgress' : 'planned';
-          if (!done && target && target < today) status = 'overdue';
-          return {
-            id: i ? `${r.id}-${i + 1}` : r.id,
-            link: `/inspections/records/${r.id}`,
-            inspectionId: r.id,
-            date: r.date ?? r.scheduledDate ?? '',
-            ...place(a.schoolId ? a : r),
-            inspector: r.inspectorName ?? '',
-            status,
-            material: mats.get(a.materialId) ?? a.materialId,
-            condition: a.assessment?.currentCondition ?? '',
-            action: a.risk.recommendedAction,
-            priority: a.risk.priority ?? '',
-            target,
-            work: [...work.map((w) => `${w.id} ${w.type}`), ...items.map((x) => `${x.action} (${x.status ?? 'Pending'})`)].join('; '),
-            immediate: a.risk.immediateAttention ?? '',
-          };
-        }));
-    },
-    stats: (rows) => [
-      { key: 'total', label: 'Response Actions', value: rows.length, tone: 'primary', icon: 'clipboard' },
-      { key: 'done', label: 'Completed', value: countBy(rows, 'completed'), tone: 'good', icon: 'check', status: 'completed' },
-      { key: 'open', label: 'Planned / In Progress', value: countBy(rows, 'planned') + countBy(rows, 'inProgress'), tone: 'warning', icon: 'clock', status: 'planned,inProgress' },
-      { key: 'none', label: 'Not Started', value: countBy(rows, 'notStarted'), tone: 'violet', icon: 'help', status: 'notStarted' },
-      { key: 'overdue', label: 'Overdue', value: countBy(rows, 'overdue'), tone: 'critical', icon: 'alert', status: 'overdue' },
     ],
   },
 
